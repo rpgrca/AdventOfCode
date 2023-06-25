@@ -4,24 +4,28 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "sunday"
 
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "sunday"
 
   - package-ecosystem: "nuget"
     directory: "/2020"
     schedule:
       interval: "weekly"
+      day: "sunday"
 
   - package-ecosystem: "nuget"
     directory: "/2021"
     schedule:
       interval: "weekly"
+      day: "sunday"
 
   - package-ecosystem: "nuget"
     directory: "/2022"
     schedule:
       interval: "weekly"
-
+      day: "sunday"
