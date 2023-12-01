@@ -7,6 +7,14 @@ pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet";
 
+    public const string SECOND_SAMPLE_INPUT = @"two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen";
+
     public const string PUZZLE_INPUT = @"76xkqjzqtwonfour
 sixthree8sixjxjqsjgjgp
 38bgcczgtninefivefive

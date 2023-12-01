@@ -56,4 +56,12 @@ public class CalibrationDocumentMust
         sut.CalibrateWithWords();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new CalibrationDocument(SECOND_SAMPLE_INPUT);
+        sut.CalibrateWithWords();
+        Assert.Equal(281, sut.SumOfCalibrationValues);
+    }
 }
