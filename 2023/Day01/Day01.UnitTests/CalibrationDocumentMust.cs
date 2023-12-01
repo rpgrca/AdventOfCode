@@ -6,8 +6,9 @@ namespace Day01.UnitTests;
 public class CalibrationDocumentMust
 {
     [Fact]
-    public void Test1()
+    public void LoadDataCorrectly()
     {
-
+        var sut = new CalibrationDocument(SAMPLE_INPUT);
+        Assert.Equal(4, sut.LineCount);
     }
 }
