@@ -64,4 +64,12 @@ public class CalibrationDocumentMust
         sut.CalibrateWithWords();
         Assert.Equal(281, sut.SumOfCalibrationValues);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new CalibrationDocument(PUZZLE_INPUT);
+        sut.CalibrateWithWords();
+        Assert.Equal(53348, sut.SumOfCalibrationValues);
+    }
 }
