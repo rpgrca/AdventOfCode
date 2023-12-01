@@ -1,6 +1,6 @@
 YEAR=$1
 DAY=Day$2
-SOLUTION=AdventOfCode$YEAR
+SOLUTION_FILENAME=AdventOfCode$YEAR.sln
 
 if [ $# -lt 2 ]; then
     echo "Usage: $0 year day"
@@ -47,10 +47,11 @@ EOT
 
 cd ..
 
-if [ ! -f $SOLUTION ]; then
-    dotnet new sln -o $SOLUTION
+if [ ! -f $SOLUTION_FILENAME ]; then
+    dotnet new sln
+    mv $YEAR.sln $SOLUTION_FILENAME
 fi
-dotnet sln $SOLUTION add $DAY/**/*.csproj
+dotnet sln $SOLUTION_FILENAME add $DAY/**/*.csproj
 cd $DAY
 
 # Create Constants.cs
