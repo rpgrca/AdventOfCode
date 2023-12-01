@@ -29,7 +29,7 @@ public class CalibrationDocument
             {
                 if (! firstFound)
                 {
-                    first = _lines[0][index] - '0';
+                    first = last = _lines[0][index] - '0';
                     firstFound = true;
                 }
                 else
