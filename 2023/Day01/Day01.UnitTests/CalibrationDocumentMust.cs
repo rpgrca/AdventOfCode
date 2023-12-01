@@ -41,7 +41,7 @@ public class CalibrationDocumentMust
         sut.Calibrate();
         Assert.Equal(54644, sut.SumOfCalibrationValues);
     }
-/*
+
     [Theory]
     [InlineData("two1nine", 29)]
     public void CalculateCalibrationValueCorrectly_WhenWordsAreAvailable(string input, int expectedValue)
@@ -49,5 +49,5 @@ public class CalibrationDocumentMust
         var sut = new CalibrationDocument(input);
         sut.CalibrateWithWords();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
-    }*/
+    }
 }

@@ -2,12 +2,20 @@
 
 
 
+using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day01.Logic;
 
 public class CalibrationDocument
 {
     private readonly string _input;
     private readonly string[] _lines;
+    private readonly string[] _validDigits = new[]
+    {
+        "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+    };
 
     public CalibrationDocument(string input)
     {
@@ -69,14 +77,18 @@ public class CalibrationDocument
         var currentLastIndex = 0;
         var result = -1;
 
-        foreach (var number in Enumerable.Range(0, 10))
+        for (var currentDigit = 0; currentDigit < _validDigits.Length; currentDigit++)
         {
-            var character = (char)(number + '0');
-            var index = line.LastIndexOf(character);
-            if (index != -1 && index > currentLastIndex)
+            var value = _validDigits[currentDigit];
+            var subValues = line.Split(value);
+            if (subValues.Length > 0)
             {
-                currentLastIndex = index;
-                result = number;
+                var index = line.Length - subValues.Last().Length;
+                if (index > currentLastIndex)
+                {
+                    currentLastIndex = index;
+                    result = currentDigit % 9 + 1;
+                }
             }
         }
 
@@ -88,19 +100,21 @@ public class CalibrationDocument
         var currentFirstIndex = line.Length;
         var result = -1;
 
-        foreach (var number in Enumerable.Range(0, 10))
+        for (var currentDigit = 0; currentDigit < _validDigits.Length; currentDigit++)
         {
-            var character = (char)(number + '0');
-            var index = line.IndexOf(character);
-            if (index != -1 && index < currentFirstIndex)
+            var value = _validDigits[currentDigit];
+            var subValues = line.Split(value);
+            if (subValues.Length > 0)
             {
-                currentFirstIndex = index;
-                result = number;
+                var index = subValues[0].Length;
+                if (index < currentFirstIndex)
+                {
+                    currentFirstIndex = index;
+                    result = currentDigit % 9 + 1;
+                }
             }
         }
 
         return result;
     }
-
-
 }
