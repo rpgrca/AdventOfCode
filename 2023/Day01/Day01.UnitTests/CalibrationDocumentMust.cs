@@ -44,6 +44,12 @@ public class CalibrationDocumentMust
 
     [Theory]
     [InlineData("two1nine", 29)]
+    [InlineData("eightwothree", 83)]
+    [InlineData("abcone2threexyz", 13)]
+    [InlineData("xtwone3four", 24)]
+    [InlineData("4nineeightseven2", 42)]
+    [InlineData("zoneight234", 14)]
+    [InlineData("7pqrstsixteen", 76)]
     public void CalculateCalibrationValueCorrectly_WhenWordsAreAvailable(string input, int expectedValue)
     {
         var sut = new CalibrationDocument(input);
