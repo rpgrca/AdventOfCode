@@ -16,6 +16,7 @@ public class CalibrationDocumentMust
 
     [Theory]
     [InlineData("1abc2", 12)]
+    [InlineData("pqr3stu8vwx", 38)]
     public void CalculateCalibrationValueCorrectly(string input, int expectedValue)
     {
         var sut = new CalibrationDocument(input);
