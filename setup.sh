@@ -1,5 +1,6 @@
 YEAR=$1
 DAY=Day$2
+SOLUTION=AdventOfCode$YEAR
 
 if [ $# -lt 2 ]; then
     echo "Usage: $0 year day"
@@ -45,7 +46,11 @@ dotnet_naming_style.prefix_underscore.required_prefix = _
 EOT
 
 cd ..
-dotnet sln AdventOfCode$YEAR.sln add $DAY/**/*.csproj
+
+if [ ! -f $SOLUTION ]; then
+    dotnet new sln -o $SOLUTION
+fi
+dotnet sln $SOLUTION add $DAY/**/*.csproj
 cd $DAY
 
 # Create Constants.cs
