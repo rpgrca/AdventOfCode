@@ -29,3 +29,9 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
+
+  - package-ecosystem: "nuget"
+    directory: "/2023"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
