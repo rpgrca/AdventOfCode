@@ -5,10 +5,12 @@ namespace Day01.UnitTests;
 
 public class CalibrationDocumentMust
 {
-    [Fact]
-    public void LoadDataCorrectly()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 4)]
+    [InlineData(PUZZLE_INPUT, 1000)]
+    public void LoadDataCorrectly(string input, int expectedLines)
     {
-        var sut = new CalibrationDocument(SAMPLE_INPUT);
-        Assert.Equal(4, sut.LineCount);
+        var sut = new CalibrationDocument(input);
+        Assert.Equal(expectedLines, sut.LineCount);
     }
 }

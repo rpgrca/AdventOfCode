@@ -8,7 +8,9 @@ public class CalibrationDocument
     public CalibrationDocument(string input)
     {
         _input = input;
+        var lines = _input.Split("\n");
+        LineCount = lines.Length;
     }
 
-    public int LineCount => 4;
+    public int LineCount { get; private set; }
 }
