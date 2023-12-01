@@ -33,4 +33,21 @@ public class CalibrationDocumentMust
         sut.Calibrate();
         Assert.Equal(142, sut.SumOfCalibrationValues);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new CalibrationDocument(PUZZLE_INPUT);
+        sut.Calibrate();
+        Assert.Equal(54644, sut.SumOfCalibrationValues);
+    }
+/*
+    [Theory]
+    [InlineData("two1nine", 29)]
+    public void CalculateCalibrationValueCorrectly_WhenWordsAreAvailable(string input, int expectedValue)
+    {
+        var sut = new CalibrationDocument(input);
+        sut.CalibrateWithWords();
+        Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
+    }*/
 }

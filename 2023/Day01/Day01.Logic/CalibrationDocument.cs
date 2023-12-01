@@ -1,6 +1,7 @@
 
 
 
+
 namespace Day01.Logic;
 
 public class CalibrationDocument
@@ -46,4 +47,60 @@ public class CalibrationDocument
             SumOfCalibrationValues += first * 10 + last;
         }
     }
+
+    public void CalibrateWithWords()
+    {
+        SumOfCalibrationValues = 0;
+
+        foreach (var line in _lines)
+        {
+            var first = 0;
+            var last = 0;
+
+            first = FindFirstValue(line);
+            last = FindLastValue(line);
+
+            SumOfCalibrationValues += first * 10 + last;
+        }
+    }
+
+    private int FindLastValue(string line)
+    {
+        var currentLastIndex = 0;
+        var result = -1;
+
+        foreach (var number in Enumerable.Range(0, 10))
+        {
+            var character = (char)(number + '0');
+            var index = line.LastIndexOf(character);
+            if (index != -1 && index > currentLastIndex)
+            {
+                currentLastIndex = index;
+                result = number;
+            }
+        }
+
+        return result;
+    }
+
+    private int FindFirstValue(string line)
+    {
+        var currentFirstIndex = line.Length;
+        var result = -1;
+
+        foreach (var number in Enumerable.Range(0, 10))
+        {
+            var character = (char)(number + '0');
+            var index = line.IndexOf(character);
+            if (index != -1 && index < currentFirstIndex)
+            {
+                currentFirstIndex = index;
+                result = number;
+            }
+        }
+
+        return result;
+    }
+
+
 }
