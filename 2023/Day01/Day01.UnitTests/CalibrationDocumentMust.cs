@@ -13,4 +13,13 @@ public class CalibrationDocumentMust
         var sut = new CalibrationDocument(input);
         Assert.Equal(expectedLines, sut.LineCount);
     }
+
+    [Theory]
+    [InlineData("1abc2", 12)]
+    public void CalculateCalibrationValueCorrectly(string input, int expectedValue)
+    {
+        var sut = new CalibrationDocument(input);
+        sut.Calibrate();
+        Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
+    }
 }

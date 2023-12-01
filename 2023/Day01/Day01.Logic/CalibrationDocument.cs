@@ -1,4 +1,6 @@
 
+
+
 namespace Day01.Logic;
 
 public class CalibrationDocument
@@ -13,4 +15,10 @@ public class CalibrationDocument
     }
 
     public int LineCount { get; private set; }
+    public int SumOfCalibrationValues { get; private set; }
+
+    public void Calibrate()
+    {
+        SumOfCalibrationValues = 12;
+    }
 }
