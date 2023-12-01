@@ -19,26 +19,31 @@ public class CalibrationDocument
 
     public void Calibrate()
     {
-        var firstFound = false;
-        var first = 0;
-        var last = 0;
+        SumOfCalibrationValues = 0;
 
-        for (var index = 0; index < _lines[0].Length; index++)
+        foreach (var line in _lines)
         {
-            if (char.IsDigit(_lines[0][index]))
+            var firstFound = false;
+            var first = 0;
+            var last = 0;
+
+            for (var index = 0; index < line.Length; index++)
             {
-                if (! firstFound)
+                if (char.IsDigit(line[index]))
                 {
-                    first = last = _lines[0][index] - '0';
-                    firstFound = true;
-                }
-                else
-                {
-                    last = _lines[0][index] - '0';
+                    if (! firstFound)
+                    {
+                        first = last = line[index] - '0';
+                        firstFound = true;
+                    }
+                    else
+                    {
+                        last = line[index] - '0';
+                    }
                 }
             }
-        }
 
-        SumOfCalibrationValues = first * 10 + last;
+            SumOfCalibrationValues += first * 10 + last;
+        }
     }
 }

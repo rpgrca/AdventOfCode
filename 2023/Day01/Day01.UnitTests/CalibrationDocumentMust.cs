@@ -25,4 +25,12 @@ public class CalibrationDocumentMust
         sut.Calibrate();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new CalibrationDocument(SAMPLE_INPUT);
+        sut.Calibrate();
+        Assert.Equal(142, sut.SumOfCalibrationValues);
+    }
 }
