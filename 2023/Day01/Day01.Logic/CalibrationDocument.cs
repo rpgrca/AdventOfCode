@@ -28,29 +28,13 @@ public class CalibrationDocument
     public void Calibrate()
     {
         SumOfCalibrationValues = 0;
+        var words = new List<string>();
+        words.AddRange(_validDigits);
 
         foreach (var line in _lines)
         {
-            var firstFound = false;
-            var first = 0;
-            var last = 0;
-
-            for (var index = 0; index < line.Length; index++)
-            {
-                if (char.IsDigit(line[index]))
-                {
-                    if (! firstFound)
-                    {
-                        first = last = line[index] - '0';
-                        firstFound = true;
-                    }
-                    else
-                    {
-                        last = line[index] - '0';
-                    }
-                }
-            }
-
+            var first = FindFirstValue(line, words);
+            var last = FindLastValue(line, words);
             SumOfCalibrationValues += first * 10 + last;
         }
     }
