@@ -32,40 +32,69 @@ public class CubeConundrumGameMust
     {
         var sut = new CubeConundrumGame("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue");
         Assert.Collection(sut.Games,
-            p1 =>
-                Assert.Collection(p1,
-                    p11 =>
+            g1 =>
+                Assert.Collection(g1,
+                    d1 =>
                     {
-                        Assert.Equal(3, p11.Blue);
-                        Assert.Equal(4, p11.Red);
-                        Assert.Equal(0, p11.Green);
+                        Assert.Equal(3, d1.Blue);
+                        Assert.Equal(4, d1.Red);
+                        Assert.Equal(0, d1.Green);
                     },
-                    p12 => {
-                        Assert.Equal(6, p12.Blue);
-                        Assert.Equal(1, p12.Red);
-                        Assert.Equal(2, p12.Green);
+                    d2 => {
+                        Assert.Equal(6, d2.Blue);
+                        Assert.Equal(1, d2.Red);
+                        Assert.Equal(2, d2.Green);
                     })
         );
     }
 
-/*
+
     [Fact]
     public void ParseSampleInputCorrectly()
     {
         var sut = new CubeConundrumGame(@"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue");
         Assert.Collection(sut.Games,
-            p1 => {
-                Assert.Equal(3, p1.Blue);
-                Assert.Equal(4, p1.Red);
-                Assert.Equal(0, p1.Green);
-            },
-            p2 => {
-                Assert.Equal(6, p2.Blue);
-                Assert.Equal(1, p2.Red);
-                Assert.Equal(2, p2.Green);
-            });
+            g1 => Assert.Collection(g1,
+                d1 =>
+                {
+                    Assert.Equal(3, d1.Blue);
+                    Assert.Equal(4, d1.Red);
+                    Assert.Equal(0, d1.Green);
+                },
+                d2 =>
+                {
+                    Assert.Equal(6, d2.Blue);
+                    Assert.Equal(1, d2.Red);
+                    Assert.Equal(2, d2.Green);
+                },
+                d3 =>
+                {
+                    Assert.Equal(0, d3.Blue);
+                    Assert.Equal(0, d3.Red);
+                    Assert.Equal(2, d3.Green);
+                }),
+            g2 => Assert.Collection(g2,
+                d1 =>
+                {
+                    Assert.Equal(1, d1.Blue);
+                    Assert.Equal(0, d1.Red);
+                    Assert.Equal(2, d1.Green);
+                },
+                d2 => {
+                    Assert.Equal(4, d2.Blue);
+                    Assert.Equal(1, d2.Red);
+                    Assert.Equal(3, d2.Green);
+                },
+                d3 =>
+                {
+                    Assert.Equal(1, d3.Blue);
+                    Assert.Equal(0, d3.Red);
+                    Assert.Equal(1, d3.Green);
+                }
+            )
+        );
 
-    }*/
+    }
 
 }
