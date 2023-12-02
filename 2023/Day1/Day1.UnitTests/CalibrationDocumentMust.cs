@@ -1,7 +1,7 @@
-using Day01.Logic;
-using static Day01.UnitTests.Constants;
+using Day1.Logic;
+using static Day1.UnitTests.Constants;
 
-namespace Day01.UnitTests;
+namespace Day1.UnitTests;
 
 public class CalibrationDocumentMust
 {

@@ -1,4 +1,4 @@
-namespace Day01.Logic;
+namespace Day1.Logic;
 
 public class CalibrationDocument
 {

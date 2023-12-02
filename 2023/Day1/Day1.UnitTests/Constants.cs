@@ -1,4 +1,4 @@
-namespace Day01.UnitTests;
+namespace Day1.UnitTests;
 
 public static class Constants
 {
