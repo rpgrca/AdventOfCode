@@ -1,5 +1,3 @@
-
-
 namespace Day2.Logic;
 
 public class CubeConundrumGame
@@ -9,22 +7,24 @@ public class CubeConundrumGame
 
     public int GameCount => _lines.Length;
 
-    public List<List<(int Blue, int Red, int Green)>> Games { get; private set; }
+    public List<(int Index, List<(int Blue, int Red, int Green)> Draws)> Games { get; private set; }
+    public int SumOfValidGameIds { get; private set; }
 
     public CubeConundrumGame(string input)
     {
         _input = input;
         _lines = _input.Split("\n");
-        Games = new List<List<(int Blue, int Red, int Green)>>();
+        Games = new List<(int, List<(int Blue, int Red, int Green)>)>();
 
         Parse();
+        FilterValidGames();
     }
 
     private void Parse()
     {
-        foreach (var line in _lines)
+        for (var index = 0; index < _lines.Length; index++)
         {
-            var fields = line.Split(":");
+            var fields = _lines[index].Split(":");
             var games = fields[1].Split(";");
 
             var draws = new List<(int, int, int)>();
@@ -48,7 +48,18 @@ public class CubeConundrumGame
                 draws.Add(cubes);
             }
 
-            Games.Add(draws);
+            Games.Add((index + 1, draws));
         }
+    }
+
+    private void FilterValidGames()
+    {
+        var filteredGames = Games.Where(IsValidGame);
+        SumOfValidGameIds = filteredGames.Sum(g => g.Index);
+    }
+
+    private static bool IsValidGame((int Index, List<(int Blue, int Red, int Green)> Draws) draws)
+    {
+        return !draws.Draws.Any(d => d.Red > 12 || d.Green > 13 || d.Blue > 14);
     }
 }
