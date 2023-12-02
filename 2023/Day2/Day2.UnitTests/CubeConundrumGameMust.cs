@@ -116,4 +116,11 @@ Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue");
         var sut = new CubeConundrumGame("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green");
         Assert.Equal(48, sut.SumOfPowers);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new CubeConundrumGame(SAMPLE_INPUT);
+        Assert.Equal(2286, sut.SumOfPowers);
+    }
 }
