@@ -10,7 +10,10 @@ public class CalibrationDocumentMust
     [InlineData(PUZZLE_INPUT, 1000)]
     public void LoadDataCorrectly(string input, int expectedLines)
     {
-        var sut = new CalibrationDocument(input);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .Build(input);
+
         Assert.Equal(expectedLines, sut.LineCount);
     }
 
@@ -21,7 +24,10 @@ public class CalibrationDocumentMust
     [InlineData("treb7uchet", 77)]
     public void CalculateCalibrationValueCorrectly(string input, int expectedValue)
     {
-        var sut = new CalibrationDocument(input);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .Build(input);
+
         sut.Calibrate();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
@@ -29,7 +35,10 @@ public class CalibrationDocumentMust
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new CalibrationDocument(SAMPLE_INPUT);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .Build(SAMPLE_INPUT);
+
         sut.Calibrate();
         Assert.Equal(142, sut.SumOfCalibrationValues);
     }
@@ -37,7 +46,10 @@ public class CalibrationDocumentMust
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new CalibrationDocument(PUZZLE_INPUT);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .Build(PUZZLE_INPUT);
+
         sut.Calibrate();
         Assert.Equal(54644, sut.SumOfCalibrationValues);
     }
@@ -52,7 +64,11 @@ public class CalibrationDocumentMust
     [InlineData("7pqrstsixteen", 76)]
     public void CalculateCalibrationValueCorrectly_WhenWordsAreAvailable(string input, int expectedValue)
     {
-        var sut = new CalibrationDocument(input);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .SupportingNames()
+            .Build(input);
+
         sut.CalibrateWithWords();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
@@ -60,7 +76,11 @@ public class CalibrationDocumentMust
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new CalibrationDocument(SECOND_SAMPLE_INPUT);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .SupportingNames()
+            .Build(SECOND_SAMPLE_INPUT);
+
         sut.CalibrateWithWords();
         Assert.Equal(281, sut.SumOfCalibrationValues);
     }
@@ -68,7 +88,11 @@ public class CalibrationDocumentMust
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new CalibrationDocument(PUZZLE_INPUT);
+        var sut = new CalibrationDocument.Builder()
+            .SupportingDigits()
+            .SupportingNames()
+            .Build(PUZZLE_INPUT);
+
         sut.CalibrateWithWords();
         Assert.Equal(53348, sut.SumOfCalibrationValues);
     }

@@ -1,40 +1,52 @@
-using Microsoft.VisualBasic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Day01.Logic;
 
 public class CalibrationDocument
 {
+    public class Builder
+    {
+        private List<string> _words;
+
+        public Builder() => _words = new();
+
+        public Builder SupportingDigits()
+        {
+            _words.AddRange(new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+            return this;
+        }
+
+        public Builder SupportingNames()
+        {
+            _words.AddRange(new string[] { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" });
+            return this;
+        }
+
+        public CalibrationDocument Build(string input) => new(_words, input);
+    }
+
     private readonly string _input;
     private readonly string[] _lines;
-    private readonly List<string> _validDigits = new()
-    {
-        "1", "2", "3", "4", "5", "6", "7", "8", "9"
-    };
+    private readonly List<string> _words;
 
-    private readonly List<string> _validWords = new()
-    {
-        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
-    };
-
-    public CalibrationDocument(string input)
+    private CalibrationDocument(List<string> words, string input)
     {
         _input = input;
         _lines = _input.Split("\n");
+        _words = words;
     }
 
     public int LineCount => _lines.Length;
+
     public int SumOfCalibrationValues { get; private set; }
 
     public void Calibrate()
     {
         SumOfCalibrationValues = 0;
-        var words = new List<string>();
-        words.AddRange(_validDigits);
-
         foreach (var line in _lines)
         {
-            var first = FindFirstValue(line, words);
-            var last = FindLastValue(line, words);
+            var first = FindFirstValue(line);
+            var last = FindLastValue(line);
             SumOfCalibrationValues += first * 10 + last;
         }
     }
@@ -42,26 +54,23 @@ public class CalibrationDocument
     public void CalibrateWithWords()
     {
         SumOfCalibrationValues = 0;
-        var words = new List<string>();
-        words.AddRange(_validDigits);
-        words.AddRange(_validWords);
 
         foreach (var line in _lines)
         {
-            var first = FindFirstValue(line, words);
-            var last = FindLastValue(line, words);
+            var first = FindFirstValue(line);
+            var last = FindLastValue(line);
             SumOfCalibrationValues += first * 10 + last;
         }
     }
 
-    private int FindLastValue(string line, List<string> words)
+    private int FindLastValue(string line)
     {
         var currentLastIndex = 0;
         var result = -1;
 
-        for (var currentDigit = 0; currentDigit < words.Count; currentDigit++)
+        for (var currentDigit = 0; currentDigit < _words.Count; currentDigit++)
         {
-            var value = words[currentDigit];
+            var value = _words[currentDigit];
             var subValues = line.Split(value);
             if (subValues.Length > 0)
             {
@@ -77,14 +86,14 @@ public class CalibrationDocument
         return result;
     }
 
-    private int FindFirstValue(string line, List<string> words)
+    private int FindFirstValue(string line)
     {
         var currentFirstIndex = line.Length;
         var result = -1;
 
-        for (var currentDigit = 0; currentDigit < words.Count; currentDigit++)
+        for (var currentDigit = 0; currentDigit < _words.Count; currentDigit++)
         {
-            var value = words[currentDigit];
+            var value = _words[currentDigit];
             var subValues = line.Split(value);
             if (subValues.Length > 0)
             {
