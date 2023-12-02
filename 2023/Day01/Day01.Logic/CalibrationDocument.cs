@@ -1,9 +1,4 @@
-
-
-
-
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.VisualBasic;
 
 namespace Day01.Logic;
 
@@ -11,9 +6,13 @@ public class CalibrationDocument
 {
     private readonly string _input;
     private readonly string[] _lines;
-    private readonly string[] _validDigits = new[]
+    private readonly List<string> _validDigits = new()
     {
-        "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "1", "2", "3", "4", "5", "6", "7", "8", "9"
+    };
+
+    private readonly List<string> _validWords = new()
+    {
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
     };
 
@@ -59,27 +58,26 @@ public class CalibrationDocument
     public void CalibrateWithWords()
     {
         SumOfCalibrationValues = 0;
+        var words = new List<string>();
+        words.AddRange(_validDigits);
+        words.AddRange(_validWords);
 
         foreach (var line in _lines)
         {
-            var first = 0;
-            var last = 0;
-
-            first = FindFirstValue(line);
-            last = FindLastValue(line);
-
+            var first = FindFirstValue(line, words);
+            var last = FindLastValue(line, words);
             SumOfCalibrationValues += first * 10 + last;
         }
     }
 
-    private int FindLastValue(string line)
+    private int FindLastValue(string line, List<string> words)
     {
         var currentLastIndex = 0;
         var result = -1;
 
-        for (var currentDigit = 0; currentDigit < _validDigits.Length; currentDigit++)
+        for (var currentDigit = 0; currentDigit < words.Count; currentDigit++)
         {
-            var value = _validDigits[currentDigit];
+            var value = words[currentDigit];
             var subValues = line.Split(value);
             if (subValues.Length > 0)
             {
@@ -95,14 +93,14 @@ public class CalibrationDocument
         return result;
     }
 
-    private int FindFirstValue(string line)
+    private int FindFirstValue(string line, List<string> words)
     {
         var currentFirstIndex = line.Length;
         var result = -1;
 
-        for (var currentDigit = 0; currentDigit < _validDigits.Length; currentDigit++)
+        for (var currentDigit = 0; currentDigit < words.Count; currentDigit++)
         {
-            var value = _validDigits[currentDigit];
+            var value = words[currentDigit];
             var subValues = line.Split(value);
             if (subValues.Length > 0)
             {
