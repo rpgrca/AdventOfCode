@@ -1,12 +1,10 @@
-using System.Reflection.Metadata.Ecma335;
-
 namespace Day01.Logic;
 
 public class CalibrationDocument
 {
     public class Builder
     {
-        private List<string> _words;
+        private readonly List<string> _words;
 
         public Builder() => _words = new();
 
@@ -25,83 +23,53 @@ public class CalibrationDocument
         public CalibrationDocument Build(string input) => new(_words, input);
     }
 
-    private readonly string _input;
     private readonly string[] _lines;
     private readonly List<string> _words;
-
-    private CalibrationDocument(List<string> words, string input)
-    {
-        _input = input;
-        _lines = _input.Split("\n");
-        _words = words;
-    }
 
     public int LineCount => _lines.Length;
 
     public int SumOfCalibrationValues { get; private set; }
 
+    private CalibrationDocument(List<string> words, string input)
+    {
+        _lines = input.Split("\n");
+        _words = words;
+    }
+
     public void Calibrate()
     {
         SumOfCalibrationValues = 0;
+
         foreach (var line in _lines)
         {
-            var first = FindFirstValue(line);
-            var last = FindLastValue(line);
+            var first = FindFirstValueFrom(line);
+            var last = FindLastValueFrom(line);
             SumOfCalibrationValues += first * 10 + last;
         }
     }
 
-    public void CalibrateWithWords()
-    {
-        SumOfCalibrationValues = 0;
+    private int FindLastValueFrom(string line) =>
+        FindValue(line, 0, (l, s) => l - s.Last().Length, (i, c) => i > c);
 
-        foreach (var line in _lines)
-        {
-            var first = FindFirstValue(line);
-            var last = FindLastValue(line);
-            SumOfCalibrationValues += first * 10 + last;
-        }
-    }
+    private int FindFirstValueFrom(string line) =>
+        FindValue(line, line.Length, (_, s) => s[0].Length, (i, c) => i < c);
 
-    private int FindLastValue(string line)
+    private int FindValue(string line, int initialValue, Func<int, string[], int> indexer, Func<int, int, bool> compare)
     {
-        var currentLastIndex = 0;
+        var currentIndex = initialValue;
         var result = -1;
 
-        for (var currentDigit = 0; currentDigit < _words.Count; currentDigit++)
+        for (var currentWord = 0; currentWord < _words.Count; currentWord++)
         {
-            var value = _words[currentDigit];
+            var value = _words[currentWord];
             var subValues = line.Split(value);
             if (subValues.Length > 0)
             {
-                var index = line.Length - subValues.Last().Length;
-                if (index > currentLastIndex)
+                var index = indexer(line.Length, subValues);
+                if (compare(index, currentIndex))
                 {
-                    currentLastIndex = index;
-                    result = currentDigit % 9 + 1;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private int FindFirstValue(string line)
-    {
-        var currentFirstIndex = line.Length;
-        var result = -1;
-
-        for (var currentDigit = 0; currentDigit < _words.Count; currentDigit++)
-        {
-            var value = _words[currentDigit];
-            var subValues = line.Split(value);
-            if (subValues.Length > 0)
-            {
-                var index = subValues[0].Length;
-                if (index < currentFirstIndex)
-                {
-                    currentFirstIndex = index;
-                    result = currentDigit % 9 + 1;
+                    currentIndex = index;
+                    result = currentWord % 9 + 1;
                 }
             }
         }

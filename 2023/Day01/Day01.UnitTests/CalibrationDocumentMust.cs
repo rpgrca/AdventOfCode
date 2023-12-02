@@ -69,7 +69,7 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(input);
 
-        sut.CalibrateWithWords();
+        sut.Calibrate();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
 
@@ -81,7 +81,7 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(SECOND_SAMPLE_INPUT);
 
-        sut.CalibrateWithWords();
+        sut.Calibrate();
         Assert.Equal(281, sut.SumOfCalibrationValues);
     }
 
@@ -93,7 +93,7 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(PUZZLE_INPUT);
 
-        sut.CalibrateWithWords();
+        sut.Calibrate();
         Assert.Equal(53348, sut.SumOfCalibrationValues);
     }
 }
