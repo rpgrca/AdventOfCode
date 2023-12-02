@@ -21,9 +21,9 @@ public class CubeConundrumGameMust
         var sut = new CubeConundrumGame("Game 1: 3 blue, 4 red");
         Assert.Collection(sut.Games,
             p1 => {
-                Assert.Equal(3, p1.Blue);
-                Assert.Equal(4, p1.Red);
-                Assert.Equal(0, p1.Green);
+                Assert.Equal(3, p1[0].Blue);
+                Assert.Equal(4, p1[0].Red);
+                Assert.Equal(0, p1[0].Green);
             });
     }
 
@@ -31,6 +31,29 @@ public class CubeConundrumGameMust
     public void ParseInputCorrectly_WhenGameHasMultipleDraws()
     {
         var sut = new CubeConundrumGame("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue");
+        Assert.Collection(sut.Games,
+            p1 =>
+                Assert.Collection(p1,
+                    p11 =>
+                    {
+                        Assert.Equal(3, p11.Blue);
+                        Assert.Equal(4, p11.Red);
+                        Assert.Equal(0, p11.Green);
+                    },
+                    p12 => {
+                        Assert.Equal(6, p12.Blue);
+                        Assert.Equal(1, p12.Red);
+                        Assert.Equal(2, p12.Green);
+                    })
+        );
+    }
+
+/*
+    [Fact]
+    public void ParseSampleInputCorrectly()
+    {
+        var sut = new CubeConundrumGame(@"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue");
         Assert.Collection(sut.Games,
             p1 => {
                 Assert.Equal(3, p1.Blue);
@@ -42,6 +65,7 @@ public class CubeConundrumGameMust
                 Assert.Equal(1, p2.Red);
                 Assert.Equal(2, p2.Green);
             });
-    }
+
+    }*/
 
 }

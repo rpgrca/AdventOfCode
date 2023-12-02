@@ -9,13 +9,13 @@ public class CubeConundrumGame
 
     public int GameCount => _games.Length;
 
-    public List<(int Blue, int Red, int Green)> Games { get; private set; }
+    public List<List<(int Blue, int Red, int Green)>> Games { get; private set; }
 
     public CubeConundrumGame(string input)
     {
         _input = input;
         _games = _input.Split("\n");
-        Games = new List<(int Blue, int Red, int Green)>();
+        Games = new List<List<(int Blue, int Red, int Green)>>();
 
         Parse();
     }
@@ -24,6 +24,8 @@ public class CubeConundrumGame
     {
         var fields = _input.Split(":");
         var games = fields[1].Split(";");
+
+        var draws = new List<(int, int, int)>();
 
         foreach (var game in games)
         {
@@ -41,7 +43,9 @@ public class CubeConundrumGame
                 }
             }
 
-            Games.Add(cubes);
+            draws.Add(cubes);
         }
+
+        Games.Add(draws);
     }
 }
