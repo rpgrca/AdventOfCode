@@ -1,3 +1,5 @@
+
+
 namespace Day2.Logic;
 
 public class CubeConundrumGame
@@ -9,6 +11,7 @@ public class CubeConundrumGame
 
     public List<(int Index, List<(int Blue, int Red, int Green)> Draws)> Games { get; private set; }
     public int SumOfValidGameIds { get; private set; }
+    public int SumOfPowers { get; set; }
 
     public CubeConundrumGame(string input)
     {
@@ -18,6 +21,19 @@ public class CubeConundrumGame
 
         Parse();
         FilterValidGames();
+        CalculateSumOfPowers();
+    }
+
+    private void CalculateSumOfPowers()
+    {
+        foreach (var game in Games)
+        {
+            var maximumRed = game.Draws.Max(d => d.Red);
+            var maximumBlue = game.Draws.Max(d => d.Blue);
+            var maximumGreen = game.Draws.Max(d => d.Green);
+
+            SumOfPowers += maximumRed * maximumBlue * maximumGreen;
+        }
     }
 
     private void Parse()
