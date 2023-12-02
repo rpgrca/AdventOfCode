@@ -6,18 +6,6 @@ namespace Day01.UnitTests;
 public class CalibrationDocumentMust
 {
     [Theory]
-    [InlineData(SAMPLE_INPUT, 4)]
-    [InlineData(PUZZLE_INPUT, 1000)]
-    public void LoadDataCorrectly(string input, int expectedLines)
-    {
-        var sut = new CalibrationDocument.Builder()
-            .SupportingDigits()
-            .Build(input);
-
-        Assert.Equal(expectedLines, sut.LineCount);
-    }
-
-    [Theory]
     [InlineData("1abc2", 12)]
     [InlineData("pqr3stu8vwx", 38)]
     [InlineData("a1b2c3d4e5f", 15)]
@@ -28,7 +16,6 @@ public class CalibrationDocumentMust
             .SupportingDigits()
             .Build(input);
 
-        sut.Calibrate();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
 
@@ -39,7 +26,6 @@ public class CalibrationDocumentMust
             .SupportingDigits()
             .Build(SAMPLE_INPUT);
 
-        sut.Calibrate();
         Assert.Equal(142, sut.SumOfCalibrationValues);
     }
 
@@ -50,7 +36,6 @@ public class CalibrationDocumentMust
             .SupportingDigits()
             .Build(PUZZLE_INPUT);
 
-        sut.Calibrate();
         Assert.Equal(54644, sut.SumOfCalibrationValues);
     }
 
@@ -69,7 +54,6 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(input);
 
-        sut.Calibrate();
         Assert.Equal(expectedValue, sut.SumOfCalibrationValues);
     }
 
@@ -81,7 +65,6 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(SECOND_SAMPLE_INPUT);
 
-        sut.Calibrate();
         Assert.Equal(281, sut.SumOfCalibrationValues);
     }
 
@@ -93,7 +76,6 @@ public class CalibrationDocumentMust
             .SupportingNames()
             .Build(PUZZLE_INPUT);
 
-        sut.Calibrate();
         Assert.Equal(53348, sut.SumOfCalibrationValues);
     }
 }

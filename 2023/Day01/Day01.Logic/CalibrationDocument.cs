@@ -26,17 +26,17 @@ public class CalibrationDocument
     private readonly string[] _lines;
     private readonly List<string> _words;
 
-    public int LineCount => _lines.Length;
-
     public int SumOfCalibrationValues { get; private set; }
 
     private CalibrationDocument(List<string> words, string input)
     {
         _lines = input.Split("\n");
         _words = words;
+
+        Calibrate();
     }
 
-    public void Calibrate()
+    private void Calibrate()
     {
         SumOfCalibrationValues = 0;
 
