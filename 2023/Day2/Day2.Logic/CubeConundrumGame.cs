@@ -1,5 +1,3 @@
-
-
 namespace Day2.Logic;
 
 public class CubeConundrumGame

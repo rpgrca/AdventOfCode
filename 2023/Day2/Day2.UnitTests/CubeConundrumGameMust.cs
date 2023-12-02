@@ -1,5 +1,4 @@
 using Day2.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day2.UnitTests.Constants;
 
 namespace Day2.UnitTests;
@@ -47,7 +46,6 @@ public class CubeConundrumGameMust
                     })
         );
     }
-
 
     [Fact]
     public void ParseSampleInputCorrectly()
@@ -122,5 +120,12 @@ Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue");
     {
         var sut = new CubeConundrumGame(SAMPLE_INPUT);
         Assert.Equal(2286, sut.SumOfPowers);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new CubeConundrumGame(PUZZLE_INPUT);
+        Assert.Equal(70768, sut.SumOfPowers);
     }
 }
