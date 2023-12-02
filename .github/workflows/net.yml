@@ -38,7 +38,9 @@ jobs:
       run: |
            for s in 2023 2022 2021 2020; do
                for d in `seq 25`; do
-                   coverlet $s/Day$d/Day$d.UnitTests/bin/Debug/net7.0/Day$d.UnitTests.dll --target "dotnet" --targetargs "test $s/Day$d/Day$d.UnitTests/Day$d.UnitTests.csproj --no-build" --format OpenCover --output adventofcode-$s-day$d.coverage.xml
+                   if [ -d $s/Day$d ]; then
+                     coverlet $s/Day$d/Day$d.UnitTests/bin/Debug/net7.0/Day$d.UnitTests.dll --target "dotnet" --targetargs "test $s/Day$d/Day$d.UnitTests/Day$d.UnitTests.csproj --no-build" --format OpenCover --output adventofcode-$s-day$d.coverage.xml
+                   fi
                done
            done
 
