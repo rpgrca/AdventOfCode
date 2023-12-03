@@ -5,11 +5,13 @@ namespace Day3.UnitTests;
 
 public class EngineSchematicMust
 {
-    [Fact]
-    public void LoadInputCorrectly()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 10)]
+    [InlineData(PUZZLE_INPUT, 140)]
+    public void LoadInputCorrectly(string input, int expectedValue)
     {
-        var sut = new EngineSchematic(SAMPLE_INPUT);
-        Assert.Equal(10, sut.Width);
-        Assert.Equal(10, sut.Height);
+        var sut = new EngineSchematic(input);
+        Assert.Equal(expectedValue, sut.Width);
+        Assert.Equal(expectedValue, sut.Height);
     }
 }
