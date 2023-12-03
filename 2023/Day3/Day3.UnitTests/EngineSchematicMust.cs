@@ -14,4 +14,16 @@ public class EngineSchematicMust
         Assert.Equal(expectedValue, sut.Width);
         Assert.Equal(expectedValue, sut.Height);
     }
+
+    [Theory]
+    [InlineData(@"467..114..
+...*......", 467)]
+    [InlineData(@"617*......
+.....+.58.
+..592.....", 1209)]
+    public void CalculateSumOfPartsCorrectly(string input, int expectedSum)
+    {
+        var sut = new EngineSchematic(input);
+        Assert.Equal(expectedSum, sut.SumOfParts);
+    }
 }
