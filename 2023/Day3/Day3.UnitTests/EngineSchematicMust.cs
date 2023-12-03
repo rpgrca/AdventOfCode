@@ -35,6 +35,15 @@ public class EngineSchematicMust
     [InlineData(@".....*........
 .40.347...640.
 ..............", 347)]
+    [InlineData("1......\n.......\n.......", 0)]
+    [InlineData("1......\n=......\n.......", 1)]
+    [InlineData("1......\n.=.....\n.......", 1)]
+    [InlineData(".1.....\n.......\n.......", 0)]
+    [InlineData(".1.....\n=......\n.......", 1)]
+    [InlineData(".1.....\n.=.....\n.......", 1)]
+    [InlineData(".1.....\n..=....\n.......", 1)]
+    [InlineData("......1\n.......\n.......", 0)]
+    [InlineData("......1\n.....=.\n.......", 1)]
     public void CalculateSumOfPartsCorrectly(string input, int expectedSum)
     {
         var sut = new EngineSchematic(input);
@@ -47,11 +56,12 @@ public class EngineSchematicMust
         var sut = new EngineSchematic(SAMPLE_INPUT);
         Assert.Equal(4361, sut.SumOfParts);
     }
-/*
+
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
         var sut = new EngineSchematic(PUZZLE_INPUT);
         Assert.True(506273 < sut.SumOfParts);
-    }*/
+        Assert.Equal(507214, sut.SumOfParts);
+    }
 }

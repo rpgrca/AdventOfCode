@@ -77,14 +77,25 @@ public class EngineSchematic
                 }
                 else
                 {
-                    if (inNumber && nextToSymbol)
+                    if (inNumber)
                     {
-                        SumOfParts += int.Parse(currentNumber);
+                        if (nextToSymbol)
+                        {
+                            SumOfParts += int.Parse(currentNumber);
+                        }
                     }
 
                     currentNumber = "";
                     inNumber = false;
                     nextToSymbol = false;
+                }
+            }
+
+            if (inNumber)
+            {
+                if (nextToSymbol)
+                {
+                    SumOfParts += int.Parse(currentNumber);
                 }
             }
         }
