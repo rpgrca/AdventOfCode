@@ -35,9 +35,9 @@ public class EngineSchematic
                 {
                     currentNumber += currentValue;
                     inNumber = true;
-                    if (y - 1 > 0)
+                    if (y - 1 >= 0)
                     {
-                        if (x - 1 > 0)
+                        if (x - 1 >= 0)
                         {
                             nextToSymbol = nextToSymbol || IsSymbol(_schematic[y-1][x-1]);
                         }
@@ -50,7 +50,7 @@ public class EngineSchematic
                         }
                     }
 
-                    if (x - 1 > 0)
+                    if (x - 1 >= 0)
                     {
                         nextToSymbol = nextToSymbol || IsSymbol(_schematic[y][x-1]);
                     }
@@ -62,7 +62,7 @@ public class EngineSchematic
 
                     if (y + 1 < Height)
                     {
-                        if (x - 1 > 0)
+                        if (x - 1 >= 0)
                         {
                             nextToSymbol = nextToSymbol || IsSymbol(_schematic[y+1][x-1]);
                         }
