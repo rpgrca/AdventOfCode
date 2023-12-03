@@ -26,4 +26,11 @@ public class EngineSchematicMust
         var sut = new EngineSchematic(input);
         Assert.Equal(expectedSum, sut.SumOfParts);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new EngineSchematic(SAMPLE_INPUT);
+        Assert.Equal(4361, sut.SumOfParts);
+    }
 }
