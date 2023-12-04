@@ -22,4 +22,11 @@ public class ScratchcardsMust
         var sut = new Scratchcards("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53");
         Assert.Equal(8, sut.TotalPoints);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new Scratchcards(SAMPLE_INPUT);
+        Assert.Equal(13, sut.TotalPoints);
+    }
 }
