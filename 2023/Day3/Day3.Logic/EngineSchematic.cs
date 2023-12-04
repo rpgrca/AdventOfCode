@@ -2,9 +2,9 @@ namespace Day3.Logic;
 
 public class EngineSchematic
 {
-    private string _input;
+    private readonly string _input;
     private readonly string[] _schematic;
-    private Dictionary<(int X, int Y), List<int>> _gears = new();
+    private readonly Dictionary<(int X, int Y), List<int>> _gears;
     private readonly List<(int X, int Y)> _gearCoordinates;
 
     public int Width => _schematic[0].Length;
@@ -20,6 +20,7 @@ public class EngineSchematic
         _input = input;
         _schematic = _input.Split("\n");
         _gearCoordinates = new List<(int X, int Y)>();
+        _gears = new Dictionary<(int X, int Y), List<int>>();
 
         Parse();
         CalculateSumOfGearRatios();
