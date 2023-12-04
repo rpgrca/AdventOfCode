@@ -49,4 +49,10 @@ Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1", 7)]
         Assert.Equal(expectedCount, sut.WonScratchCount);
     }
 
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new Scratchcards(SAMPLE_INPUT);
+        Assert.Equal(30, sut.WonScratchCount);
+    }
 }
