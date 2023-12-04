@@ -25,7 +25,7 @@ public class EngineSchematic
 
     private void CalculateSumOfGearRatios()
     {
-        SumOfGearRatios = dictionary.Where(d => d.Value.Count == 2).Aggregate(0, (t, i) => t + (i.Value[0] * i.Value[1]));
+        SumOfGearRatios = dictionary.Where(d => d.Value.Distinct().Count() == 2).Aggregate(0, (t, i) => t + (i.Value[0] * i.Value[1]));
 /*
         var list = new List<string>();
         for (var y = 0; y < Height; y++)

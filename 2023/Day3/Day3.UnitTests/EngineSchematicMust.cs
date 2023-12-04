@@ -74,11 +74,11 @@ public class EngineSchematicMust
         Assert.Equal(expectedValue, sut.SumOfGearRatios);
     }
 
-/*
+
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
         var sut = new EngineSchematic(SAMPLE_INPUT);
         Assert.Equal(467835, sut.SumOfGearRatios);
-    }*/
+    }
 }
