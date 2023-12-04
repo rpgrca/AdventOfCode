@@ -55,4 +55,11 @@ Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1", 7)]
         var sut = new Scratchcards(SAMPLE_INPUT);
         Assert.Equal(30, sut.WonScratchCount);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new Scratchcards(PUZZLE_INPUT);
+        Assert.Equal(5037841, sut.WonScratchCount);
+    }
 }
