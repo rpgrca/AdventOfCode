@@ -67,6 +67,7 @@ public class EngineSchematicMust
 
     [Theory]
     [InlineData("111*3", 333)]
+    [InlineData("111*111", 12321, Skip = "case not found in test samples")]
     [InlineData("186.48\n...*..", 8928)]
     public void CalculateSumOfGearRatiosCorrectly(string input, int expectedValue)
     {
@@ -74,11 +75,18 @@ public class EngineSchematicMust
         Assert.Equal(expectedValue, sut.SumOfGearRatios);
     }
 
-
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
         var sut = new EngineSchematic(SAMPLE_INPUT);
         Assert.Equal(467835, sut.SumOfGearRatios);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzle()
+    {
+        var sut = new EngineSchematic(PUZZLE_INPUT);
+        Assert.True(85767650 > sut.SumOfGearRatios);
+        Assert.Equal(72553319, sut.SumOfGearRatios);
     }
 }
