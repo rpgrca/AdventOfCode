@@ -55,10 +55,6 @@ public class EngineSchematic
                             {
                                 if (_schematic[y-1][x-1] == '*')
                                 {
-                                    if (!dictionary.ContainsKey((x-1, y-1)))
-                                    {
-                                        dictionary.Add((x-1, y-1), new List<int>());
-                                    }
                                     list.Add((x-1, y-1));
                                 }
                                 nextToSymbol = true;
@@ -69,10 +65,6 @@ public class EngineSchematic
                         {
                             if (_schematic[y-1][x] == '*')
                             {
-                                if (!dictionary.ContainsKey((x, y-1)))
-                                {
-                                    dictionary.Add((x, y-1), new List<int>());
-                                }
                                 list.Add((x, y-1));
                             }
 
@@ -85,10 +77,6 @@ public class EngineSchematic
                             {
                                 if (_schematic[y-1][x+1] == '*')
                                 {
-                                    if (!dictionary.ContainsKey((x+1, y-1)))
-                                    {
-                                        dictionary.Add((x+1, y-1), new List<int>());
-                                    }
                                     list.Add((x+1, y-1));
                                 }
 
@@ -103,10 +91,6 @@ public class EngineSchematic
                         {
                             if (_schematic[y][x-1] == '*')
                             {
-                                if (!dictionary.ContainsKey((x-1, y)))
-                                {
-                                    dictionary.Add((x-1, y), new List<int>());
-                                }
                                 list.Add((x-1, y));
                             }
 
@@ -120,10 +104,6 @@ public class EngineSchematic
                         {
                             if (_schematic[y][x+1] == '*')
                             {
-                                if (!dictionary.ContainsKey((x+1, y)))
-                                {
-                                    dictionary.Add((x+1, y), new List<int>());
-                                }
                                 list.Add((x+1, y));
                             }
 
@@ -139,10 +119,6 @@ public class EngineSchematic
                             {
                                 if (_schematic[y+1][x-1] == '*')
                                 {
-                                    if (!dictionary.ContainsKey((x-1, y+1)))
-                                    {
-                                        dictionary.Add((x-1, y+1), new List<int>());
-                                    }
                                     list.Add((x-1, y+1));
                                 }
 
@@ -154,10 +130,6 @@ public class EngineSchematic
                         {
                             if (_schematic[y+1][x] == '*')
                             {
-                                if (!dictionary.ContainsKey((x, y+1)))
-                                {
-                                    dictionary.Add((x, y+1), new List<int>());
-                                }
                                 list.Add((x, y+1));
                             }
 
@@ -170,10 +142,6 @@ public class EngineSchematic
                             {
                                 if (_schematic[y+1][x+1] == '*')
                                 {
-                                    if (!dictionary.ContainsKey((x+1, y+1)))
-                                    {
-                                        dictionary.Add((x+1, y+1), new List<int>());
-                                    }
                                     list.Add((x+1, y+1));
                                 }
 
@@ -193,6 +161,10 @@ public class EngineSchematic
 
                         foreach (var coordinates in list)
                         {
+                            if (!dictionary.ContainsKey(coordinates))
+                            {
+                                dictionary.Add(coordinates, new List<int>());
+                            }
                             dictionary[coordinates].Add(int.Parse(currentNumber));
                         }
                     }
@@ -212,6 +184,10 @@ public class EngineSchematic
 
                     foreach (var coordinates in list)
                     {
+                        if (!dictionary.ContainsKey(coordinates))
+                        {
+                            dictionary.Add(coordinates, new List<int>());
+                        }
                         dictionary[coordinates].Add(int.Parse(currentNumber));
                     }
                 }
