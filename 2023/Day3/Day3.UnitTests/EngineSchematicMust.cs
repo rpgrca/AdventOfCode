@@ -64,4 +64,21 @@ public class EngineSchematicMust
         Assert.True(506273 < sut.SumOfParts);
         Assert.Equal(507214, sut.SumOfParts);
     }
+
+    [Theory]
+    [InlineData("111*3", 333)]
+    [InlineData("186.48\n...*..", 8928)]
+    public void CalculateSumOfGearRatiosCorrectly(string input, int expectedValue)
+    {
+        var sut = new EngineSchematic(input);
+        Assert.Equal(expectedValue, sut.SumOfGearRatios);
+    }
+
+/*
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new EngineSchematic(SAMPLE_INPUT);
+        Assert.Equal(467835, sut.SumOfGearRatios);
+    }*/
 }
