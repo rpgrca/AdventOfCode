@@ -1,5 +1,6 @@
 
 
+
 namespace Day4.Logic;
 public class Scratchcards
 {
@@ -13,6 +14,7 @@ public class Scratchcards
     public int OwnedAmount => _ownedValues[0].Length;
 
     public int TotalPoints { get; private set; }
+    public long WonScratchCount { get; private set; } = 3;
 
     public Scratchcards(string input)
     {
@@ -23,6 +25,27 @@ public class Scratchcards
 
         Parse();
         CalculateTotalPoints();
+        CalculateWonScratches();
+    }
+
+    private void CalculateWonScratches()
+    {
+        var duplicates = new List<int>();
+        for (var index = 0; index < Amount; index++)
+        {
+            duplicates.Add(1);
+        }
+
+        for (var index = 0; index < Amount; index++)
+        {
+            var intersectedValues = _ownedValues[index].Intersect(_winningValues[index]).ToArray();
+            for (var subIndex = 0; subIndex < intersectedValues.Length && subIndex + index + 1 < Amount; subIndex++)
+            {
+                duplicates[index + subIndex + 1] = duplicates[index + subIndex + 1] + duplicates[index];
+            }
+        }
+
+        WonScratchCount = duplicates.Sum();
     }
 
     private void Parse()
