@@ -1,38 +1,35 @@
 
 
+
 namespace Day5.Logic;
 public class ProductionMapping
 {
     private readonly string _input;
     private List<long> _seeds;
-    private readonly List<Func<long, long>> _fertilizerToWaterMap;
-    private readonly List<Func<long, long>> _soilToFertilizerMap;
-    private readonly List<Func<long, long>> _seedToSoilMap;
-    private readonly List<Func<long, long>> _waterToLightMap;
-    private readonly List<Func<long, long>> _lightToTemperatureMap;
-    private readonly List<Func<long, long>> _temperatureToHumidityMap;
-    private readonly List<Func<long, long>> _humidityToLocationMap;
+    private readonly List<List<Func<long, long>>> _maps;
 
     public int SeedsCount => _seeds.Count;
-    public int SeedToSoilCount => _seedToSoilMap.Count;
-    public int SoilToFertilizerCount => _soilToFertilizerMap.Count;
-    public int FertilizerToWaterCount => _fertilizerToWaterMap.Count;
-    public int WaterToLightCount => _waterToLightMap.Count;
-    public int LightToTemperatureCount => _lightToTemperatureMap.Count;
-    public int TemperatureToHumidityCount => _temperatureToHumidityMap.Count;
-    public int HumidityToLocationCount => _humidityToLocationMap.Count;
+    public int SeedToSoilCount => _maps[0].Count;
+    public int SoilToFertilizerCount => _maps[1].Count;
+    public int FertilizerToWaterCount => _maps[2].Count;
+    public int WaterToLightCount => _maps[3].Count;
+    public int LightToTemperatureCount => _maps[4].Count;
+    public int TemperatureToHumidityCount => _maps[5].Count;
+    public int HumidityToLocationCount => _maps[6].Count;
+
+    public long MinimumLocation { get; private set; }
 
     public ProductionMapping(string input)
     {
         _input = input;
-        _seedToSoilMap = new List<Func<long, long>>();
-        _soilToFertilizerMap = new List<Func<long, long>>();
-        _fertilizerToWaterMap = new List<Func<long, long>>();
-        _waterToLightMap = new List<Func<long, long>>();
-        _lightToTemperatureMap = new List<Func<long, long>>();
-        _temperatureToHumidityMap = new List<Func<long, long>>();
-        _humidityToLocationMap = new List<Func<long, long>>();
+        _maps = new List<List<Func<long, long>>>();
+        for (var index = 0; index < 7; index++)
+        {
+            _maps.Add(new List<Func<long, long>>());
+        }
+
         Parse();
+        //CalculateMinimumLocation();
     }
 
     private void Parse()
@@ -65,35 +62,36 @@ public class ProductionMapping
                 switch (currentSection)
                 {
                     case "seed-to-soil map":
-                        _seedToSoilMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[0].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "soil-to-fertilizer map":
-                        _soilToFertilizerMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[1].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "fertilizer-to-water map":
-                        _fertilizerToWaterMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[2].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "water-to-light map":
-                        _waterToLightMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[3].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "light-to-temperature map":
-                        _lightToTemperatureMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[4].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "temperature-to-humidity map":
-                        _temperatureToHumidityMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[5].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
 
                     case "humidity-to-location map":
-                        _humidityToLocationMap.Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
+                        _maps[6].Add(s => s >= values[1] && s < values[1] + values[2]? values[0] + (s - values[1]) : s);
                         break;
                 }
             }
         }
     }
+
 
 }
