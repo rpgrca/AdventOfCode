@@ -24,16 +24,23 @@ public class ProductionMappingMust
     }
 
     [Fact]
-    public void SolveFirstSampleCorretly()
+    public void SolveFirstSampleCorrectly()
     {
         var sut = new ProductionMapping(SAMPLE_INPUT);
         Assert.Equal(35, sut.MinimumLocation);
     }
 
     [Fact]
-    public void SolveFirstPuzzleCorretly()
+    public void SolveFirstPuzzleCorrectly()
     {
         var sut = new ProductionMapping(PUZZLE_INPUT);
         Assert.Equal(551761867, sut.MinimumLocation);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ProductionMapping(SAMPLE_INPUT, true);
+        Assert.Equal(46, sut.MinimumLocation);
     }
 }

@@ -35,6 +35,7 @@ public class ProductionMapping
 
         if (asRange)
         {
+            CalculateMinimumLocationWithRanges();
         }
         else
         {
@@ -134,5 +135,36 @@ public class ProductionMapping
         }
 
         MinimumLocation = results.Min();
+    }
+
+    private void CalculateMinimumLocationWithRanges()
+    {
+        MinimumLocation = long.MaxValue;
+        foreach (var seedRange in _seedRanges)
+        {
+            for (var seed = seedRange.Start; seed < seedRange.Start + seedRange.Count; seed++)
+            {
+                var currentIndex = seed;
+                for (var index = 0; index < _maps.Count; index++)
+                {
+                    var list = new List<long>();
+                    foreach (var lambda in _maps[index])
+                    {
+                        list.Add(lambda(currentIndex));
+                    }
+
+                    var result = list.Distinct().Where(p => p != currentIndex).ToArray();
+                    if (result.Length != 0)
+                    {
+                        currentIndex = result.Single();
+                    }
+                }
+
+                if (currentIndex < MinimumLocation)
+                {
+                    MinimumLocation = currentIndex;
+                }
+            }
+        }
     }
 }
