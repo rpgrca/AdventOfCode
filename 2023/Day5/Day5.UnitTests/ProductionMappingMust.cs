@@ -22,11 +22,11 @@ public class ProductionMappingMust
         Assert.Equal(expectedTemperatureToHumidity, sut.TemperatureToHumidityCount);
         Assert.Equal(expectedHumidityToLocation, sut.HumidityToLocationCount);
     }
-/*
+
     [Fact]
     public void SolveFirstSampleCorretly()
     {
         var sut = new ProductionMapping(SAMPLE_INPUT);
         Assert.Equal(35, sut.MinimumLocation);
-    }*/
+    }
 }

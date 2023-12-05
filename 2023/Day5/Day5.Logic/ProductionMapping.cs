@@ -29,7 +29,7 @@ public class ProductionMapping
         }
 
         Parse();
-        //CalculateMinimumLocation();
+        CalculateMinimumLocation();
     }
 
     private void Parse()
@@ -93,5 +93,31 @@ public class ProductionMapping
         }
     }
 
+    private void CalculateMinimumLocation()
+    {
+        var results = new List<long>();
 
+        foreach (var seed in _seeds)
+        {
+            var currentIndex = seed;
+            for (var index = 0; index < _maps.Count; index++)
+            {
+                var list = new List<long>();
+                foreach (var lambda in _maps[index])
+                {
+                    list.Add(lambda(currentIndex));
+                }
+
+                var result = list.Distinct().Where(p => p != currentIndex).ToArray();
+                if (result.Length != 0)
+                {
+                    currentIndex = result.Single();
+                }
+            }
+
+            results.Add(currentIndex);
+        }
+
+        MinimumLocation = results.Min();
+    }
 }
