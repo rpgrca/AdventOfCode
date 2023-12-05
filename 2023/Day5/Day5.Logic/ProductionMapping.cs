@@ -4,14 +4,14 @@ namespace Day5.Logic;
 public class ProductionMapping
 {
     private readonly string _input;
-    private List<int> _seeds;
-    private readonly List<Func<int, int>> _fertilizerToWaterMap;
-    private readonly List<Func<int, int>> _soilToFertilizerMap;
-    private readonly List<Func<int, int>> _seedToSoilMap;
-    private readonly List<Func<int, int>> _waterToLightMap;
-    private readonly List<Func<int, int>> _lightToTemperatureMap;
-    private readonly List<Func<int, int>> _temperatureToHumidityMap;
-    private readonly List<Func<int, int>> _humidityToLocationMap;
+    private List<long> _seeds;
+    private readonly List<Func<long, long>> _fertilizerToWaterMap;
+    private readonly List<Func<long, long>> _soilToFertilizerMap;
+    private readonly List<Func<long, long>> _seedToSoilMap;
+    private readonly List<Func<long, long>> _waterToLightMap;
+    private readonly List<Func<long, long>> _lightToTemperatureMap;
+    private readonly List<Func<long, long>> _temperatureToHumidityMap;
+    private readonly List<Func<long, long>> _humidityToLocationMap;
 
     public int SeedsCount => _seeds.Count;
     public int SeedToSoilCount => _seedToSoilMap.Count;
@@ -25,13 +25,13 @@ public class ProductionMapping
     public ProductionMapping(string input)
     {
         _input = input;
-        _seedToSoilMap = new List<Func<int, int>>();
-        _soilToFertilizerMap = new List<Func<int, int>>();
-        _fertilizerToWaterMap = new List<Func<int, int>>();
-        _waterToLightMap = new List<Func<int, int>>();
-        _lightToTemperatureMap = new List<Func<int, int>>();
-        _temperatureToHumidityMap = new List<Func<int, int>>();
-        _humidityToLocationMap = new List<Func<int, int>>();
+        _seedToSoilMap = new List<Func<long, long>>();
+        _soilToFertilizerMap = new List<Func<long, long>>();
+        _fertilizerToWaterMap = new List<Func<long, long>>();
+        _waterToLightMap = new List<Func<long, long>>();
+        _lightToTemperatureMap = new List<Func<long, long>>();
+        _temperatureToHumidityMap = new List<Func<long, long>>();
+        _humidityToLocationMap = new List<Func<long, long>>();
         Parse();
     }
 
@@ -51,7 +51,7 @@ public class ProductionMapping
             {
                 if (section[0] == "seeds")
                 {
-                    _seeds = section[1].Trim().Split(" ").Select(int.Parse).ToList();
+                    _seeds = section[1].Trim().Split(" ").Select(long.Parse).ToList();
                 }
                 else
                 {
@@ -60,7 +60,7 @@ public class ProductionMapping
             }
             else
             {
-                var values = section[0].Trim().Split(" ").Select(int.Parse).ToArray();
+                var values = section[0].Trim().Split(" ").Select(long.Parse).ToArray();
 
                 switch (currentSection)
                 {
