@@ -7,6 +7,7 @@ public class ProductionMapping
     private readonly string _input;
     private List<long> _seeds;
     private readonly List<List<Func<long, long>>> _maps;
+    private readonly List<(long Start, long Count)> _seedRanges;
 
     public int SeedsCount => _seeds.Count;
     public int SeedToSoilCount => _maps[0].Count;
@@ -19,17 +20,26 @@ public class ProductionMapping
 
     public long MinimumLocation { get; private set; }
 
-    public ProductionMapping(string input)
+    public ProductionMapping(string input, bool asRange = false)
     {
         _input = input;
+        _seeds = new List<long>();
         _maps = new List<List<Func<long, long>>>();
+        _seedRanges = new List<(long Start, long Count)>();
         for (var index = 0; index < 7; index++)
         {
             _maps.Add(new List<Func<long, long>>());
         }
 
         Parse();
-        CalculateMinimumLocation();
+
+        if (asRange)
+        {
+        }
+        else
+        {
+            CalculateMinimumLocation();
+        }
     }
 
     private void Parse()
@@ -49,6 +59,11 @@ public class ProductionMapping
                 if (section[0] == "seeds")
                 {
                     _seeds = section[1].Trim().Split(" ").Select(long.Parse).ToList();
+
+                    for (var index = 0; index < _seeds.Count - 1; index += 2)
+                    {
+                        _seedRanges.Add((_seeds[index], _seeds[index + 1]));
+                    }
                 }
                 else
                 {
