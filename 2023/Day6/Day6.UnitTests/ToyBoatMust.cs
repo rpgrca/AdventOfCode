@@ -7,6 +7,7 @@ public class ToyBoatMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 3)]
+    [InlineData(PUZZLE_INPUT, 4)]
     public void LoadInputCorrectly(string input, int expectedRaces)
     {
         var sut = new ToyBoat(input);
