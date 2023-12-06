@@ -59,11 +59,10 @@ public class ToyBoat
 
     private void CalculateBestTimeForSingleRace()
     {
-        WaysToBreakRecord = 1;
+        WaysToBreakRecord = 0;
         var time = long.Parse(_times.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
         var distance = long.Parse(_distances.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
-
-        var recordBreakingTimes = new List<long>();
+        var started = false;
 
         for (var pressedDown = 1; pressedDown < time; pressedDown++)
         {
@@ -71,10 +70,12 @@ public class ToyBoat
             var totalDistance = leftTime * pressedDown;
             if (totalDistance > distance)
             {
-                recordBreakingTimes.Add(totalDistance);
+                started = true;
+                WaysToBreakRecord++;
+            }
+            else
+            {
             }
         }
-
-        WaysToBreakRecord *= recordBreakingTimes.Count;
     }
 }
