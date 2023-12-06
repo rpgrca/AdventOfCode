@@ -75,6 +75,10 @@ public class ToyBoat
             }
             else
             {
+                if (started)
+                {
+                    break;
+                }
             }
         }
     }
