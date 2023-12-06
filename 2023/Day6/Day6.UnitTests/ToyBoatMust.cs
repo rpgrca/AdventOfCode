@@ -13,4 +13,11 @@ public class ToyBoatMust
         var sut = new ToyBoat(input);
         Assert.Equal(expectedRaces, sut.RaceCount);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ToyBoat(SAMPLE_INPUT);
+        Assert.Equal(288, sut.WaysToBreakRecord);
+    }
 }
