@@ -108,24 +108,41 @@ public class ProductionMapping
                 }
             }
         }
+<<<<<<< Updated upstream
+=======
+
+        var oldMaps = _maps.ToList();
+        var seedMap = new SortedList<(long, long, long), Func<long, long>>();
+
+        for (var index = 0; index < _seeds.Count - 1; index += 2)
+        {
+            seedMap.Add((_seeds[index], _seeds[index], _seeds[index + 1]), s => s);
+        }
+        oldMaps.Insert(0, seedMap);
 
         var list = new List<(long, long, long)>();
-        foreach (var range in _maps[6].Keys)
+        foreach (var range in oldMaps[7].Keys)
         {
             list.Add((range.Target, range.Start, range.Count));
         }
         _simplifiedMap.Insert(0, list.OrderBy(p => p.Item2).ToList());
 
-        for (var index = 5; index >= 0; index--)
+        for (var index = 6; index >= 0; index--)
         {
             list = new List<(long, long, long)>();
 
-            foreach (var range in _maps[index].OrderBy(p => p.Key.Start))
+            foreach (var range in oldMaps[index].OrderBy(p => p.Key.Start))
             {
                 (long, long, long)[] splittedRange = SplitRangeInTwo(range.Key, _simplifiedMap[0]);
+                if (splittedRange[0].Item3 < 0)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
                 if (splittedRange[0] == (0, 0, 0))
                 {
-                    _simplifiedMap[0].Add((range.Key.Start, range.Key.Start, range.Key.Count));
+                    list.Add(range.Key);
+                    //_simplifiedMap[0].Add((range.Key.Target, range.Key.Target, range.Key.Count));
+                    //_simplifiedMap[0] = _simplifiedMap[0].OrderBy(p => p.Item2).ToList();
                 }
                 else
                 {
@@ -138,7 +155,9 @@ public class ProductionMapping
                         {
                             if (splittedRange2[0] == (0, 0, 0))
                             {
-                                _simplifiedMap[0].Add((splittedRange[1].Item2, splittedRange[1].Item2, splittedRange[1].Item3));
+                                list.Add(splittedRange[1]);
+                                //_simplifiedMap[0].Add((splittedRange[1].Item1, splittedRange[1].Item1, splittedRange[1].Item3));
+                                //_simplifiedMap[0] = _simplifiedMap[0].OrderBy(p => p.Item2).ToList();
                             }
                         }
 
@@ -152,8 +171,9 @@ public class ProductionMapping
                 }
             }
 
-            _simplifiedMap.Insert(0, list);
+            _simplifiedMap.Insert(0, list.OrderBy(p => p.Item2).ToList());
         }
+>>>>>>> Stashed changes
     }
 
     private void CalculateMinimumLocation()
@@ -187,66 +207,90 @@ public class ProductionMapping
     private void CalculateMinimumLocationWithRanges()
     {
         MinimumLocation = long.MaxValue;
-        foreach (var seedRange in _seedRanges)
+        foreach (var seedRange in _simplifiedMap[0])
         {
-            for (var seedStart = seedRange.Start; seedStart < seedRange.Start + seedRange.Count;)
+<<<<<<< Updated upstream
+            for (var seed = seedRange.Start; seed < seedRange.Start + seedRange.Count; seed++)
             {
-                var soilRange = FindSoilContaining2(seedStart, _simplifiedMap[0]);
+                var currentIndex = seed;
+                for (var index = 0; index < _maps.Count; index++)
+                {
+                    var list = new List<long>();
+                    foreach (var lambda in _maps[index])
+                    {
+                        list.Add(lambda(currentIndex));
+                    }
+
+                    var result = list.Distinct().Where(p => p != currentIndex).ToArray();
+                    if (result.Length != 0)
+                    {
+                        currentIndex = result.Single();
+                    }
+=======
+            for (var seedStart = seedRange.Item3; seedStart < seedRange.Item2 + seedRange.Item3;)
+            {
+                var soilRange = FindSoilContaining2(seedStart, _simplifiedMap[1]);
                 var currentIndex = soilRange.Conversion + (seedStart - soilRange.Start);
 
                 for (var soilStart = currentIndex; soilStart < soilRange.Conversion + soilRange.Count;)
                 {
-                    var fertilizerRange = FindSoilContaining2(soilStart, _simplifiedMap[1]);
+                    var fertilizerRange = FindSoilContaining2(soilStart, _simplifiedMap[2]);
                     currentIndex = fertilizerRange.Conversion + (soilStart - fertilizerRange.Start);
 
                     for (var fertilizerStart = currentIndex; fertilizerStart < fertilizerRange.Conversion + fertilizerRange.Count;)
                     {
-                        var waterRange = FindSoilContaining2(fertilizerStart, _simplifiedMap[2]);
+                        var waterRange = FindSoilContaining2(fertilizerStart, _simplifiedMap[3]);
                         currentIndex = waterRange.Conversion + (fertilizerStart - waterRange.Start);
 
                         for (var waterStart = currentIndex; waterStart < waterRange.Conversion + waterRange.Count;)
                         {
-                            var lightRange = FindSoilContaining2(waterStart, _simplifiedMap[3]);
+                            var lightRange = FindSoilContaining2(waterStart, _simplifiedMap[4]);
                             currentIndex = lightRange.Conversion + (waterStart - lightRange.Start);
 
                             for (var lightStart = currentIndex; lightStart < lightRange.Conversion + lightRange.Count;)
                             {
-                                var temperatureRange = FindSoilContaining2(lightStart, _simplifiedMap[4]);
+                                var temperatureRange = FindSoilContaining2(lightStart, _simplifiedMap[5]);
                                 currentIndex = temperatureRange.Conversion + (lightStart - temperatureRange.Start);
 
                                 for (var temperatureStart = currentIndex; temperatureStart < temperatureRange.Conversion + temperatureRange.Count;)
                                 {
-                                    var humidityRange = FindSoilContaining2(temperatureStart, _simplifiedMap[5]);
+                                    var humidityRange = FindSoilContaining2(temperatureStart, _simplifiedMap[6]);
                                     currentIndex = humidityRange.Conversion + (temperatureStart - humidityRange.Start);
 
                                     for (var humidityStart = currentIndex; humidityStart < humidityRange.Conversion + humidityRange.Count;)
                                     {
-                                        var locationRange = FindSoilContaining2(humidityStart, _simplifiedMap[6]);
+                                        var locationRange = FindSoilContaining2(humidityStart, _simplifiedMap[7]);
                                         currentIndex = locationRange.Conversion + (humidityStart - locationRange.Start);
-                                        humidityStart += locationRange.Count;
+                                        humidityStart += humidityRange.Count;
                                     }
 
-                                    temperatureStart += humidityRange.Count;
+                                    temperatureStart += temperatureRange.Count;
                                 }
 
-                                lightStart += temperatureRange.Count;
+                                lightStart += lightRange.Count;
                             }
 
-                            waterStart += lightRange.Count;
+                            waterStart += waterRange.Count;
                         }
 
-                        fertilizerStart += waterRange.Count;
+                        fertilizerStart += fertilizerRange.Count;
                     }
 
-                    soilStart += fertilizerRange.Count;
+                    soilStart += soilRange.Count;
+>>>>>>> Stashed changes
                 }
 
                 if (currentIndex < MinimumLocation)
                 {
                     MinimumLocation = currentIndex;
                 }
+<<<<<<< Updated upstream
+            }
+        }
+    }
+=======
 
-                seedStart += soilRange.Count;
+                seedStart += seedRange.Item3;
             }
         }
     }
@@ -382,9 +426,9 @@ public class ProductionMapping
     {
         foreach (var map in maps)
         {
-            if (range.Start < map.Start)
+            if (range.Target < map.Start)
             {
-                if (range.Start + range.Count - 1 < map.Start)
+                if (range.Target + range.Count - 1 < map.Start)
                 {
                     // rrrrrrr
                     //          mmmmmmm
@@ -393,16 +437,16 @@ public class ProductionMapping
                 }
                 else
                 {
-                    if (range.Start + range.Count - 1 < map.Start + map.Count - 1)
+                    if (range.Target + range.Count - 1 < map.Start + map.Count - 1)
                     {
                         // 012|345678
                         // rrr|rrrr
                         //    |mmmmmm
 
                         var firstLength = map.Start - range.Start;
-
+//ok
                         return new[] {
-                            (range.Target, range.Start, firstLength),
+                            (range.Start, range.Start, firstLength),
                             (range.Target + firstLength, map.Start, range.Count - firstLength)
                         };
                     }
@@ -412,18 +456,18 @@ public class ProductionMapping
                         // rr|rrrrrrr
                         //   |mmmm
 
-                        var firstLength = map.Start - range.Start;
+                        var firstLength = map.Start - range.Target;
 
                         return new[] {
                             (range.Target, range.Start, firstLength),
-                            (range.Target + firstLength, map.Start, range.Count - firstLength)
+                            (range.Target + firstLength, range.Start + firstLength, range.Count - firstLength)
                         };
                     }
                 }
             }
             else
             {
-                if (map.Start + map.Count - 1 < range.Start)
+                if (map.Start + map.Count - 1 < range.Target)
                 {
                     //        rrrrrrr
                     // mmmmm
@@ -432,13 +476,13 @@ public class ProductionMapping
                 }
                 else
                 {
-                    if (map.Start + map.Count - 1 < range.Start + range.Count - 1)
+                    if (map.Start + map.Count - 1 < range.Target + range.Count - 1)
                     {
                         // 01234|56789
                         //    rr|rrrrr
                         // mmmmm|
 
-                        var firstLength = map.Start + map.Count - range.Start;
+                        var firstLength = map.Start + map.Count - range.Target;
 
                         return new[] {
                             (range.Target, range.Start, firstLength),
@@ -460,4 +504,5 @@ public class ProductionMapping
 
         return new (long Target, long Start, long Count)[] { (0L, 0L, 0L) };
     }
+>>>>>>> Stashed changes
 }
