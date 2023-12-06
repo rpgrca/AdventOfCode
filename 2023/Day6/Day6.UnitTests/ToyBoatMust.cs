@@ -35,5 +35,10 @@ public class ToyBoatMust
         Assert.Equal(71503, sut.WaysToBreakRecord);
     }
 
-
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ToyBoat(PUZZLE_INPUT, false);
+        Assert.Equal(35150181, sut.WaysToBreakRecord);
+    }
 }

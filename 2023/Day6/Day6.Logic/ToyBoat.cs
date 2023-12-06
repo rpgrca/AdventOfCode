@@ -8,7 +8,7 @@ public class ToyBoat
     private int[] _distances;
 
     public int RaceCount => _times.Length;
-    public int WaysToBreakRecord { get; private set; }
+    public long WaysToBreakRecord { get; private set; }
 
     public ToyBoat(string input, bool badKerning = true)
     {
@@ -60,10 +60,10 @@ public class ToyBoat
     private void CalculateBestTimeForSingleRace()
     {
         WaysToBreakRecord = 1;
-        var time = int.Parse(_times.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
-        var distance = int.Parse(_distances.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
+        var time = long.Parse(_times.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
+        var distance = long.Parse(_distances.Select(p => $"{p}").Aggregate(string.Empty, (t, i) => t += i));
 
-        var recordBreakingTimes = new List<int>();
+        var recordBreakingTimes = new List<long>();
 
         for (var pressedDown = 1; pressedDown < time; pressedDown++)
         {
