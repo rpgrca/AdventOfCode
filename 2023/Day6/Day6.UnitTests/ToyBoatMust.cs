@@ -20,4 +20,20 @@ public class ToyBoatMust
         var sut = new ToyBoat(SAMPLE_INPUT);
         Assert.Equal(288, sut.WaysToBreakRecord);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ToyBoat(PUZZLE_INPUT);
+        Assert.Equal(293046, sut.WaysToBreakRecord);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ToyBoat(SAMPLE_INPUT, false);
+        Assert.Equal(71503, sut.WaysToBreakRecord);
+    }
+
+
 }
