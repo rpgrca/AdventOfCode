@@ -1,3 +1,5 @@
+using Xunit.Sdk;
+
 namespace Day5.UnitTests;
 
 public static class Constants
