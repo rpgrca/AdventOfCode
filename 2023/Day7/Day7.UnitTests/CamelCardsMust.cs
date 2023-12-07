@@ -6,10 +6,11 @@ namespace Day7.UnitTests;
 public class CamelCardsMust
 {
     [Theory]
-    [InlineData(SAMPLE_INPUT)]
-    public void LoadInputCorrectly(string input)
+    [InlineData(SAMPLE_INPUT, 5)]
+    [InlineData(PUZZLE_INPUT, 1000)]
+    public void LoadInputCorrectly(string input, int expectedCount)
     {
         var sut = new CamelCards(input);
-        Assert.Equal(5, sut.Hands);
+        Assert.Equal(expectedCount, sut.Hands);
     }
 }
