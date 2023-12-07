@@ -43,4 +43,11 @@ public class ProductionMappingMust
         var sut = new ProductionMapping(SAMPLE_INPUT, true);
         Assert.Equal(46, sut.MinimumLocation);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ProductionMapping(PUZZLE_INPUT, true, false);
+        Assert.Equal(57451709, sut.MinimumLocation);
+    }
 }
