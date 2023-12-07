@@ -26,5 +26,6 @@ public class CamelCardsMust
     {
         var sut = new CamelCards(PUZZLE_INPUT);
         Assert.True(250456319 > sut.TotalWinnings);
+        Assert.Equal(250232501, sut.TotalWinnings);
     }
 }
