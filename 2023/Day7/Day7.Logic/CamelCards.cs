@@ -58,12 +58,12 @@ public class CamelCards
             .OrderBy(h => h.Weight)
             .ToList();
 
-        handsSortedByKind.Sort((x, y) => HandStrengthComparer(x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
+        handsSortedByKind.Sort((x, y) => HandStrengthComparer(relativeValues, x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
 
         _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
     }
 
-    private static int HandStrengthComparer(string left, int weightLeft, string right, int weightRight)
+    private static int HandStrengthComparer(Dictionary<char, int> relativeValues, string left, int weightLeft, string right, int weightRight)
     {
         if (weightLeft > weightRight)
         {
@@ -81,13 +81,13 @@ public class CamelCards
                 continue;
             }
 
-            if (left[index] > right[index])
+            if (relativeValues[left[index]] > relativeValues[right[index]])
             {
-                return -1;
+                return 1;
             }
             else
             {
-                return 1;
+                return -1;
             }
         }
 
