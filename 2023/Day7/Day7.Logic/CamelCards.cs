@@ -8,9 +8,10 @@ public class CamelCards
     private readonly string _input;
     private readonly string[] _lines;
     private readonly List<(string Hand, int Bid)> _hands;
-    private List<(string, int)> _handSortedByCard;
+    private List<(string Hand, int Bid)> _handSortedByKindAndCard;
 
     public int Hands => _hands.Count;
+    public int TotalWinnings { get; private set; }
 
     public CamelCards(string input)
     {
@@ -20,6 +21,7 @@ public class CamelCards
 
         Parse();
         SortHandsByCard();
+        CalculateTotalWinnings();
     }
 
     private void Parse()
@@ -58,7 +60,7 @@ public class CamelCards
 
         handsSortedByKind.Sort((x, y) => HandStrengthComparer(x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
 
-        _handSortedByCard = handsSortedByKind.Select(p => p.Original).ToList();
+        _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
     }
 
     private static int HandStrengthComparer(string left, int weightLeft, string right, int weightRight)
@@ -152,4 +154,12 @@ public class CamelCards
 
     private bool IsOnePair(string hand) =>
         hand[0] == hand[1] || hand[1] == hand[2] || hand[2] == hand[3] || hand[3] == hand[4];
+
+    private void CalculateTotalWinnings()
+    {
+        for (var index = 0; index < _handSortedByKindAndCard.Count; index++)
+        {
+            TotalWinnings += _handSortedByKindAndCard[index].Bid * (index + 1);
+        }
+    }
 }

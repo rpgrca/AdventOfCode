@@ -13,4 +13,11 @@ public class CamelCardsMust
         var sut = new CamelCards(input);
         Assert.Equal(expectedCount, sut.Hands);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new CamelCards(SAMPLE_INPUT);
+        Assert.Equal(6440, sut.TotalWinnings);
+    }
 }
