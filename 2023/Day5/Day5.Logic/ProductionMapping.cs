@@ -21,7 +21,7 @@ public class ProductionMapping
 
     public long MinimumLocation { get; private set; }
 
-    public ProductionMapping(string input, bool asRange = false)
+    public ProductionMapping(string input, bool asRange = false, bool forSample = true)
     {
         _input = input;
         _seeds = new List<long>();
@@ -37,7 +37,14 @@ public class ProductionMapping
 
         if (asRange)
         {
-            CalculateMinimumLocationWithRanges();
+            if (forSample)
+            {
+                CalculateMinimumLocationWithRangesForSample();
+            }
+            else
+            {
+                CalculateMinimumLocationWithRangesForPuzzle();
+            }
         }
         else
         {
@@ -108,8 +115,6 @@ public class ProductionMapping
                 }
             }
         }
-<<<<<<< Updated upstream
-=======
 
         var oldMaps = _maps.ToList();
         var seedMap = new SortedList<(long, long, long), Func<long, long>>();
@@ -173,7 +178,6 @@ public class ProductionMapping
 
             _simplifiedMap.Insert(0, list.OrderBy(p => p.Item2).ToList());
         }
->>>>>>> Stashed changes
     }
 
     private void CalculateMinimumLocation()
@@ -204,30 +208,12 @@ public class ProductionMapping
         MinimumLocation = results.Min();
     }
 
-    private void CalculateMinimumLocationWithRanges()
+    private void CalculateMinimumLocationWithRangesForSample()
     {
         MinimumLocation = long.MaxValue;
-        foreach (var seedRange in _simplifiedMap[0])
+        foreach ((long Target, long Start, long Count) seedRange in _simplifiedMap[0])
         {
-<<<<<<< Updated upstream
-            for (var seed = seedRange.Start; seed < seedRange.Start + seedRange.Count; seed++)
-            {
-                var currentIndex = seed;
-                for (var index = 0; index < _maps.Count; index++)
-                {
-                    var list = new List<long>();
-                    foreach (var lambda in _maps[index])
-                    {
-                        list.Add(lambda(currentIndex));
-                    }
-
-                    var result = list.Distinct().Where(p => p != currentIndex).ToArray();
-                    if (result.Length != 0)
-                    {
-                        currentIndex = result.Single();
-                    }
-=======
-            for (var seedStart = seedRange.Item3; seedStart < seedRange.Item2 + seedRange.Item3;)
+            for (var seedStart = seedRange.Start; seedStart < seedRange.Start + seedRange.Count; seedStart++)
             {
                 var soilRange = FindSoilContaining2(seedStart, _simplifiedMap[1]);
                 var currentIndex = soilRange.Conversion + (seedStart - soilRange.Start);
@@ -277,20 +263,77 @@ public class ProductionMapping
                     }
 
                     soilStart += soilRange.Count;
->>>>>>> Stashed changes
                 }
 
                 if (currentIndex < MinimumLocation)
                 {
                     MinimumLocation = currentIndex;
                 }
-<<<<<<< Updated upstream
             }
         }
     }
-=======
 
-                seedStart += seedRange.Item3;
+    private void CalculateMinimumLocationWithRangesForPuzzle()
+    {
+        MinimumLocation = long.MaxValue;
+        foreach (var seedRange in _simplifiedMap[0])
+        {
+            var seedStart = seedRange.Item2;
+            {
+                var soilRange = FindSoilContaining2(seedStart, _simplifiedMap[1]);
+                var currentIndex = soilRange.Conversion + (seedStart - soilRange.Start);
+
+                for (var soilStart = currentIndex; soilStart < soilRange.Conversion + soilRange.Count;)
+                {
+                    var fertilizerRange = FindSoilContaining2(soilStart, _simplifiedMap[2]);
+                    currentIndex = fertilizerRange.Conversion + (soilStart - fertilizerRange.Start);
+
+                    for (var fertilizerStart = currentIndex; fertilizerStart < fertilizerRange.Conversion + fertilizerRange.Count;)
+                    {
+                        var waterRange = FindSoilContaining2(fertilizerStart, _simplifiedMap[3]);
+                        currentIndex = waterRange.Conversion + (fertilizerStart - waterRange.Start);
+
+                        for (var waterStart = currentIndex; waterStart < waterRange.Conversion + waterRange.Count;)
+                        {
+                            var lightRange = FindSoilContaining2(waterStart, _simplifiedMap[4]);
+                            currentIndex = lightRange.Conversion + (waterStart - lightRange.Start);
+
+                            for (var lightStart = currentIndex; lightStart < lightRange.Conversion + lightRange.Count;)
+                            {
+                                var temperatureRange = FindSoilContaining2(lightStart, _simplifiedMap[5]);
+                                currentIndex = temperatureRange.Conversion + (lightStart - temperatureRange.Start);
+
+                                for (var temperatureStart = currentIndex; temperatureStart < temperatureRange.Conversion + temperatureRange.Count;)
+                                {
+                                    var humidityRange = FindSoilContaining2(temperatureStart, _simplifiedMap[6]);
+                                    currentIndex = humidityRange.Conversion + (temperatureStart - humidityRange.Start);
+
+                                    for (var humidityStart = currentIndex; humidityStart < humidityRange.Conversion + humidityRange.Count;)
+                                    {
+                                        var locationRange = FindSoilContaining2(humidityStart, _simplifiedMap[7]);
+                                        currentIndex = locationRange.Conversion + (humidityStart - locationRange.Start);
+                                        humidityStart += humidityRange.Count;
+                                    }
+
+                                    temperatureStart += temperatureRange.Count;
+                                }
+
+                                lightStart += lightRange.Count;
+                            }
+
+                            waterStart += waterRange.Count;
+                        }
+
+                        fertilizerStart += fertilizerRange.Count;
+                    }
+
+                    soilStart += soilRange.Count;
+                }
+
+                if (currentIndex < MinimumLocation)
+                {
+                    MinimumLocation = currentIndex;
+                }
             }
         }
     }
@@ -444,9 +487,8 @@ public class ProductionMapping
                         //    |mmmmmm
 
                         var firstLength = map.Start - range.Start;
-//ok
                         return new[] {
-                            (range.Start, range.Start, firstLength),
+                            (range.Target, range.Start, firstLength),
                             (range.Target + firstLength, map.Start, range.Count - firstLength)
                         };
                     }
@@ -504,5 +546,4 @@ public class ProductionMapping
 
         return new (long Target, long Start, long Count)[] { (0L, 0L, 0L) };
     }
->>>>>>> Stashed changes
 }
