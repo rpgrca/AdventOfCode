@@ -139,10 +139,6 @@ public class ProductionMapping
             foreach (var range in oldMaps[index].OrderBy(p => p.Key.Start))
             {
                 (long, long, long)[] splittedRange = SplitRangeInTwo(range.Key, _simplifiedMap[0]);
-                if (splittedRange[0].Item3 < 0)
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
                 if (splittedRange[0] == (0, 0, 0))
                 {
                     list.Add(range.Key);
@@ -362,8 +358,7 @@ public class ProductionMapping
         return (start, start, 1);
     }
 
-
-
+/*
     private (long Target, long Start, long Count)[] SplitRange((long Target, long Start, long Count) range, List<(long Target, long Start, long Count)> maps)
     {
         foreach (var map in maps)
@@ -463,7 +458,7 @@ public class ProductionMapping
 
         return Array.Empty<(long, long, long)>();
     }
-
+*/
 
     private (long Target, long Start, long Count)[] SplitRangeInTwo((long Target, long Start, long Count) range, List<(long Target, long Start, long Count)> maps)
     {
