@@ -1,8 +1,5 @@
-
-using System.Collections.Immutable;
-using System.Reflection.Metadata.Ecma335;
-
 namespace Day7.Logic;
+
 public class CamelCards
 {
     private readonly string _input;
@@ -13,14 +10,23 @@ public class CamelCards
     public int Hands => _hands.Count;
     public int TotalWinnings { get; private set; }
 
-    public CamelCards(string input)
+    public CamelCards(string input, bool jackAsJocker = false)
     {
         _input = input;
         _lines = input.Split("\n");
         _hands = new List<(string, int)>();
 
         Parse();
-        SortHandsByCard();
+
+        if (! jackAsJocker)
+        {
+            SortHandsByCard();
+        }
+        else
+        {
+            SortHandsByCardWithJocker();
+        }
+
         CalculateTotalWinnings();
     }
 
@@ -63,6 +69,38 @@ public class CamelCards
         _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
     }
 
+    private void SortHandsByCardWithJocker()
+    {
+        var relativeValues = new Dictionary<char, int>
+        {
+            { 'A', 14 },
+            { 'K', 13 },
+            { 'Q', 12 },
+            { 'T', 10 },
+            { '9',  9 },
+            { '8',  8 },
+            { '7',  7 },
+            { '6',  6 },
+            { '5',  5 },
+            { '4',  4 },
+            { '3',  3 },
+            { '2',  2 },
+            { 'J',  1 }
+        };
+
+        var handsSortedByKind = _hands
+            .Select(p => new { Original = p, Sorted = SortHand(p, relativeValues) })
+            .Select(p => new { p.Original, p.Sorted, Weight = SortHandByWeight(p.Sorted, true) })
+            .OrderBy(h => h.Weight)
+            .ToList();
+
+        handsSortedByKind.Sort((x, y) => HandStrengthComparer(relativeValues, x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
+
+        _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
+    }
+
+
+
     private static int HandStrengthComparer(Dictionary<char, int> relativeValues, string left, int weightLeft, string right, int weightRight)
     {
         if (weightLeft > weightRight)
@@ -102,34 +140,52 @@ public class CamelCards
             .Aggregate(string.Empty, (t, i) => t = t + i.Item2.ToString("X"));
     }
 
-    private int SortHandByWeight(string hand)
+    private int SortHandByWeight(string hand, bool withJocker = false)
     {
-        if (IsFiveOfaKind(hand))
+        var hands = new List<string>();
+
+        if (! withJocker || !hand.Contains('1'))
         {
-            return 6;
+            hands.Add(hand);
         }
-        if (IsFourOfaKind(hand))
+        else
         {
-            return 5;
-        }
-        if (IsFullHouse(hand))
-        {
-            return 4;
-        }
-        if (IsThreeOfaKind(hand))
-        {
-            return 3;
-        }
-        if (IsTwoPair(hand))
-        {
-            return 2;
-        }
-        if (IsOnePair(hand))
-        {
-            return 1;
+            foreach (var card in new[] { 'E', 'D', 'C', 'A', '9', '8', '7', '6', '5', '4', '3', '2', '1' })
+            {
+                hands.Add(hand.Replace('1', card));
+            }
         }
 
-        return 0;
+        var maximumWeight = 0;
+        foreach (var h in hands)
+        {
+            if (IsFiveOfaKind(h))
+            {
+                if (maximumWeight < 6) maximumWeight = 6;
+            }
+            else if (IsFourOfaKind(h))
+            {
+                if (maximumWeight < 5) maximumWeight = 5;
+            }
+            else if (IsFullHouse(h))
+            {
+                if (maximumWeight < 4) maximumWeight = 4;
+            }
+            else if (IsThreeOfaKind(h))
+            {
+                if (maximumWeight < 3) maximumWeight = 3;
+            }
+            else if (IsTwoPair(h))
+            {
+                if (maximumWeight < 2) maximumWeight = 2;
+            }
+            else if (IsOnePair(h))
+            {
+                if (maximumWeight < 1) maximumWeight = 1;
+            }
+        }
+
+        return maximumWeight;
     }
 
     private bool IsFiveOfaKind(string hand) =>

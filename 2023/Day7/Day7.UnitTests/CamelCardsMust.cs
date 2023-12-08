@@ -28,4 +28,11 @@ public class CamelCardsMust
         Assert.True(250456319 > sut.TotalWinnings);
         Assert.Equal(250232501, sut.TotalWinnings);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new CamelCards(SAMPLE_INPUT, true);
+        Assert.Equal(5905, sut.TotalWinnings);
+    }
 }
