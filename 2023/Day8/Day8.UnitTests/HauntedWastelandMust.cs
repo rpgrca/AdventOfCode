@@ -113,12 +113,14 @@ public class HauntedWastelandMust
             i5 => Assert.Equal("HJA", i5),
             i6 => Assert.Equal("HPA", i6));
     }
-/*
+
     [Fact]
     public void CalculateFirstStepCorrectly_WhenUsingGhostMap()
     {
         var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
-        Assert.Collection(sut.CurrentNodes,
-            n1 => Assert.Equal())
-    }*/
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11B", n1),
+            n2 => Assert.Equal("22B", n2));
+    }
 }

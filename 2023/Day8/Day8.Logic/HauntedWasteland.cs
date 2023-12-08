@@ -3,6 +3,7 @@
 
 
 
+
 namespace Day8.Logic;
 public class HauntedWasteland
 {
@@ -13,14 +14,14 @@ public class HauntedWasteland
     public string Instructions { get; private set; }
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
     public int StepsToReachGoal { get; private set; }
-    public List<string> CurrentStates { get; private set; }
+    public string[] CurrentStates { get; private set; }
 
     public HauntedWasteland(string input, bool forGhosts = false)
     {
         _input = input;
         Instructions = string.Empty;
         Steps = new Dictionary<string, Dictionary<char, string>>();
-        CurrentStates = new List<string>();
+        CurrentStates = Array.Empty<string>();
 
         Parse();
 
@@ -33,6 +34,7 @@ public class HauntedWasteland
     private void Parse()
     {
         var lines = _input.Split("\n");
+        var currentStates = new List<string>();
         Instructions = lines[0];
         InstructionCount = lines[0].Length;
 
@@ -49,9 +51,11 @@ public class HauntedWasteland
 
             if (key[^1] == 'A')
             {
-                CurrentStates.Add(key);
+                currentStates.Add(key);
             }
         }
+
+        CurrentStates = currentStates.ToArray();
     }
 
     private void CalculateStepsToGoal()
@@ -63,5 +67,15 @@ public class HauntedWasteland
         {
             currentStep = Steps[currentStep][Instructions[StepsToReachGoal++ % InstructionCount]];
         }
+    }
+
+    public void Step()
+    {
+        for (var index = 0; index < CurrentStates.Length; index++)
+        {
+            CurrentStates[index] = Steps[CurrentStates[index]][Instructions[StepsToReachGoal % InstructionCount]];
+        }
+
+        StepsToReachGoal++;
     }
 }
