@@ -185,6 +185,54 @@ public class HauntedWasteland
             stepsToFinalState.Add(legCount);
         }
 
-        StepsToReachGoal = stepsToFinalState.Aggregate(1, (t, i) => t *= i);
+        CalculateLeastCommonMultiple(stepsToFinalState);
+    }
+
+    private void CalculateLeastCommonMultiple(List<int> values)
+    {
+        var leastCommonMultiple = new Dictionary<int, int>();
+        foreach (var value in values)
+        {
+            var primes = CalculatePrimeNumbersFor(value);
+            foreach (var (key, repeat) in primes)
+            {
+                if (leastCommonMultiple.ContainsKey(key))
+                {
+                    if (leastCommonMultiple[key] < repeat)
+                    {
+                        leastCommonMultiple[key] = repeat;
+                    }
+                }
+                else
+                {
+                    leastCommonMultiple.Add(key, repeat);
+                }
+            }
+        }
+
+        StepsToReachGoal = leastCommonMultiple.Aggregate(1L, (t, i) => t * (i.Key * i.Value));
+    }
+
+    private Dictionary<int, int> CalculatePrimeNumbersFor(int value)
+    {
+        var result = new Dictionary<int, int>();
+        var repeat = 0;
+        while (value % 2 == 0)
+        {
+            result.Add(2, ++repeat);
+            value /= 2;
+        }
+
+        for (var index = 3; value > 1; index += 2)
+        {
+            repeat = 0;
+            while (value % index == 0)
+            {
+                result.Add(index, ++repeat);
+                value /= index;
+            }
+        }
+
+        return result;
     }
 }

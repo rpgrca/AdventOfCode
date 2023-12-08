@@ -196,12 +196,12 @@ public class HauntedWastelandMust
         sut.ReachGoalInGhostModeWithNumericStates();
         Assert.Equal(6, sut.StepsToReachGoal);
     }
-/*
+
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new HauntedWasteland(PUZZLE_INPUT, true);
         sut.ReachGoalInGhostModeWithNumericStates();
         Assert.Equal(21165830176709, sut.StepsToReachGoal);
-    }*/
+    }
 }
