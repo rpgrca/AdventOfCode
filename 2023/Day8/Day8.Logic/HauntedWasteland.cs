@@ -13,14 +13,18 @@ public class HauntedWasteland
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
     public int StepsToReachGoal { get; private set; }
 
-    public HauntedWasteland(string input)
+    public HauntedWasteland(string input, bool forGhosts = false)
     {
         _input = input;
         Instructions = string.Empty;
         Steps = new Dictionary<string, Dictionary<char, string>>();
 
         Parse();
-        CalculateStepsToGoal();
+
+        if (!forGhosts)
+        {
+            CalculateStepsToGoal();
+        }
     }
 
     private void Parse()

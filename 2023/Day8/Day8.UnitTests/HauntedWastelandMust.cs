@@ -83,4 +83,20 @@ public class HauntedWastelandMust
         var sut = new HauntedWasteland(PUZZLE_INPUT);
         Assert.Equal(21409, sut.StepsToReachGoal);
     }
+
+    [Fact]
+    public void LoadGhostInputCorrectly()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        Assert.Equal(2, sut.InstructionCount);
+        Assert.Equal(8, sut.StateCount);
+    }
+/*
+
+    [Fact]
+    public void SelectAllStartingNodesCorrectly()
+    {
+        var sut = new HauntedWasteland(PUZZLE_INPUT);
+        Assert.Equal(2, sut.InitialNodes);
+    }*/
 }
