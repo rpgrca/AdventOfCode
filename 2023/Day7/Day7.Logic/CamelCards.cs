@@ -8,7 +8,7 @@ public class CamelCards
     private List<(string Hand, int Bid)> _handSortedByKindAndCard;
 
     public int Hands => _hands.Count;
-    public int TotalWinnings { get; private set; }
+    public long TotalWinnings { get; private set; }
 
     public CamelCards(string input, bool jackAsJocker = false)
     {
@@ -65,7 +65,6 @@ public class CamelCards
             .ToList();
 
         handsSortedByKind.Sort((x, y) => HandStrengthComparer(relativeValues, x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
-
         _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
     }
 
@@ -90,16 +89,13 @@ public class CamelCards
 
         var handsSortedByKind = _hands
             .Select(p => new { Original = p, Sorted = SortHand(p, relativeValues) })
-            .Select(p => new { p.Original, p.Sorted, Weight = SortHandByWeight(p.Sorted, true) })
+            .Select(p => new { p.Original, Weight = SortHandByWeight(p.Sorted, true) })
             .OrderBy(h => h.Weight)
             .ToList();
 
         handsSortedByKind.Sort((x, y) => HandStrengthComparer(relativeValues, x.Original.Hand, x.Weight, y.Original.Hand, y.Weight));
-
         _handSortedByKindAndCard = handsSortedByKind.Select(p => p.Original).ToList();
     }
-
-
 
     private static int HandStrengthComparer(Dictionary<char, int> relativeValues, string left, int weightLeft, string right, int weightRight)
     {
@@ -150,9 +146,10 @@ public class CamelCards
         }
         else
         {
-            foreach (var card in new[] { 'E', 'D', 'C', 'A', '9', '8', '7', '6', '5', '4', '3', '2', '1' })
+            hands.Add(hand);
+            foreach (var card in new[] { 'E', 'D', 'C', 'A', '9', '8', '7', '6', '5', '4', '3', '2' })
             {
-                hands.Add(hand.Replace('1', card));
+                hands.Add(string.Join("", hand.Replace('1', card).OrderBy(p => p)));
             }
         }
 
@@ -192,8 +189,8 @@ public class CamelCards
         hand[0] == hand[1] && hand[1] == hand[2] && hand[2] == hand[3] && hand[3] == hand[4];
 
     private bool IsFourOfaKind(string hand) =>
-        (hand[0] == hand[1] && hand[1] == hand[2] && hand[2] == hand[3]) ||
-        (hand[1] == hand[2] && hand[2] == hand[3] && hand[3] == hand[4]);
+        /* AAAAK */ (hand[0] == hand[1] && hand[1] == hand[2] && hand[2] == hand[3]) ||
+        /* KAAAA */ (hand[1] == hand[2] && hand[2] == hand[3] && hand[3] == hand[4]);
 
     private bool IsFullHouse(string hand) =>
         (hand[0] == hand[1] && hand[1] == hand[2] && hand[3] == hand[4]) ||
