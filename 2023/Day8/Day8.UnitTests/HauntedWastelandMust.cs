@@ -123,4 +123,69 @@ public class HauntedWastelandMust
             n1 => Assert.Equal("11B", n1),
             n2 => Assert.Equal("22B", n2));
     }
+
+    [Fact]
+    public void CalculateSecondStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.Step();
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11Z", n1),
+            n2 => Assert.Equal("22C", n2));
+    }
+
+    [Fact]
+    public void CalculateThirdStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11B", n1),
+            n2 => Assert.Equal("22Z", n2));
+    }
+
+    [Fact]
+    public void CalculateFourthStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11Z", n1),
+            n2 => Assert.Equal("22B", n2));
+    }
+
+    [Fact]
+    public void CalculateFifthStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11B", n1),
+            n2 => Assert.Equal("22C", n2));
+    }
+
+    [Fact]
+    public void CalculateSixthStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        sut.Step();
+        Assert.Collection(sut.CurrentStates,
+            n1 => Assert.Equal("11Z", n1),
+            n2 => Assert.Equal("22Z", n2));
+    }
 }
