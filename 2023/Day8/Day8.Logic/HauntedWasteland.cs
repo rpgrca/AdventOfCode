@@ -2,6 +2,7 @@
 
 
 
+
 namespace Day8.Logic;
 public class HauntedWasteland
 {
@@ -12,12 +13,14 @@ public class HauntedWasteland
     public string Instructions { get; private set; }
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
     public int StepsToReachGoal { get; private set; }
+    public List<string> InitialNodes { get; private set; }
 
     public HauntedWasteland(string input, bool forGhosts = false)
     {
         _input = input;
         Instructions = string.Empty;
         Steps = new Dictionary<string, Dictionary<char, string>>();
+        InitialNodes = new List<string>();
 
         Parse();
 
@@ -43,6 +46,11 @@ public class HauntedWasteland
             var branches = values[1].Trim()[1..^1].Split(",");
             Steps[key].Add('L', branches[0].Trim());
             Steps[key].Add('R', branches[1].Trim());
+
+            if (key[^1] == 'A')
+            {
+                InitialNodes.Add(key);
+            }
         }
     }
 

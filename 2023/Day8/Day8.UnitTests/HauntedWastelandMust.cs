@@ -91,12 +91,13 @@ public class HauntedWastelandMust
         Assert.Equal(2, sut.InstructionCount);
         Assert.Equal(8, sut.StateCount);
     }
-/*
 
     [Fact]
     public void SelectAllStartingNodesCorrectly()
     {
-        var sut = new HauntedWasteland(PUZZLE_INPUT);
-        Assert.Equal(2, sut.InitialNodes);
-    }*/
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        Assert.Collection(sut.InitialNodes,
+            i1 => Assert.Equal("11A", i1),
+            i2 => Assert.Equal("22A", i2));
+    }
 }
