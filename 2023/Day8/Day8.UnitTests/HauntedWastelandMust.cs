@@ -71,9 +71,16 @@ public class HauntedWastelandMust
     [Theory]
     [InlineData(SAMPLE_INPUT, 2)]
     [InlineData(SECOND_SAMPLE_INPUT, 6)]
-    public void CalculateStepsToReachGoalCorrectly(string input, int expectedSteps)
+    public void SolveFirstSampleCorrectly(string input, int expectedSteps)
     {
         var sut = new HauntedWasteland(input);
         Assert.Equal(expectedSteps, sut.StepsToReachGoal);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new HauntedWasteland(PUZZLE_INPUT);
+        Assert.Equal(21409, sut.StepsToReachGoal);
     }
 }
