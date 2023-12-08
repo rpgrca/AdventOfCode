@@ -93,11 +93,24 @@ public class HauntedWastelandMust
     }
 
     [Fact]
-    public void SelectAllStartingNodesCorrectly()
+    public void SelectAllStartingNodesCorrectly_WhenParsingSampleInput()
     {
         var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
         Assert.Collection(sut.InitialNodes,
             i1 => Assert.Equal("11A", i1),
             i2 => Assert.Equal("22A", i2));
+    }
+
+    [Fact]
+    public void SelectAllStartingNodesCorrectly_WhenParsingPuzzleInput()
+    {
+        var sut = new HauntedWasteland(PUZZLE_INPUT, true);
+        Assert.Collection(sut.InitialNodes,
+            i1 => Assert.Equal("AAA", i1),
+            i2 => Assert.Equal("XDA", i2),
+            i3 => Assert.Equal("XSA", i3),
+            i4 => Assert.Equal("CFA", i4),
+            i5 => Assert.Equal("HJA", i5),
+            i6 => Assert.Equal("HPA", i6));
     }
 }
