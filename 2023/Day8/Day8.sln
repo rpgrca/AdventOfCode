@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day8.Logic", "Day8.Logic\Day8.Logic.csproj", "{F64C06BF-1525-4D26-92ED-8E64C2C97670}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day8.UnitTests", "Day8.UnitTests\Day8.UnitTests.csproj", "{DE86A959-4DB2-40C3-B981-2D3B2875C578}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F64C06BF-1525-4D26-92ED-8E64C2C97670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F64C06BF-1525-4D26-92ED-8E64C2C97670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F64C06BF-1525-4D26-92ED-8E64C2C97670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F64C06BF-1525-4D26-92ED-8E64C2C97670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE86A959-4DB2-40C3-B981-2D3B2875C578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE86A959-4DB2-40C3-B981-2D3B2875C578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE86A959-4DB2-40C3-B981-2D3B2875C578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE86A959-4DB2-40C3-B981-2D3B2875C578}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
