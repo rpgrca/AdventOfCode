@@ -14,4 +14,13 @@ public class HauntedWastelandMust
         Assert.Equal(expectedInstructions, sut.InstructionCount);
         Assert.Equal(expectedStates, sut.StateCount);
     }
+
+    [Fact]
+    public void ObtainInstructionsFromSampleCorrectly()
+    {
+        var sut = new HauntedWasteland(SAMPLE_INPUT);
+        Assert.Collection(sut.Instructions,
+            p1 => Assert.Equal('R', p1),
+            p2 => Assert.Equal('L', p2));
+    }
 }
