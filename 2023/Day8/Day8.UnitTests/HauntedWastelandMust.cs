@@ -190,10 +190,18 @@ public class HauntedWastelandMust
     }
 
     [Fact]
-    public void CalculateStepsToGoalCorrectly_WhenUsingGhostMap()
+    public void SolveSecondSampleCorrectly()
     {
         var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
         sut.ReachGoalInGhostMode();
         Assert.Equal(6, sut.StepsToReachGoal);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new HauntedWasteland(PUZZLE_INPUT, true);
+        sut.ReachGoalInGhostMode();
+        Assert.Equal(0, sut.StepsToReachGoal);
     }
 }

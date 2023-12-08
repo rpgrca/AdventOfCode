@@ -8,12 +8,13 @@ namespace Day8.Logic;
 public class HauntedWasteland
 {
     private readonly string _input;
+    private int _currentIndex;
 
     public int StateCount { get; private set; }
     public int InstructionCount { get; private set; }
     public string Instructions { get; private set; }
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
-    public int StepsToReachGoal { get; private set; }
+    public long StepsToReachGoal { get; private set; }
     public string[] CurrentStates { get; private set; }
 
     public HauntedWasteland(string input, bool forGhosts = false)
@@ -60,12 +61,19 @@ public class HauntedWasteland
 
     private void CalculateStepsToGoal()
     {
+        var index = 0;
         StepsToReachGoal = 0;
 
         var currentStep = "AAA";
         while (currentStep != "ZZZ")
         {
-            currentStep = Steps[currentStep][Instructions[StepsToReachGoal++ % InstructionCount]];
+            currentStep = Steps[currentStep][Instructions[index]];
+            StepsToReachGoal++;
+            index++;
+            if (index >= InstructionCount)
+            {
+                index = 0;
+            }
         }
     }
 
@@ -73,10 +81,15 @@ public class HauntedWasteland
     {
         for (var index = 0; index < CurrentStates.Length; index++)
         {
-            CurrentStates[index] = Steps[CurrentStates[index]][Instructions[StepsToReachGoal % InstructionCount]];
+            CurrentStates[index] = Steps[CurrentStates[index]][Instructions[_currentIndex]];
         }
 
         StepsToReachGoal++;
+        _currentIndex++;
+        if (_currentIndex >= InstructionCount)
+        {
+            _currentIndex = 0;
+        }
     }
 
     public void ReachGoalInGhostMode()
