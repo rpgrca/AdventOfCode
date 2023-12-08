@@ -188,4 +188,12 @@ public class HauntedWastelandMust
             n1 => Assert.Equal("11Z", n1),
             n2 => Assert.Equal("22Z", n2));
     }
+
+    [Fact]
+    public void CalculateStepsToGoalCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        sut.ReachGoalInGhostMode();
+        Assert.Equal(6, sut.StepsToReachGoal);
+    }
 }

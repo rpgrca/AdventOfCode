@@ -78,4 +78,12 @@ public class HauntedWasteland
 
         StepsToReachGoal++;
     }
+
+    public void ReachGoalInGhostMode()
+    {
+        while (CurrentStates.Any(p => p[^1] != 'Z'))
+        {
+            Step();
+        }
+    }
 }
