@@ -9,6 +9,11 @@ public class HauntedWasteland
 {
     private readonly string _input;
     private int _currentIndex;
+    private Dictionary<int, Dictionary<char, int>> _numericStates;
+    public int[] _currentNumericStates;
+    private int[] _finalStates;
+    private int _startingState;
+    private int _endingState;
 
     public int StateCount { get; private set; }
     public int InstructionCount { get; private set; }
@@ -20,6 +25,9 @@ public class HauntedWasteland
     public HauntedWasteland(string input, bool forGhosts = false)
     {
         _input = input;
+        _numericStates = new Dictionary<int, Dictionary<char, int>>();
+        _currentNumericStates = Array.Empty<int>();
+        _finalStates = Array.Empty<int>();
         Instructions = string.Empty;
         Steps = new Dictionary<string, Dictionary<char, string>>();
         CurrentStates = Array.Empty<string>();
@@ -28,7 +36,8 @@ public class HauntedWasteland
 
         if (!forGhosts)
         {
-            CalculateStepsToGoal();
+            //CalculateStepsToGoal();
+            CalculateStepsToGoalWithNumericStates();
         }
     }
 
@@ -36,6 +45,10 @@ public class HauntedWasteland
     {
         var lines = _input.Split("\n");
         var currentStates = new List<string>();
+        var finalStates = new List<int>();
+        var dictionary = new Dictionary<string, int>();
+        var currentNumericStates = new List<int>();
+
         Instructions = lines[0];
         InstructionCount = lines[0].Length;
 
@@ -44,7 +57,11 @@ public class HauntedWasteland
         {
             var values = line.Split("=");
             var key = values[0].Trim();
+
             Steps.Add(key, new Dictionary<char, string>());
+            var oldIndex = dictionary.Count;
+            dictionary.Add(key, oldIndex);
+            _numericStates.Add(dictionary[key], new Dictionary<char, int>());
 
             var branches = values[1].Trim()[1..^1].Split(",");
             Steps[key].Add('L', branches[0].Trim());
@@ -52,11 +69,35 @@ public class HauntedWasteland
 
             if (key[^1] == 'A')
             {
+                if (key == "AAA")
+                {
+                    _startingState = dictionary[key];
+                }
+
                 currentStates.Add(key);
+                currentNumericStates.Add(dictionary[key]);
+            }
+
+            if (key[^1] == 'Z')
+            {
+                if (key == "ZZZ")
+                {
+                    _endingState = dictionary[key];
+                }
+
+                finalStates.Add(dictionary[key]);
             }
         }
 
+        foreach (var entry in Steps)
+        {
+            _numericStates[dictionary[entry.Key]].Add('L', dictionary[entry.Value['L']]);
+            _numericStates[dictionary[entry.Key]].Add('R', dictionary[entry.Value['R']]);
+        }
+
         CurrentStates = currentStates.ToArray();
+        _finalStates = finalStates.ToArray();
+        _currentNumericStates = currentNumericStates.ToArray();
     }
 
     private void CalculateStepsToGoal()
@@ -76,6 +117,27 @@ public class HauntedWasteland
             }
         }
     }
+
+    private void CalculateStepsToGoalWithNumericStates()
+    {
+        var index = 0;
+        StepsToReachGoal = 0;
+
+        while (_startingState != _endingState)
+        {
+            if (StepsToReachGoal > 21407)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+            _startingState = _numericStates[_startingState][Instructions[index]];
+            StepsToReachGoal++;
+            index++;
+            if (index >= InstructionCount)
+            {
+                index = 0;
+            }
+        }
+   }
 
     public void Step()
     {
@@ -98,5 +160,31 @@ public class HauntedWasteland
         {
             Step();
         }
+    }
+
+    public void ReachGoalInGhostModeWithNumericStates()
+    {
+        var stepsToFinalState = new List<int>();
+        var currentInstruction = 0;
+        for (var index = 0; index < _currentNumericStates.Length; index++)
+        {
+            var currentState = _currentNumericStates[index];
+            var legCount = 0;
+
+            while (! _finalStates.Contains(currentState))
+            {
+                currentState = _numericStates[currentState][Instructions[currentInstruction++]];
+                legCount++;
+
+                if (currentInstruction >= InstructionCount)
+                {
+                    currentInstruction = 0;
+                }
+            }
+
+            stepsToFinalState.Add(legCount);
+        }
+
+        StepsToReachGoal = stepsToFinalState.Aggregate(1, (t, i) => t *= i);
     }
 }
