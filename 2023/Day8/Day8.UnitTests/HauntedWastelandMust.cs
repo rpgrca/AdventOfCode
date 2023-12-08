@@ -8,6 +8,7 @@ public class HauntedWastelandMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 2, 7)]
+    [InlineData(SECOND_SAMPLE_INPUT, 3, 3)]
     [InlineData(PUZZLE_INPUT, 271, 798)]
     public void LoadInputCorrectly(string input, int expectedInstructions, int expectedStates)
     {
@@ -65,5 +66,14 @@ public class HauntedWastelandMust
                 Assert.Equal("ZZZ", s7.Value['L']);
                 Assert.Equal("ZZZ", s7.Value['R']);
             });
+    }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 2)]
+    [InlineData(SECOND_SAMPLE_INPUT, 6)]
+    public void CalculateStepsToReachGoalCorrectly(string input, int expectedSteps)
+    {
+        var sut = new HauntedWasteland(input);
+        Assert.Equal(expectedSteps, sut.StepsToReachGoal);
     }
 }

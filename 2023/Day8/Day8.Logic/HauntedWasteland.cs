@@ -1,6 +1,7 @@
 
 
 
+
 namespace Day8.Logic;
 public class HauntedWasteland
 {
@@ -10,6 +11,7 @@ public class HauntedWasteland
     public int InstructionCount { get; private set; }
     public string Instructions { get; private set; }
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
+    public int StepsToReachGoal { get; private set; }
 
     public HauntedWasteland(string input)
     {
@@ -18,6 +20,7 @@ public class HauntedWasteland
         Steps = new Dictionary<string, Dictionary<char, string>>();
 
         Parse();
+        CalculateStepsToGoal();
     }
 
     private void Parse()
@@ -36,6 +39,17 @@ public class HauntedWasteland
             var branches = values[1].Trim()[1..^1].Split(",");
             Steps[key].Add('L', branches[0].Trim());
             Steps[key].Add('R', branches[1].Trim());
+        }
+    }
+
+    private void CalculateStepsToGoal()
+    {
+        StepsToReachGoal = 0;
+
+        var currentStep = "AAA";
+        while (currentStep != "ZZZ")
+        {
+            currentStep = Steps[currentStep][Instructions[StepsToReachGoal++ % InstructionCount]];
         }
     }
 }
