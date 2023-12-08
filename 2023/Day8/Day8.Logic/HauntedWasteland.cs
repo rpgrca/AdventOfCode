@@ -13,14 +13,14 @@ public class HauntedWasteland
     public string Instructions { get; private set; }
     public Dictionary<string, Dictionary<char, string>> Steps { get; private set; }
     public int StepsToReachGoal { get; private set; }
-    public List<string> InitialNodes { get; private set; }
+    public List<string> CurrentStates { get; private set; }
 
     public HauntedWasteland(string input, bool forGhosts = false)
     {
         _input = input;
         Instructions = string.Empty;
         Steps = new Dictionary<string, Dictionary<char, string>>();
-        InitialNodes = new List<string>();
+        CurrentStates = new List<string>();
 
         Parse();
 
@@ -49,7 +49,7 @@ public class HauntedWasteland
 
             if (key[^1] == 'A')
             {
-                InitialNodes.Add(key);
+                CurrentStates.Add(key);
             }
         }
     }

@@ -96,7 +96,7 @@ public class HauntedWastelandMust
     public void SelectAllStartingNodesCorrectly_WhenParsingSampleInput()
     {
         var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
-        Assert.Collection(sut.InitialNodes,
+        Assert.Collection(sut.CurrentStates,
             i1 => Assert.Equal("11A", i1),
             i2 => Assert.Equal("22A", i2));
     }
@@ -105,7 +105,7 @@ public class HauntedWastelandMust
     public void SelectAllStartingNodesCorrectly_WhenParsingPuzzleInput()
     {
         var sut = new HauntedWasteland(PUZZLE_INPUT, true);
-        Assert.Collection(sut.InitialNodes,
+        Assert.Collection(sut.CurrentStates,
             i1 => Assert.Equal("AAA", i1),
             i2 => Assert.Equal("XDA", i2),
             i3 => Assert.Equal("XSA", i3),
@@ -113,4 +113,12 @@ public class HauntedWastelandMust
             i5 => Assert.Equal("HJA", i5),
             i6 => Assert.Equal("HPA", i6));
     }
+/*
+    [Fact]
+    public void CalculateFirstStepCorrectly_WhenUsingGhostMap()
+    {
+        var sut = new HauntedWasteland(THIRD_SAMPLE_INPUT, true);
+        Assert.Collection(sut.CurrentNodes,
+            n1 => Assert.Equal())
+    }*/
 }
