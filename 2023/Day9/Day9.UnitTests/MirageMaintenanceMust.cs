@@ -199,4 +199,13 @@ public class MirageMaintenanceMust
         sut.ExtendSequenceBackwards();
         Assert.Equal(2, sut.SumOfExtrapolatedValues);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new MirageMaintenance(PUZZLE_INPUT);
+        sut.Calculate();
+        sut.ExtendSequenceBackwards();
+        Assert.Equal(884, sut.SumOfExtrapolatedValues);
+    }
 }
