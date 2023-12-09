@@ -3,6 +3,7 @@
 
 
 
+
 namespace Day9.Logic;
 public class MirageMaintenance
 {
@@ -12,6 +13,7 @@ public class MirageMaintenance
     public int HistoryCount { get; set; }
     public List<List<int>> Histories { get; private set; }
     public List<List<List<int>>> SequenceOfDifferences { get; private set; }
+    public int SumOfExtrapolatedValues { get; private set; }
 
     public MirageMaintenance(string input)
     {
@@ -57,6 +59,8 @@ public class MirageMaintenance
 
     public void ExtendSequence()
     {
+        SumOfExtrapolatedValues = 0;
+
         for (var index = 0; index < HistoryCount; index++)
         {
             var lastValueToAdd = 0;
@@ -68,6 +72,8 @@ public class MirageMaintenance
                 lastValueToAdd += lastNumberInCurrentSequence;
                 sequence.Add(lastValueToAdd);
             }
+
+            SumOfExtrapolatedValues += lastValueToAdd;
         }
     }
 }

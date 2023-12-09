@@ -147,4 +147,12 @@ public class MirageMaintenanceMust
                 p5 => Assert.Equal(new[] { 0, 0, 0 }, p5)));
     }
 
+    [Fact]
+    public void SolveFirstSample()
+    {
+        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        sut.Calculate();
+        sut.ExtendSequence();
+        Assert.Equal(114, sut.SumOfExtrapolatedValues);
+    }
 }
