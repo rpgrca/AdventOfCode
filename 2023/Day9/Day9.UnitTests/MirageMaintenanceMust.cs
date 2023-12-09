@@ -27,7 +27,7 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
-    public void CalculateInitialSequenceOfDifferenceCorrectly()
+    public void CalculateInitialSequenceOfDifferenceCorrectly_WithFirstInput()
     {
         var sut = new MirageMaintenance("0 3 6 9 12 15");
         Assert.Single(sut.SequenceOfDifferences);
@@ -36,7 +36,7 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
-    public void CalculateFirstSequenceOfDifferenceCorrectly()
+    public void CalculateFirstSequenceOfDifferenceCorrectly_WithFirstInput()
     {
         var sut = new MirageMaintenance("0 3 6 9 12 15");
         sut.CalculateSequenceOfDifference();
@@ -47,7 +47,7 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
-    public void CalculateSecondSequenceOfDifferenceCorrectly()
+    public void CalculateSecondSequenceOfDifferenceCorrectly_WithFirstInput()
     {
         var sut = new MirageMaintenance("0 3 6 9 12 15");
         sut.CalculateSequenceOfDifference();
@@ -60,7 +60,7 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
-    public void CalculateSequenceOfDifferencesAutomatically()
+    public void CalculateSequenceOfDifferencesAutomatically_WithFirstInput()
     {
         var sut = new MirageMaintenance("0 3 6 9 12 15");
         sut.Calculate();
@@ -69,6 +69,19 @@ public class MirageMaintenanceMust
             p1 => Assert.Equal(new int[] { 0, 3, 6, 9, 12, 15 }, p1),
             p2 => Assert.Equal(new int[] { 3, 3, 3, 3, 3 }, p2),
             p3 => Assert.Equal(new[] { 0, 0, 0, 0 }, p3));
+    }
+
+    [Fact]
+    public void CalculateSequenceOfDifferencesAutomatically_WithSecondInput()
+    {
+        var sut = new MirageMaintenance("1 3 6 10 15 21");
+        sut.Calculate();
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 1, 3, 6, 10, 15, 21 }, p1),
+            p2 => Assert.Equal(new int[] { 2, 3, 4, 5, 6 }, p2),
+            p3 => Assert.Equal(new[] { 1, 1, 1, 1 }, p3),
+            p4 => Assert.Equal(new[] { 0, 0, 0 }, p4));
     }
 
 }
