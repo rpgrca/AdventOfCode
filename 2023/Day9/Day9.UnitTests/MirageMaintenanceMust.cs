@@ -165,4 +165,29 @@ public class MirageMaintenanceMust
         sut.ExtendSequence();
         Assert.Equal(1974913025, sut.SumOfExtrapolatedValues);
     }
+
+    [Fact]
+    public void ExtendSequenceBackwardsCorrectly()
+    {
+        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        sut.Calculate();
+        sut.ExtendSequenceBackwards();
+        Assert.Equal(3, sut.SequenceOfDifferences.Count);
+        Assert.Collection(sut.SequenceOfDifferences,
+            s1 => Assert.Collection(s1,
+                p1 => Assert.Equal(new int[] { -3, 0, 3, 6, 9, 12, 15 }, p1),
+                p2 => Assert.Equal(new int[] { 3, 3, 3, 3, 3, 3 }, p2),
+                p3 => Assert.Equal(new[] { 0, 0, 0, 0, 0 }, p3)),
+            s2 => Assert.Collection(s2,
+                p1 => Assert.Equal(new int[] { 0, 1, 3, 6, 10, 15, 21 }, p1),
+                p2 => Assert.Equal(new int[] { 1, 2, 3, 4, 5, 6 }, p2),
+                p3 => Assert.Equal(new[] { 1, 1, 1, 1, 1 }, p3),
+                p4 => Assert.Equal(new[] { 0, 0, 0, 0 }, p4)),
+            s3 => Assert.Collection(s3,
+                p1 => Assert.Equal(new int[] { 5, 10, 13, 16, 21, 30, 45 }, p1),
+                p2 => Assert.Equal(new int[] { 5, 3, 3, 5, 9, 15 }, p2),
+                p3 => Assert.Equal(new[] { -2, 0, 2, 4, 6 }, p3),
+                p4 => Assert.Equal(new[] { 2, 2, 2, 2 }, p4),
+                p5 => Assert.Equal(new[] { 0, 0, 0 }, p5)));
+    }
 }

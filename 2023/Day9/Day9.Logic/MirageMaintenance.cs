@@ -4,6 +4,7 @@
 
 
 
+
 namespace Day9.Logic;
 public class MirageMaintenance
 {
@@ -74,6 +75,22 @@ public class MirageMaintenance
             }
 
             SumOfExtrapolatedValues += lastValueToAdd;
+        }
+    }
+
+    public void ExtendSequenceBackwards()
+    {
+        for (var index = 0; index < HistoryCount; index++)
+        {
+            var lastValueToAdd = 0;
+
+            for (var subIndex = SequenceOfDifferences[index].Count - 1; subIndex >= 0; subIndex--)
+            {
+                var sequence = SequenceOfDifferences[index][subIndex];
+                var lastNumberInCurrentSequence = sequence.First();
+                lastValueToAdd = lastNumberInCurrentSequence - lastValueToAdd;
+                sequence.Insert(0, lastValueToAdd);
+            }
         }
     }
 }
