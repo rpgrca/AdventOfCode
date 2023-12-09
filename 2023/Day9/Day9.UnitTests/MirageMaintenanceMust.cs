@@ -1,3 +1,4 @@
+using System.Net.Security;
 using System.Security.Cryptography;
 using Day9.Logic;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
@@ -148,11 +149,20 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
-    public void SolveFirstSample()
+    public void SolveFirstSampleCorrectly()
     {
         var sut = new MirageMaintenance(SAMPLE_INPUT);
         sut.Calculate();
         sut.ExtendSequence();
         Assert.Equal(114, sut.SumOfExtrapolatedValues);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new MirageMaintenance(PUZZLE_INPUT);
+        sut.Calculate();
+        sut.ExtendSequence();
+        Assert.Equal(1974913025, sut.SumOfExtrapolatedValues);
     }
 }
