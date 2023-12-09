@@ -2,6 +2,7 @@
 
 
 
+
 namespace Day9.Logic;
 public class MirageMaintenance
 {
@@ -9,8 +10,8 @@ public class MirageMaintenance
     private readonly string[] _lines;
 
     public int HistoryCount { get; set; }
-    public List<int[]> Histories { get; private set; }
-    public List<List<int[]>> SequenceOfDifferences { get; private set; }
+    public List<List<int>> Histories { get; private set; }
+    public List<List<List<int>>> SequenceOfDifferences { get; private set; }
 
     public MirageMaintenance(string input)
     {
@@ -18,14 +19,14 @@ public class MirageMaintenance
         _lines = _input.Split("\n");
 
         HistoryCount = _lines.Length;
-        Histories = new List<int[]>();
-        SequenceOfDifferences = new List<List<int[]>>();
+        Histories = new List<List<int>>();
+        SequenceOfDifferences = new List<List<List<int>>>();
 
         foreach (var line in _lines)
         {
-            var values = line.Split(" ").Select(int.Parse).ToArray();
+            var values = line.Split(" ").Select(int.Parse).ToList();
             Histories.Add(values);
-            SequenceOfDifferences.Add(new List<int[]>() { values });
+            SequenceOfDifferences.Add(new List<List<int>>() { values });
         }
     }
 
@@ -34,12 +35,12 @@ public class MirageMaintenance
         var currentSequence = SequenceOfDifferences[id];
         var list = new List<int>();
         var sequence = currentSequence.Last();
-        for (var index = 0; index < sequence.Length - 1; index++)
+        for (var index = 0; index < sequence.Count - 1; index++)
         {
             list.Add(sequence[index + 1] - sequence[index]);
         }
 
-        currentSequence.Add(list.ToArray());
+        currentSequence.Add(list.ToList());
     }
 
     public void Calculate()
@@ -53,4 +54,23 @@ public class MirageMaintenance
             }
         }
     }
+/*
+    public void ExtendSequence()
+    {
+        var lastValue = 0;
+        for (var index = 0; index < HistoryCount; index++)
+        {
+            foreach (var sequence in SequenceOfDifferences[index])
+            {
+                sequence.ad
+            }
+
+
+            while (sequence.Last().Any(q => q != 0))
+            {
+                CalculateSequenceOfDifference(index);
+            }
+        }
+
+    }*/
 }
