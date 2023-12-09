@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Day9.Logic;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day9.UnitTests.Constants;
@@ -26,20 +27,48 @@ public class MirageMaintenanceMust
     }
 
     [Fact]
+    public void CalculateInitialSequenceOfDifferenceCorrectly()
+    {
+        var sut = new MirageMaintenance("0 3 6 9 12 15");
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 0, 3, 6, 9, 12, 15 }, p1));
+    }
+
+    [Fact]
     public void CalculateFirstSequenceOfDifferenceCorrectly()
     {
-        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        var sut = new MirageMaintenance("0 3 6 9 12 15");
         sut.CalculateSequenceOfDifference();
-        Assert.Equal(new[] { 3, 3, 3, 3, 3 }, sut.SequenceOfDifferences[0][1]);
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 0, 3, 6, 9, 12, 15 }, p1),
+            p2 => Assert.Equal(new int[] { 3, 3, 3, 3, 3 }, p2));
     }
 
     [Fact]
     public void CalculateSecondSequenceOfDifferenceCorrectly()
     {
-        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        var sut = new MirageMaintenance("0 3 6 9 12 15");
         sut.CalculateSequenceOfDifference();
         sut.CalculateSequenceOfDifference();
-        Assert.Equal(new[] { 0, 0, 0, 0 }, sut.SequenceOfDifferences[0][2]);
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 0, 3, 6, 9, 12, 15 }, p1),
+            p2 => Assert.Equal(new int[] { 3, 3, 3, 3, 3 }, p2),
+            p3 => Assert.Equal(new[] { 0, 0, 0, 0 }, p3));
+    }
+
+    [Fact]
+    public void CalculateSequenceOfDifferencesAutomatically()
+    {
+        var sut = new MirageMaintenance("0 3 6 9 12 15");
+        sut.Calculate();
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 0, 3, 6, 9, 12, 15 }, p1),
+            p2 => Assert.Equal(new int[] { 3, 3, 3, 3, 3 }, p2),
+            p3 => Assert.Equal(new[] { 0, 0, 0, 0 }, p3));
     }
 
 }

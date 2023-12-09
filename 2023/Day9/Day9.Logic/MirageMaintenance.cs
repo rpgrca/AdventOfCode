@@ -1,6 +1,7 @@
 
 
 
+
 namespace Day9.Logic;
 public class MirageMaintenance
 {
@@ -38,5 +39,13 @@ public class MirageMaintenance
         }
 
         SequenceOfDifferences[0].Add(list.ToArray());
+    }
+
+    public void Calculate()
+    {
+        while (SequenceOfDifferences[0].Last().Any(q => q != 0))
+        {
+            CalculateSequenceOfDifference();
+        }
     }
 }
