@@ -29,23 +29,28 @@ public class MirageMaintenance
         }
     }
 
-    public void CalculateSequenceOfDifference()
+    public void CalculateSequenceOfDifference(int id = 0)
     {
+        var currentSequence = SequenceOfDifferences[id];
         var list = new List<int>();
-        var sequence = SequenceOfDifferences[0].Last();
+        var sequence = currentSequence.Last();
         for (var index = 0; index < sequence.Length - 1; index++)
         {
             list.Add(sequence[index + 1] - sequence[index]);
         }
 
-        SequenceOfDifferences[0].Add(list.ToArray());
+        currentSequence.Add(list.ToArray());
     }
 
     public void Calculate()
     {
-        while (SequenceOfDifferences[0].Last().Any(q => q != 0))
+        for (var index = 0; index < HistoryCount; index++)
         {
-            CalculateSequenceOfDifference();
+            var sequence = SequenceOfDifferences[index];
+            while (sequence.Last().Any(q => q != 0))
+            {
+                CalculateSequenceOfDifference(index);
+            }
         }
     }
 }
