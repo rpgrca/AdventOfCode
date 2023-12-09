@@ -54,23 +54,20 @@ public class MirageMaintenance
             }
         }
     }
-/*
+
     public void ExtendSequence()
     {
-        var lastValue = 0;
         for (var index = 0; index < HistoryCount; index++)
         {
-            foreach (var sequence in SequenceOfDifferences[index])
-            {
-                sequence.ad
-            }
+            var lastValueToAdd = 0;
 
-
-            while (sequence.Last().Any(q => q != 0))
+            for (var subIndex = SequenceOfDifferences[index].Count - 1; subIndex >= 0; subIndex--)
             {
-                CalculateSequenceOfDifference(index);
+                var sequence = SequenceOfDifferences[index][subIndex];
+                var lastNumberInCurrentSequence = sequence.Last();
+                lastValueToAdd += lastNumberInCurrentSequence;
+                sequence.Add(lastValueToAdd);
             }
         }
-
-    }*/
+    }
 }

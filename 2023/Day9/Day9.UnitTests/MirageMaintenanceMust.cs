@@ -121,7 +121,7 @@ public class MirageMaintenanceMust
                 p4 => Assert.Equal(new[] { 2, 2, 2 }, p4),
                 p5 => Assert.Equal(new[] { 0, 0 }, p5)));
     }
-/*
+
     [Fact]
     public void ExtendSequenceCorrectly()
     {
@@ -145,6 +145,6 @@ public class MirageMaintenanceMust
                 p3 => Assert.Equal(new[] { 0, 2, 4, 6, 8 }, p3),
                 p4 => Assert.Equal(new[] { 2, 2, 2, 2 }, p4),
                 p5 => Assert.Equal(new[] { 0, 0, 0 }, p5)));
-    }*/
+    }
 
 }
