@@ -80,6 +80,8 @@ public class MirageMaintenance
 
     public void ExtendSequenceBackwards()
     {
+        SumOfExtrapolatedValues = 0;
+
         for (var index = 0; index < HistoryCount; index++)
         {
             var lastValueToAdd = 0;
@@ -91,6 +93,8 @@ public class MirageMaintenance
                 lastValueToAdd = lastNumberInCurrentSequence - lastValueToAdd;
                 sequence.Insert(0, lastValueToAdd);
             }
+
+            SumOfExtrapolatedValues += lastValueToAdd;
         }
     }
 }

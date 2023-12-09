@@ -190,4 +190,13 @@ public class MirageMaintenanceMust
                 p4 => Assert.Equal(new[] { 2, 2, 2, 2 }, p4),
                 p5 => Assert.Equal(new[] { 0, 0, 0 }, p5)));
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        sut.Calculate();
+        sut.ExtendSequenceBackwards();
+        Assert.Equal(2, sut.SumOfExtrapolatedValues);
+    }
 }
