@@ -84,4 +84,19 @@ public class MirageMaintenanceMust
             p4 => Assert.Equal(new[] { 0, 0, 0 }, p4));
     }
 
+    [Fact]
+    public void CalculateSequenceOfDifferencesAutomatically_WithThirdInput()
+    {
+        var sut = new MirageMaintenance("10 13 16 21 30 45");
+        sut.Calculate();
+        Assert.Single(sut.SequenceOfDifferences);
+        Assert.Collection(sut.SequenceOfDifferences[0],
+            p1 => Assert.Equal(new int[] { 10, 13, 16, 21, 30, 45 }, p1),
+            p2 => Assert.Equal(new int[] { 3, 3, 5, 9, 15 }, p2),
+            p3 => Assert.Equal(new[] { 0, 2, 4, 6 }, p3),
+            p4 => Assert.Equal(new[] { 2, 2, 2 }, p4),
+            p5 => Assert.Equal(new[] { 0, 0 }, p5));
+    }
+
+
 }
