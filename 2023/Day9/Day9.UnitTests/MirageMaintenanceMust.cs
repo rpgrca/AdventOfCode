@@ -24,4 +24,22 @@ public class MirageMaintenanceMust
             p2 => Assert.Equal(new[] { 1, 3, 6, 10, 15, 21 }, p2),
             p3 => Assert.Equal(new[] { 10, 13, 16, 21, 30, 45 }, p3));
     }
+
+    [Fact]
+    public void CalculateFirstSequenceOfDifferenceCorrectly()
+    {
+        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        sut.CalculateSequenceOfDifference();
+        Assert.Equal(new[] { 3, 3, 3, 3, 3 }, sut.SequenceOfDifferences[0][1]);
+    }
+
+    [Fact]
+    public void CalculateSecondSequenceOfDifferenceCorrectly()
+    {
+        var sut = new MirageMaintenance(SAMPLE_INPUT);
+        sut.CalculateSequenceOfDifference();
+        sut.CalculateSequenceOfDifference();
+        Assert.Equal(new[] { 0, 0, 0, 0 }, sut.SequenceOfDifferences[0][2]);
+    }
+
 }

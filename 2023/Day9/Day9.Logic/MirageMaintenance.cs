@@ -1,5 +1,6 @@
 
 
+
 namespace Day9.Logic;
 public class MirageMaintenance
 {
@@ -8,6 +9,7 @@ public class MirageMaintenance
 
     public int HistoryCount { get; set; }
     public List<int[]> Histories { get; private set; }
+    public List<List<int[]>> SequenceOfDifferences { get; private set; }
 
     public MirageMaintenance(string input)
     {
@@ -16,9 +18,25 @@ public class MirageMaintenance
 
         HistoryCount = _lines.Length;
         Histories = new List<int[]>();
+        SequenceOfDifferences = new List<List<int[]>>();
+
         foreach (var line in _lines)
         {
-            Histories.Add(line.Split(" ").Select(int.Parse).ToArray());
+            var values = line.Split(" ").Select(int.Parse).ToArray();
+            Histories.Add(values);
+            SequenceOfDifferences.Add(new List<int[]>() { values });
         }
+    }
+
+    public void CalculateSequenceOfDifference()
+    {
+        var list = new List<int>();
+        var sequence = SequenceOfDifferences[0].Last();
+        for (var index = 0; index < sequence.Length - 1; index++)
+        {
+            list.Add(sequence[index + 1] - sequence[index]);
+        }
+
+        SequenceOfDifferences[0].Add(list.ToArray());
     }
 }
