@@ -29,9 +29,20 @@ public class PipeMazeMust
 
     [Theory]
     [InlineData(SAMPLE_INPUT, 'F')]
+    [InlineData(SECOND_SAMPLE_INPUT, 'F')]
     public void GuessInitialPipeCorrectly_WithSampleInput(string input, char expectedPipe)
     {
         var sut = new PipeMaze(input);
         Assert.Equal(expectedPipe, sut.StartingPipe);
     }
+
+    [Theory]
+    [InlineData(THIRD_SAMPLE_INPUT, 'F')]
+    [InlineData(FOURTH_SAMPLE_INPUT, 'F')]
+    public void GuessInitialPipeCorrectly_WithComplexSampleInput(string input, char expectedPipe)
+    {
+        var sut = new PipeMaze(input);
+        Assert.Equal(expectedPipe, sut.StartingPipe);
+    }
+
 }
