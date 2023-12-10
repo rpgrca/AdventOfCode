@@ -51,4 +51,16 @@ public class PipeMazeMust
         var sut = new PipeMaze(PUZZLE_INPUT);
         Assert.Equal('L', sut.StartingPipe);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 4)]
+    [InlineData(SECOND_SAMPLE_INPUT, 4)]
+    [InlineData(THIRD_SAMPLE_INPUT, 8)]
+    [InlineData(FOURTH_SAMPLE_INPUT, 8)]
+    public void CalculateMiddlePointCorrectly(string input, int expectedMiddle)
+    {
+        var sut = new PipeMaze(input);
+        Assert.Equal(expectedMiddle, sut.FarthestDistance);
+
+    }
 }

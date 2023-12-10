@@ -1,7 +1,5 @@
-
-
-
 namespace Day10.Logic;
+
 public class PipeMaze
 {
     private readonly string _input;
@@ -426,6 +424,95 @@ public class PipeMaze
         }
 
         StartingPipe = p.Single();
+
+        var steps = 0;
+        switch (StartingPipe)
+        {
+            case 'F': steps = Check('E', (X+1, Y), 1); break;
+            case 'L': steps = Check('E', (X+1, Y), 1); break;
+        }
+
+        FarthestDistance = steps / 2;
+    }
+
+    private int Check(char from1, (int X, int Y) value1, int count)
+    {
+        if (value1.X == X && value1.Y == Y)
+        {
+            return count + 1;
+        }
+
+        switch (_lines[value1.Y][value1.X])
+        {
+            case 'F':
+                if (from1 == 'N')
+                {
+                    return Check('E', (value1.X + 1, value1.Y), count+1);
+                }
+                else
+                {
+                    return Check('S', (value1.X, value1.Y+1), count+1);
+                }
+                break;
+
+            case 'J':
+                if (from1 == 'S')
+                {
+                    return Check('W', (value1.X-1, value1.Y), count+1);
+                }
+                else
+                {
+                    return Check('N', (value1.X, value1.Y-1), count+1);
+                }
+                break;
+
+            case 'L':
+                if (from1 == 'S')
+                {
+                    return Check('E', (value1.X+1, value1.Y), count+1);
+                }
+                else
+                {
+                    return Check('N', (value1.X, value1.Y-1), count+1);
+                }
+                break;
+
+            case '7':
+                if (from1 == 'N')
+                {
+                    return Check('W', (value1.X-1, value1.Y), count+1);
+                }
+                else
+                {
+                    return Check('S', (value1.X, value1.Y+1), count+1);
+                }
+                break;
+
+            case '-':
+                if (from1 == 'E')
+                {
+                    return Check('E', (value1.X+1, value1.Y), count+1);
+                }
+                else
+                {
+                    return Check('W', (value1.X-1, value1.Y), count+1);
+                }
+                break;
+
+            case '|':
+                if (from1 == 'N')
+                {
+                    return Check('N', (value1.X, value1.Y-1), count+1);
+                }
+                else
+                {
+                    return Check('S', (value1.X, value1.Y+1), count+1);
+                }
+                break;
+
+            default:
+                throw new Exception("Invalid state");
+        }
     }
 
     public int W => _lines[0].Length;
@@ -435,4 +522,5 @@ public class PipeMaze
     public int X { get; set; }
     public int Y { get; set; }
     public char StartingPipe { get; set; }
+    public int FarthestDistance { get; set; }
 }
