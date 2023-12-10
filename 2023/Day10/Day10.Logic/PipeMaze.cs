@@ -6,16 +6,15 @@ namespace Day10.Logic;
 public class PipeMaze
 {
     private readonly string _input;
-    private readonly string[] _lines;
+    private readonly List<List<char>> _lines;
 
     public PipeMaze(string input)
     {
         _input = input;
-        _lines = _input.Split("\n");
+        _lines = _input.Split("\n").Select(p => p.Select(c => c).ToList()).ToList();
 
         for (var y = 0; y < H; y++)
         {
-
             for (var x = 0; x < W; x++)
             {
                 if (_lines[y][x] == 'S')
@@ -429,19 +428,35 @@ public class PipeMaze
         StartingPipe = p.Single();
 
         var steps = 0;
+        var path = new List<List<char>>();
+        foreach (var line in _lines)
+        {
+            path.Add(line.Select(p => p).ToList());
+        }
         switch (StartingPipe)
         {
-            case 'F': steps = Check('E', (X+1, Y), 1); break;
-            case 'L': steps = Check('E', (X+1, Y), 1); break;
+            case 'F': steps = Check(path, 'E', (X+1, Y), 1); break;
+            case 'L': steps = Check(path, 'E', (X+1, Y), 1); break;
         }
 
         FarthestDistance = steps / 2;
 
-        var expandedMap = new List<List<char>>();
+        var expandedMap = new List<List<char>>
+        {
+            Enumerable.Range(0, W * 2 + 1).Select(p => 'o').ToList()
+        };
+
+        var i = 0;
+        var j = 0;
         foreach (var line in _lines)
         {
             var currentLine = new List<char>();
             var newLine = new List<char>();
+
+            currentLine.Add('o');
+            newLine.Add('o');
+
+            j = 0;
             foreach (var tile1 in line)
             {
                 var tile = tile1;
@@ -449,7 +464,18 @@ public class PipeMaze
                 {
                     tile = StartingPipe;
                 }
+                else
+                {
+                    if (tile is 'F' or 'J' or 'L' or '7' or '|' or '-')
+                    {
+                        if (path[i][j] != 'P')
+                        {
+                            tile = '.';
+                        }
+                    }
+                }
                 currentLine.Add(tile);
+
                 currentLine.Add(tile switch {
                     'F' or 'L' or '-' => '-',
                     _ => 'o'
@@ -460,19 +486,23 @@ public class PipeMaze
                     _ => 'o'
                 });
                 newLine.Add('o');
+                j++;
             }
 
             expandedMap.Add(currentLine);
             expandedMap.Add(newLine);
+            i++;
         }
 
         FillOutsideTiles(expandedMap, 0, 0);
 
         OutsideTiles = 0;
-        foreach (var line in expandedMap)
+        for (var y = 0; y < expandedMap.Count; y++)
         {
-            foreach (var tile in line)
+            var line = expandedMap[y];
+            for (var x = 0; x < line.Count; x++)
             {
+                var tile = line[x];
                 if (tile == 'O')
                 {
                     OutsideTiles++;
@@ -488,7 +518,7 @@ public class PipeMaze
 
     private void FillOutsideTiles(List<List<char>> expandedMap, int x, int y)
     {
-        if (x < 0 || x >= W * 2 || y < 0 || y >= H * 2 || expandedMap[y][x] == 'O' || expandedMap[y][x] == 'X')
+        if (x < 0 || x >= expandedMap[0].Count || y < 0 || y >= expandedMap.Count || expandedMap[y][x] == 'O' || expandedMap[y][x] == 'X')
         {
             return;
         }
@@ -512,78 +542,79 @@ public class PipeMaze
         }
     }
 
-    private int Check(char from1, (int X, int Y) value1, int count)
+    private int Check(List<List<char>> path, char from1, (int X, int Y) value1, int count)
     {
         if (value1.X == X && value1.Y == Y)
         {
             return count + 1;
         }
 
+        path[value1.Y][value1.X] = 'P';
         switch (_lines[value1.Y][value1.X])
         {
             case 'F':
                 if (from1 == 'N')
                 {
-                    return Check('E', (value1.X + 1, value1.Y), count+1);
+                    return Check(path, 'E', (value1.X + 1, value1.Y), count+1);
                 }
                 else
                 {
-                    return Check('S', (value1.X, value1.Y+1), count+1);
+                    return Check(path, 'S', (value1.X, value1.Y+1), count+1);
                 }
                 break;
 
             case 'J':
                 if (from1 == 'S')
                 {
-                    return Check('W', (value1.X-1, value1.Y), count+1);
+                    return Check(path, 'W', (value1.X-1, value1.Y), count+1);
                 }
                 else
                 {
-                    return Check('N', (value1.X, value1.Y-1), count+1);
+                    return Check(path, 'N', (value1.X, value1.Y-1), count+1);
                 }
                 break;
 
             case 'L':
                 if (from1 == 'S')
                 {
-                    return Check('E', (value1.X+1, value1.Y), count+1);
+                    return Check(path, 'E', (value1.X+1, value1.Y), count+1);
                 }
                 else
                 {
-                    return Check('N', (value1.X, value1.Y-1), count+1);
+                    return Check(path, 'N', (value1.X, value1.Y-1), count+1);
                 }
                 break;
 
             case '7':
                 if (from1 == 'N')
                 {
-                    return Check('W', (value1.X-1, value1.Y), count+1);
+                    return Check(path, 'W', (value1.X-1, value1.Y), count+1);
                 }
                 else
                 {
-                    return Check('S', (value1.X, value1.Y+1), count+1);
+                    return Check(path, 'S', (value1.X, value1.Y+1), count+1);
                 }
                 break;
 
             case '-':
                 if (from1 == 'E')
                 {
-                    return Check('E', (value1.X+1, value1.Y), count+1);
+                    return Check(path, 'E', (value1.X+1, value1.Y), count+1);
                 }
                 else
                 {
-                    return Check('W', (value1.X-1, value1.Y), count+1);
+                    return Check(path, 'W', (value1.X-1, value1.Y), count+1);
                 }
                 break;
 
             case '|':
                 if (from1 == 'N')
                 {
-                    return Check('N', (value1.X, value1.Y-1), count+1);
+                    return Check(path, 'N', (value1.X, value1.Y-1), count+1);
                 }
                 else
                 {
-                    return Check('S', (value1.X, value1.Y+1), count+1);
+                    return Check(path, 'S', (value1.X, value1.Y+1), count+1);
                 }
                 break;
 
@@ -592,9 +623,9 @@ public class PipeMaze
         }
     }
 
-    public int W => _lines[0].Length;
+    public int W => _lines[0].Count;
 
-    public int H => _lines.Length;
+    public int H => _lines.Count;
 
     public int X { get; set; }
     public int Y { get; set; }
