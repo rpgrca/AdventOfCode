@@ -84,4 +84,11 @@ public class PipeMazeMust
         var sut = new PipeMaze(input);
         Assert.Equal(expectedInnerTiles, sut.InsideTiles);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new PipeMaze(PUZZLE_INPUT);
+        Assert.Equal(383, sut.InsideTiles);
+    }
 }
