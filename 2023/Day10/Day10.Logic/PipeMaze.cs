@@ -437,6 +437,7 @@ public class PipeMaze
         {
             case 'F': steps = Check(path, 'E', (X+1, Y), 1); break;
             case 'L': steps = Check(path, 'E', (X+1, Y), 1); break;
+            case '7': steps = Check(path, 'W', (X-1, Y), 1); break;
         }
 
         FarthestDistance = steps / 2;

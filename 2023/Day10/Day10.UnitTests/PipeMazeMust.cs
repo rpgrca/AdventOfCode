@@ -59,7 +59,7 @@ public class PipeMazeMust
     [InlineData(FOURTH_SAMPLE_INPUT, 8)]
     [InlineData(FIFTH_SAMPLE_INPUT, 23)]
     [InlineData(SIXTH_SAMPLE_INPUT, 70)]
-    [InlineData(SEVENTH_SAMPLE_INPUT, 0)]
+    [InlineData(SEVENTH_SAMPLE_INPUT, 80)]
     public void CalculateMiddlePointCorrectly(string input, int expectedMiddle)
     {
         var sut = new PipeMaze(input);
@@ -78,7 +78,7 @@ public class PipeMazeMust
     [InlineData(SAMPLE_INPUT, 1)]
     [InlineData(FIFTH_SAMPLE_INPUT, 4)]
     [InlineData(SIXTH_SAMPLE_INPUT, 8)]
-    //[InlineData(SEVENTH_SAMPLE_INPUT, 10)]
+    [InlineData(SEVENTH_SAMPLE_INPUT, 10)]
     public void CalculateInsideTilesCorrectly(string input, int expectedInnerTiles)
     {
         var sut = new PipeMaze(input);
