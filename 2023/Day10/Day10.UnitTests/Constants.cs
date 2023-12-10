@@ -8,19 +8,19 @@ public static class Constants
 .L-J.
 .....";
 
-    private const string SECOND_SAMPLE_INPUT = @"-L|F7
+    public const string SECOND_SAMPLE_INPUT = @"-L|F7
 7S-7|
 L|7||
 -L-J|
 L|-JF";
 
-    private const string THIRD_SAMPLE_INPUT = @"..F7.
+    public const string THIRD_SAMPLE_INPUT = @"..F7.
 .FJ|.
 SJ.L7
 |F--J
 LJ...";
 
-    private const string FOURTH_SAMPLE_INPUT = @"7-F7-
+    public const string FOURTH_SAMPLE_INPUT = @"7-F7-
 .FJ|7
 SJLL7
 |F--J
