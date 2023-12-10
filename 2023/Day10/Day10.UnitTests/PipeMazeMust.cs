@@ -26,4 +26,12 @@ public class PipeMazeMust
         Assert.Equal(expectedStartX, sut.X);
         Assert.Equal(expectedStartY, sut.Y);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 'F')]
+    public void GuessInitialPipeCorrectly_WithSampleInput(string input, char expectedPipe)
+    {
+        var sut = new PipeMaze(input);
+        Assert.Equal(expectedPipe, sut.StartingPipe);
+    }
 }
