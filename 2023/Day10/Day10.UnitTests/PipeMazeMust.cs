@@ -45,4 +45,10 @@ public class PipeMazeMust
         Assert.Equal(expectedPipe, sut.StartingPipe);
     }
 
+    [Fact]
+    public void GuessInitialPipeCorrectly_WithPuzzleInput()
+    {
+        var sut = new PipeMaze(PUZZLE_INPUT);
+        Assert.Equal('L', sut.StartingPipe);
+    }
 }
