@@ -63,4 +63,11 @@ public class PipeMazeMust
         Assert.Equal(expectedMiddle, sut.FarthestDistance);
 
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new PipeMaze(PUZZLE_INPUT);
+        Assert.Equal(6725, sut.FarthestDistance);
+    }
 }
