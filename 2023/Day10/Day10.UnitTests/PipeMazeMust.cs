@@ -57,6 +57,9 @@ public class PipeMazeMust
     [InlineData(SECOND_SAMPLE_INPUT, 4)]
     [InlineData(THIRD_SAMPLE_INPUT, 8)]
     [InlineData(FOURTH_SAMPLE_INPUT, 8)]
+    [InlineData(FIFTH_SAMPLE_INPUT, 23)]
+    [InlineData(SIXTH_SAMPLE_INPUT, 70)]
+    [InlineData(SEVENTH_SAMPLE_INPUT, 0)]
     public void CalculateMiddlePointCorrectly(string input, int expectedMiddle)
     {
         var sut = new PipeMaze(input);
@@ -69,5 +72,12 @@ public class PipeMazeMust
     {
         var sut = new PipeMaze(PUZZLE_INPUT);
         Assert.Equal(6725, sut.FarthestDistance);
+    }
+
+    [Fact]
+    public void CalculateOusideTilesCorrectly()
+    {
+        var sut = new PipeMaze(SAMPLE_INPUT);
+        Assert.Equal(16, sut.OutsideTiles);
     }
 }

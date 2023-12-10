@@ -1,3 +1,6 @@
+
+using System.Data;
+
 namespace Day10.Logic;
 
 public class PipeMaze
@@ -433,6 +436,75 @@ public class PipeMaze
         }
 
         FarthestDistance = steps / 2;
+
+        var expandedMap = new List<List<char>>();
+        foreach (var line in _lines)
+        {
+            var currentLine = new List<char>();
+            var newLine = new List<char>();
+            foreach (var tile1 in line)
+            {
+                var tile = tile1;
+                if (tile == 'S')
+                {
+                    tile = StartingPipe;
+                }
+                currentLine.Add(tile);
+                currentLine.Add(tile switch {
+                    'F' or 'L' or '-' => '-',
+                    _ => 'o'
+                });
+
+                newLine.Add(tile switch {
+                    'F' or '7' or '|' => '|',
+                    _ => 'o'
+                });
+                newLine.Add('o');
+            }
+
+            expandedMap.Add(currentLine);
+            expandedMap.Add(newLine);
+        }
+
+        FillOutsideTiles(expandedMap, 0, 0);
+
+        OutsideTiles = 0;
+        foreach (var line in expandedMap)
+        {
+            foreach (var tile in line)
+            {
+                if (tile == 'O')
+                {
+                    OutsideTiles++;
+                }
+            }
+        }
+    }
+
+    private void FillOutsideTiles(List<List<char>> expandedMap, int x, int y)
+    {
+        if (x < 0 || x >= W * 2 || y < 0 || y >= H * 2 || expandedMap[y][x] == 'O' || expandedMap[y][x] == 'X')
+        {
+            return;
+        }
+
+        if (expandedMap[y][x] == '.' || expandedMap[y][x] == 'o')
+        {
+            if (expandedMap[y][x] == '.')
+            {
+                expandedMap[y][x] = 'O';
+            }
+
+            if (expandedMap[y][x] == 'o')
+            {
+                expandedMap[y][x] = 'X';
+            }
+
+            FillOutsideTiles(expandedMap, x-1, y);
+            FillOutsideTiles(expandedMap, x+1, y);
+            FillOutsideTiles(expandedMap, x, y-1);
+            FillOutsideTiles(expandedMap, x, y+1);
+        }
     }
 
     private int Check(char from1, (int X, int Y) value1, int count)
@@ -523,4 +595,5 @@ public class PipeMaze
     public int Y { get; set; }
     public char StartingPipe { get; set; }
     public int FarthestDistance { get; set; }
+    public int OutsideTiles { get; set; }
 }
