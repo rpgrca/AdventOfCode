@@ -477,6 +477,11 @@ public class PipeMaze
                 {
                     OutsideTiles++;
                 }
+
+                if (tile == '.')
+                {
+                    InsideTiles++;
+                }
             }
         }
     }
@@ -596,4 +601,5 @@ public class PipeMaze
     public char StartingPipe { get; set; }
     public int FarthestDistance { get; set; }
     public int OutsideTiles { get; set; }
+    public int InsideTiles { get; set; }
 }

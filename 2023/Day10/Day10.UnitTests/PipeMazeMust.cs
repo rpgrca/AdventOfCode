@@ -80,4 +80,13 @@ public class PipeMazeMust
         var sut = new PipeMaze(SAMPLE_INPUT);
         Assert.Equal(16, sut.OutsideTiles);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 1)]
+    [InlineData(FIFTH_SAMPLE_INPUT, 4)]
+    public void CalculateInsideTilesCorrectly(string input, int expectedInnerTiles)
+    {
+        var sut = new PipeMaze(input);
+        Assert.Equal(expectedInnerTiles, sut.InsideTiles);
+    }
 }
