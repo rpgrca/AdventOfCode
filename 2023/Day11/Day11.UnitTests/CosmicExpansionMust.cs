@@ -52,6 +52,9 @@ public class CosmicExpansionMust
 
     [Theory]
     [InlineData(4, 8, 9)]
+    [InlineData(0, 6, 15)]
+    [InlineData(2, 5, 17)]
+    [InlineData(7, 8, 5)]
     public void CalculateGalaxyDistanceCorrectly(int start, int end, int expectedDistance)
     {
         var sut = new CosmicExpansion(SAMPLE_INPUT);
