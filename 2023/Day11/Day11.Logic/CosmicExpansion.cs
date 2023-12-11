@@ -1,7 +1,5 @@
-
-
-
 namespace Day11.Logic;
+
 public class CosmicExpansion
 {
     private readonly string _input;
@@ -84,4 +82,6 @@ public class CosmicExpansion
     public int ExpandedHeight => _expandedUniverse.Count;
 
     public int GalaxyCount => _galaxies.Count;
+
+    public List<(int X, int Y)> Galaxies => _galaxies;
 }

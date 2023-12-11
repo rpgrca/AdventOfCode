@@ -33,4 +33,20 @@ public class CosmicExpansionMust
         var sut = new CosmicExpansion(input);
         Assert.Equal(expectedGalaxies, sut.GalaxyCount);
     }
+
+    [Fact]
+    public void LocateGalaxiesInExpandedUniverseCorrectly()
+    {
+        var sut = new CosmicExpansion(SAMPLE_INPUT);
+        Assert.Collection(sut.Galaxies,
+            g1 => Assert.Equal((4, 0), g1),
+            g2 => Assert.Equal((9, 1), g2),
+            g3 => Assert.Equal((0, 2), g3),
+            g4 => Assert.Equal((8, 5), g4),
+            g5 => Assert.Equal((1, 6), g5),
+            g6 => Assert.Equal((12, 7), g6),
+            g7 => Assert.Equal((9, 10), g7),
+            g8 => Assert.Equal((0, 11), g8),
+            g9 => Assert.Equal((5, 11), g9));
+    }
 }
