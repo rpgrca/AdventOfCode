@@ -1,16 +1,19 @@
 
 
+
 namespace Day11.Logic;
 public class CosmicExpansion
 {
     private readonly string _input;
     private readonly string[] _lines;
     private readonly List<List<char>> _expandedUniverse;
+    private readonly List<(int X, int Y)> _galaxies;
 
     public CosmicExpansion(string input)
     {
         _input = input;
         _lines = _input.Split("\n");
+        _galaxies = new List<(int X, int Y)>();
 
         var expansionW = new List<int>();
         var expansionH = new List<int>();
@@ -61,6 +64,17 @@ public class CosmicExpansion
                 _expandedUniverse.Add(temp.Select(p => p).ToList());
             }
         }
+
+        for (var y = 0; y < ExpandedHeight; y++)
+        {
+            for (var x = 0; x < ExpandedWidth; x++)
+            {
+                if (_expandedUniverse[y][x] == '#')
+                {
+                    _galaxies.Add((x, y));
+                }
+            }
+        }
     }
 
     public int Width => _lines[0].Length;
@@ -68,4 +82,6 @@ public class CosmicExpansion
 
     public int ExpandedWidth => _expandedUniverse[0].Count;
     public int ExpandedHeight => _expandedUniverse.Count;
+
+    public int GalaxyCount => _galaxies.Count;
 }
