@@ -1,3 +1,4 @@
+
 namespace Day11.Logic;
 
 public class CosmicExpansion
@@ -84,4 +85,9 @@ public class CosmicExpansion
     public int GalaxyCount => _galaxies.Count;
 
     public List<(int X, int Y)> Galaxies => _galaxies;
+
+    public int CalculateDistanceBetween(int start, int end)
+    {
+        return Math.Abs(_galaxies[start].X - _galaxies[end].X) + Math.Abs(_galaxies[start].Y - _galaxies[end].Y);
+    }
 }

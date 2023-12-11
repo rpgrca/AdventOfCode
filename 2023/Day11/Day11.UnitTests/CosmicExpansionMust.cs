@@ -49,4 +49,12 @@ public class CosmicExpansionMust
             g8 => Assert.Equal((0, 11), g8),
             g9 => Assert.Equal((5, 11), g9));
     }
+
+    [Theory]
+    [InlineData(4, 8, 9)]
+    public void CalculateGalaxyDistanceCorrectly(int start, int end, int expectedDistance)
+    {
+        var sut = new CosmicExpansion(SAMPLE_INPUT);
+        Assert.Equal(expectedDistance, sut.CalculateDistanceBetween(start, end));
+    }
 }
