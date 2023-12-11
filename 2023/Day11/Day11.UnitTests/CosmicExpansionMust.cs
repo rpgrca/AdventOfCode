@@ -14,4 +14,13 @@ public class CosmicExpansionMust
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 13, 12)]
+    public void ExpandUniverseCorrectly(string input, int expectedWidth, int expectedHeight)
+    {
+        var sut = new CosmicExpansion(input);
+        Assert.Equal(expectedWidth, sut.ExpandedWidth);
+        Assert.Equal(expectedHeight, sut.ExpandedHeight);
+    }
 }
