@@ -9,11 +9,12 @@ public class CosmicExpansion
     private readonly List<List<char>> _expandedUniverse;
     private readonly List<(int X, int Y)> _galaxies;
 
-    public CosmicExpansion(string input)
+    public CosmicExpansion(string input, int expansionRate = 1)
     {
         _input = input;
         _lines = _input.Split("\n");
         _galaxies = new List<(int X, int Y)>();
+        _expandedUniverse = new List<List<char>>();
 
         var expansionW = new List<int>();
         var expansionH = new List<int>();
@@ -44,42 +45,80 @@ public class CosmicExpansion
             }
         }
 
-        _expandedUniverse = new List<List<char>>();
-        for (var y = 0; y < Height; y++)
+        if (expansionRate == 1)
         {
-            var temp = new List<char>();
-            for (var x = 0; x < Width; x++)
+            for (var y = 0; y < Height; y++)
             {
-                temp.Add(_lines[y][x]);
-                if (expansionW.Contains(x))
+                var temp = new List<char>();
+                for (var x = 0; x < Width; x++)
                 {
-                    temp.Add('.');
+                    temp.Add(_lines[y][x]);
+                    if (expansionW.Contains(x))
+                    {
+                        temp.Add('.');
+                    }
+                }
+
+                _expandedUniverse.Add(temp);
+                if (expansionH.Contains(y))
+                {
+                    _expandedUniverse.Add(temp.Select(p => p).ToList());
                 }
             }
 
-            _expandedUniverse.Add(temp);
-            if (expansionH.Contains(y))
+            for (var y = 0; y < ExpandedHeight; y++)
             {
-                _expandedUniverse.Add(temp.Select(p => p).ToList());
-            }
-        }
-
-        for (var y = 0; y < ExpandedHeight; y++)
-        {
-            for (var x = 0; x < ExpandedWidth; x++)
-            {
-                if (_expandedUniverse[y][x] == '#')
+                for (var x = 0; x < ExpandedWidth; x++)
                 {
-                    _galaxies.Add((x, y));
+                    if (_expandedUniverse[y][x] == '#')
+                    {
+                        _galaxies.Add((x, y));
+                    }
+                }
+            }
+
+            for (var i = 0; i < _galaxies.Count - 1; i++)
+            {
+                for (var j = i + 1; j < _galaxies.Count; j++)
+                {
+                    SumOfShortestDistances += CalculateDistanceBetween(i, j);
                 }
             }
         }
-
-        for (var i = 0; i < _galaxies.Count - 1; i++)
+        else
         {
-            for (var j = i + 1; j < _galaxies.Count; j++)
+            for (var y = 0; y < Height; y++)
             {
-                SumOfShortestDistances += CalculateDistanceBetween(i, j);
+                for (var x = 0; x < Width; x++)
+                {
+                    if (_lines[y][x] == '#')
+                    {
+                        _galaxies.Add((x, y));
+                    }
+                }
+            }
+
+            var expandedUniverseGalaxies = new List<(int X, int Y)>();
+            foreach (var galaxy in _galaxies)
+            {
+                var timesOfWidthExpansion = expansionW.Count(x => x < galaxy.X);
+                var timesOfHeightExpansion = expansionH.Count(y => y < galaxy.Y);
+
+                expandedUniverseGalaxies.Add((galaxy.X + (expansionRate - 1) * timesOfWidthExpansion, galaxy.Y + (expansionRate - 1) * timesOfHeightExpansion));
+            }
+
+            _galaxies.Clear();
+            foreach (var galaxy in expandedUniverseGalaxies)
+            {
+                _galaxies.Add(galaxy);
+            }
+
+            for (var i = 0; i < _galaxies.Count - 1; i++)
+            {
+                for (var j = i + 1; j < _galaxies.Count; j++)
+                {
+                    SumOfShortestDistances += CalculateDistanceBetween(i, j);
+                }
             }
         }
     }
@@ -94,7 +133,7 @@ public class CosmicExpansion
 
     public List<(int X, int Y)> Galaxies => _galaxies;
 
-    public int SumOfShortestDistances { get; set; }
+    public long SumOfShortestDistances { get; set; }
 
     public int CalculateDistanceBetween(int start, int end)
     {
