@@ -60,4 +60,11 @@ public class CosmicExpansionMust
         var sut = new CosmicExpansion(SAMPLE_INPUT);
         Assert.Equal(expectedDistance, sut.CalculateDistanceBetween(start, end));
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new CosmicExpansion(SAMPLE_INPUT);
+        Assert.Equal(374, sut.SumOfShortestDistances);
+    }
 }

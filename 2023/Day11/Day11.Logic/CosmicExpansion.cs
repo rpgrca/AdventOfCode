@@ -1,4 +1,5 @@
 
+
 namespace Day11.Logic;
 
 public class CosmicExpansion
@@ -74,6 +75,14 @@ public class CosmicExpansion
                 }
             }
         }
+
+        for (var i = 0; i < _galaxies.Count - 1; i++)
+        {
+            for (var j = i + 1; j < _galaxies.Count; j++)
+            {
+                SumOfShortestDistances += CalculateDistanceBetween(i, j);
+            }
+        }
     }
 
     public int Width => _lines[0].Length;
@@ -85,6 +94,8 @@ public class CosmicExpansion
     public int GalaxyCount => _galaxies.Count;
 
     public List<(int X, int Y)> Galaxies => _galaxies;
+
+    public int SumOfShortestDistances { get; set; }
 
     public int CalculateDistanceBetween(int start, int end)
     {
