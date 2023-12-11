@@ -83,4 +83,11 @@ public class CosmicExpansionMust
         var sut = new CosmicExpansion(SAMPLE_INPUT, expansionRate);
         Assert.Equal(expectedSum, sut.SumOfShortestDistances);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new CosmicExpansion(PUZZLE_INPUT, 1000000);
+        Assert.Equal(742305960572, sut.SumOfShortestDistances);
+    }
 }
