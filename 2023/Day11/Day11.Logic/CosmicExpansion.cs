@@ -44,7 +44,6 @@ public class CosmicExpansion
             }
         }
 
-
         _expandedUniverse = new List<List<char>>();
         for (var y = 0; y < Height; y++)
         {
