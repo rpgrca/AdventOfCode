@@ -40,4 +40,29 @@ public class HotSpringsMust
         yield return new object[] { "#....######..#####. 1,6,5", "#....######..#####.", new[] { 1, 6, 5 } };
         yield return new object[] { ".###.##....# 3,2,1", ".###.##....#", new[] { 3, 2, 1 } };
     }
+
+    [Theory]
+    [MemberData(nameof(SingleLineCombinationFeeder))]
+    public void CalculatePossibleCombinationsCorrectly(string input, string[] expectedCombinations)
+    {
+        var sut = new HotSprings(input);
+        Assert.Collection(sut.Combinations[0], c1 => Assert.Single(expectedCombinations, c1));
+        Assert.Collection(expectedCombinations, c1 => Assert.Single(sut.Combinations[0], c1));
+    }
+
+    public static IEnumerable<object[]> SingleLineCombinationFeeder()
+    {
+        yield return new object[] { "???.### 1,1,3", new string[] { "#.#.###" } };
+        /*yield return new object[] { "?#?#?#?#?#?#?#? 1,3,1,6", "?#?#?#?#?#?#?#?", new[] { 1,3,1,6 } };
+        yield return new object[] { ".??..??...?##. 1,1,3", ".??..??...?##.", new[] { 1,1,3 } };
+        yield return new object[] { "????.#...#... 4,1,1", "????.#...#...", new[] { 4, 1, 1 } };
+        yield return new object[] { "????.######..#####. 1,6,5", "????.######..#####.", new[] { 1, 6, 5 } };
+        yield return new object[] { "?###???????? 3,2,1", "?###????????", new[] { 3, 2, 1 } };*/
+        /*yield return new object[] { ".#...#....###. 1,1,3", ".#...#....###.", new[] { 1,1,3 } };
+        yield return new object[] { ".#.###.#.###### 1,3,1,6", ".#.###.#.######", new[] { 1,3,1,6 } };
+        yield return new object[] { "####.#...#... 4,1,1", "####.#...#...", new[] { 4, 1, 1 } };
+        yield return new object[] { "#....######..#####. 1,6,5", "#....######..#####.", new[] { 1, 6, 5 } };
+        yield return new object[] { ".###.##....# 3,2,1", ".###.##....#", new[] { 3, 2, 1 } };*/
+    }
+
 }

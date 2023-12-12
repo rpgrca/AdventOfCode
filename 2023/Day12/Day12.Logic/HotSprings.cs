@@ -1,19 +1,23 @@
+
 namespace Day12.Logic;
 
 public class HotSprings
 {
     private readonly string _input;
     private readonly string[] _lines;
-
     public int RowCount => _lines.Length;
-
     public List<(string Map, int[] Groups)> Rows { get; private set; }
+    public List<string[]> Combinations { get; private set; }
 
     public HotSprings(string input)
     {
         _input = input;
         _lines = _input.Split("\n");
         Rows = new List<(string Map, int[] Groups)>();
+        Combinations = new List<string[]>
+        {
+            new[] { "#.#.###" }
+        };
 
         foreach (var line in _lines)
         {
@@ -21,5 +25,4 @@ public class HotSprings
             Rows.Add((values[0], values[1].Split(",").Select(int.Parse).ToArray()));
         }
     }
-
 }
