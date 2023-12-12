@@ -80,5 +80,10 @@ public class HotSpringsMust
         Assert.Equal(expectedSum, sut.SumOfArrangements);
     }
 
-
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new HotSprings(PUZZLE_INPUT, true);
+        Assert.Equal(6935, sut.SumOfArrangements);
+    }
 }
