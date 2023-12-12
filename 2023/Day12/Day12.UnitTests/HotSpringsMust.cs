@@ -13,4 +13,22 @@ public class HotSpringsMust
         var sut  = new HotSprings(input);
         Assert.Equal(expectedRows, sut.RowCount);
     }
+
+    [Theory]
+    [MemberData(nameof(SingleLineFeeder))]
+    public void ParseInputCorrectly(string input, string expectedMap, int[] expectedGroups)
+    {
+        var sut = new HotSprings(input);
+        Assert.Collection(sut.Rows,
+            r1 => {
+                Assert.Equal(expectedMap, r1.Map);
+                Assert.Equal(expectedGroups, r1.Groups);
+            });
+    }
+
+    public static IEnumerable<object[]> SingleLineFeeder()
+    {
+        yield return new object[] { "???.### 1,1,3", "???.###", new[] { 1, 1, 3 } };
+        yield return new object[] { ".#...#....###. 1,1,3", ".#...#....###.", new[] { 1,1,3 } };
+    }
 }
