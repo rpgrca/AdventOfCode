@@ -13,4 +13,17 @@ public class PointOfIncidenceMust
         var sut = new PointOfIncidence(input);
         Assert.Equal(expectedMaps, sut.MapCount);
     }
+
+    [Fact]
+    public void FindVerticalMirroringCorrectly()
+    {
+        var sut = new PointOfIncidence(@"#.##..##.
+..#.##.#.
+##......#
+##......#
+..#.##.#.
+..##..##.
+#.#.##.#.");
+        Assert.Equal(5, sut.PatternSummary);
+    }
 }
