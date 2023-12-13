@@ -89,7 +89,7 @@ public class PointOfIncidenceMust
     }
 
     [Fact]
-    public void Test1()
+    public void SkipMirroring_WhenThereIsAGapInTheMiddle()
     {
         var sut = new PointOfIncidence(@".#.####.####.##
 .#.#.#........#
@@ -102,7 +102,7 @@ public class PointOfIncidenceMust
     }
 
     [Fact]
-    public void Test2()
+    public void StopProcessing_WhenPerfectMatchIsFound()
     {
         var sut = new PointOfIncidence(@"#..#.#....#......
 ######.######.##.
