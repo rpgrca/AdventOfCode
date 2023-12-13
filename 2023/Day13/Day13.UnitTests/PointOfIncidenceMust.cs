@@ -100,11 +100,27 @@ public class PointOfIncidenceMust
 ..##..##.##.#..", true);
         Assert.Equal(10, sut.PatternSummary);
     }
-/*
+
+    [Fact]
+    public void Test2()
+    {
+        var sut = new PointOfIncidence(@"#..#.#....#......
+######.######.##.
+####..####...##.#
+.##...##.####.#..
+.##...##.####.#..
+####..####...##.#
+######.######.##.
+#..#.#....#......
+###.#######.....#", true);
+        Assert.Equal(2, sut.PatternSummary);
+    }
+
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new PointOfIncidence(PUZZLE_INPUT, true);
         Assert.True(28482 < sut.PatternSummary);
-    }*/
+        Assert.Equal(28806, sut.PatternSummary);
+    }
 }

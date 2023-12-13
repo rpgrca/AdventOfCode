@@ -75,7 +75,7 @@ public class PointOfIncidence
 
             for (var index = 0; index < _maps.Count; index++)
             {
-                if (index == 47)
+                if (index == 77)
                 {
                     System.Diagnostics.Debugger.Break();
                 }
@@ -105,7 +105,7 @@ public class PointOfIncidence
                                 }
                                 found = true;
                                 PatternSummary += possibleColumn;
-                                //goto Correct;
+                                goto Correct;
                             }
 
                             map.Vertical[column] = oldColumn;
@@ -120,6 +120,11 @@ public class PointOfIncidence
                         var difference = map.Horizontal[row] ^ map.Horizontal[innerRow];
                         if (BitOperations.IsPow2(difference))
                         {
+                            if ((row + innerRow) % 2 == 0)
+                            {
+                                continue;
+                            }
+
                             var oldRow = map.Horizontal[row];
                             map.Horizontal[row] = map.Horizontal[innerRow];
 
