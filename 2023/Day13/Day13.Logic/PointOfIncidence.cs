@@ -2,6 +2,8 @@
 
 
 
+using System.Numerics;
+
 namespace Day13.Logic;
 public class PointOfIncidence
 {
@@ -9,7 +11,7 @@ public class PointOfIncidence
     private readonly string[] _lines;
     private readonly List<(List<string> Pattern, List<int> Vertical, List<int> Horizontal)> _maps;
 
-    public PointOfIncidence(string input)
+    public PointOfIncidence(string input, bool smudgeCorrection = false)
     {
         _input = input;
         _lines = _input.Split("\n");
@@ -33,37 +35,87 @@ public class PointOfIncidence
         _maps.Add((currentMap, GenerateVerticalNumbering(currentMap), GenerateHorizontalNumbering(currentMap)));
 
         PatternSummary = 0;
-        foreach (var map in _maps)
+
+        if (! smudgeCorrection)
         {
-            var lastValue = -1;
-            for (var column = 0; column < map.Vertical.Count; column++)
+            foreach (var map in _maps)
             {
-                if (map.Vertical[column] == lastValue)
+                var lastValue = -1;
+                for (var column = 0; column < map.Vertical.Count; column++)
                 {
-                    if (CheckMirroring(map.Vertical, column))
+                    if (map.Vertical[column] == lastValue)
                     {
-                        PatternSummary += column;
-                        break;
+                        if (CheckMirroring(map.Vertical, column))
+                        {
+                            PatternSummary += column;
+                            break;
+                        }
+                    }
+
+                    lastValue = map.Vertical[column];
+                }
+
+                lastValue = -1;
+                for (var row = 0; row < map.Horizontal.Count; row++)
+                {
+                    if (map.Horizontal[row] == lastValue)
+                    {
+                        if (CheckMirroring(map.Horizontal, row))
+                        {
+                            PatternSummary += row * 100;
+                            break;
+                        }
+                    }
+
+                    lastValue = map.Horizontal[row];
+                }
+            }
+        }
+        else
+        {
+            foreach (var map in _maps)
+            {
+                for (var column = 0; column < map.Vertical.Count - 1; column++)
+                {
+                    for (var innerColumn = column + 1; innerColumn < map.Vertical.Count; innerColumn++)
+                    {
+                        var difference = map.Vertical[column] ^ map.Vertical[innerColumn];
+                        if (BitOperations.IsPow2(difference))
+                        {
+                            if (CheckMirroring(map.Vertical, (column + innerColumn + 1) / 2))
+                            {
+                                PatternSummary += column;
+                                break;
+                            }
+                        }
                     }
                 }
 
-                lastValue = map.Vertical[column];
-            }
-
-            lastValue = -1;
-            for (var row = 0; row < map.Horizontal.Count; row++)
-            {
-                if (map.Horizontal[row] == lastValue)
+                for (var row = 0; row < map.Horizontal.Count - 1; row++)
                 {
-                    if (CheckMirroring(map.Horizontal, row))
+                    for (var innerRow = row + 1; innerRow < map.Horizontal.Count; innerRow++)
                     {
-                        PatternSummary += row * 100;
-                        break;
+                        var difference = map.Horizontal[row] ^ map.Horizontal[innerRow];
+                        if (BitOperations.IsPow2(difference))
+                        {
+                            var oldHorizontalRow = map.Horizontal[row];
+                            map.Horizontal[row] = map.Horizontal[innerRow];
+
+                            var possibleRow = (row + innerRow + 1) / 2;
+                            if (CheckMirroring(map.Horizontal, possibleRow))
+                            {
+                                PatternSummary += possibleRow * 100;
+                                goto Correct;
+                            }
+
+                            map.Horizontal[row] = oldHorizontalRow;
+                        }
                     }
                 }
 
-                lastValue = map.Horizontal[row];
+                Correct:;
             }
+
         }
     }
 
@@ -72,7 +124,7 @@ public class PointOfIncidence
         int previous;
         int next;
 
-        for (previous = reflection - 1, next = reflection; previous >= 0 && next < map.Count; previous--, next++)
+        for (previous = reflection - 2, next = reflection + 1; previous >= 0 && next < map.Count; previous--, next++)
         {
             if (map[previous] != map[next])
             {

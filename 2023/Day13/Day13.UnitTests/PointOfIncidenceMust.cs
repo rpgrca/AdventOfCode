@@ -54,4 +54,17 @@ public class PointOfIncidenceMust
         var sut = new PointOfIncidence(PUZZLE_INPUT);
         Assert.Equal(33047, sut.PatternSummary);
     }
+
+    [Fact]
+    public void FixHorizontalSmudgeCorrectly()
+    {
+        var sut = new PointOfIncidence(@"#.##..##.
+..#.##.#.
+##......#
+##......#
+..#.##.#.
+..##..##.
+#.#.##.#.", true);
+        Assert.Equal(300, sut.PatternSummary);
+    }
 }
