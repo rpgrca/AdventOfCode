@@ -1,6 +1,7 @@
 
 
 
+
 namespace Day13.Logic;
 public class PointOfIncidence
 {
@@ -39,18 +40,64 @@ public class PointOfIncidence
             {
                 if (map.Vertical[column] == lastValue)
                 {
-                    PatternSummary += column;
-                    break;
+                    if (CheckMirroring(map.Vertical, column))
+                    {
+                        PatternSummary += column;
+                        break;
+                    }
                 }
 
                 lastValue = map.Vertical[column];
             }
+
+            lastValue = -1;
+            for (var row = 0; row < map.Horizontal.Count; row++)
+            {
+                if (map.Horizontal[row] == lastValue)
+                {
+                    if (CheckMirroring(map.Horizontal, row))
+                    {
+                        PatternSummary += row * 100;
+                        break;
+                    }
+                }
+
+                lastValue = map.Horizontal[row];
+            }
         }
+    }
+
+    private bool CheckMirroring(List<int> map, int reflection)
+    {
+        int previous;
+        int next;
+
+        for (previous = reflection - 1, next = reflection; previous >= 0 && next < map.Count; previous--, next++)
+        {
+            if (map[previous] != map[next])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private List<int> GenerateHorizontalNumbering(List<string> currentMap)
     {
-        return new List<int>();
+        var horizontalNumbering = new List<int>();
+        for (var y = 0; y < currentMap.Count; y++)
+        {
+            var code = 0;
+            for (var x = 0; x < currentMap[y].Length; x++)
+            {
+                code = (code << 1) | (currentMap[y][x] == '.'? 0 : 1);
+            }
+
+            horizontalNumbering.Add(code);
+        }
+
+        return horizontalNumbering;
     }
 
     private List<int> GenerateVerticalNumbering(List<string> currentMap)

@@ -26,4 +26,17 @@ public class PointOfIncidenceMust
 #.#.##.#.");
         Assert.Equal(5, sut.PatternSummary);
     }
+
+    [Fact]
+    public void FindHorizontalMirroringCorrectly()
+    {
+        var sut = new PointOfIncidence(@"#...##..#
+#....#..#
+..##..###
+#####.##.
+#####.##.
+..##..###
+#....#..#");
+        Assert.Equal(400, sut.PatternSummary);
+    }
 }
