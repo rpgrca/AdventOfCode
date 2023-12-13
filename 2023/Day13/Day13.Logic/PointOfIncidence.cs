@@ -22,7 +22,6 @@ public class PointOfIncidence
         {
             if (string.IsNullOrEmpty(line))
             {
-
                 _maps.Add((currentMap, GenerateVerticalNumbering(currentMap), GenerateHorizontalNumbering(currentMap)));
                 currentMap = new List<string>();
             }
@@ -73,8 +72,15 @@ public class PointOfIncidence
         }
         else
         {
-            foreach (var map in _maps)
+
+            for (var index = 0; index < _maps.Count; index++)
             {
+                if (index == 47)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+                var map = _maps[index];
+                var found = false;
                 for (var column = 0; column < map.Vertical.Count - 1; column++)
                 {
                     for (var innerColumn = column + 1; innerColumn < map.Vertical.Count; innerColumn++)
@@ -82,14 +88,24 @@ public class PointOfIncidence
                         var difference = map.Vertical[column] ^ map.Vertical[innerColumn];
                         if (BitOperations.IsPow2(difference))
                         {
+                            if ((column + innerColumn) % 2 == 0)
+                            {
+                                continue;
+                            }
+
                             var oldColumn = map.Vertical[column];
-                            map.Vertical[column] =  map.Vertical[innerColumn];
+                            map.Vertical[column] = map.Vertical[innerColumn];
 
                             var possibleColumn = (column + innerColumn + 1) / 2;
                             if (CheckMirroring(map.Vertical, possibleColumn))
                             {
-                                PatternSummary += column;
-                                goto CheckForRow;
+                                if (found)
+                                {
+                                    throw new Exception("Test");
+                                }
+                                found = true;
+                                PatternSummary += possibleColumn;
+                                //goto Correct;
                             }
 
                             map.Vertical[column] = oldColumn;
@@ -97,7 +113,6 @@ public class PointOfIncidence
                     }
                 }
 
-            CheckForRow:
                 for (var row = 0; row < map.Horizontal.Count - 1; row++)
                 {
                     for (var innerRow = row + 1; innerRow < map.Horizontal.Count; innerRow++)
@@ -111,6 +126,7 @@ public class PointOfIncidence
                             var possibleRow = (row + innerRow + 1) / 2;
                             if (CheckMirroring(map.Horizontal, possibleRow))
                             {
+                                found = true;
                                 PatternSummary += possibleRow * 100;
                                 goto Correct;
                             }
@@ -120,7 +136,11 @@ public class PointOfIncidence
                     }
                 }
 
-                Correct:;
+                Correct:
+                    if (! found)
+                    {
+                        throw new Exception("Not found");
+                    }
             }
 
         }

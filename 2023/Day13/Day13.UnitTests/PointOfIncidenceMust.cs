@@ -87,4 +87,24 @@ public class PointOfIncidenceMust
         var sut = new PointOfIncidence(SAMPLE_INPUT, true);
         Assert.Equal(400, sut.PatternSummary);
     }
+
+    [Fact]
+    public void Test1()
+    {
+        var sut = new PointOfIncidence(@".#.####.####.##
+.#.#.#........#
+###.#...#..#...
+###.#...#..#...
+.#.#.#........#
+.#.####.####.##
+..##..##.##.#..", true);
+        Assert.Equal(10, sut.PatternSummary);
+    }
+/*
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new PointOfIncidence(PUZZLE_INPUT, true);
+        Assert.True(28482 < sut.PatternSummary);
+    }*/
 }
