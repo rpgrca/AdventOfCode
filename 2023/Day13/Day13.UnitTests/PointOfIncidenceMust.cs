@@ -1,3 +1,4 @@
+using System.Drawing;
 using Day13.Logic;
 using static Day13.UnitTests.Constants;
 
@@ -45,5 +46,12 @@ public class PointOfIncidenceMust
     {
         var sut = new PointOfIncidence(SAMPLE_INPUT);
         Assert.Equal(405, sut.PatternSummary);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new PointOfIncidence(PUZZLE_INPUT);
+        Assert.Equal(33047, sut.PatternSummary);
     }
 }
