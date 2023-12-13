@@ -82,15 +82,22 @@ public class PointOfIncidence
                         var difference = map.Vertical[column] ^ map.Vertical[innerColumn];
                         if (BitOperations.IsPow2(difference))
                         {
-                            if (CheckMirroring(map.Vertical, (column + innerColumn + 1) / 2))
+                            var oldColumn = map.Vertical[column];
+                            map.Vertical[column] =  map.Vertical[innerColumn];
+
+                            var possibleColumn = (column + innerColumn + 1) / 2;
+                            if (CheckMirroring(map.Vertical, possibleColumn))
                             {
                                 PatternSummary += column;
-                                break;
+                                goto CheckForRow;
                             }
+
+                            map.Vertical[column] = oldColumn;
                         }
                     }
                 }
 
+            CheckForRow:
                 for (var row = 0; row < map.Horizontal.Count - 1; row++)
                 {
                     for (var innerRow = row + 1; innerRow < map.Horizontal.Count; innerRow++)
@@ -98,7 +105,7 @@ public class PointOfIncidence
                         var difference = map.Horizontal[row] ^ map.Horizontal[innerRow];
                         if (BitOperations.IsPow2(difference))
                         {
-                            var oldHorizontalRow = map.Horizontal[row];
+                            var oldRow = map.Horizontal[row];
                             map.Horizontal[row] = map.Horizontal[innerRow];
 
                             var possibleRow = (row + innerRow + 1) / 2;
@@ -108,7 +115,7 @@ public class PointOfIncidence
                                 goto Correct;
                             }
 
-                            map.Horizontal[row] = oldHorizontalRow;
+                            map.Horizontal[row] = oldRow;
                         }
                     }
                 }

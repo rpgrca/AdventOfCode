@@ -67,4 +67,24 @@ public class PointOfIncidenceMust
 #.#.##.#.", true);
         Assert.Equal(300, sut.PatternSummary);
     }
+
+    [Fact]
+    public void FixVerticalSmudgeCorrectly()
+    {
+        var sut = new PointOfIncidence(@"#...##..#
+#....#..#
+..##..###
+#####.##.
+#####.##.
+..##..###
+#....#..#", true);
+        Assert.Equal(100, sut.PatternSummary);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new PointOfIncidence(SAMPLE_INPUT, true);
+        Assert.Equal(400, sut.PatternSummary);
+    }
 }
