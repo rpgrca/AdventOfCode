@@ -39,4 +39,11 @@ public class PointOfIncidenceMust
 #....#..#");
         Assert.Equal(400, sut.PatternSummary);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new PointOfIncidence(SAMPLE_INPUT);
+        Assert.Equal(405, sut.PatternSummary);
+    }
 }
