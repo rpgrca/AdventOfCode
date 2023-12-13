@@ -7,6 +7,7 @@ public class PointOfIncidenceMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 2)]
+    [InlineData(PUZZLE_INPUT, 100)]
     public void LoadInputCorrectly(string input, int expectedMaps)
     {
         var sut = new PointOfIncidence(input);
