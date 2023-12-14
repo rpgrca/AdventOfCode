@@ -236,4 +236,13 @@ public class ParabolicReflectorDishMust
         sut.CalculateNorthernLoad();
         Assert.Equal(64, sut.NorthernLoad);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(PUZZLE_INPUT);
+        sut.SpinBillionTimes(104, 39);
+        sut.CalculateNorthernLoad();
+        Assert.Equal(100531, sut.NorthernLoad);
+    }
 }
