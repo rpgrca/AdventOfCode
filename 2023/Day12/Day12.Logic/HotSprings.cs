@@ -57,6 +57,10 @@ public class HotSprings
                 {
                     newRow = ('?' + row.Map, row.Groups);
                 }
+                else if (row.Map[^1] == '?')
+                {
+                    newRow = (row.Map + '?', row.Groups);
+                }
 
                 var combinationsFirst = new List<string>();
                 CalculateCombinations(newRow, 0, string.Empty, combinationsFirst);
