@@ -132,4 +132,12 @@ public class ParabolicReflectorDish
             }
         }
     }
+
+    public void Spin()
+    {
+        TiltNorth();
+        TiltWest();
+        TiltSouth();
+        TiltEast();
+    }
 }
