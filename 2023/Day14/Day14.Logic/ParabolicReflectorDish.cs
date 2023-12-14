@@ -88,4 +88,26 @@ public class ParabolicReflectorDish
             }
         }
     }
+
+    public void TiltEast()
+    {
+        for (var y = 0; y < CurrentMap.Count; y++)
+        {
+            for (var x = CurrentMap[y].Count - 1; x >= 0; x--)
+            {
+                if (CurrentMap[y][x] == 'O')
+                {
+                    var calculatedX = x + 1;
+                    while (calculatedX < CurrentMap[y].Count && CurrentMap[y][calculatedX] == '.')
+                    {
+                        calculatedX++;
+                    }
+
+                    calculatedX -= 1;
+                    CurrentMap[y][x] = '.';
+                    CurrentMap[y][calculatedX] = 'O';
+                }
+            }
+        }
+    }
 }
