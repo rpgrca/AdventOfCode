@@ -118,10 +118,19 @@ public class ParabolicReflectorDishMust
     [Theory]
     [InlineData("O\nO\n.\nO\n.\nO\n.\n.\n#\n#", 34)]
     [InlineData(".\n.\n.\nO\nO\n.\n.\n.\n.\nO", 27)]
+    [InlineData(".\nO\n.\n.\n.\n#\nO\n.\n.\nO", 17)]
     public void CalculateLoadCorrectly(string input, int expectedLoad)
     {
         var sut = new ParabolicReflectorDish(input);
         sut.TiltNorth();
         Assert.Equal(expectedLoad, sut.NorthernLoad);
+    }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
+        sut.TiltNorth();
+        Assert.Equal(136, sut.NorthernLoad);
     }
 }
