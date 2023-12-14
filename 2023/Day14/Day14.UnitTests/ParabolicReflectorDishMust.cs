@@ -172,4 +172,18 @@ public class ParabolicReflectorDishMust
                 c1 => Assert.Equal('.', c1),
                 c2 => Assert.Equal('O', c2)));
     }
+
+    [Fact]
+    public void TiltSouthCorrectly()
+    {
+        var sut = new ParabolicReflectorDish("OO\n..");
+        sut.TiltSouth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)),
+            m2 => Assert.Collection(m2,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('O', c2)));
+    }
 }
