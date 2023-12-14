@@ -14,4 +14,14 @@ public class ParabolicReflectorDishMust
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
+
+    [Fact]
+    public void DoNotMoveCubeRocks()
+    {
+        var sut = new ParabolicReflectorDish("#");
+        sut.TiltNorth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('#', c1)));
+    }
 }
