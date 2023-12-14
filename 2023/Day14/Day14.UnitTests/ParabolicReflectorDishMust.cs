@@ -133,4 +133,12 @@ public class ParabolicReflectorDishMust
         sut.TiltNorth();
         Assert.Equal(136, sut.NorthernLoad);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(PUZZLE_INPUT);
+        sut.TiltNorth();
+        Assert.Equal(106990, sut.NorthernLoad);
+    }
 }
