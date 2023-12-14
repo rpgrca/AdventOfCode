@@ -49,6 +49,28 @@ public class HotSprings
                 var row = Rows[index];
 
                 (string, int[]) newRow = (string.Empty, Array.Empty<int>());
+                if (row.Map[^1] == '?')
+                {
+                    newRow = (row.Map + '?', row.Groups);
+                }
+                else if (row.Map[^1] == '.')
+                {
+                    newRow = ('?' + row.Map, row.Groups);
+                }
+                else if (row.Map[0] == '?' && row.Map[^1] == '#')
+                {
+                    newRow = (row.Map + '?', row.Groups);
+                }
+                else if (row.Map[0] == '.' && row.Map[^1] == '#')
+                {
+                    newRow = (row.Map + '?', row.Groups); // TODO
+                }
+                else if (row.Map[0] == '#' && row.Map[^1] == '#')
+                {
+                    newRow = ('?' + row.Map, row.Groups); // TODO
+                }
+
+/*
                 if (row.Map[^1] == '#')
                 {
                     newRow = (row.Map + '?', row.Groups);
@@ -60,7 +82,7 @@ public class HotSprings
                 else if (row.Map[^1] == '?')
                 {
                     newRow = (row.Map + '?', row.Groups);
-                }
+                }*/
 
                 var combinationsFirst = new List<string>();
                 CalculateCombinations(newRow, 0, string.Empty, combinationsFirst);

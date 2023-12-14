@@ -72,6 +72,15 @@ public class HotSpringsMust
     }
 
     [Theory]
+    [InlineData("?? 1", 2)]
+    [InlineData("?????????????? 1,1,1,1,1", 252)]
+    public void Test1(string input, int expectedResult)
+    {
+        var sut = new HotSprings(input, true);
+        Assert.Equal(expectedResult, sut.SumOfArrangements);
+    }
+
+    [Theory]
     [InlineData(SAMPLE_INPUT, 6)]
     [InlineData(SECOND_SAMPLE_INPUT, 21)]
     public void SolveFirstSampleCorrectly(string input, int expectedSum)
@@ -93,6 +102,7 @@ public class HotSpringsMust
     [InlineData("????.#...#... 4,1,1", 16)]
     [InlineData("????.######..#####. 1,6,5", 2500)]
     [InlineData("?###???????? 3,2,1", 506250)]
+    [InlineData(".??#???.??? 3,1,1", 2333772)]
     public void SolveExampleCorrectly_WhenUnfoldingMap(string input, int expectedResult)
     {
         var sut = new HotSprings(input, true, true);
@@ -105,4 +115,12 @@ public class HotSpringsMust
         var sut = new HotSprings(SECOND_SAMPLE_INPUT, true, true);
         Assert.Equal(525152, sut.SumOfArrangements);
     }
+/*
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new HotSprings(PUZZLE_INPUT, true, true);
+        //Assert.True(878755040584 < sut.SumOfArrangements);
+        Assert.Equal(878760112338, sut.SumOfArrangements);
+    }*/
 }
