@@ -1,14 +1,10 @@
-
-
-
-using System.Security.Cryptography.X509Certificates;
-
 namespace Day14.Logic;
 
 public class ParabolicReflectorDish
 {
     private readonly string _input;
     private readonly string[] _lines;
+    private readonly List<string> _status;
 
     public int Height { get; private set; }
     public int Width { get; private set; }
@@ -19,6 +15,7 @@ public class ParabolicReflectorDish
     {
         _input = input;
         _lines = input.Split("\n");
+        _status = new List<string>();
 
         Height = _lines.Length;
         Width = _lines[0].Length;
@@ -133,11 +130,22 @@ public class ParabolicReflectorDish
         }
     }
 
-    public void Spin()
+    public void Spin(int count)
     {
-        TiltNorth();
-        TiltWest();
-        TiltSouth();
-        TiltEast();
+        while (count-- > 0)
+        {
+            TiltNorth();
+            TiltWest();
+            TiltSouth();
+            TiltEast();
+        }
+    }
+
+    public void SpinBillionTimes(int warmup, int repetition)
+    {
+        Spin(warmup);
+        var left = 1_000_000_000 - warmup;
+        left = left % repetition;
+        Spin(left);
     }
 }

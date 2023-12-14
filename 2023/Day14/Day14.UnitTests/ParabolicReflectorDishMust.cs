@@ -191,7 +191,7 @@ public class ParabolicReflectorDishMust
     public void SpinRocksCorrectly()
     {
         var sut = new ParabolicReflectorDish("OO\n..");
-        sut.Spin();
+        sut.Spin(1);
         Assert.Collection(sut.CurrentMap,
             m1 => Assert.Collection(m1,
                 c1 => Assert.Equal('.', c1),
@@ -199,5 +199,41 @@ public class ParabolicReflectorDishMust
             m2 => Assert.Collection(m2,
                 c1 => Assert.Equal('O', c1),
                 c2 => Assert.Equal('O', c2)));
+    }
+
+    [Fact]
+    public void SpinSampleOnceCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
+        sut.Spin(1);
+        sut.CalculateNorthernLoad();
+        Assert.Equal(87, sut.NorthernLoad);
+    }
+
+    [Fact]
+    public void SpinSampleTwiceCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
+        sut.Spin(2);
+        sut.CalculateNorthernLoad();
+        Assert.Equal(69, sut.NorthernLoad);
+    }
+
+    [Fact]
+    public void SpinSampleThriceCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
+        sut.Spin(3);
+        sut.CalculateNorthernLoad();
+        Assert.Equal(69, sut.NorthernLoad);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
+        sut.SpinBillionTimes(10, 7);
+        sut.CalculateNorthernLoad();
+        Assert.Equal(64, sut.NorthernLoad);
     }
 }
