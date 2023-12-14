@@ -13,6 +13,7 @@ public class ParabolicReflectorDish
     public int Height { get; private set; }
     public int Width { get; private set; }
     public List<List<char>> CurrentMap { get; private set; }
+    public int NorthernLoad { get; private set; }
 
     public ParabolicReflectorDish(string input)
     {
@@ -46,6 +47,18 @@ public class ParabolicReflectorDish
                     calculatedY += 1;
                     CurrentMap[y][x] = '.';
                     CurrentMap[calculatedY][x] = 'O';
+                }
+            }
+        }
+
+        NorthernLoad = 0;
+        for (var y = 0; y < CurrentMap.Count; y++)
+        {
+            for (var x = 0; x < CurrentMap[y].Count; x++)
+            {
+                if (CurrentMap[y][x] == 'O')
+                {
+                    NorthernLoad += Height - y;
                 }
             }
         }

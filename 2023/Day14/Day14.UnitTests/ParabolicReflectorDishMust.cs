@@ -114,4 +114,14 @@ public class ParabolicReflectorDishMust
                 c1 => Assert.Equal('.', c1),
                 c2 => Assert.Equal('.', c2)));
     }
+
+    [Theory]
+    [InlineData("O\nO\n.\nO\n.\nO\n.\n.\n#\n#", 34)]
+    [InlineData(".\n.\n.\nO\nO\n.\n.\n.\n.\nO", 27)]
+    public void CalculateLoadCorrectly(string input, int expectedLoad)
+    {
+        var sut = new ParabolicReflectorDish(input);
+        sut.TiltNorth();
+        Assert.Equal(expectedLoad, sut.NorthernLoad);
+    }
 }
