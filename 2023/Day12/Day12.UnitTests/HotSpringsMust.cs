@@ -97,6 +97,7 @@ public class HotSpringsMust
 
     [Theory]
     [InlineData("???.### 1,1,3", 1)]
+    [InlineData(".??..??...?##. 1,1,3", 16384)]
     public void SolveExampleCorrectly_WhenUnfoldingMap(string input, int expectedResult)
     {
         var sut = new HotSprings(input, true, true);
