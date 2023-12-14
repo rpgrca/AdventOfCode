@@ -72,4 +72,46 @@ public class ParabolicReflectorDishMust
                 c2 => Assert.Equal('.', c2)));
     }
 
+    [Fact]
+    public void BlockRoundedRock_WhenHittingCubeRock()
+    {
+        var sut = new ParabolicReflectorDish(".#\n..\nOO");
+        sut.TiltNorth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('#', c2)),
+            m2 => Assert.Collection(m2,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('O', c2)),
+            m3 => Assert.Collection(m3,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)));
+    }
+
+    [Fact]
+    public void RollRoundedRock_WhenColumnHasMultipleGaps()
+    {
+        var sut = new ParabolicReflectorDish("..\n..\nO#\n..\n..\nOO");
+        sut.TiltNorth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('.', c2)),
+            m2 => Assert.Collection(m2,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('.', c2)),
+            m3 => Assert.Collection(m3,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('#', c2)),
+            m4 => Assert.Collection(m4,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('O', c2)),
+            m5 => Assert.Collection(m5,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)),
+            m6 => Assert.Collection(m6,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)));
+    }
 }
