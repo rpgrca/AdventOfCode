@@ -7,6 +7,7 @@ public class ParabolicReflectorDishMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 10, 10)]
+    [InlineData(PUZZLE_INPUT, 100, 100)]
     public void LoadInputCorrectly(string input, int expectedWidth, int expectedHeight)
     {
         var sut = new ParabolicReflectorDish(input);
