@@ -86,4 +86,20 @@ public class HotSpringsMust
         var sut = new HotSprings(PUZZLE_INPUT, true);
         Assert.Equal(6935, sut.SumOfArrangements);
     }
+
+/*
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new HotSprings(THIRD_SAMPLE_INPUT, true);
+        Assert.Equal(0, sut.SumOfArrangements);
+    }*/
+
+    [Theory]
+    [InlineData("???.### 1,1,3", 1)]
+    public void SolveExampleCorrectly_WhenUnfoldingMap(string input, int expectedResult)
+    {
+        var sut = new HotSprings(input, true, true);
+        Assert.Equal(expectedResult, sut.SumOfArrangements);
+    }
 }
