@@ -50,7 +50,10 @@ public class ParabolicReflectorDish
                 }
             }
         }
+    }
 
+    public void CalculateNorthernLoad()
+    {
         NorthernLoad = 0;
         for (var y = 0; y < CurrentMap.Count; y++)
         {
@@ -59,6 +62,28 @@ public class ParabolicReflectorDish
                 if (CurrentMap[y][x] == 'O')
                 {
                     NorthernLoad += Height - y;
+                }
+            }
+        }
+    }
+
+    public void TiltWest()
+    {
+        for (var y = 0; y < CurrentMap.Count; y++)
+        {
+            for (var x = 0; x < CurrentMap[y].Count; x++)
+            {
+                if (CurrentMap[y][x] == 'O')
+                {
+                    var calculatedX = x - 1;
+                    while (calculatedX >= 0 && CurrentMap[y][calculatedX] == '.')
+                    {
+                        calculatedX--;
+                    }
+
+                    calculatedX += 1;
+                    CurrentMap[y][x] = '.';
+                    CurrentMap[y][calculatedX] = 'O';
                 }
             }
         }

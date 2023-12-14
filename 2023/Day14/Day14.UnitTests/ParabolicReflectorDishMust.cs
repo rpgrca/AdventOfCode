@@ -123,6 +123,7 @@ public class ParabolicReflectorDishMust
     {
         var sut = new ParabolicReflectorDish(input);
         sut.TiltNorth();
+        sut.CalculateNorthernLoad();
         Assert.Equal(expectedLoad, sut.NorthernLoad);
     }
 
@@ -131,6 +132,7 @@ public class ParabolicReflectorDishMust
     {
         var sut = new ParabolicReflectorDish(SAMPLE_INPUT);
         sut.TiltNorth();
+        sut.CalculateNorthernLoad();
         Assert.Equal(136, sut.NorthernLoad);
     }
 
@@ -139,6 +141,21 @@ public class ParabolicReflectorDishMust
     {
         var sut = new ParabolicReflectorDish(PUZZLE_INPUT);
         sut.TiltNorth();
+        sut.CalculateNorthernLoad();
         Assert.Equal(106990, sut.NorthernLoad);
+    }
+
+    [Fact]
+    public void TiltWestCorrectly()
+    {
+        var sut = new ParabolicReflectorDish(".O\n.O");
+        sut.TiltWest();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('.', c2)),
+            m2 => Assert.Collection(m2,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('.', c2)));
     }
 }
