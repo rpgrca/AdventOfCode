@@ -46,7 +46,7 @@ public class ParabolicReflectorDishMust
     }
 
     [Fact]
-    public void MoveRoundRocks_WhenColumnHasRoomToMove()
+    public void MoveRoundRocks_WhenColumnHasNoBlockUntilEdge()
     {
         var sut = new ParabolicReflectorDish(".\nO");
         sut.TiltNorth();
@@ -54,4 +54,22 @@ public class ParabolicReflectorDishMust
             m1 => Assert.Collection(m1, c1 => Assert.Equal('O', c1)),
             m2 => Assert.Collection(m2, c2 => Assert.Equal('.', c2)));
     }
+
+    [Fact]
+    public void MoveRoundRocks_WhenColumnHasRoomToMove()
+    {
+        var sut = new ParabolicReflectorDish("..\n.O\nO.");
+        sut.TiltNorth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1,
+                c1 => Assert.Equal('O', c1),
+                c2 => Assert.Equal('O', c2)),
+            m2 => Assert.Collection(m2,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)),
+            m3 => Assert.Collection(m3,
+                c1 => Assert.Equal('.', c1),
+                c2 => Assert.Equal('.', c2)));
+    }
+
 }

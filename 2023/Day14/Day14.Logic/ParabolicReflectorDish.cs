@@ -31,19 +31,22 @@ public class ParabolicReflectorDish
 
     public void TiltNorth()
     {
-        for (var y = 0; y < CurrentMap.Count; y++)
+        for (var x = 0; x < CurrentMap[0].Count; x++)
         {
-            if (CurrentMap[y][0] == 'O')
+            for (var y = 0; y < CurrentMap.Count; y++)
             {
-                var calculatedY = y - 1;
-                while (calculatedY >= 0 && CurrentMap[calculatedY][0] == '.')
+                if (CurrentMap[y][x] == 'O')
                 {
-                    calculatedY--;
-                }
+                    var calculatedY = y - 1;
+                    while (calculatedY >= 0 && CurrentMap[calculatedY][x] == '.')
+                    {
+                        calculatedY--;
+                    }
 
-                calculatedY += 1;
-                CurrentMap[y][0] = '.';
-                CurrentMap[calculatedY][0] = 'O';
+                    calculatedY += 1;
+                    CurrentMap[y][x] = '.';
+                    CurrentMap[calculatedY][x] = 'O';
+                }
             }
         }
     }
