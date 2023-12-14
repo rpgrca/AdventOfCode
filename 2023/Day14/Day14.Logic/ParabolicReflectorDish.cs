@@ -1,6 +1,8 @@
 
 
 
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day14.Logic;
 
 public class ParabolicReflectorDish
@@ -29,5 +31,20 @@ public class ParabolicReflectorDish
 
     public void TiltNorth()
     {
+        for (var y = 0; y < CurrentMap.Count; y++)
+        {
+            if (CurrentMap[y][0] == 'O')
+            {
+                var calculatedY = y - 1;
+                while (calculatedY >= 0 && CurrentMap[calculatedY][0] == '.')
+                {
+                    calculatedY--;
+                }
+
+                calculatedY += 1;
+                CurrentMap[y][0] = '.';
+                CurrentMap[calculatedY][0] = 'O';
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Security.Cryptography;
 using Day14.Logic;
 using static Day14.UnitTests.Constants;
@@ -35,7 +36,7 @@ public class ParabolicReflectorDishMust
     [InlineData("#\n#", '#', '#')]
     [InlineData("O\n#", 'O', '#')]
     [InlineData(".\n#", '.', '#')]
-    public void DoNotMoveCubeRocks_WhenVerticalMapHasOneCubeRock(string input, char expectedFirst, char expectedSecond)
+    public void DoNotMoveCubeRocks_WhenColumnHasOneCubeRock(string input, char expectedFirst, char expectedSecond)
     {
         var sut = new ParabolicReflectorDish(input);
         sut.TiltNorth();
@@ -44,4 +45,13 @@ public class ParabolicReflectorDishMust
             m2 => Assert.Collection(m2, c2 => Assert.Equal(expectedSecond, c2)));
     }
 
+    [Fact]
+    public void MoveRoundRocks_WhenColumnHasRoomToMove()
+    {
+        var sut = new ParabolicReflectorDish(".\nO");
+        sut.TiltNorth();
+        Assert.Collection(sut.CurrentMap,
+            m1 => Assert.Collection(m1, c1 => Assert.Equal('O', c1)),
+            m2 => Assert.Collection(m2, c2 => Assert.Equal('.', c2)));
+    }
 }
