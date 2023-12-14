@@ -87,14 +87,6 @@ public class HotSpringsMust
         Assert.Equal(6935, sut.SumOfArrangements);
     }
 
-/*
-    [Fact]
-    public void SolveSecondSampleCorrectly()
-    {
-        var sut = new HotSprings(THIRD_SAMPLE_INPUT, true);
-        Assert.Equal(0, sut.SumOfArrangements);
-    }*/
-
     [Theory]
     [InlineData("???.### 1,1,3", 1)]
     [InlineData(".??..??...?##. 1,1,3", 16384)]
@@ -105,5 +97,12 @@ public class HotSpringsMust
     {
         var sut = new HotSprings(input, true, true);
         Assert.Equal(expectedResult, sut.SumOfArrangements);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new HotSprings(SECOND_SAMPLE_INPUT, true, true);
+        Assert.Equal(525152, sut.SumOfArrangements);
     }
 }
