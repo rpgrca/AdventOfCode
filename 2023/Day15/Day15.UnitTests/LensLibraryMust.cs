@@ -7,6 +7,7 @@ public class LensLibraryMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 11)]
+    [InlineData(PUZZLE_INPUT, 4000)]
     public void ParseInputCorrectly(string input, int expectedCount)
     {
         var sut = new LensLibrary(input);
