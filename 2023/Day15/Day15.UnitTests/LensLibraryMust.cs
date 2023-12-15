@@ -13,4 +13,23 @@ public class LensLibraryMust
         var sut = new LensLibrary(input);
         Assert.Equal(expectedCount, sut.SequenceCount);
     }
+
+    [Theory]
+    [InlineData("HASH", 52)]
+    [InlineData("rn=1", 30)]
+    [InlineData("cm-", 253)]
+    [InlineData("qp=3", 97)]
+    [InlineData("cm=2", 47)]
+    [InlineData("qp-", 14)]
+    [InlineData("pc=4", 180)]
+    [InlineData("ot=9", 9)]
+    [InlineData("ab=5", 197)]
+    [InlineData("pc-", 48)]
+    [InlineData("pc=6", 214)]
+    [InlineData("ot=7", 231)]
+    public void CalculateHashCorrectly(string input, int expectedSumOfHashes)
+    {
+        var sut = new LensLibrary(input);
+        Assert.Equal(expectedSumOfHashes, sut.SumOfHashes);
+    }
 }
