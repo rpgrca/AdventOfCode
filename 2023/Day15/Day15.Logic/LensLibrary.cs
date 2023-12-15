@@ -1,11 +1,17 @@
 
 
+
+using System.Linq.Expressions;
+
 namespace Day15.Logic;
 public class LensLibrary
 {
     private readonly string _input;
     private readonly string[] _sequence;
     public int SumOfHashes { get; private set; }
+    public int SequenceCount => _sequence.Length;
+    public List<List<(string Label, int FocalLength)>> Boxes { get; set; }
+    public int FocusingPower { get; private set; }
 
     public LensLibrary(string input)
     {
@@ -57,6 +63,14 @@ public class LensLibrary
 
             NextSentence:;
         }
+
+        FocusingPower = 0;
+        for (var index = 0; index < Boxes.Count; index++)
+        {
+            FocusingPower += Boxes[index]
+                .Select((l, i) => (index + 1) * (i + 1) * l.FocalLength)
+                .Aggregate(0, (t, i) => t += i);
+        }
     }
 
     private static int CalculateHash(string sentence)
@@ -71,8 +85,4 @@ public class LensLibrary
 
         return currentValue;
     }
-
-    public int SequenceCount => _sequence.Length;
-
-    public List<List<(string Label, int FocalLength)>> Boxes { get; set; }
 }

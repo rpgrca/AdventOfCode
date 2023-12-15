@@ -170,5 +170,12 @@ public class LensLibraryMust
             b3 => Assert.Equal(("pc", 6), b3));
     }
 
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new LensLibrary(SAMPLE_INPUT);
+        Assert.Equal(145, sut.FocusingPower);
+    }
+
 
 }
