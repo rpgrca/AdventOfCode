@@ -43,7 +43,16 @@ public class LensLibrary
             }
             else
             {
-                var hash = CalculateHash(operands[0][0..^1]);
+                var label = operands[0][0..^1];
+                var hash = CalculateHash(label);
+                for (var index = 0; index < Boxes[hash].Count; index++)
+                {
+                    if (Boxes[hash][index].Label == label)
+                    {
+                        Boxes[hash].Remove(Boxes[hash][index]);
+                        goto NextSentence;
+                    }
+                }
             }
 
             NextSentence:;

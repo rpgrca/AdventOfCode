@@ -85,4 +85,13 @@ public class LensLibraryMust
             b1 => Assert.Equal(("qp", 3), b1));
     }
 
+    [Fact]
+    public void SelectBoxCorrectly_WhenExecuting5Steps()
+    {
+        var sut = new LensLibrary("rn=1,cm-,qp=3,cm=2,qp-");
+        Assert.Collection(sut.Boxes[0],
+            b1 => Assert.Equal(("rn", 1), b1),
+            b2 => Assert.Equal(("cm", 2), b2));
+        Assert.Empty(sut.Boxes[1]);
+    }
 }
