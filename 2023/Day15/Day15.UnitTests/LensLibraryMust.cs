@@ -47,5 +47,10 @@ public class LensLibraryMust
         Assert.Equal(515495, sut.SumOfHashes);
     }
 
-
+    [Fact]
+    public void SelectBoxCorrectly()
+    {
+        var sut = new LensLibrary("rn=1");
+        Assert.Equal(("rn", 1), sut.Boxes[0][0]);
+    }
 }

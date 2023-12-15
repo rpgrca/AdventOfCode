@@ -11,6 +11,13 @@ public class LensLibrary
     {
         _input = input;
         _sequence = _input.Split(",");
+        Boxes = new List<List<(string Label, int FocalLength)>>()
+        {
+            new List<(string Label, int FocalLength)>()
+            {
+                ("rn", 1)
+            }
+        };
 
         SumOfHashes = 0;
         foreach (var sentence in _sequence)
@@ -29,4 +36,5 @@ public class LensLibrary
 
     public int SequenceCount => _sequence.Length;
 
+    public List<List<(string Label, int FocalLength)>> Boxes { get; set; }
 }
