@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using Day15.Logic;
 using static Day15.UnitTests.Constants;
 
@@ -48,7 +49,7 @@ public class LensLibraryMust
     }
 
     [Fact]
-    public void SelectBoxCorrectly_WhenExecutingOneStep()
+    public void SelectBoxCorrectly_WhenExecuting1Step()
     {
         var sut = new LensLibrary("rn=1");
         Assert.Collection(sut.Boxes[0],
@@ -56,7 +57,7 @@ public class LensLibraryMust
     }
 
     [Fact]
-    public void SelectBoxCorrectly_WhenExecutingTwoSteps()
+    public void SelectBoxCorrectly_WhenExecuting2Steps()
     {
         var sut = new LensLibrary("rn=1,cm-");
         Assert.Collection(sut.Boxes[0],
@@ -64,11 +65,22 @@ public class LensLibraryMust
     }
 
     [Fact]
-    public void SelectBoxCorrectly_WhenExecutingThreeSteps()
+    public void SelectBoxCorrectly_WhenExecuting3Steps()
     {
         var sut = new LensLibrary("rn=1,cm-,qp=3");
         Assert.Collection(sut.Boxes[0],
             b1 => Assert.Equal(("rn", 1), b1));
+        Assert.Collection(sut.Boxes[1],
+            b1 => Assert.Equal(("qp", 3), b1));
+    }
+
+    [Fact]
+    public void SelectBoxCorrectly_WhenExecuting4Steps()
+    {
+        var sut = new LensLibrary("rn=1,cm-,qp=3,cm=2");
+        Assert.Collection(sut.Boxes[0],
+            b1 => Assert.Equal(("rn", 1), b1),
+            b2 => Assert.Equal(("cm", 2), b2));
         Assert.Collection(sut.Boxes[1],
             b1 => Assert.Equal(("qp", 3), b1));
     }
