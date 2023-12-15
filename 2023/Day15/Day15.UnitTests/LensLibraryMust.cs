@@ -32,4 +32,20 @@ public class LensLibraryMust
         var sut = new LensLibrary(input);
         Assert.Equal(expectedSumOfHashes, sut.SumOfHashes);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new LensLibrary(SAMPLE_INPUT);
+        Assert.Equal(1320, sut.SumOfHashes);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new LensLibrary(PUZZLE_INPUT);
+        Assert.Equal(515495, sut.SumOfHashes);
+    }
+
+
 }
