@@ -177,5 +177,10 @@ public class LensLibraryMust
         Assert.Equal(145, sut.FocusingPower);
     }
 
-
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new LensLibrary(PUZZLE_INPUT);
+        Assert.Equal(229349, sut.FocusingPower);
+    }
 }
