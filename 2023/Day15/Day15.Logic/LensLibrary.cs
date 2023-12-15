@@ -16,6 +16,10 @@ public class LensLibrary
             new List<(string Label, int FocalLength)>()
             {
                 ("rn", 1)
+            },
+            new List<(string Label, int FocalLength)>()
+            {
+                ("qp", 3)
             }
         };
 

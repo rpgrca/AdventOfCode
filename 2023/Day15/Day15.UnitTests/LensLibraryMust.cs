@@ -48,9 +48,29 @@ public class LensLibraryMust
     }
 
     [Fact]
-    public void SelectBoxCorrectly()
+    public void SelectBoxCorrectly_WhenExecutingOneStep()
     {
         var sut = new LensLibrary("rn=1");
-        Assert.Equal(("rn", 1), sut.Boxes[0][0]);
+        Assert.Collection(sut.Boxes[0],
+            b1 => Assert.Equal(("rn", 1), b1));
     }
+
+    [Fact]
+    public void SelectBoxCorrectly_WhenExecutingTwoSteps()
+    {
+        var sut = new LensLibrary("rn=1,cm-");
+        Assert.Collection(sut.Boxes[0],
+            b1 => Assert.Equal(("rn", 1), b1));
+    }
+
+    [Fact]
+    public void SelectBoxCorrectly_WhenExecutingThreeSteps()
+    {
+        var sut = new LensLibrary("rn=1,cm-,qp=3");
+        Assert.Collection(sut.Boxes[0],
+            b1 => Assert.Equal(("rn", 1), b1));
+        Assert.Collection(sut.Boxes[1],
+            b1 => Assert.Equal(("qp", 3), b1));
+    }
+
 }
