@@ -38,7 +38,7 @@ public class TheFloorWillBeLavaMust
         sut.Energize();
         Assert.Equal("#####\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
     }
-/*
+
     [Fact]
     public void SplitBeamCorrectly_WhenHittingVerticalSplitterCenter()
     {
@@ -46,5 +46,4 @@ public class TheFloorWillBeLavaMust
         sut.Energize();
         Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
     }
-*/
 }
