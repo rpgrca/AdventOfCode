@@ -20,8 +20,7 @@ public class TheFloorWillBeLavaMust
     {
         var sut = new TheFloorWillBeLava(".....");
         sut.Energize();
-        Assert.Collection(sut.EnergizedMap,
-            l1 => Assert.Equal("#####", l1));
+        Assert.Equal("#####", sut.GetEnergizedMap());
     }
 
     [Fact]
@@ -29,13 +28,7 @@ public class TheFloorWillBeLavaMust
     {
         var sut = new TheFloorWillBeLava(".....\n.....\n.....\n.....\n.....");
         sut.Energize();
-        Assert.Collection(sut.EnergizedMap,
-            l1 => Assert.Equal("#####", l1),
-            l2 => Assert.Equal(".....", l2),
-            l3 => Assert.Equal(".....", l3),
-            l4 => Assert.Equal(".....", l4),
-            l5 => Assert.Equal(".....", l5)
-        );
+        Assert.Equal("#####\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
     }
 
     [Fact]
@@ -43,12 +36,15 @@ public class TheFloorWillBeLavaMust
     {
         var sut = new TheFloorWillBeLava("..-..\n.....\n.....\n.....\n.....");
         sut.Energize();
-        Assert.Collection(sut.EnergizedMap,
-            l1 => Assert.Equal("#####", l1),
-            l2 => Assert.Equal(".....", l2),
-            l3 => Assert.Equal(".....", l3),
-            l4 => Assert.Equal(".....", l4),
-            l5 => Assert.Equal(".....", l5)
-        );
+        Assert.Equal("#####\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
     }
+/*
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingVerticalSplitterCenter()
+    {
+        var sut = new TheFloorWillBeLava("..|..\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+*/
 }
