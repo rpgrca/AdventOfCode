@@ -72,6 +72,14 @@ public class TheFloorWillBeLavaMust
     }
 
     [Fact]
+    public void BounceInvertedMirrorCorrectly_WhenHittingFromBelow()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n..\\..\n.....\n..\\./");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n###.#\n..#.#\n..###", sut.GetEnergizedMap());
+    }
+
+    [Fact]
     public void BounceNormalMirrorCorrectly_WhenHittingFromLeft()
     {
         var sut = new TheFloorWillBeLava("../..\n.....\n.....\n.....\n.....");

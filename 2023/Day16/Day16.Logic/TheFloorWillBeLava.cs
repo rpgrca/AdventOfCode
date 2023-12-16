@@ -115,6 +115,11 @@ public class TheFloorWillBeLava
                             beam.X++;
                             beam.Orientation = 'r';
                             break;
+
+                        case 'u':
+                            beam.X--;
+                            beam.Orientation = 'l';
+                            break;
                     }
                     break;
 
