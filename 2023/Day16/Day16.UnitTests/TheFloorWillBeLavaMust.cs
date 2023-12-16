@@ -14,4 +14,13 @@ public class TheFloorWillBeLavaMust
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
+
+    [Fact]
+    public void TransverseCorrectly_WhenTileIsEmpty()
+    {
+        var sut = new TheFloorWillBeLava(".....");
+        sut.Energize();
+        Assert.Collection(sut.EnergizedMap,
+            l1 => Assert.Equal("#####", l1));
+    }
 }
