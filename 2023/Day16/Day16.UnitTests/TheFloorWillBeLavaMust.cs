@@ -56,7 +56,23 @@ public class TheFloorWillBeLavaMust
     }
 
     [Fact]
-    public void BounceMirrorCorrectly_WhenMirrorIsNormal()
+    public void BounceInvertedMirrorCorrectly_WhenHittingFromLeft()
+    {
+        var sut = new TheFloorWillBeLava("..\\..\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void BounceInvertedMirrorCorrectly_WhenHittingFromAbove()
+    {
+        var sut = new TheFloorWillBeLava("..\\..\n.....\n..\\..\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..###\n.....\n.....", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void BounceNormalMirrorCorrectly_WhenHittingFromLeft()
     {
         var sut = new TheFloorWillBeLava("../..\n.....\n.....\n.....\n.....");
         sut.Energize();
@@ -64,12 +80,27 @@ public class TheFloorWillBeLavaMust
     }
 
     [Fact]
-    public void BounceMirrorCorrectly_WhenMirrorIsInverted()
+    public void BounceNormalMirrorCorrectly_WhenHittingFromAbove()
     {
-        var sut = new TheFloorWillBeLava("..\\..\n.....\n.....\n.....\n.....");
+        var sut = new TheFloorWillBeLava("..\\..\n.....\n../..\n.....\n.....");
         sut.Energize();
-        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+        Assert.Equal("###..\n..#..\n###..\n.....\n.....", sut.GetEnergizedMap());
     }
 
+    [Fact]
+    public void BounceNormalMirrorCorrectly_WhenHittingFromRight()
+    {
+        var sut = new TheFloorWillBeLava("..\\..\n.....\n/./..\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n###..\n#....\n#....", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void BounceNormalMirrorCorrectly_WhenHittingFromBelow()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n../..\n.....\n..\\./");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n..###\n..#.#\n..###", sut.GetEnergizedMap());
+    }
 
 }

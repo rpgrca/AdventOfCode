@@ -55,11 +55,20 @@ public class TheFloorWillBeLava
                 case '.':
                     switch (beam.Orientation)
                     {
+                        case 'l':
+                            beam.X--;
+                            break;
+
                         case 'r':
                             beam.X++;
                             break;
+
                         case 'd':
                             beam.Y++;
+                            break;
+
+                        case 'u':
+                            beam.Y--;
                             break;
                     }
                     break;
@@ -67,9 +76,24 @@ public class TheFloorWillBeLava
                 case '/':
                     switch (beam.Orientation)
                     {
+                        case 'l':
+                            beam.Y++;
+                            beam.Orientation = 'd';
+                            break;
+
                         case 'r':
                             beam.Y--;
                             beam.Orientation = 'u';
+                            break;
+
+                        case 'd':
+                            beam.X--;
+                            beam.Orientation = 'l';
+                            break;
+
+                        case 'u':
+                            beam.X++;
+                            beam.Orientation = 'r';
                             break;
                     }
                     break;
@@ -77,9 +101,19 @@ public class TheFloorWillBeLava
                 case '\\':
                     switch (beam.Orientation)
                     {
+                        case 'l':
+                            beam.Y--;
+                            beam.Orientation = 'u';
+                            break;
+
                         case 'r':
                             beam.Y++;
                             beam.Orientation = 'd';
+                            break;
+
+                        case 'd':
+                            beam.X++;
+                            beam.Orientation = 'r';
                             break;
                     }
                     break;
