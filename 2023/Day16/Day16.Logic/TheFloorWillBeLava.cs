@@ -1,6 +1,8 @@
 
 
 
+using System.IO.Compression;
+
 namespace Day16.Logic;
 public class TheFloorWillBeLava
 {
@@ -68,6 +70,16 @@ public class TheFloorWillBeLava
                         case 'r':
                             beam.Y--;
                             beam.Orientation = 'u';
+                            break;
+                    }
+                    break;
+
+                case '\\':
+                    switch (beam.Orientation)
+                    {
+                        case 'r':
+                            beam.Y++;
+                            beam.Orientation = 'd';
                             break;
                     }
                     break;

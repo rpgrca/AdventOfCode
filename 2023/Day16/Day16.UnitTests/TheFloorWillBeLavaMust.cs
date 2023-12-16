@@ -63,5 +63,13 @@ public class TheFloorWillBeLavaMust
         Assert.Equal("###..\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
     }
 
+    [Fact]
+    public void BounceMirrorCorrectly_WhenMirrorIsInverted()
+    {
+        var sut = new TheFloorWillBeLava("..\\..\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
 
 }
