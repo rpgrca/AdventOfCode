@@ -16,18 +16,21 @@ public class TheFloorWillBeLava
     {
         _input = input;
         _lines = _input.Split("\n");
-/*
+
         var list = new List<char[]>();
-        for (var index = 0; index < Width; index++)
+        for (var index = 0; index < Height; index++)
         {
-            list.Add(Enumerable.Range(1, Width).Select(p => '0').ToArray());
+            list.Add(Enumerable.Range(1, Width).Select(p => '.').ToArray());
         }
 
-        EnergizedMap = list;*/
-        EnergizedMap = new List<char[]> { "#####".ToCharArray() };
+        EnergizedMap = list;
     }
 
     public void Energize()
     {
+        for (var index = 0; index < Width; index++)
+        {
+            EnergizedMap[0][index] = '#';
+        }
     }
 }

@@ -23,4 +23,18 @@ public class TheFloorWillBeLavaMust
         Assert.Collection(sut.EnergizedMap,
             l1 => Assert.Equal("#####", l1));
     }
+
+    [Fact]
+    public void TransverseCorrectly_WhenMapHasTwoEmptyDimensions()
+    {
+        var sut = new TheFloorWillBeLava(".....\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Collection(sut.EnergizedMap,
+            l1 => Assert.Equal("#####", l1),
+            l2 => Assert.Equal(".....", l2),
+            l3 => Assert.Equal(".....", l3),
+            l4 => Assert.Equal(".....", l4),
+            l5 => Assert.Equal(".....", l5)
+        );
+    }
 }
