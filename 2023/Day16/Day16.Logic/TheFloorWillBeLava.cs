@@ -135,6 +135,11 @@ public class TheFloorWillBeLava
                 case '|':
                     switch (beam.Orientation)
                     {
+                        case 'l':
+                            beam.Y--;
+                            beam.Orientation = 'u';
+                            break;
+
                         case 'r':
                             beam.Y++;
                             beam.Orientation = 'd';
@@ -142,6 +147,10 @@ public class TheFloorWillBeLava
 
                         case 'd':
                             beam.Y++;
+                            break;
+
+                        case 'u':
+                            beam.Y--;
                             break;
                     }
                     break;

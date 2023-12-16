@@ -40,22 +40,6 @@ public class TheFloorWillBeLavaMust
     }
 
     [Fact]
-    public void SplitBeamCorrectly_WhenHittingVerticalSplitterCenter()
-    {
-        var sut = new TheFloorWillBeLava("..|..\n.....\n.....\n.....\n.....");
-        sut.Energize();
-        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
-    }
-
-    [Fact]
-    public void TransverseVerticalSplitterCorrectly_WhenMovingDownwards()
-    {
-        var sut = new TheFloorWillBeLava("..|..\n.....\n..|..\n.....\n.....");
-        sut.Energize();
-        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
-    }
-
-    [Fact]
     public void BounceInvertedMirrorCorrectly_WhenHittingFromLeft()
     {
         var sut = new TheFloorWillBeLava("..\\..\n.....\n.....\n.....\n.....");
@@ -111,4 +95,35 @@ public class TheFloorWillBeLavaMust
         Assert.Equal("#####\n....#\n..###\n..#.#\n..###", sut.GetEnergizedMap());
     }
 
+    [Fact]
+    public void TransverseVerticalSplitterCorrectly_WhenHittingFromAbove()
+    {
+        var sut = new TheFloorWillBeLava("..|..\n.....\n..|..\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void TransverseVerticalSplitterCorrectly_WhenHittingFromBelow()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n../..\n..|..\n..\\./");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n..###\n..#.#\n..###", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingVerticalSplitterFromLeft()
+    {
+        var sut = new TheFloorWillBeLava("..|..\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingVerticalSplitterFromRight()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n\\....\n.....\n..|./");
+        sut.Energize();
+        Assert.Equal("#####\n..#.#\n..#.#\n..#.#\n..###", sut.GetEnergizedMap());
+    }
 }
