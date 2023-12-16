@@ -62,6 +62,16 @@ public class TheFloorWillBeLava
                     }
                     break;
 
+                case '/':
+                    switch (beam.Orientation)
+                    {
+                        case 'r':
+                            beam.Y--;
+                            beam.Orientation = 'u';
+                            break;
+                    }
+                    break;
+
                 case '-':
                     switch (beam.Orientation)
                     {
