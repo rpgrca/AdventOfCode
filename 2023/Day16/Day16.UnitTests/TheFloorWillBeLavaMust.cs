@@ -46,4 +46,13 @@ public class TheFloorWillBeLavaMust
         sut.Energize();
         Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
     }
+
+    [Fact]
+    public void TransverseVerticalSplitterCorrectly_WhenMovingDownwards()
+    {
+        var sut = new TheFloorWillBeLava("..|..\n.....\n..|..\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("###..\n..#..\n..#..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
 }

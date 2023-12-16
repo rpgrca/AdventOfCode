@@ -78,6 +78,10 @@ public class TheFloorWillBeLava
                             beam.Y++;
                             beam.Orientation = 'd';
                             break;
+
+                        case 'd':
+                            beam.Y++;
+                            break;
                     }
                     break;
             }
