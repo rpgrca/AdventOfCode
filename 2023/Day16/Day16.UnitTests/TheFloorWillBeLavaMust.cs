@@ -32,14 +32,6 @@ public class TheFloorWillBeLavaMust
     }
 
     [Fact]
-    public void TransverseHorizontalSplitterCorrectly_WhenHittingHorizontalSplitterEnd()
-    {
-        var sut = new TheFloorWillBeLava("..-..\n.....\n.....\n.....\n.....");
-        sut.Energize();
-        Assert.Equal("#####\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
-    }
-
-    [Fact]
     public void BounceInvertedMirrorCorrectly_WhenHittingFromLeft()
     {
         var sut = new TheFloorWillBeLava("..\\..\n.....\n.....\n.....\n.....");
@@ -125,5 +117,37 @@ public class TheFloorWillBeLavaMust
         var sut = new TheFloorWillBeLava("....\\\n.....\n\\....\n.....\n..|./");
         sut.Energize();
         Assert.Equal("#####\n..#.#\n..#.#\n..#.#\n..###", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void TransverseHorizontalSplitterCorrectly_WhenHittingFromLeft()
+    {
+        var sut = new TheFloorWillBeLava("..-..\n.....\n.....\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("#####\n.....\n.....\n.....\n.....", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void TransverseHorizontalSplitterCorrectly_WhenHittingFromRight()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n.-../\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n#####\n.....\n.....", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingHorizontalSplitterFromAbove()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n....-\n.....\n.....");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n#####\n.....\n.....", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingHorizontalSplitterFromBelow()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n-....\n.....\n\\.../");
+        sut.Energize();
+        Assert.Equal("#####\n....#\n#####\n#...#\n#####", sut.GetEnergizedMap());
     }
 }
