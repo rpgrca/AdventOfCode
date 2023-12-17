@@ -6,7 +6,8 @@ namespace Day17.UnitTests;
 public class ClumsyCrucibleMust
 {
     [Theory]
-    [InlineData(SAMPLE_INPUT, 10, 10)]
+    [InlineData(SAMPLE_INPUT, 13, 13)]
+    [InlineData(PUZZLE_INPUT, 141, 141)]
     public void LoadInputCorrectly(string input, int expectedWidth, int expectedHeight)
     {
         var sut = new ClumsyCrucible(input);
