@@ -39,7 +39,17 @@ public class ClumsyCrucibleMust
     [InlineData("5678\n1234", 10)]
     [InlineData("1289\n8345", 14)]
     [InlineData("119111\n911191", 8)]
+    [InlineData("11111\n22292\n33333", 13)]
     public void CalculateBestPathCorrectly(string input, int expectedHeatLoss)
+    {
+        var sut = new ClumsyCrucible(input);
+        sut.FindBestRoute();
+        Assert.Equal(expectedHeatLoss, sut.HeatLoss);
+    }
+
+    [Theory]
+    [InlineData("11111\n99999\n33333", 18)]
+    public void DoNotMoveMoreThanThreeTimesInOneDirection(string input, int expectedHeatLoss)
     {
         var sut = new ClumsyCrucible(input);
         sut.FindBestRoute();
