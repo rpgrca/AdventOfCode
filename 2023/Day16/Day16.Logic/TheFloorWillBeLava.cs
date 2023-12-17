@@ -13,7 +13,7 @@ public class TheFloorWillBeLava
         public int Y { get; set; }
         public char Orientation { get; set; }
 
-        public static Beam CreateOriginalBeam() => new();
+        public static Beam CreateOriginalBeam(int x, int y, char orientation) => new(x, y, orientation);
 
         public static Beam? SplitBeam(Beam location, List<Beam> beams, int x, int y, char orientation)
         {
@@ -33,11 +33,12 @@ public class TheFloorWillBeLava
 
         public Beam(int x, int y) => _source = (x, y);
 
-        private Beam()
+        private Beam(int x, int y, char orientation)
         {
             _source = (-1, -1);
-            X = Y = 0;
-            Orientation = 'r';
+            X = x;
+            Y = y;
+            Orientation = orientation;
         }
 
         public bool WasGeneratedAtTile(int x, int y) => _source.X == x && _source.Y == y;
@@ -46,6 +47,9 @@ public class TheFloorWillBeLava
    }
 
     private readonly string _input;
+    private readonly int _startingX;
+    private readonly int _startingY;
+    private readonly char _startingOrientation;
     private readonly string[] _lines;
     private readonly List<char[]> _map;
     private readonly List<char[]> _energizedMap;
@@ -60,9 +64,12 @@ public class TheFloorWillBeLava
         return string.Join("\n", _energizedMap.Select(p => new string(p)));
     }
 
-    public TheFloorWillBeLava(string input)
+    public TheFloorWillBeLava(string input, int x = 0, int y = 0, char orientation = 'r')
     {
         _input = input;
+        _startingX = x;
+        _startingY = y;
+        _startingOrientation = orientation;
         _lines = _input.Split("\n");
 
         _map = new List<char[]>();
@@ -81,7 +88,7 @@ public class TheFloorWillBeLava
     public void Energize(int cycles = 50)
     {
         Beam? newBeam = null;
-        var beams = new List<Beam> { Beam.CreateOriginalBeam() };
+        var beams = new List<Beam> { Beam.CreateOriginalBeam(_startingX, _startingY, _startingOrientation) };
         var beamsToAdd = new List<Beam>();
 
         for (var cycle = 0; cycle < cycles; cycle++)
@@ -252,5 +259,63 @@ public class TheFloorWillBeLava
 
         var map = GetEnergizedMap();
         EnergizedTilesCount = map.Count(c => c == '#');
+    }
+}
+
+
+public class TheFloorWillBeLavaScanner
+{
+    private readonly string _input;
+    private readonly int _length;
+    public int BestEnergizedTilesCount { get; private set; }
+
+    public TheFloorWillBeLavaScanner(string input)
+    {
+        _input = input;
+        _length = _input.Count(c => c == '\n') + 1;
+    }
+
+    public void TestConfigurations()
+    {
+
+        for (var y = 0; y < _length; y++)
+        {
+            var sut = new TheFloorWillBeLava(_input, 0, y, 'r');
+            sut.Energize();
+            if (BestEnergizedTilesCount < sut.EnergizedTilesCount)
+            {
+                BestEnergizedTilesCount = sut.EnergizedTilesCount;
+            }
+        }
+
+        for (var y = 0; y < _length; y++)
+        {
+            var sut = new TheFloorWillBeLava(_input, _length - 1, y, 'l');
+            sut.Energize();
+            if (BestEnergizedTilesCount < sut.EnergizedTilesCount)
+            {
+                BestEnergizedTilesCount = sut.EnergizedTilesCount;
+            }
+        }
+
+        for (var x = 0; x < _length; x++)
+        {
+            var sut = new TheFloorWillBeLava(_input, x, _length - 1, 'u');
+            sut.Energize();
+            if (BestEnergizedTilesCount < sut.EnergizedTilesCount)
+            {
+                BestEnergizedTilesCount = sut.EnergizedTilesCount;
+            }
+        }
+
+        for (var x = 0; x < _length; x++)
+        {
+            var sut = new TheFloorWillBeLava(_input, x, 0, 'd');
+            sut.Energize();
+            if (BestEnergizedTilesCount < sut.EnergizedTilesCount)
+            {
+                BestEnergizedTilesCount = sut.EnergizedTilesCount;
+            }
+        }
     }
 }

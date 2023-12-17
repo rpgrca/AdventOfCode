@@ -198,4 +198,12 @@ public class TheFloorWillBeLavaMust
         sut.Energize(662);
         Assert.Equal(7728, sut.EnergizedTilesCount);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new TheFloorWillBeLavaScanner(SAMPLE_INPUT);
+        sut.TestConfigurations();
+        Assert.Equal(51, sut.BestEnergizedTilesCount);
+    }
 }
