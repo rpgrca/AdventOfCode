@@ -1,16 +1,12 @@
-
-
-
-using System.IO.Compression;
-
 namespace Day16.Logic;
+
 public class TheFloorWillBeLava
 {
-    private struct Beam
+    private class Beam
     {
-        public int X;
-        public int Y;
-        public char Orientation;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public char Orientation { get; set; }
     }
 
     private readonly string _input;
@@ -44,132 +40,146 @@ public class TheFloorWillBeLava
         }
     }
 
-    public void Energize()
+    public void Energize(int cycles = 50)
     {
-        var beam = new Beam { Orientation = 'r' };
-        do
+        var beams = new List<Beam> { new() { Orientation = 'r' } };
+        var beamsToAdd = new List<Beam>();
+        var processed = false;
+
+        for (var cycle = 0; cycle < cycles; cycle++)
         {
-            _energizedMap[beam.Y][beam.X] = '#';
-            switch (_map[beam.Y][beam.X])
+            for (var index = 0; index < beams.Count; index++)
             {
-                case '.':
-                    switch (beam.Orientation)
+                var beam = beams[index];
+                if (beam.X >= 0 && beam.X < Width && beam.Y >= 0 && beam.Y < Height)
+                {
+                    _energizedMap[beam.Y][beam.X] = '#';
+                    switch (_map[beam.Y][beam.X])
                     {
-                        case 'l':
-                            beam.X--;
+                        case '.':
+                            switch (beam.Orientation)
+                            {
+                                case 'l':
+                                    beam.X--;
+                                    break;
+
+                                case 'r':
+                                    beam.X++;
+                                    break;
+
+                                case 'd':
+                                    beam.Y++;
+                                    break;
+
+                                case 'u':
+                                    beam.Y--;
+                                    break;
+                            }
                             break;
 
-                        case 'r':
-                            beam.X++;
+                        case '/':
+                            switch (beam.Orientation)
+                            {
+                                case 'l':
+                                    beam.Y++;
+                                    beam.Orientation = 'd';
+                                    break;
+
+                                case 'r':
+                                    beam.Y--;
+                                    beam.Orientation = 'u';
+                                    break;
+
+                                case 'd':
+                                    beam.X--;
+                                    beam.Orientation = 'l';
+                                    break;
+
+                                case 'u':
+                                    beam.X++;
+                                    beam.Orientation = 'r';
+                                    break;
+                            }
                             break;
 
-                        case 'd':
-                            beam.Y++;
+                        case '\\':
+                            switch (beam.Orientation)
+                            {
+                                case 'l':
+                                    beam.Y--;
+                                    beam.Orientation = 'u';
+                                    break;
+
+                                case 'r':
+                                    beam.Y++;
+                                    beam.Orientation = 'd';
+                                    break;
+
+                                case 'd':
+                                    beam.X++;
+                                    beam.Orientation = 'r';
+                                    break;
+
+                                case 'u':
+                                    beam.X--;
+                                    beam.Orientation = 'l';
+                                    break;
+                            }
                             break;
 
-                        case 'u':
-                            beam.Y--;
+                        case '-':
+                            switch (beam.Orientation)
+                            {
+                                case 'l':
+                                    beam.X--;
+                                    break;
+
+                                case 'r':
+                                    beam.X++;
+                                    break;
+
+                                case 'd':
+                                    beamsToAdd.Add(new Beam() { X = beam.X + 1, Y = beam.Y, Orientation = 'r' });
+                                    beam.X--;
+                                    beam.Orientation = 'l';
+                                    break;
+
+                                case 'u':
+                                    beamsToAdd.Add(new Beam() { X = beam.X - 1, Y = beam.Y, Orientation = 'l' });
+                                    beam.X++;
+                                    beam.Orientation = 'r';
+                                    break;
+                            }
+                            break;
+
+                        case '|':
+                            switch (beam.Orientation)
+                            {
+                                case 'l':
+                                    beam.Y--;
+                                    beam.Orientation = 'u';
+                                    break;
+
+                                case 'r':
+                                    beam.Y++;
+                                    beam.Orientation = 'd';
+                                    break;
+
+                                case 'd':
+                                    beam.Y++;
+                                    break;
+
+                                case 'u':
+                                    beam.Y--;
+                                    break;
+                            }
                             break;
                     }
-                    break;
-
-                case '/':
-                    switch (beam.Orientation)
-                    {
-                        case 'l':
-                            beam.Y++;
-                            beam.Orientation = 'd';
-                            break;
-
-                        case 'r':
-                            beam.Y--;
-                            beam.Orientation = 'u';
-                            break;
-
-                        case 'd':
-                            beam.X--;
-                            beam.Orientation = 'l';
-                            break;
-
-                        case 'u':
-                            beam.X++;
-                            beam.Orientation = 'r';
-                            break;
-                    }
-                    break;
-
-                case '\\':
-                    switch (beam.Orientation)
-                    {
-                        case 'l':
-                            beam.Y--;
-                            beam.Orientation = 'u';
-                            break;
-
-                        case 'r':
-                            beam.Y++;
-                            beam.Orientation = 'd';
-                            break;
-
-                        case 'd':
-                            beam.X++;
-                            beam.Orientation = 'r';
-                            break;
-
-                        case 'u':
-                            beam.X--;
-                            beam.Orientation = 'l';
-                            break;
-                    }
-                    break;
-
-                case '-':
-                    switch (beam.Orientation)
-                    {
-                        case 'l':
-                            beam.X--;
-                            break;
-
-                        case 'r':
-                            beam.X++;
-                            break;
-
-                        case 'd':
-                            beam.X--;
-                            beam.Orientation = 'l';
-                            break;
-
-                        case 'u':
-                            beam.X++;
-                            beam.Orientation = 'r';
-                            break;
-                    }
-                    break;
-
-                case '|':
-                    switch (beam.Orientation)
-                    {
-                        case 'l':
-                            beam.Y--;
-                            beam.Orientation = 'u';
-                            break;
-
-                        case 'r':
-                            beam.Y++;
-                            beam.Orientation = 'd';
-                            break;
-
-                        case 'd':
-                            beam.Y++;
-                            break;
-
-                        case 'u':
-                            beam.Y--;
-                            break;
-                    }
-                    break;
+                }
             }
+
+            beams.AddRange(beamsToAdd);
+            beamsToAdd.Clear();
         }
-        while (beam.X >= 0 && beam.X < Width && beam.Y >= 0 && beam.Y < Height);
     }
 }
