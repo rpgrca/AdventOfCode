@@ -5,10 +5,35 @@ public class TheFloorWillBeLava
 {
     private class Beam
     {
+        private readonly (int X, int Y) _source;
         public int X { get; set; }
         public int Y { get; set; }
         public char Orientation { get; set; }
-    }
+
+        public static Beam CreateOriginalBeam() => new();
+
+        public static Beam? SplitBeam(Beam location, List<Beam> beams, int x, int y, char orientation)
+        {
+            var sameSource = beams.SingleOrDefault(b => b.WasGeneratedAtSameTile(location.X, location.Y));
+            if (sameSource is null)
+            {
+                return new Beam(location.X, location.Y) { X = x, Y = y, Orientation = orientation };
+            }
+
+            return null;
+        }
+
+        public Beam(int x, int y) => _source = (x, y);
+
+        private Beam()
+        {
+            _source = (-1, -1);
+            X = Y = 0;
+            Orientation = 'r';
+        }
+
+        public bool WasGeneratedAtSameTile(int x, int y) => _source.X == X && _source.Y == Y;
+   }
 
     private readonly string _input;
     private readonly string[] _lines;
@@ -45,17 +70,14 @@ public class TheFloorWillBeLava
 
     public void Energize(int cycles = 50)
     {
-        var beams = new List<Beam> { new() { Orientation = 'r' } };
+        Beam? newBeam = null;
+        var beams = new List<Beam> { Beam.CreateOriginalBeam() };
         var beamsToAdd = new List<Beam>();
 
         for (var cycle = 0; cycle < cycles; cycle++)
         {
             for (var index = 0; index < beams.Count; index++)
             {
-                if (index == 8)
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
                 var beam = beams[index];
                 if (beam.X >= 0 && beam.X < Width && beam.Y >= 0 && beam.Y < Height)
                 {
@@ -145,13 +167,21 @@ public class TheFloorWillBeLava
                                     break;
 
                                 case 'd':
-                                    beamsToAdd.Add(new Beam() { X = beam.X + 1, Y = beam.Y, Orientation = 'r' });
+                                    newBeam = Beam.SplitBeam(beam, beams, beam.X + 1, beam.Y, 'r');
+                                    if (newBeam != null)
+                                    {
+                                        beamsToAdd.Add(newBeam);
+                                    }
                                     beam.X--;
                                     beam.Orientation = 'l';
                                     break;
 
                                 case 'u':
-                                    beamsToAdd.Add(new Beam() { X = beam.X - 1, Y = beam.Y, Orientation = 'l' });
+                                    newBeam = Beam.SplitBeam(beam, beams, beam.X - 1, beam.Y, 'l');
+                                    if (newBeam != null)
+                                    {
+                                        beamsToAdd.Add(newBeam);
+                                    }
                                     beam.X++;
                                     beam.Orientation = 'r';
                                     break;
@@ -162,13 +192,21 @@ public class TheFloorWillBeLava
                             switch (beam.Orientation)
                             {
                                 case 'l':
-                                    beamsToAdd.Add(new Beam() { X = beam.X, Y = beam.Y + 1, Orientation = 'd' });
+                                    newBeam = Beam.SplitBeam(beam, beams, beam.X, beam.Y + 1, 'd');
+                                    if (newBeam != null)
+                                    {
+                                        beamsToAdd.Add(newBeam);
+                                    }
                                     beam.Y--;
                                     beam.Orientation = 'u';
                                     break;
 
                                 case 'r':
-                                    beamsToAdd.Add(new Beam() { X = beam.X, Y = beam.Y - 1, Orientation = 'u' });
+                                    newBeam = Beam.SplitBeam(beam, beams, beam.X, beam.Y - 1, 'u');
+                                    if (newBeam != null)
+                                    {
+                                        beamsToAdd.Add(newBeam);
+                                    }
                                     beam.Y++;
                                     beam.Orientation = 'd';
                                     break;
@@ -191,7 +229,6 @@ public class TheFloorWillBeLava
         }
 
         var map = GetEnergizedMap();
-        Console.WriteLine(map);
         EnergizedTilesCount = map.Count(c => c == '#');
     }
 }

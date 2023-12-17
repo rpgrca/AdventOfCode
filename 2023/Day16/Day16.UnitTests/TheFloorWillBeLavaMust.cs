@@ -190,4 +190,12 @@ public class TheFloorWillBeLavaMust
         sut.Energize(33);
         Assert.Equal(46, sut.EnergizedTilesCount);
     }
+/*
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new TheFloorWillBeLava(PUZZLE_INPUT);
+        sut.Energize(1000);
+        Assert.Equal(0, sut.EnergizedTilesCount);
+    }*/
 }
