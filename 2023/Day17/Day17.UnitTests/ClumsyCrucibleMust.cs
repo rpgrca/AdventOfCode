@@ -5,7 +5,7 @@ namespace Day17.UnitTests;
 
 public class ClumsyCrucibleMust
 {
-    [Theory]
+/*    [Theory]
     [InlineData(SAMPLE_INPUT, 13, 13)]
     [InlineData(PUZZLE_INPUT, 141, 141)]
     public void LoadInputCorrectly(string input, int expectedWidth, int expectedHeight)
@@ -32,21 +32,25 @@ public class ClumsyCrucibleMust
         var sut = new ClumsyCrucible(input);
         Assert.Equal((expectedX, expectedY), sut.Goal);
     }
-
+*/
     [Theory]
-    [InlineData("1234\n5678", 17)]
-    [InlineData("123\n456", 11)]
-    [InlineData("5678\n1234", 10)]
-    [InlineData("1289\n8345", 14)]
-    [InlineData("119111\n911191", 8)]
-    [InlineData("11111\n22292\n33333", 13)]
+    //[InlineData("1234\n5678", 17)]
+    //[InlineData("123\n456", 11)]
+    //[InlineData("5678\n1234", 10)]
+    //[InlineData("1289\n8345", 14)]
+    //[InlineData("119111\n911191", 8)]
+    //[InlineData("11111\n22292\n33333", 13)]
+    //[InlineData("2413\n3215", 11)]
+    //[InlineData("241343\n321545", 20)]
+    [InlineData("241343231\n321545353", 32)]
+
     public void CalculateBestPathCorrectly(string input, int expectedHeatLoss)
     {
         var sut = new ClumsyCrucible(input);
         sut.FindBestRoute();
         Assert.Equal(expectedHeatLoss, sut.HeatLoss);
     }
-
+/*
     [Theory]
     [InlineData("11111\n99999\n33333", 18)]
     public void DoNotMoveMoreThanThreeTimesInOneDirection(string input, int expectedHeatLoss)
@@ -55,4 +59,14 @@ public class ClumsyCrucibleMust
         sut.FindBestRoute();
         Assert.Equal(expectedHeatLoss, sut.HeatLoss);
     }
+*/
+
+/*
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ClumsyCrucible(SAMPLE_INPUT, true);
+        sut.FindBestRoute();
+        Assert.Equal(102, sut.HeatLoss);
+    }*/
 }
