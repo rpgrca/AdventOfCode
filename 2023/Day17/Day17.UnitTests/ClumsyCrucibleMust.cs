@@ -36,9 +36,12 @@ public class ClumsyCrucibleMust
     [Theory]
     [InlineData("1234\n5678", 17)]
     [InlineData("123\n456", 11)]
+    [InlineData("5678\n1234", 10)]
+    [InlineData("1289\n8345", 14)]
     public void CalculateBestPathCorrectly(string input, int expectedHeatLoss)
     {
         var sut = new ClumsyCrucible(input);
+        sut.FindBestRoute();
         Assert.Equal(expectedHeatLoss, sut.HeatLoss);
     }
 }
