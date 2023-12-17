@@ -183,4 +183,11 @@ public class TheFloorWillBeLavaMust
         Assert.Equal("#####\n..#.#\n..###\n..#..\n..#..", sut.GetEnergizedMap());
     }
 
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new TheFloorWillBeLava(SAMPLE_INPUT);
+        sut.Energize(33);
+        Assert.Equal(46, sut.EnergizedTilesCount);
+    }
 }

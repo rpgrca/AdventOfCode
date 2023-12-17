@@ -1,3 +1,4 @@
+
 namespace Day16.Logic;
 
 public class TheFloorWillBeLava
@@ -16,6 +17,8 @@ public class TheFloorWillBeLava
 
     public int Width => _lines[0].Length;
     public int Height => _lines.Length;
+
+    public int EnergizedTilesCount { get; private set; }
 
     public string GetEnergizedMap()
     {
@@ -44,12 +47,15 @@ public class TheFloorWillBeLava
     {
         var beams = new List<Beam> { new() { Orientation = 'r' } };
         var beamsToAdd = new List<Beam>();
-        var processed = false;
 
         for (var cycle = 0; cycle < cycles; cycle++)
         {
             for (var index = 0; index < beams.Count; index++)
             {
+                if (index == 8)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
                 var beam = beams[index];
                 if (beam.X >= 0 && beam.X < Width && beam.Y >= 0 && beam.Y < Height)
                 {
@@ -183,5 +189,9 @@ public class TheFloorWillBeLava
             beams.AddRange(beamsToAdd);
             beamsToAdd.Clear();
         }
+
+        var map = GetEnergizedMap();
+        Console.WriteLine(map);
+        EnergizedTilesCount = map.Count(c => c == '#');
     }
 }
