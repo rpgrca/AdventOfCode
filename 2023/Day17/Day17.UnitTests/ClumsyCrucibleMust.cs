@@ -14,4 +14,23 @@ public class ClumsyCrucibleMust
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT)]
+    [InlineData(PUZZLE_INPUT)]
+    public void CalculateEntranceCorrectly(string input)
+    {
+        var sut = new ClumsyCrucible(input);
+        Assert.Equal((0, 0), sut.Entrance);
+    }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 12, 12)]
+    [InlineData(PUZZLE_INPUT, 140, 140)]
+    public void CalculateGoalCorrectly(string input, int expectedX, int expectedY)
+    {
+        var sut = new ClumsyCrucible(input);
+        Assert.Equal((expectedX, expectedY), sut.Goal);
+    }
+
 }
