@@ -82,5 +82,25 @@ public class ClumsyCrucible
                 FindBestRoute(currentX, possibleNextY, possibleAccumulatedHeatLoss);
             }
         }
+
+        possibleNextX = currentX - 1;
+        if (possibleNextX >= 0)
+        {
+            possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[currentY][possibleNextX].HeatLoss;
+            if (_heatLossMap[currentY][possibleNextX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
+            {
+                FindBestRoute(possibleNextX, currentY, possibleAccumulatedHeatLoss);
+            }
+        }
+
+        possibleNextY = currentY - 1;
+        if (possibleNextY >= 0)
+        {
+            possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[possibleNextY][currentX].HeatLoss;
+            if (_heatLossMap[possibleNextY][currentX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
+            {
+                FindBestRoute(currentX, possibleNextY, possibleAccumulatedHeatLoss);
+            }
+        }
     }
 }

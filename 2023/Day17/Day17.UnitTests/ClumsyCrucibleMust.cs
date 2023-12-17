@@ -38,6 +38,7 @@ public class ClumsyCrucibleMust
     [InlineData("123\n456", 11)]
     [InlineData("5678\n1234", 10)]
     [InlineData("1289\n8345", 14)]
+    [InlineData("119111\n911191", 8)]
     public void CalculateBestPathCorrectly(string input, int expectedHeatLoss)
     {
         var sut = new ClumsyCrucible(input);
