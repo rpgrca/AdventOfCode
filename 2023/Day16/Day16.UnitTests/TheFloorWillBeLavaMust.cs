@@ -206,4 +206,12 @@ public class TheFloorWillBeLavaMust
         sut.TestConfigurations();
         Assert.Equal(51, sut.BestEnergizedTilesCount);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new TheFloorWillBeLavaScanner(PUZZLE_INPUT);
+        sut.TestConfigurations(10000);
+        Assert.Equal(8061, sut.BestEnergizedTilesCount);
+    }
 }
