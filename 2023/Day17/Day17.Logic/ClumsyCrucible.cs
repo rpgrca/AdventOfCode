@@ -29,26 +29,42 @@ public class Block : IBlock
 [DebuggerDisplay("{HeatLoss} [Total: {MinimumAccumulatedHeatLoss}]")]
 public class Block2 : IBlock
 {
-    private readonly List<int> _minimum;
+    private readonly int[] _minimum;
+    private int _index;
 
     public int HeatLoss { get; }
 
-    public int MinimumAccumulatedHeatLoss => _minimum[^1];
+    public int MinimumAccumulatedHeatLoss => _minimum[_index];
 
     public Block2(int heatLoss)
     {
         HeatLoss = heatLoss;
-        _minimum = new List<int>() { int.MaxValue };
+        _minimum = new int[100];
+        _index = 0;
+        for (var index = 0; index < 100; index++)
+        {
+            _minimum[index] = int.MaxValue;
+        }
     }
 
     public void Push(int minimumAccumulatedHeatLoss)
     {
-        _minimum.Add(minimumAccumulatedHeatLoss);
+        if (_index < 100 - 1)
+        {
+            _minimum[++_index] = minimumAccumulatedHeatLoss;
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("More than 100 elements in cache");
+        }
     }
 
     public void Pop()
     {
-        _minimum.RemoveAt(_minimum.Count - 1);
+        if (_index > 0)
+        {
+            _index--;
+        }
     }
 }
 
