@@ -1,8 +1,11 @@
 
+using System.Diagnostics;
+
 namespace Day16.Logic;
 
 public class TheFloorWillBeLava
 {
+    [DebuggerDisplay("({X},{Y},{Orientation}) from ({_source.X},{_source.Y})")]
     private class Beam
     {
         private readonly (int X, int Y) _source;
@@ -14,8 +17,13 @@ public class TheFloorWillBeLava
 
         public static Beam? SplitBeam(Beam location, List<Beam> beams, int x, int y, char orientation)
         {
-            var sameSource = beams.SingleOrDefault(b => b.WasGeneratedAtSameTile(location.X, location.Y));
-            if (sameSource is null)
+            if (location.X == 80 && location.Y == 70)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+
+            var otherBeamGeneratedAtSameLocation = beams.SingleOrDefault(b => b.WasGeneratedAtTile(location.X, location.Y));
+            if (otherBeamGeneratedAtSameLocation is null)
             {
                 return new Beam(location.X, location.Y) { X = x, Y = y, Orientation = orientation };
             }
@@ -32,7 +40,9 @@ public class TheFloorWillBeLava
             Orientation = 'r';
         }
 
-        public bool WasGeneratedAtSameTile(int x, int y) => _source.X == X && _source.Y == Y;
+        public bool WasGeneratedAtTile(int x, int y) => _source.X == x && _source.Y == y;
+
+        public bool HasSameGenerationTileAs(Beam beam) => _source == beam._source;
    }
 
     private readonly string _input;
@@ -170,7 +180,10 @@ public class TheFloorWillBeLava
                                     newBeam = Beam.SplitBeam(beam, beams, beam.X + 1, beam.Y, 'r');
                                     if (newBeam != null)
                                     {
-                                        beamsToAdd.Add(newBeam);
+                                        if (! beamsToAdd.Any(b => b.HasSameGenerationTileAs(newBeam)))
+                                        {
+                                            beamsToAdd.Add(newBeam);
+                                        }
                                     }
                                     beam.X--;
                                     beam.Orientation = 'l';
@@ -180,7 +193,10 @@ public class TheFloorWillBeLava
                                     newBeam = Beam.SplitBeam(beam, beams, beam.X - 1, beam.Y, 'l');
                                     if (newBeam != null)
                                     {
-                                        beamsToAdd.Add(newBeam);
+                                        if (! beamsToAdd.Any(b => b.HasSameGenerationTileAs(newBeam)))
+                                        {
+                                            beamsToAdd.Add(newBeam);
+                                        }
                                     }
                                     beam.X++;
                                     beam.Orientation = 'r';
@@ -195,7 +211,10 @@ public class TheFloorWillBeLava
                                     newBeam = Beam.SplitBeam(beam, beams, beam.X, beam.Y + 1, 'd');
                                     if (newBeam != null)
                                     {
-                                        beamsToAdd.Add(newBeam);
+                                        if (! beamsToAdd.Any(b => b.HasSameGenerationTileAs(newBeam)))
+                                        {
+                                            beamsToAdd.Add(newBeam);
+                                        }
                                     }
                                     beam.Y--;
                                     beam.Orientation = 'u';
@@ -205,7 +224,10 @@ public class TheFloorWillBeLava
                                     newBeam = Beam.SplitBeam(beam, beams, beam.X, beam.Y - 1, 'u');
                                     if (newBeam != null)
                                     {
-                                        beamsToAdd.Add(newBeam);
+                                        if (! beamsToAdd.Any(b => b.HasSameGenerationTileAs(newBeam)))
+                                        {
+                                            beamsToAdd.Add(newBeam);
+                                        }
                                     }
                                     beam.Y++;
                                     beam.Orientation = 'd';
