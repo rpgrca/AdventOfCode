@@ -167,4 +167,20 @@ public class TheFloorWillBeLavaMust
         Assert.Equal("#....\n#....\n#####\n#.#..\n###..", sut.GetEnergizedMap());
     }
 
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingHorizontalSplitterFromLeft()
+    {
+        var sut = new TheFloorWillBeLava("\\....\n.....\n\\.|.\n.....\n......");
+        sut.Energize();
+        Assert.Equal("#.#..\n#.#..\n###..\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
+    [Fact]
+    public void SplitBeamCorrectly_WhenHittingHorizontalSplitterFromRight()
+    {
+        var sut = new TheFloorWillBeLava("....\\\n.....\n..|./\n.....\n......");
+        sut.Energize();
+        Assert.Equal("#####\n..#.#\n..###\n..#..\n..#..", sut.GetEnergizedMap());
+    }
+
 }
