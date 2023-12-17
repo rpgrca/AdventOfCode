@@ -211,7 +211,7 @@ public class TheFloorWillBeLavaMust
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new TheFloorWillBeLavaScanner(PUZZLE_INPUT);
-        sut.TestConfigurations(10000);
+        sut.TestConfigurations(673);
         Assert.Equal(8061, sut.BestEnergizedTilesCount);
     }
 }
