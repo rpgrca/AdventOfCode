@@ -13,4 +13,14 @@ public class LavaductLagoonMust
         var sut = new LavaductLagoon(input);
         Assert.Equal(expectedLength, sut.DigPlanLength);
     }
+
+    [Theory]
+    [InlineData("R 1 (#70c710)", 1)]
+    [InlineData("R 6 (#70c710)\nD 5 (#70c710)\nL 5 (#70c710)\nU 4 (#70c710)", 20)]
+    public void DigCorrectly(string input, int expectedPerimeter)
+    {
+        var sut = new LavaductLagoon(input);
+        sut.Dig();
+        Assert.Equal(expectedPerimeter, sut.TrenchPerimeter);
+    }
 }
