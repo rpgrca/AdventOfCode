@@ -94,7 +94,7 @@ public class ClumsyCrucible
     public (int X, int Y) Goal { get; }
     public int HeatLoss => _leastHeatLossAtGoal;
 
-    public ClumsyCrucible(string input, bool scanSampleRoute = false, int leastHeatLossAtGoal = 2_000_000)
+    public ClumsyCrucible(string input, int leastHeatLossAtGoal = 2_000_000)
     {
         _input = input;
         _lines = _input.Split("\n");
@@ -256,7 +256,6 @@ public class ClumsyCrucible
 
     public void FindBestRouteBreadthFirst()
     {
-
         var queue = new PriorityQueue<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss), int>();
         var visited = new HashSet<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss)>();
 
@@ -334,5 +333,138 @@ public class ClumsyCrucible
                 }
             }
         }
+    }
+
+    public void FindBestRouteForUltraCrucible()
+    {
+        var queue = new PriorityQueue<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss), int>();
+        var visited = new HashSet<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss)>();
+
+        queue.Enqueue((Entrance.X, Entrance.Y, 'e', 0, 0), 0);
+        queue.Enqueue((Entrance.X, Entrance.Y, 's', 0, 0), 0);
+
+        while (queue.Count > 0)
+        {
+            var block = queue.Dequeue();
+
+            if (block.X == 7 && block.Y == 0)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+
+            if (block.X == Goal.X && block.Y == Goal.Y)
+            {
+                if (_leastHeatLossAtGoal > block.AccumulatedHeatLoss && block.Steps >= 4)
+                {
+                    _leastHeatLossAtGoal = block.AccumulatedHeatLoss;
+                }
+
+                continue;
+            }
+
+            if (block.AccumulatedHeatLoss > _leastHeatLossAtGoal || visited.Contains(block))
+            {
+                continue;
+            }
+
+            visited.Add(block);
+
+            if (block.X + 1 < Width)
+            {
+                if (block.Direction != 'w')
+                {
+                    var steps = block.Steps + 1;
+                    if (block.Direction == 'e')
+                    {
+                        if (steps < 10)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
+                            queue.Enqueue((block.X + 1, block.Y, 'e', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                        }
+                    }
+                    else
+                    {
+                        if (steps > 4)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
+                            queue.Enqueue((block.X + 1, block.Y, 'e', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                        }
+                    }
+                }
+            }
+
+            if (block.Y + 1 < Height)
+            {
+                if (block.Direction != 'n')
+                {
+                    var steps = block.Steps + 1;
+                    if (block.Direction == 's')
+                    {
+                        if (steps < 10)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
+                            queue.Enqueue((block.X, block.Y + 1, 's', steps, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                        }
+                    }
+                    else
+                    {
+                        if (steps > 4)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
+                            queue.Enqueue((block.X, block.Y + 1, 's', 1, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                        }
+                    }
+                }
+            }
+
+            if (block.Y - 1 >= 0)
+            {
+                if (block.Direction != 's')
+                {
+                    var steps = block.Steps + 1;
+                    if (block.Direction == 'n')
+                    {
+                        if (steps < 10)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
+                            queue.Enqueue((block.X, block.Y - 1, 'n', steps, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                        }
+                    }
+                    else
+                    {
+                        if (steps > 4)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
+                            queue.Enqueue((block.X, block.Y - 1, 'n', 1, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                        }
+                    }
+                }
+            }
+
+            if (block.X - 1 >= 0)
+            {
+                if (block.Direction != 'e')
+                {
+                    var steps = block.Steps + 1;
+                    if (block.Direction == 'w')
+                    {
+                        if (steps < 10)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
+                            queue.Enqueue((block.X - 1, block.Y, 'w', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                        }
+                    }
+                    else
+                    {
+                        if (steps > 4)
+                        {
+                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
+                            queue.Enqueue((block.X - 1, block.Y, 'w', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

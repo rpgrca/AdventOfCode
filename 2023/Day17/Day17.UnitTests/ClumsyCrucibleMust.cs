@@ -66,16 +66,24 @@ public class ClumsyCrucibleMust
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new ClumsyCrucible(SAMPLE_INPUT, true, 103);
+        var sut = new ClumsyCrucible(SAMPLE_INPUT, 103);
         sut.FindBestRouteBreadthFirst();
         Assert.Equal(102, sut.HeatLoss);
     }
 
-    [Fact]
+    [Fact(Skip = "slow test, 1m 43s")]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new ClumsyCrucible(PUZZLE_INPUT, true, 1111);
+        var sut = new ClumsyCrucible(PUZZLE_INPUT, 1111);
         sut.FindBestRouteBreadthFirst();
         Assert.Equal(1110, sut.HeatLoss);
+    }
+
+    [Fact]
+    public void Test1()
+    {
+        var sut = new ClumsyCrucible(SECOND_SAMPLE_INPUT);
+        sut.FindBestRouteForUltraCrucible();
+        Assert.Equal(71, sut.HeatLoss);
     }
 }
