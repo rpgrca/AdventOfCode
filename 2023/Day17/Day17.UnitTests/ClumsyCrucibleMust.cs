@@ -94,4 +94,13 @@ public class ClumsyCrucibleMust
         sut.FindBestRouteForUltraCrucible();
         Assert.Equal(94, sut.HeatLoss);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ClumsyCrucible(PUZZLE_INPUT);
+        sut.FindBestRouteForUltraCrucible();
+        Assert.True(1326 > sut.HeatLoss);
+        Assert.Equal(1294, sut.HeatLoss);
+    }
 }

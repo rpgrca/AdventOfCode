@@ -338,36 +338,38 @@ public class ClumsyCrucible
     public void FindBestRouteForUltraCrucible()
     {
         var queue = new PriorityQueue<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss), int>();
-        var visited = new HashSet<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss)>();
+        var dictionary = new Dictionary<(int X, int Y, char Direction, int Steps), int>();
 
         queue.Enqueue((Entrance.X, Entrance.Y, 'e', 0, 0), 0);
         queue.Enqueue((Entrance.X, Entrance.Y, 's', 0, 0), 0);
+        dictionary.Add((Entrance.X, Entrance.Y, 'e', 0), 0);
+        dictionary.Add((Entrance.X, Entrance.Y, 's', 0), 0);
 
         while (queue.Count > 0)
         {
             var block = queue.Dequeue();
 
-            if (block.X == 7 && block.Y == 0)
-            {
-                System.Diagnostics.Debugger.Break();
-            }
-
             if (block.X == Goal.X && block.Y == Goal.Y)
             {
-                if (_leastHeatLossAtGoal > block.AccumulatedHeatLoss && block.Steps >= 4)
+                if (_leastHeatLossAtGoal > block.AccumulatedHeatLoss)
                 {
                     _leastHeatLossAtGoal = block.AccumulatedHeatLoss;
+                    Console.WriteLine($"{_leastHeatLossAtGoal} (queue: {queue.Count}, dictionary: {dictionary.Count})");
                 }
 
                 continue;
             }
 
-            if (block.AccumulatedHeatLoss > _leastHeatLossAtGoal || visited.Contains(block))
+            if (block.AccumulatedHeatLoss > _leastHeatLossAtGoal /*|| visited.Contains(block)*/)
             {
                 continue;
             }
 
-            visited.Add(block);
+            var currentBlock = (block.X, block.Y, block.Direction, block.Steps);
+            if (dictionary[currentBlock] < block.AccumulatedHeatLoss)
+            {
+                continue;
+            }
 
             if (block.X + 1 < Width)
             {
@@ -376,18 +378,48 @@ public class ClumsyCrucible
                     var steps = block.Steps + 1;
                     if (block.Direction == 'e')
                     {
-                        if (steps < 10)
+                        if (steps < 11)
                         {
                             var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
-                            queue.Enqueue((block.X + 1, block.Y, 'e', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                            var key = (block.X + 1, block.Y, 'e', steps);
+
+                            if (dictionary.TryGetValue(key, out var a1))
+                            {
+                                if (a1 > heatLoss)
+                                {
+                                    queue.Enqueue((block.X + 1, block.Y, 'e', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                    dictionary[key] = heatLoss;
+                                }
+                            }
+                            else
+                            {
+                                queue.Enqueue((block.X + 1, block.Y, 'e', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                dictionary.Add(key, heatLoss);
+                            }
                         }
                     }
                     else
                     {
                         if (steps > 4)
                         {
-                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
-                            queue.Enqueue((block.X + 1, block.Y, 'e', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                            if (block.X + 4 < Width)
+                            {
+                                var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
+                                var key = (block.X + 1, block.Y, 'e', 1);
+                                if (dictionary.TryGetValue(key, out var a1))
+                                {
+                                    if (a1 > heatLoss)
+                                    {
+                                        queue.Enqueue((block.X + 1, block.Y, 'e', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                        dictionary[key] = heatLoss;
+                                    }
+                                }
+                                else
+                                {
+                                    queue.Enqueue((block.X + 1, block.Y, 'e', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                    dictionary.Add(key, heatLoss);
+                                }
+                            }
                         }
                     }
                 }
@@ -400,18 +432,47 @@ public class ClumsyCrucible
                     var steps = block.Steps + 1;
                     if (block.Direction == 's')
                     {
-                        if (steps < 10)
+                        if (steps < 11)
                         {
                             var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
-                            queue.Enqueue((block.X, block.Y + 1, 's', steps, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                            var key = (block.X, block.Y + 1, 's', steps);
+                            if (dictionary.TryGetValue(key, out var a1))
+                            {
+                                if (a1 > heatLoss)
+                                {
+                                    queue.Enqueue((block.X, block.Y + 1, 's', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                    dictionary[key] = heatLoss;
+                                }
+                            }
+                            else
+                            {
+                                queue.Enqueue((block.X, block.Y + 1, 's', steps, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                                dictionary.Add(key, heatLoss);
+                            }
                         }
                     }
                     else
                     {
                         if (steps > 4)
                         {
-                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
-                            queue.Enqueue((block.X, block.Y + 1, 's', 1, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                            if (block.Y + 4 < Height)
+                            {
+                                var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
+                                var key = (block.X, block.Y + 1, 's', 1);
+                                if (dictionary.TryGetValue(key, out var a1))
+                                {
+                                    if (a1 > heatLoss)
+                                    {
+                                        queue.Enqueue((block.X, block.Y + 1, 's', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                        dictionary[key] = heatLoss;
+                                    }
+                                }
+                                else
+                                {
+                                    queue.Enqueue((block.X, block.Y + 1, 's', 1, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                                    dictionary.Add(key, heatLoss);
+                                }
+                            }
                         }
                     }
                 }
@@ -424,18 +485,47 @@ public class ClumsyCrucible
                     var steps = block.Steps + 1;
                     if (block.Direction == 'n')
                     {
-                        if (steps < 10)
+                        if (steps < 11)
                         {
                             var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
-                            queue.Enqueue((block.X, block.Y - 1, 'n', steps, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                            var key = (block.X, block.Y - 1, 'n', steps);
+                            if (dictionary.TryGetValue(key, out var a1))
+                            {
+                                if (a1 > heatLoss)
+                                {
+                                    queue.Enqueue((block.X, block.Y - 1, 'n', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                    dictionary[key] = heatLoss;
+                                }
+                            }
+                            else
+                            {
+                                queue.Enqueue((block.X, block.Y - 1, 'n', steps, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                                dictionary.Add(key, heatLoss);
+                            }
                         }
                     }
                     else
                     {
                         if (steps > 4)
                         {
-                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
-                            queue.Enqueue((block.X, block.Y - 1, 'n', 1, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                            if (block.Y - 4 >= 0)
+                            {
+                                var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
+                                var key = (block.X, block.Y - 1, 'n', 1);
+                                if (dictionary.TryGetValue(key, out var a1))
+                                {
+                                    if (a1 > heatLoss)
+                                    {
+                                        queue.Enqueue((block.X, block.Y - 1, 'n', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                        dictionary[key] = heatLoss;
+                                    }
+                                }
+                                else
+                                {
+                                    queue.Enqueue((block.X, block.Y - 1, 'n', 1, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                                    dictionary.Add(key, heatLoss);
+                                }
+                            }
                         }
                     }
                 }
@@ -448,18 +538,47 @@ public class ClumsyCrucible
                     var steps = block.Steps + 1;
                     if (block.Direction == 'w')
                     {
-                        if (steps < 10)
+                        if (steps < 11)
                         {
                             var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
-                            queue.Enqueue((block.X - 1, block.Y, 'w', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                            var key = (block.X - 1, block.Y, 'w', steps);
+                            if (dictionary.TryGetValue(key, out var a1))
+                            {
+                                if (a1 > heatLoss)
+                                {
+                                    queue.Enqueue((block.X - 1, block.Y, 'w', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                    dictionary[key] = heatLoss;
+                                }
+                            }
+                            else
+                            {
+                                queue.Enqueue((block.X - 1, block.Y, 'w', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                                dictionary.Add(key, heatLoss);
+                            }
                         }
                     }
                     else
                     {
                         if (steps > 4)
                         {
-                            var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
-                            queue.Enqueue((block.X - 1, block.Y, 'w', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                            if (block.X - 4 >= 0)
+                            {
+                                var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
+                                var key = (block.X - 1, block.Y, 'w', 1);
+                                if (dictionary.TryGetValue(key, out var a1))
+                                {
+                                    if (a1 > heatLoss)
+                                    {
+                                        queue.Enqueue((block.X - 1, block.Y, 'w', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                                        dictionary[key] = heatLoss;
+                                    }
+                                }
+                                else
+                                {
+                                    queue.Enqueue((block.X - 1, block.Y, 'w', 1, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                                    dictionary.Add(key, heatLoss);
+                                }
+                            }
                         }
                     }
                 }
