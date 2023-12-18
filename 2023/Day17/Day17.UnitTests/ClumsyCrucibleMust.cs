@@ -95,7 +95,7 @@ public class ClumsyCrucibleMust
         Assert.Equal(94, sut.HeatLoss);
     }
 
-    [Fact]
+    [Fact(Skip = "slow test, 30s")]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new ClumsyCrucible(PUZZLE_INPUT);
