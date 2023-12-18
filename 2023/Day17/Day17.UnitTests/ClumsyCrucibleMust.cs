@@ -80,10 +80,18 @@ public class ClumsyCrucibleMust
     }
 
     [Fact]
-    public void Test1()
+    public void SolveSimpleSecondSampleCorrectly()
     {
         var sut = new ClumsyCrucible(SECOND_SAMPLE_INPUT);
         sut.FindBestRouteForUltraCrucible();
         Assert.Equal(71, sut.HeatLoss);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ClumsyCrucible(SAMPLE_INPUT);
+        sut.FindBestRouteForUltraCrucible();
+        Assert.Equal(94, sut.HeatLoss);
     }
 }
