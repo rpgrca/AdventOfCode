@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Day17.Logic;
 
@@ -256,5 +257,87 @@ public class ClumsyCrucible
         }
 
         _heatLossMap[currentY][currentX].Pop();
+    }
+
+    public void FindBestRouteBreadthFirst()
+    {
+
+        var queue = new PriorityQueue<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss), int>();
+        var visited = new HashSet<(int X, int Y, char Direction, int Steps, int AccumulatedHeatLoss)>();
+
+        queue.Enqueue((Entrance.X, Entrance.Y, 'e', 0, 0), 0);
+        queue.Enqueue((Entrance.X, Entrance.Y, 's', 0, 0), 0);
+
+        while (queue.Count > 0)
+        {
+            var block = queue.Dequeue();
+            if (block.X == Goal.X && block.Y == Goal.Y)
+            {
+                if (_leastHeatLossAtGoal > block.AccumulatedHeatLoss)
+                {
+                    _leastHeatLossAtGoal = block.AccumulatedHeatLoss;
+                    continue;
+                }
+            }
+
+            if (block.AccumulatedHeatLoss > _leastHeatLossAtGoal || visited.Contains(block))
+            {
+                continue;
+            }
+
+            visited.Add(block);
+
+            if (block.X + 1 < Width)
+            {
+                if (block.Direction != 'w')
+                {
+                    var steps = block.Direction != 'e'? 0 : block.Steps + 1;
+                    if (steps < 3)
+                    {
+                        var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X + 1].HeatLoss;
+                        queue.Enqueue((block.X + 1, block.Y, 'e', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X + 1)));
+                    }
+                }
+            }
+
+            if (block.Y + 1 < Height)
+            {
+                if (block.Direction != 'n')
+                {
+                    var steps = block.Direction != 's'? 0 : block.Steps + 1;
+                    if (steps < 3)
+                    {
+                        var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y + 1][block.X].HeatLoss;
+                        queue.Enqueue((block.X, block.Y + 1, 's', steps, heatLoss), ((Height - (block.Y + 1)) * 1000) + (Width - block.X));
+                    }
+                }
+            }
+
+            if (block.Y - 1 >= 0)
+            {
+                if (block.Direction != 's')
+                {
+                    var steps = block.Direction != 'n'? 0 : block.Steps + 1;
+                    if (steps < 3)
+                    {
+                        var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y - 1][block.X].HeatLoss;
+                        queue.Enqueue((block.X, block.Y - 1, 'n', steps, heatLoss), ((Height - (block.Y - 1)) * 1000) + (Width - block.X));
+                    }
+                }
+            }
+
+            if (block.X - 1 >= 0)
+            {
+                if (block.Direction != 'e')
+                {
+                    var steps = block.Direction != 'w'? 0 : block.Steps + 1;
+                    if (steps < 3)
+                    {
+                        var heatLoss = block.AccumulatedHeatLoss + _heatLossMap[block.Y][block.X - 1].HeatLoss;
+                        queue.Enqueue((block.X - 1, block.Y, 'w', steps, heatLoss), ((Height - block.Y) * 1000) + (Width - (block.X - 1)));
+                    }
+                }
+            }
+        }
     }
 }

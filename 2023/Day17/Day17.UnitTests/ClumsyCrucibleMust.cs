@@ -68,7 +68,7 @@ public class ClumsyCrucibleMust
     public void SolveFirstSampleCorrectly()
     {
         var sut = new ClumsyCrucible(SAMPLE_INPUT, true, 103);
-        sut.FindBestRoute();
+        sut.FindBestRouteBreadthFirst();
         Assert.Equal(102, sut.HeatLoss);
     }
 /*
