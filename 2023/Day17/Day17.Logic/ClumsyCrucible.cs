@@ -104,11 +104,6 @@ public class ClumsyCrucible
         Goal = (Width - 1, Height - 1);
 
         _heatLossMap = _lines.Select(l => l.Select(c => new Block2(c - '0')).Cast<IBlock>().ToArray()).ToArray();
-
-        if (scanSampleRoute)
-        {
-            FindSampleRoute();
-        }
     }
 
     public void FindBestRoute()
