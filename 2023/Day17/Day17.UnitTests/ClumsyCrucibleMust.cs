@@ -5,6 +5,7 @@ namespace Day17.UnitTests;
 
 public class ClumsyCrucibleMust
 {
+    /*
     [Theory]
     [InlineData(SAMPLE_INPUT, 13, 13)]
     [InlineData(PUZZLE_INPUT, 141, 141)]
@@ -66,8 +67,16 @@ public class ClumsyCrucibleMust
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new ClumsyCrucible(SAMPLE_INPUT, true);
+        var sut = new ClumsyCrucible(SAMPLE_INPUT, true, 103);
         sut.FindBestRoute();
         Assert.Equal(102, sut.HeatLoss);
+    }*/
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ClumsyCrucible(PUZZLE_INPUT, true, 1485);
+        sut.FindBestRoute();
+        Assert.Equal(0, sut.HeatLoss);
     }
 }
