@@ -78,11 +78,6 @@ public class LavaductLagoon
                     break;
             }
         }
-
-        CalculatePerimeter();
-        Draw();
-        CalculateArea();
-        Draw();
     }
 
     public void Draw()
@@ -93,7 +88,7 @@ public class LavaductLagoon
         }
     }
 
-    private void CalculatePerimeter()
+    public void CalculatePerimeter()
     {
         TrenchPerimeter = 0;
         for (var y = 0; y < _length; y++)
@@ -108,7 +103,7 @@ public class LavaductLagoon
         }
     }
 
-    private void CalculateArea()
+    public void CalculateArea()
     {
         FillArea(_initialX + 1, _initialY + 1);
         TrenchArea = 0;
@@ -126,29 +121,35 @@ public class LavaductLagoon
 
     private void FillArea(int x, int y)
     {
+        var visited = new HashSet<(int, int)>();
+        if (visited.Contains((x, y)))
+        {
+            return;
+        }
+
+        visited.Add((x, y));
         if (_map[y][x] == '.')
         {
             _map[y][x] = '#';
-            if (x + 1 < _length)
+            if (x + 1 < _length && !visited.Contains((x + 1, y)))
             {
                 FillArea(x + 1, y); // r
             }
 
-            if (x - 1 >= 0)
+            if (x - 1 >= 0 && !visited.Contains((x - 1, y)))
             {
                 FillArea(x - 1, y); // l
             }
 
-            if (y + 1 < _length)
+            if (y + 1 < _length && !visited.Contains((x, y + 1)))
             {
                 FillArea(x, y + 1); // d
             }
 
-            if (y - 1 >= 0)
+            if (y - 1 >= 0 && !visited.Contains((x, y - 1)))
             {
                 FillArea(x, y - 1); // u
             }
         }
     }
-
 }
