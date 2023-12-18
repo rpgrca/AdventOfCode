@@ -113,7 +113,7 @@ public class ClumsyCrucible
     public void FindBestRoute()
     {
         var steps = new List<char>();
-        FindBestRoute(Entrance.X, Entrance.Y, -1, -1, 0, 0, '?', steps);
+        FindBestRoute(Entrance.X, Entrance.Y, -1, -1, 0, 0, '?');
 /*
         var map = string.Empty;
         for (var y = 0; y < Height; y++)
@@ -152,7 +152,7 @@ public class ClumsyCrucible
         _leastHeatLossAtGoal = accumulator;
     }
 
-    private void FindBestRoute(int currentX, int currentY, int previousX, int previousY, int accumulatedHeatLoss, int straightMoves, char currentDirection, List<char> steps)
+    private void FindBestRoute(int currentX, int currentY, int previousX, int previousY, int accumulatedHeatLoss, int straightMoves, char currentDirection)
     {
         int possibleAccumulatedHeatLoss;
         int possibleStraightMoves;
@@ -163,7 +163,7 @@ public class ClumsyCrucible
             {
                 _heatLossMap[currentY][currentX].Push(accumulatedHeatLoss);
                 _leastHeatLossAtGoal = accumulatedHeatLoss;
-                Console.WriteLine(_leastHeatLossAtGoal);
+                //Console.WriteLine(_leastHeatLossAtGoal);
                 //_bestSteps = steps.Select(p => p).ToList();
             }
 
@@ -182,16 +182,16 @@ public class ClumsyCrucible
         var possibleNextX = currentX + 1;
         if (possibleNextX < Width)
         {
-            if (previousX != possibleNextX || previousY != currentY)
+            if (currentDirection != 'w')
             {
                 possibleStraightMoves = currentDirection != 'e' ? 0 : straightMoves + 1;
                 if (possibleStraightMoves < 3)
                 {
                     possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[currentY][possibleNextX].HeatLoss;
-                    if (_heatLossMap[currentY][possibleNextX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss && possibleAccumulatedHeatLoss < _leastHeatLossAtGoal)
+                    if (possibleAccumulatedHeatLoss < _leastHeatLossAtGoal && _heatLossMap[currentY][possibleNextX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
                     {
                         //steps.Add('e');
-                        FindBestRoute(possibleNextX, currentY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'e', steps);
+                        FindBestRoute(possibleNextX, currentY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'e');
                         //steps.RemoveAt(steps.Count - 1);
                     }
                 }
@@ -201,16 +201,16 @@ public class ClumsyCrucible
         var possibleNextY = currentY + 1;
         if (possibleNextY < Height)
         {
-            if (previousX != currentX || previousY != possibleNextY)
+            if (currentDirection != 'n')
             {
                 possibleStraightMoves = currentDirection != 's' ? 0 : straightMoves + 1;
                 if (possibleStraightMoves < 3)
                 {
                     possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[possibleNextY][currentX].HeatLoss;
-                    if (_heatLossMap[possibleNextY][currentX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss && possibleAccumulatedHeatLoss < _leastHeatLossAtGoal)
+                    if (possibleAccumulatedHeatLoss < _leastHeatLossAtGoal && _heatLossMap[possibleNextY][currentX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
                     {
                         //steps.Add('s');
-                        FindBestRoute(currentX, possibleNextY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 's', steps);
+                        FindBestRoute(currentX, possibleNextY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 's');
                         //steps.RemoveAt(steps.Count - 1);
                     }
                 }
@@ -220,16 +220,16 @@ public class ClumsyCrucible
         possibleNextX = currentX - 1;
         if (possibleNextX >= 0)
         {
-            if (previousX != possibleNextX || previousY != currentY)
+            if (currentDirection != 'e')
             {
                 possibleStraightMoves = currentDirection != 'w' ? 0 : straightMoves + 1;
                 if (possibleStraightMoves < 3)
                 {
                     possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[currentY][possibleNextX].HeatLoss;
-                    if (_heatLossMap[currentY][possibleNextX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss && possibleAccumulatedHeatLoss < _leastHeatLossAtGoal)
+                    if (possibleAccumulatedHeatLoss < _leastHeatLossAtGoal && _heatLossMap[currentY][possibleNextX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
                     {
                         //steps.Add('w');
-                        FindBestRoute(possibleNextX, currentY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'w', steps);
+                        FindBestRoute(possibleNextX, currentY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'w');
                         //steps.RemoveAt(steps.Count - 1);
                     }
                 }
@@ -239,16 +239,16 @@ public class ClumsyCrucible
         possibleNextY = currentY - 1;
         if (possibleNextY >= 0)
         {
-            if (previousX != currentX || previousY != possibleNextY)
+            if (currentDirection != 's')
             {
                 possibleStraightMoves = currentDirection != 'n' ? 0 : straightMoves + 1;
                 if (possibleStraightMoves < 3)
                 {
                     possibleAccumulatedHeatLoss = accumulatedHeatLoss + _heatLossMap[possibleNextY][currentX].HeatLoss;
-                    if (_heatLossMap[possibleNextY][currentX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss && possibleAccumulatedHeatLoss < _leastHeatLossAtGoal)
+                    if (possibleAccumulatedHeatLoss < _leastHeatLossAtGoal && _heatLossMap[possibleNextY][currentX].MinimumAccumulatedHeatLoss > possibleAccumulatedHeatLoss)
                     {
                         //steps.Add('n');
-                        FindBestRoute(currentX, possibleNextY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'n', steps);
+                        FindBestRoute(currentX, possibleNextY, currentX, currentY, possibleAccumulatedHeatLoss, possibleStraightMoves, 'n');
                         //steps.RemoveAt(steps.Count - 1);
                     }
                 }
