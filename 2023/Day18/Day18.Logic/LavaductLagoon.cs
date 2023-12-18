@@ -16,19 +16,42 @@ public class LavaductLagoon
 
     public int TrenchPerimeter { get; private set; }
     public int TrenchArea { get; private set; }
+    public List<(int Length, char Direction)> RealInstructions { get; }
 
-    public LavaductLagoon(string input, int length = 100)
+    public LavaductLagoon(string input, int length = 100, bool create = true)
     {
         _input = input;
         _lines = _input.Split("\n");
-        _map = new char[length][];
         _length = length;
         _initialX = _length / 3;
         _initialY = _length / 3;
+        RealInstructions = new List<(int, char)>();
 
-        for (var index = 0; index < _length; index++)
+        if (create)
         {
-            _map[index] = new string('.', _length).ToCharArray();
+            _map = new char[length][];
+            for (var index = 0; index < _length; index++)
+            {
+                _map[index] = new string('.', _length).ToCharArray();
+            }
+        }
+    }
+
+    public void Decode()
+    {
+        foreach (var line in _lines)
+        {
+            var command = line.Split(" ");
+            var hex = command[2][1..^1];
+            var direction = hex[^1] switch {
+                '0' => 'R',
+                '1' => 'D',
+                '2' => 'L',
+                _ => 'U'
+            };
+            var length = Convert.ToInt32(hex[1..^1], 16);
+
+            RealInstructions.Add((length, direction));
         }
     }
 
