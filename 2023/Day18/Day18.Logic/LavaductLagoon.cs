@@ -262,8 +262,9 @@ public class LavaductLagoon
             {
                 if (nextDubious)
                 {
-                    dubious.Add((index, lastHole, block.Value.Begin));
+                    dubious.Add((index, lineLastPoint, block.Value.Begin));
                     nextDubious = false;
+                    lineLastPoint = -1;
                 }
 
                 if (block.Value.Begin != block.Value.End)
@@ -309,6 +310,7 @@ public class LavaductLagoon
                 {
                     coveredArea[index].Add((lineLastPoint, lastHole));
                     area += lastHole - lineLastPoint;
+                    lineLastPoint = -1;
                 }
             }
 
