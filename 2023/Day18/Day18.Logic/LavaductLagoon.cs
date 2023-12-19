@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Data;
+using System.Runtime.ExceptionServices;
 
 namespace Day18.Logic;
 
@@ -248,6 +249,156 @@ public class LavaductLagoon
             }
         }
 
+        var accountedFor = new HashSet<int>();
+        var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
+        var dubious = new List<(int Y, int Begin, int End)>();
+        for (var index = 0; index < array.Length; index++)
+        {
+            var area = 0L;
+            var lastHole = -1;
+
+            if (array[index].Count > 0)
+            {
+                // process only points
+                if (array[index].Sum(p => p.Value.End - p.Value.Begin) == 0)
+                {
+                    accountedFor.Add(index);
+
+                    var inside = false;
+                    foreach (var block in array[index])
+                    {
+                        if (!inside)
+                        {
+                            lastHole = block.Value.Begin;
+                            inside = true;
+                        }
+                        else
+                        {
+                            coveredArea[index].Add((lastHole, block.Value.Begin));
+                            area += block.Value.Begin - lastHole + 1;
+                            lastHole = -1;
+                            inside = false;
+                        }
+                    }
+                }
+            }
+
+            if (area != 0)
+            {
+                TrenchArea += area;
+            }
+        }
+
+
+        for (var index = 0; index < array.Length; index++)
+        {
+            var area = 0;
+
+            if (array[index].Count > 0)
+            {
+                if (accountedFor.Contains(index))
+                {
+                    continue;
+                }
+
+                if (array[index].Count == 1 && array[index].Values.Count == 1)
+                {
+                    var first = array[index].Single().Value;
+                    accountedFor.Add(index);
+                    coveredArea[index].Add((first.Begin, first.End));
+                    area += first.End - first.Begin + 1;
+                }
+
+                if (area != 0)
+                {
+                    TrenchArea += area;
+                }
+            }
+        }
+
+        for (var index = 0; index < array.Length; index++)
+        {
+            var area = 0L;
+
+            if (array[index].Count > 0)
+            {
+                if (accountedFor.Contains(index))
+                {
+                    continue;
+                }
+
+                accountedFor.Add(index);
+
+                var inside = true;
+                for (var subIndex = 0; subIndex < array[index].Count - 1; subIndex +=2)
+                {
+                    var first = array[index].ElementAt(subIndex);
+                    var second = array[index].ElementAt(subIndex + 1);
+
+                    if (inside)
+                    {
+                        coveredArea[index].Add((first.Value.Begin, first.Value.End));
+                        area += first.Value.End - first.Value.Begin + 1;
+
+                        coveredArea[index].Add((first.Value.End, second.Value.Begin));
+                        area += second.Value.Begin - first.Value.End - 1;
+
+                        coveredArea[index].Add((second.Value.Begin, second.Value.End));
+                        area += second.Value.End - second.Value.Begin + 1;
+                        inside = false;
+                    }
+                    else
+                    {
+                        dubious.Add((index, first.Value.End, second.Value.Begin));
+                        inside = true;
+                    }
+                }
+            }
+
+/*
+            if (inside)
+            {
+                if (lineLastPoint != -1)
+                {
+                    coveredArea[index].Add((lineLastPoint, lastHole));
+                    area += lastHole - lineLastPoint;
+                    lineLastPoint = -1;
+                }
+            }*/
+
+            if (area != 0)
+            {
+                TrenchArea += area;
+            }
+        }
+
+
+
+
+        var extraArea = 0;
+        foreach (var range in dubious)
+        {
+            var exists = false;
+            if (coveredArea[range.Y - 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
+            {
+                exists = true;
+            }
+            else if (coveredArea[range.Y + 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
+            {
+                exists = true;
+            }
+
+            if (exists)
+            {
+                extraArea += range.End - range.Begin - 1;
+                coveredArea[range.Y].Add((range.Begin, range.End));
+            }
+        }
+
+        TrenchArea += extraArea;
+
+
+/*
         var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
         var dubious = new List<(int Y, int Begin, int End)>();
         for (var index = 0; index < array.Length; index++)
@@ -291,8 +442,18 @@ public class LavaductLagoon
                 {
                     if (!inside)
                     {
-                        lastHole = block.Value.Begin;
-                        inside = true;
+                        if (lineLastPoint != -1)
+                        {
+                            dubious.Add((index, lineLastPoint, block.Value.Begin));
+                            lineLastPoint = -1;
+                            coveredArea[index].Add((block.Value.Begin, block.Value.End));
+                            area += 1;
+                        }
+                        else
+                        {
+                            lastHole = block.Value.Begin;
+                            inside = true;
+                        }
                     }
                     else
                     {
@@ -303,7 +464,7 @@ public class LavaductLagoon
                     }
                 }
             }
-
+//*
             if (inside)
             {
                 if (lineLastPoint != -1)
@@ -312,7 +473,7 @@ public class LavaductLagoon
                     area += lastHole - lineLastPoint;
                     lineLastPoint = -1;
                 }
-            }
+            }//
 
             if (area != 0)
             {
@@ -341,7 +502,7 @@ public class LavaductLagoon
         }
 
         TrenchArea += extraArea;
-
+*/
 
 /*
         for (var index = 0; index < array.Length; index++)
