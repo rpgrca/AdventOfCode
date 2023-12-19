@@ -201,10 +201,19 @@ public class LavaductLagoon
                 case 'D': // d
                     for (var index = currentY; index < currentY + instruction.Length; index++)
                     {
-                        if (!array[index].ContainsKey(currentX))
+                        if (array[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
                         {
-                            array[index].Add(currentX, (currentX, currentX));
+                            continue;
                         }
+
+                        //if (!array[index].ContainsKey(currentX))
+                        //{
+                            array[index].Add(currentX, (currentX, currentX));
+                        //}
+                        //else
+                        //{
+                        //    System.Diagnostics.Debugger.Break();
+                       // }
                     }
                     currentY += instruction.Length;
                     break;
@@ -218,10 +227,21 @@ public class LavaductLagoon
                 case 'U': // u
                     for (var index = currentY; index > currentY - instruction.Length; index--)
                     {
+                        if (array[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
+                        {
+                            continue;
+                        }
+
+                        array[index].Add(currentX, (currentX, currentX));
+                        /*
                         if (!array[index].ContainsKey(currentX))
                         {
                             array[index].Add(currentX, (currentX, currentX));
                         }
+                        else
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }*/
                     }
                     currentY -= instruction.Length;
                     break;
@@ -236,21 +256,25 @@ public class LavaductLagoon
             var inside = false;
             var lastHole = -1;
             var lineLastPoint = -1;
+            var nextDubious = false;
 
             foreach (var block in array[index])
             {
+                if (nextDubious)
+                {
+                    dubious.Add((index, lastHole, block.Value.Begin));
+                    nextDubious = false;
+                }
+
                 if (block.Value.Begin != block.Value.End)
                 {
                     if (inside)
                     {
-                        if (lastHole == -1)
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
-
                         coveredArea[index].Add((lastHole, block.Value.Begin));
                         area += block.Value.Begin - lastHole;
                         lastHole = block.Value.End;
+                        inside = false;
+                        nextDubious = true;
                     }
 
                     coveredArea[index].Add((block.Value.Begin, block.Value.End));
@@ -264,11 +288,6 @@ public class LavaductLagoon
                 }
                 else
                 {
-                    if (block.Value.Begin == lineLastPoint)
-                    {
-                        continue;
-                    }
-
                     if (!inside)
                     {
                         lastHole = block.Value.Begin;
@@ -276,11 +295,6 @@ public class LavaductLagoon
                     }
                     else
                     {
-                        if (lastHole == -1)
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
-
                         coveredArea[index].Add((lastHole, block.Value.Begin));
                         area += block.Value.Begin - lastHole + 1;
                         lastHole = -1;
@@ -291,13 +305,11 @@ public class LavaductLagoon
 
             if (inside)
             {
-                if (lineLastPoint == -1)
+                if (lineLastPoint != -1)
                 {
-                    System.Diagnostics.Debugger.Break();
+                    coveredArea[index].Add((lineLastPoint, lastHole));
+                    area += lastHole - lineLastPoint;
                 }
-
-                coveredArea[index].Add((lineLastPoint, lastHole));
-                area += lastHole - lineLastPoint;
             }
 
             if (area != 0)
@@ -309,13 +321,20 @@ public class LavaductLagoon
         var extraArea = 0;
         foreach (var range in dubious)
         {
+            var exists = false;
             if (coveredArea[range.Y - 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
             {
-                extraArea += range.End - range.Begin - 1;
+                exists = true;
             }
             else if (coveredArea[range.Y + 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
             {
+                exists = true;
+            }
+
+            if (exists)
+            {
                 extraArea += range.End - range.Begin - 1;
+                coveredArea[range.Y].Add((range.Begin, range.End));
             }
         }
 
