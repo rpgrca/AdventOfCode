@@ -1,5 +1,7 @@
 
 
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day19.Logic;
 
 public class Aplenty
@@ -58,5 +60,33 @@ public class Rule
         var commands = _input.Split(new char[] { '{', '}' });
         Name = commands[0];
         _filters = commands[1].Split(",");
+    }
+}
+
+public class Part
+{
+    private readonly string _input;
+
+    public int X { get; }
+    public int M { get; }
+    public int A { get; }
+    public int S { get; }
+
+    public Part(string input)
+    {
+        _input = input;
+        var values = input[1..^1].Split(",");
+        foreach (var value in values)
+        {
+            var pair = value.Split("=");
+            var amount = int.Parse(pair[1]);
+            switch (pair[0])
+            {
+                case "x": X = amount; break;
+                case "m": M = amount; break;
+                case "a": A = amount; break;
+                case "s": S = amount; break;
+            }
+        }
     }
 }

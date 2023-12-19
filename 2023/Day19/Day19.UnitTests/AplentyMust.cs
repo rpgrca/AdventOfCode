@@ -1,3 +1,4 @@
+using System.Security;
 using Day19.Logic;
 using static Day19.UnitTests.Constants;
 
@@ -33,5 +34,20 @@ public class AplentyMust
         var sut = new Rule(input);
         Assert.Equal(expectedName, sut.Name);
         Assert.Equal(expectedFilterCount, sut.ExpectedFilterCount);
+    }
+
+    [Theory]
+    [InlineData("{x=787,m=2655,a=1222,s=2876}", 787, 2655, 1222, 2876)]
+    [InlineData("{x=1679,m=44,a=2067,s=496}", 1679, 44, 2067, 496)]
+    [InlineData("{x=2036,m=264,a=79,s=2244}", 2036, 264, 79, 2244)]
+    [InlineData("{x=2461,m=1339,a=466,s=291}", 2461, 1339, 466, 291)]
+    [InlineData("{x=2127,m=1623,a=2188,s=1013}", 2127, 1623, 2188, 1013)]
+    public void ParsePartCorrectly(string input, int expectedX, int expectedM, int expectedA, int expectedS)
+    {
+        var sut = new Part(input);
+        Assert.Equal(expectedX, sut.X);
+        Assert.Equal(expectedM, sut.M);
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedS, sut.S);
     }
 }
