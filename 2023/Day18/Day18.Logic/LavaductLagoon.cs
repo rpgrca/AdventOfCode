@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Data;
-using System.Runtime.CompilerServices;
 
 namespace Day18.Logic;
 
@@ -15,7 +15,7 @@ public class LavaductLagoon
     public int DigPlanLength => _lines.Length;
 
     public int TrenchPerimeter { get; private set; }
-    public int TrenchArea { get; private set; }
+    public long TrenchArea { get; private set; }
     public List<(int Length, char Direction)> RealInstructions { get; }
 
     public LavaductLagoon(string input, int length = 100, bool create = true)
@@ -172,6 +172,46 @@ public class LavaductLagoon
             if (y - 1 >= 0 && !visited.Contains((x, y - 1)))
             {
                 FillArea(x, y - 1); // u
+            }
+        }
+    }
+
+    public void CalculateArea2()
+    {
+        var array = Enumerable.Range(0, 5_000_000).Select(p => new SortedList<int, (int Begin, int End)>()).ToArray();
+        var currentX = _initialX;
+        var currentY = _initialY;
+
+        foreach (var instruction in RealInstructions)
+        {
+            switch (instruction.Direction)
+            {
+                case '0': // r
+                    array[currentY].Add(currentX, (currentX, currentX + instruction.Length));
+                    currentX += instruction.Length;
+                    break;
+
+                case '1': // d
+                    for (var index = currentY; index < currentY + instruction.Length; index++)
+                    {
+                        array[index].Add(currentX, (currentX, currentX));
+                    }
+                    currentY += instruction.Length;
+                    break;
+
+                case '2': // l
+                    var previous = currentX - instruction.Length;
+                    array[currentY].Add(previous, (previous, currentX));
+                    currentX = previous;
+                    break;
+
+                case '3': // u
+                    for (var index = currentY; index > currentY - instruction.Length; index--)
+                    {
+                        array[index].Add(currentX, (currentX, currentX));
+                    }
+                    currentY -= instruction.Length;
+                    break;
             }
         }
     }
