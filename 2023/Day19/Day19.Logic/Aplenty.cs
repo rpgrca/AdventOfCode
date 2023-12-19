@@ -1,4 +1,5 @@
 
+
 namespace Day19.Logic;
 
 public class Aplenty
@@ -38,4 +39,24 @@ public class Aplenty
 
     public int PartCount => _parts.Count;
     public int RuleCount => _rules.Count;
+}
+
+
+public class Rule
+{
+    private readonly string _input;
+
+    public string Name { get; }
+
+    private readonly string[] _filters;
+
+    public int ExpectedFilterCount => _filters.Length;
+
+    public Rule(string input)
+    {
+        _input = input;
+        var commands = _input.Split(new char[] { '{', '}' });
+        Name = commands[0];
+        _filters = commands[1].Split(",");
+    }
 }
