@@ -131,4 +131,12 @@ hdj{m>838:A,pv}
         sut.Execute();
         Assert.Equal(19114, sut.SumOfAcceptedParts);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new Aplenty(PUZZLE_INPUT);
+        sut.Execute();
+        Assert.Equal(402185, sut.SumOfAcceptedParts);
+    }
 }
