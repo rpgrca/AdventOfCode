@@ -27,6 +27,12 @@ public class LavaductLagoon
         _initialY = _length / 3;
         RealInstructions = new List<(int, char)>();
 
+        foreach (var line in _lines)
+        {
+            var command = line.Split(" ");
+            RealInstructions.Add((int.Parse(command[1]), command[0][0]));
+        }
+
         if (create)
         {
             _map = new char[length][];
@@ -39,6 +45,7 @@ public class LavaductLagoon
 
     public void Decode()
     {
+        RealInstructions.Clear();
         foreach (var line in _lines)
         {
             var command = line.Split(" ");
@@ -186,33 +193,181 @@ public class LavaductLagoon
         {
             switch (instruction.Direction)
             {
-                case '0': // r
+                case 'R': // r
                     array[currentY].Add(currentX, (currentX, currentX + instruction.Length));
                     currentX += instruction.Length;
                     break;
 
-                case '1': // d
+                case 'D': // d
                     for (var index = currentY; index < currentY + instruction.Length; index++)
                     {
-                        array[index].Add(currentX, (currentX, currentX));
+                        if (!array[index].ContainsKey(currentX))
+                        {
+                            array[index].Add(currentX, (currentX, currentX));
+                        }
                     }
                     currentY += instruction.Length;
                     break;
 
-                case '2': // l
+                case 'L': // l
                     var previous = currentX - instruction.Length;
                     array[currentY].Add(previous, (previous, currentX));
                     currentX = previous;
                     break;
 
-                case '3': // u
+                case 'U': // u
                     for (var index = currentY; index > currentY - instruction.Length; index--)
                     {
-                        array[index].Add(currentX, (currentX, currentX));
+                        if (!array[index].ContainsKey(currentX))
+                        {
+                            array[index].Add(currentX, (currentX, currentX));
+                        }
                     }
                     currentY -= instruction.Length;
                     break;
             }
         }
+
+        var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
+        for (var index = 0; index < array.Length; index++)
+        {
+            var area = 0L;
+            var inside = false;
+            var lastHole = -1;
+            var lineLastPoint = -1;
+
+            foreach (var block in array[index])
+            {
+                if (block.Value.Begin != block.Value.End)
+                {
+                    if (inside)
+                    {
+                        if (lastHole == -1)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+
+                        coveredArea[index].Add((lastHole, block.Value.Begin));
+                        area += block.Value.Begin - lastHole + 1;
+                        lastHole = block.Value.End;
+                    }
+
+                    coveredArea[index].Add((block.Value.Begin, block.Value.End));
+                    area += block.Value.End - block.Value.Begin + 1;
+
+                    if (lineLastPoint != -1)
+                    {
+                        if (coveredArea[index-1].Any(p => p.Begin <= lineLastPoint && p.End >= lineLastPoint))
+                        {
+                            coveredArea[index].Add((lineLastPoint, block.Value.Begin));
+                            area += block.Value.Begin - lineLastPoint - 1;
+                        }
+                    }
+                    lineLastPoint = block.Value.End;
+                }
+                else
+                {
+                    if (block.Value.Begin == lineLastPoint)
+                    {
+                        continue;
+                    }
+
+                    if (!inside)
+                    {
+                        lastHole = block.Value.Begin;
+                        inside = true;
+                    }
+                    else
+                    {
+                        if (lastHole == -1)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+
+                        coveredArea[index].Add((lastHole, block.Value.Begin));
+                        area += block.Value.Begin - lastHole + 1;
+                        lastHole = -1;
+                        inside = false;
+                    }
+                }
+            }
+
+            if (inside)
+            {
+                if (lineLastPoint == -1)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+
+                coveredArea[index].Add((lineLastPoint, lastHole));
+                area += lastHole - lineLastPoint;
+            }
+
+            TrenchArea += area;
+        }
+
+
+/*
+        for (var index = 0; index < array.Length; index++)
+        {
+            var area = 0L;
+            var inside = false;
+            var lastHole = -1L;
+            var lineLastPoint = -1;
+
+            foreach (var block in array[index])
+            {
+                if (block.Value.Begin != block.Value.End)
+                {
+                    if (inside)
+                    {
+                        if (lastHole == -1)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+                        area += block.Value.Begin - lastHole + 1;
+                        lastHole = block.Value.End;
+                    }
+
+                    area += block.Value.End - block.Value.Begin + 1;
+                    lineLastPoint = block.Value.End;
+                }
+                else
+                {
+                    if (block.Value.Begin == lineLastPoint)
+                    {
+                        continue;
+                    }
+
+                    if (!inside)
+                    {
+                        lastHole = block.Value.Begin;
+                        inside = true;
+                    }
+                    else
+                    {
+                        if (lastHole == -1)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+                        area += block.Value.Begin - lastHole + 1;
+                        lastHole = -1;
+                        inside = false;
+                    }
+                }
+            }
+
+            if (inside)
+            {
+                if (lineLastPoint == -1)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+                area += lastHole - lineLastPoint;
+            }
+
+            TrenchArea += area;
+        }
+*/
     }
 }
