@@ -82,12 +82,21 @@ public class LavaductLagoonMust
     }
 
     [Fact]
-    public void SolveFirstSampleWithDecodingCorrectly()
+    public void SolveFirstSampleWithNewAlgorithmCorrectly()
     {
         var sut = new LavaductLagoon(SAMPLE_INPUT, 10_000, create: false);
         sut.CalculateArea2();
         Assert.Equal(62, sut.TrenchArea);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleWithNewAlgorithmCorrectly()
+    {
+        var sut = new LavaductLagoon(PUZZLE_INPUT, 10_000, create: false);
+        sut.CalculateArea2();
+        Assert.Equal(48400, sut.TrenchArea);
+    }
+
 
 /*
     [Fact]

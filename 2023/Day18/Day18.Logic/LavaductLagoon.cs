@@ -229,6 +229,7 @@ public class LavaductLagoon
         }
 
         var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
+        var dubious = new List<(int Y, int Begin, int End)>();
         for (var index = 0; index < array.Length; index++)
         {
             var area = 0L;
@@ -248,7 +249,7 @@ public class LavaductLagoon
                         }
 
                         coveredArea[index].Add((lastHole, block.Value.Begin));
-                        area += block.Value.Begin - lastHole + 1;
+                        area += block.Value.Begin - lastHole;
                         lastHole = block.Value.End;
                     }
 
@@ -257,11 +258,7 @@ public class LavaductLagoon
 
                     if (lineLastPoint != -1)
                     {
-                        if (coveredArea[index-1].Any(p => p.Begin <= lineLastPoint && p.End >= lineLastPoint))
-                        {
-                            coveredArea[index].Add((lineLastPoint, block.Value.Begin));
-                            area += block.Value.Begin - lineLastPoint - 1;
-                        }
+                        dubious.Add((index, lineLastPoint, block.Value.Begin));
                     }
                     lineLastPoint = block.Value.End;
                 }
@@ -303,8 +300,26 @@ public class LavaductLagoon
                 area += lastHole - lineLastPoint;
             }
 
-            TrenchArea += area;
+            if (area != 0)
+            {
+                TrenchArea += area;
+            }
         }
+
+        var extraArea = 0;
+        foreach (var range in dubious)
+        {
+            if (coveredArea[range.Y - 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
+            {
+                extraArea += range.End - range.Begin - 1;
+            }
+            else if (coveredArea[range.Y + 1].Any(p => p.Begin <= range.Begin && p.End >= range.End))
+            {
+                extraArea += range.End - range.Begin - 1;
+            }
+        }
+
+        TrenchArea += extraArea;
 
 
 /*
