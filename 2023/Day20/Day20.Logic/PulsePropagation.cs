@@ -1,23 +1,37 @@
-
-
-
-
-
 namespace Day20.Logic;
+
+public enum PulseState
+{
+    Low = 0,
+    High = 1
+}
 
 public class PulsePropagation
 {
     private readonly string _input;
     private readonly string[] _lines;
     private readonly string[] _broadcastTarget;
+    private readonly Dictionary<string, PulseState> _flipflops;
+    private readonly List<string> _conjunctions;
+    private readonly List<string> _unnameds;
+
+    public int CommandsCount => _lines.Length;
+    public int FlipFlopCount => _flipflops.Count;
+    public int ConjuntionCount => _conjunctions.Count;
+    public int UnnamedCount => _unnameds.Count;
+    public int HighPulseCount { get; set; }
+    public int LowPulseCount { get; set; }
+    public int BroadcasterTargets => _broadcastTarget.Length;
+
 
     public PulsePropagation(string input)
     {
         _input = input;
         _lines = _input.Split("\n");
-
-        var flipflops = new HashSet<string>();
-        var conjuntions = new HashSet<string>();
+        _flipflops = new Dictionary<string, PulseState>();
+        _conjunctions = new List<string>();
+        _unnameds = new List<string>();
+        _broadcastTarget = Array.Empty<string>();
 
         foreach (var line in _lines)
         {
@@ -29,14 +43,12 @@ public class PulsePropagation
             else
             if (command[0][0] == '%')
             {
-                FlipFlopCount++;
-                flipflops.Add(command[0][1..]);
+                _flipflops.Add(command[0][1..], PulseState.Low);
             }
             else
             if (command[0][0] == '&')
             {
-                ConjuntionCount++;
-                conjuntions.Add(command[0][1..]);
+                _conjunctions.Add(command[0][1..]);
             }
         }
 
@@ -46,25 +58,16 @@ public class PulsePropagation
             var targets = command[1].Split(",");
             foreach (var target in targets.Select(p => p.Trim()))
             {
-                if (!flipflops.Contains(target) && !conjuntions.Contains(target))
+                if (!_flipflops.ContainsKey(target) && !_conjunctions.Contains(target))
                 {
-                    UnnamedCount++;
+                    _unnameds.Add(target);
                 }
             }
         }
     }
 
-    public int CommandsCount => _lines.Length;
-
-    public int FlipFlopCount { get; set; }
-    public int ConjuntionCount { get; set; }
-    public int UnnamedCount { get; set; }
-    public int HighPulseCount { get; set; }
-    public int LowPulseCount { get; set; }
-    public int BroadcasterTargets => _broadcastTarget.Length;
-
     public void Pulse()
     {
-
+        LowPulseCount++;
     }
 }

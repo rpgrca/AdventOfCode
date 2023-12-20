@@ -36,7 +36,7 @@ public class PulsePropagationMust
         var sut = new PulsePropagation(input);
         Assert.Equal(expectedBroadcasterTargets, sut.BroadcasterTargets);
     }
-/*
+
     [Fact]
     public void BroadcastCorrectly_WhenBroadcastTargetIsUnnamed()
     {
@@ -44,5 +44,5 @@ public class PulsePropagationMust
         sut.Pulse();
         Assert.Equal(1, sut.LowPulseCount);
         Assert.Equal(0, sut.HighPulseCount);
-    }*/
+    }
 }
