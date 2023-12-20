@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Day19.Logic;
 
 public class Aplenty
@@ -146,10 +144,10 @@ public class Aplenty
                 }
             }
 
-            AcceptedCombinations += (xSet? (maximumX - minimumX + 1) : 4000) *
-                (mSet? (maximumM - minimumM + 1) : 4000) *
-                (aSet? (maximumA - minimumA + 1) : 4000) *
-                (sSet? (maximumS - minimumS + 1) : 4000);
+            AcceptedCombinations += (xSet? (maximumX - minimumX - (minimumX != 1 && maximumX != 4000? 1UL : 0UL)) : 4000) *
+                (mSet? (maximumM - minimumM - (minimumM != 1 && maximumM != 4000? 1UL : 0UL)) : 4000) *
+                (aSet? (maximumA - minimumA - (minimumA != 1 && maximumA != 4000? 1UL : 0UL)) : 4000) *
+                (sSet? (maximumS - minimumS - (minimumS != 1 && maximumS != 4000? 1UL : 0UL)) : 4000);
         }
 
         // Not taking into account "in" filters still
@@ -217,34 +215,5 @@ public class Aplenty
                 SumOfAcceptedParts += part.X + part.M + part.A + part.S;
             }
         }
-    }
-}
-
-public class Condition
-{
-    public char Variable { get; init; }
-    public int Minimum { get; init; }
-    public int Maximum { get; init; }
-}
-
-[DebuggerDisplay("{Name} ({Nodes.Count})")]
-public class Node
-{
-    public string Name { get; }
-    public IFilter Filter { get; }
-    public List<Node> Nodes { get; }
-
-    public Node(string name)
-    {
-        Name = name;
-        Filter = null;
-        Nodes = new List<Node>();
-    }
-
-    public Node(string name, IFilter filter)
-    {
-        Name = name;
-        Filter = filter;
-        Nodes = new List<Node>();
     }
 }

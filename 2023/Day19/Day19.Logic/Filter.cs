@@ -29,13 +29,12 @@ public class Filter : IFilter
         {
             var values = _input.Split('<');
             var jump = values[1].Split(':');
-
             Result = jump[1];
             Variable = values[0][0];
             MinimumAcceptedValue = 1;
-            MaximumAcceptedValue = ulong.Parse(jump[0]) - 1;
-            Negation = new NegatedFilter($"{Variable}>{MaximumAcceptedValue}", Variable, MaximumAcceptedValue, 4000);
-            _method = p => p.Values[Variable] < (int)MaximumAcceptedValue + 1;
+            MaximumAcceptedValue = ulong.Parse(jump[0]);
+            Negation = new NegatedFilter($"{Variable}>={MaximumAcceptedValue}", Variable, MaximumAcceptedValue - 1, 4000);
+            _method = p => p.Values[Variable] < (int)MaximumAcceptedValue;
         }
         else if (_input.Contains('>'))
         {
@@ -44,10 +43,10 @@ public class Filter : IFilter
 
             Result = jump[1];
             Variable = values[0][0];
-            MinimumAcceptedValue = ulong.Parse(jump[0]) + 1;
+            MinimumAcceptedValue = ulong.Parse(jump[0]);
             MaximumAcceptedValue = 4000;
-            Negation = new NegatedFilter($"{Variable}<{MinimumAcceptedValue}", Variable, 1, MinimumAcceptedValue);
-            _method = p => p.Values[Variable] > (int)MinimumAcceptedValue - 1;
+            Negation = new NegatedFilter($"{Variable}<={MinimumAcceptedValue}", Variable, 1, MinimumAcceptedValue + 1);
+            _method = p => p.Values[Variable] > (int)MinimumAcceptedValue;
         }
         else
         {
