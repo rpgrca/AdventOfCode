@@ -11,9 +11,9 @@ public class PulsePropagation
     private readonly string _input;
     private readonly string[] _lines;
     private readonly string[] _broadcastTarget;
-    private readonly Dictionary<string, PulseState> _flipflops;
+    private readonly Dictionary<string, (int State, string[] Targets)> _flipflops;
     private readonly List<string> _conjunctions;
-    private readonly List<string> _unnameds;
+    private readonly HashSet<string> _unnameds;
 
     public int CommandsCount => _lines.Length;
     public int FlipFlopCount => _flipflops.Count;
@@ -28,9 +28,9 @@ public class PulsePropagation
     {
         _input = input;
         _lines = _input.Split("\n");
-        _flipflops = new Dictionary<string, PulseState>();
+        _flipflops = new Dictionary<string, (int, string[])>();
         _conjunctions = new List<string>();
-        _unnameds = new List<string>();
+        _unnameds = new HashSet<string>();
         _broadcastTarget = Array.Empty<string>();
 
         foreach (var line in _lines)
@@ -43,7 +43,7 @@ public class PulsePropagation
             else
             if (command[0][0] == '%')
             {
-                _flipflops.Add(command[0][1..], PulseState.Low);
+                _flipflops.Add(command[0][1..], (0, command[1].Split(",").Select(p => p.Trim()).ToArray()));
             }
             else
             if (command[0][0] == '&')
@@ -60,7 +60,10 @@ public class PulsePropagation
             {
                 if (!_flipflops.ContainsKey(target) && !_conjunctions.Contains(target))
                 {
-                    _unnameds.Add(target);
+                    if (!_unnameds.Contains(target))
+                    {
+                        _unnameds.Add(target);
+                    }
                 }
             }
         }
@@ -68,17 +71,46 @@ public class PulsePropagation
 
     public void Pulse()
     {
+        var queue = new Queue<(string Target, int Pulse)>();
         foreach (var target in _broadcastTarget)
         {
+            queue.Enqueue((target, 0));
             LowPulseCount++;
-            if (_unnameds.Contains(target))
+        }
+
+        while (queue.Count > 0)
+        {
+            var target = queue.Dequeue();
+
+            if (_unnameds.Contains(target.Target))
             {
+                // ignore
             }
-            else if (_flipflops.TryGetValue(target, out var flipflop))
+            else if (_flipflops.TryGetValue(target.Target, out var flipflop))
             {
-                flipflop = ~flipflop;
-                _flipflops[target] = flipflop;
-                HighPulseCount++;
+                if (flipflop.State == 0)
+                {
+                    if (target.Pulse != 0)
+                    {
+                        continue;
+                        // ignore
+                    }
+                }
+
+                flipflop = (~flipflop.State, flipflop.Targets);
+                _flipflops[target.Target] = flipflop;
+                foreach (var flipflopTarget in flipflop.Targets)
+                {
+                    queue.Enqueue((flipflopTarget, flipflop.State));
+                    if (flipflop.State == 0)
+                    {
+                        LowPulseCount++;
+                    }
+                    else
+                    {
+                        HighPulseCount++;
+                    }
+                }
             }
         }
     }
