@@ -1,11 +1,15 @@
 
 
+
+
+
 namespace Day20.Logic;
 
 public class PulsePropagation
 {
     private readonly string _input;
     private readonly string[] _lines;
+    private readonly string[] _broadcastTarget;
 
     public PulsePropagation(string input)
     {
@@ -18,6 +22,11 @@ public class PulsePropagation
         foreach (var line in _lines)
         {
             var command = line.Split(" -> ");
+            if (command[0] == "broadcaster")
+            {
+                _broadcastTarget = command[1].Split(",").Select(p => p.Trim()).ToArray();
+            }
+            else
             if (command[0][0] == '%')
             {
                 FlipFlopCount++;
@@ -50,4 +59,12 @@ public class PulsePropagation
     public int FlipFlopCount { get; set; }
     public int ConjuntionCount { get; set; }
     public int UnnamedCount { get; set; }
+    public int HighPulseCount { get; set; }
+    public int LowPulseCount { get; set; }
+    public int BroadcasterTargets => _broadcastTarget.Length;
+
+    public void Pulse()
+    {
+
+    }
 }

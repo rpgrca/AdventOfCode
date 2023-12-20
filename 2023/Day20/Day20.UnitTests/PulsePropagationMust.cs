@@ -26,4 +26,23 @@ public class PulsePropagationMust
         Assert.Equal(expectedConjuntions, sut.ConjuntionCount);
         Assert.Equal(expectedUnnameds, sut.UnnamedCount);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 3)]
+    [InlineData(SECOND_SAMPLE_INPUT, 1)]
+    [InlineData(PUZZLE_INPUT, 4)]
+    public void CalculateInitialBroadcastTargetsCorrectly(string input, int expectedBroadcasterTargets)
+    {
+        var sut = new PulsePropagation(input);
+        Assert.Equal(expectedBroadcasterTargets, sut.BroadcasterTargets);
+    }
+/*
+    [Fact]
+    public void BroadcastCorrectly_WhenBroadcastTargetIsUnnamed()
+    {
+        var sut = new PulsePropagation("broadcaster -> output");
+        sut.Pulse();
+        Assert.Equal(1, sut.LowPulseCount);
+        Assert.Equal(0, sut.HighPulseCount);
+    }*/
 }
