@@ -68,6 +68,18 @@ public class PulsePropagation
 
     public void Pulse()
     {
-        LowPulseCount++;
+        foreach (var target in _broadcastTarget)
+        {
+            LowPulseCount++;
+            if (_unnameds.Contains(target))
+            {
+            }
+            else if (_flipflops.TryGetValue(target, out var flipflop))
+            {
+                flipflop = ~flipflop;
+                _flipflops[target] = flipflop;
+                HighPulseCount++;
+            }
+        }
     }
 }

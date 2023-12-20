@@ -38,11 +38,20 @@ public class PulsePropagationMust
     }
 
     [Fact]
-    public void BroadcastCorrectly_WhenBroadcastTargetIsUnnamed()
+    public void CountLowPulsesCorrectly_WhenTargetIsUnnamed()
     {
         var sut = new PulsePropagation("broadcaster -> output");
         sut.Pulse();
         Assert.Equal(1, sut.LowPulseCount);
         Assert.Equal(0, sut.HighPulseCount);
+    }
+
+    [Fact]
+    public void CountLowPulsesCorrectly_WhenRelayIsFlipFlop()
+    {
+        var sut = new PulsePropagation("broadcaster -> a\n%a -> output");
+        sut.Pulse();
+        Assert.Equal(1, sut.LowPulseCount);
+        Assert.Equal(1, sut.HighPulseCount);
     }
 }
