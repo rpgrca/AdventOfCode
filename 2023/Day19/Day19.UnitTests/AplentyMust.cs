@@ -143,12 +143,14 @@ hdj{m>838:A,pv}
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-//states do not repeat
-//
-//a   m   s   x (unique values in rules)
-//289*317*271*292
-//7_249_519_916
         var sut = new Aplenty(SAMPLE_INPUT, true);
         Assert.Equal(167409079868000UL, sut.AcceptedCombinations);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new Aplenty(PUZZLE_INPUT, true);
+        Assert.Equal(130291480568730UL, sut.AcceptedCombinations);
     }
 }
