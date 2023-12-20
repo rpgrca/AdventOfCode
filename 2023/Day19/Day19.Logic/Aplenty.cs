@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Day19.Logic;
 
 public class Aplenty
@@ -6,8 +8,12 @@ public class Aplenty
     private readonly string[] _lines;
     private readonly Dictionary<string, Rule> _rules;
     private readonly List<Part> _parts;
+    public int PartCount => _parts.Count;
+    public int RuleCount => _rules.Count;
+    public int SumOfAcceptedParts { get; private set; }
+    public ulong AcceptedCombinations { get; private set; }
 
-    public Aplenty(string input)
+    public Aplenty(string input, bool buildGraph = false)
     {
         _input = input;
         _lines = _input.Split("\n");
@@ -34,24 +40,179 @@ public class Aplenty
                 }
             }
         }
+
+        if (buildGraph)
+        {
+            var root = BuildGraph();
+            var filters = new List<IFilter>();
+            FindCombinations(root, filters);
+        }
     }
 
-    public int PartCount => _parts.Count;
-    public int RuleCount => _rules.Count;
+    private Node BuildGraph()
+    {
+        var dictionary = new Dictionary<string, Node>();
+        var root = new Node("start", new Filter("in"));
+        dictionary.Add("start", root);
 
-    public int SumOfAcceptedParts { get; private set; }
+        _rules.Add("start", new Rule("start{in}"));
+        BuildGraph(dictionary, "start");
+
+        return dictionary["in"];
+    }
+
+    private void FindCombinations(Node root, List<IFilter> filters)
+    {
+        if (root.Name.StartsWith("R"))
+        {
+            return;
+        }
+        else if (root.Name.StartsWith("A"))
+        {
+            var xSet = false;
+            var minimumX = 0UL;
+            var maximumX = 0UL;
+            var mSet = false;
+            var minimumM = 0UL;
+            var maximumM = 0UL;
+            var aSet = false;
+            var minimumA = 0UL;
+            var maximumA = 0UL;
+            var sSet = false;
+            var minimumS = 0UL;
+            var maximumS = 0UL;
+
+            foreach (var filter in filters)
+            {
+                switch (filter.Variable)
+                {
+                    case 'x':
+                        if (! xSet)
+                        {
+                            minimumX = filter.MinimumAcceptedValue;
+                            maximumX = filter.MaximumAcceptedValue;
+                            xSet = true;
+                        }
+                        else
+                        {
+                            maximumX = Math.Min(maximumX, filter.MaximumAcceptedValue);
+                            minimumX = Math.Max(minimumX, filter.MinimumAcceptedValue);
+                        }
+                        break;
+
+                    case 'm':
+                        if (! mSet)
+                        {
+                            maximumM = filter.MaximumAcceptedValue;
+                            minimumM = filter.MinimumAcceptedValue;
+                            mSet = true;
+                        }
+                        else
+                        {
+                            maximumM = Math.Min(maximumM, filter.MaximumAcceptedValue);
+                            minimumM = Math.Max(minimumM, filter.MinimumAcceptedValue);
+                        }
+
+                        break;
+
+                    case 'a':
+                        if (! aSet)
+                        {
+                            maximumA = filter.MaximumAcceptedValue;
+                            minimumA = filter.MinimumAcceptedValue;
+                            aSet = true;
+                        }
+                        else
+                        {
+                            maximumA = Math.Min(maximumA, filter.MaximumAcceptedValue);
+                            minimumA = Math.Max(minimumA, filter.MinimumAcceptedValue);
+                        }
+
+                        break;
+
+                    case 's':
+                        if (! sSet)
+                        {
+                            maximumS = filter.MaximumAcceptedValue;
+                            minimumS = filter.MinimumAcceptedValue;
+                            sSet = true;
+                        }
+                        else
+                        {
+                            maximumS = Math.Min(maximumS, filter.MaximumAcceptedValue);
+                            minimumS = Math.Max(minimumS, filter.MinimumAcceptedValue);
+                        }
+                        break;
+                }
+            }
+
+            AcceptedCombinations += (xSet? (maximumX - minimumX + 1) : 4000) *
+                (mSet? (maximumM - minimumM + 1) : 4000) *
+                (aSet? (maximumA - minimumA + 1) : 4000) *
+                (sSet? (maximumS - minimumS + 1) : 4000);
+        }
+
+        // Not taking into account "in" filters still
+        for (var index = 0; index < root.Nodes.Count; index++)
+        {
+            var nextFilters = filters.Select(p => p).ToList();
+
+            for (var subIndex = 0; subIndex < index; subIndex++)
+            {
+                nextFilters.Add(root.Nodes[subIndex].Filter.Negation);
+            }
+
+            var node = root.Nodes[index];
+            nextFilters.Add(node.Filter);
+            FindCombinations(node, nextFilters);
+        }
+
+        return;
+    }
+
+    private void BuildGraph(Dictionary<string, Node> dictionary, string name)
+    {
+        Rule rule;
+        if (_rules.ContainsKey(name))
+        {
+            rule = _rules[name];
+        }
+        else
+        {
+            // A or R
+            return;
+        }
+
+        foreach (var filter in rule.Filters)
+        {
+            Node nextNode;
+            if (dictionary.ContainsKey(filter.Result))
+            {
+                nextNode = dictionary[filter.Result];
+            }
+            else
+            {
+                nextNode = new Node(filter.Result, filter);
+                dictionary.Add(filter.Result, nextNode);
+            }
+
+            var currentNode = dictionary[name];
+            currentNode.Nodes.Add(nextNode);
+            BuildGraph(dictionary, nextNode.Name);
+        }
+    }
 
     public void Execute()
     {
         foreach (var part in _parts)
         {
             var nextRule = "in";
-            while (nextRule != "A" && nextRule != "R")
+            while (!nextRule.StartsWith("A") && !nextRule.StartsWith("R"))
             {
                 nextRule = _rules[nextRule].Apply(part);
             }
 
-            if (nextRule == "A")
+            if (nextRule.StartsWith("A"))
             {
                 SumOfAcceptedParts += part.X + part.M + part.A + part.S;
             }
@@ -59,76 +220,31 @@ public class Aplenty
     }
 }
 
-
-public class Rule
+public class Condition
 {
-    private readonly string _input;
-
-    public string Name { get; }
-
-    private readonly List<Filter> _filters;
-
-    public int ExpectedFilterCount => _filters.Count;
-
-    public Rule(string input)
-    {
-        _input = input;
-        _filters = new();
-
-        var commands = _input.Split(new char[] { '{', '}' });
-        Name = commands[0];
-        var filters = commands[1].Split(",");
-        foreach (var filter in filters)
-        {
-            _filters.Add(new Filter(filter));
-        }
-    }
-
-    internal string Apply(Part part)
-    {
-        foreach (var filter in _filters)
-        {
-            var useThisRule = filter.Apply(part);
-            if (useThisRule)
-            {
-                return filter.Result;
-            }
-        }
-
-        throw new Exception("Invalid state reached");
-    }
+    public char Variable { get; init; }
+    public int Minimum { get; init; }
+    public int Maximum { get; init; }
 }
 
-public class Filter
+[DebuggerDisplay("{Name} ({Nodes.Count})")]
+public class Node
 {
-    private readonly string _input;
-    private readonly Func<Part, bool> _method;
+    public string Name { get; }
+    public IFilter Filter { get; }
+    public List<Node> Nodes { get; }
 
-    public Filter(string input)
+    public Node(string name)
     {
-        _input = input;
-        if (_input.Contains('<'))
-        {
-            var values = _input.Split('<');
-            var jump = values[1].Split(':');
-            _method = p => p.Values[values[0][0]] < int.Parse(jump[0]);
-            Result = jump[1];
-        }
-        else if (_input.Contains('>'))
-        {
-            var values = _input.Split('>');
-            var jump = values[1].Split(':');
-            _method = p => p.Values[values[0][0]] > int.Parse(jump[0]);
-            Result = jump[1];
-        }
-        else
-        {
-            _method = p => true;
-            Result = input;
-        }
+        Name = name;
+        Filter = null;
+        Nodes = new List<Node>();
     }
 
-    public string Result { get; internal set; }
-
-    internal bool Apply(Part part) => _method(part);
+    public Node(string name, IFilter filter)
+    {
+        Name = name;
+        Filter = filter;
+        Nodes = new List<Node>();
+    }
 }
