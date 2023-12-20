@@ -1,3 +1,4 @@
+using System.Reflection;
 using Day20.Logic;
 using static Day20.UnitTests.Constants;
 
@@ -62,5 +63,23 @@ public class PulsePropagationMust
         sut.Pulse();
         Assert.Equal(1, sut.LowPulseCount);
         Assert.Equal(2, sut.HighPulseCount);
+    }
+
+    [Fact]
+    public void CountPulsesCorrectly_WhenFlipFlopOnReceivesHighPulse()
+    {
+        var sut = new PulsePropagation("broadcaster -> a, b\n%a -> b\n%b -> output");
+        sut.Pulse();
+        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(2, sut.HighPulseCount);
+    }
+
+    [Fact]
+    public void CountPulsesCorrectly_WhenConjunctionReceivesLowPulse()
+    {
+        var sut = new PulsePropagation("broadcaster -> a\n%a -> b\n&b -> output");
+        sut.Pulse();
+        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(1, sut.HighPulseCount);
     }
 }
