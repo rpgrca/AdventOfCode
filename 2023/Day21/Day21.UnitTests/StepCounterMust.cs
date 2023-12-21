@@ -86,4 +86,11 @@ public class StepCounterMust
         Assert.Contains((3, 9), sut.CurrentPositions);
     }
 
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new StepCounter(PUZZLE_INPUT);
+        sut.Step(64);
+        Assert.Equal(3770, sut.CurrentPositions.Count);
+    }
 }
