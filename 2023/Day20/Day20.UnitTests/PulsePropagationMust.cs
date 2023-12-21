@@ -43,7 +43,7 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> output");
         sut.Pulse();
-        Assert.Equal(1, sut.LowPulseCount);
+        Assert.Equal(2, sut.LowPulseCount);
         Assert.Equal(0, sut.HighPulseCount);
     }
 
@@ -52,7 +52,7 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> a\n%a -> output");
         sut.Pulse();
-        Assert.Equal(1, sut.LowPulseCount);
+        Assert.Equal(2, sut.LowPulseCount);
         Assert.Equal(1, sut.HighPulseCount);
     }
 
@@ -61,7 +61,7 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> a\n%a -> b, output\n%b -> output");
         sut.Pulse();
-        Assert.Equal(1, sut.LowPulseCount);
+        Assert.Equal(2, sut.LowPulseCount);
         Assert.Equal(2, sut.HighPulseCount);
     }
 
@@ -70,7 +70,7 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> a, b\n%a -> b\n%b -> output");
         sut.Pulse();
-        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(3, sut.LowPulseCount);
         Assert.Equal(2, sut.HighPulseCount);
     }
 
@@ -79,7 +79,7 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> a\n%a -> b\n&b -> output");
         sut.Pulse();
-        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(3, sut.LowPulseCount);
         Assert.Equal(1, sut.HighPulseCount);
     }
 
@@ -88,7 +88,16 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation("broadcaster -> a\n%a -> b\n&b -> c\n&c -> output");
         sut.Pulse();
-        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(3, sut.LowPulseCount);
         Assert.Equal(2, sut.HighPulseCount);
+    }
+
+    [Fact]
+    public void HandleOnePulseCorrectly_WhenUsingSampleInput()
+    {
+        var sut = new PulsePropagation(SAMPLE_INPUT);
+        sut.Pulse();
+        Assert.Equal(8, sut.LowPulseCount);
+        Assert.Equal(4, sut.HighPulseCount);
     }
 }

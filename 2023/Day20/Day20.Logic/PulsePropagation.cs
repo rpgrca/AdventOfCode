@@ -75,6 +75,8 @@ public class PulsePropagation
 
     public void Pulse()
     {
+        LowPulseCount++;
+
         var queue = new Queue<(string Source, string Target, int Pulse)>();
         foreach (var target in _broadcastTarget)
         {
