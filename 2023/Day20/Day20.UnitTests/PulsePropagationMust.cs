@@ -145,4 +145,14 @@ public class PulsePropagationMust
         Assert.Equal(17, sut.LowPulseCount);
         Assert.Equal(11, sut.HighPulseCount);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 32000000)]
+    [InlineData(SECOND_SAMPLE_INPUT, 11687500)]
+    public void SolveFirstSampleCorrectly(string input, int expectedCount)
+    {
+        var sut = new PulsePropagation(input);
+        sut.Pulse(1000);
+        Assert.Equal(expectedCount, sut.PulseMultiplication);
+    }
 }

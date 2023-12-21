@@ -1,3 +1,4 @@
+
 namespace Day20.Logic;
 
 public enum PulseState
@@ -19,10 +20,11 @@ public class PulsePropagation
     public int FlipFlopCount => _flipflops.Count;
     public int ConjuntionCount => _conjunctions.Count;
     public int UnnamedCount => _unnameds.Count;
-    public int HighPulseCount { get; set; }
-    public int LowPulseCount { get; set; }
+    public int HighPulseCount { get; private set; }
+    public int LowPulseCount { get; private set; }
     public int BroadcasterTargets => _broadcastTarget.Length;
 
+    public int PulseMultiplication => LowPulseCount * HighPulseCount;
 
     public PulsePropagation(string input)
     {
