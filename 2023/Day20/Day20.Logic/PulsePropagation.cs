@@ -62,7 +62,7 @@ public class PulsePropagation
                 {
                     if (_conjunctions.TryGetValue(target, out var conjunction))
                     {
-                        conjunction.States.TryAdd(command[0].Trim(), 0);
+                        conjunction.States.TryAdd(command[0][1..].Trim(), 0);
                     }
                     else if (!_unnameds.Contains(target))
                     {
@@ -75,10 +75,10 @@ public class PulsePropagation
 
     public void Pulse()
     {
-        var queue = new Queue<(string Target, int Pulse)>();
+        var queue = new Queue<(string Source, string Target, int Pulse)>();
         foreach (var target in _broadcastTarget)
         {
-            queue.Enqueue((target, 0));
+            queue.Enqueue(("broadcaster", target, 0));
             LowPulseCount++;
         }
 
@@ -94,7 +94,7 @@ public class PulsePropagation
                     _flipflops[target.Target] = flipflop;
                     foreach (var flipflopTarget in flipflop.Targets)
                     {
-                        queue.Enqueue((flipflopTarget, flipflop.State));
+                        queue.Enqueue((target.Target, flipflopTarget, flipflop.State));
                         if (flipflop.State == 0)
                         {
                             LowPulseCount++;
@@ -108,11 +108,11 @@ public class PulsePropagation
             }
             else if (_conjunctions.TryGetValue(target.Target, out var conjunction))
             {
-                conjunction.States[target.Target] = target.Pulse;
-                var pulseToSend = conjunction.States.Values.Any(p => p == 0)? 0 : -1;
+                conjunction.States[target.Source] = target.Pulse;
+                var pulseToSend = conjunction.States.Values.Any(p => p == 0)? -1 : 0;
                 foreach (var conjunctionTarget in conjunction.Targets)
                 {
-                    queue.Enqueue((conjunctionTarget, pulseToSend));
+                    queue.Enqueue((target.Target, conjunctionTarget, pulseToSend));
                     if (pulseToSend == 0)
                     {
                         LowPulseCount++;

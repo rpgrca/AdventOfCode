@@ -75,11 +75,20 @@ public class PulsePropagationMust
     }
 
     [Fact]
-    public void CountPulsesCorrectly_WhenConjunctionReceivesLowPulse()
+    public void CountPulsesCorrectly_WhenConjunctionReceivesHighPulse()
     {
         var sut = new PulsePropagation("broadcaster -> a\n%a -> b\n&b -> output");
         sut.Pulse();
         Assert.Equal(2, sut.LowPulseCount);
         Assert.Equal(1, sut.HighPulseCount);
+    }
+
+    [Fact]
+    public void CountPulsesCorrectly_WhenConjunctionReceivesLowPulse()
+    {
+        var sut = new PulsePropagation("broadcaster -> a\n%a -> b\n&b -> c\n&c -> output");
+        sut.Pulse();
+        Assert.Equal(2, sut.LowPulseCount);
+        Assert.Equal(2, sut.HighPulseCount);
     }
 }
