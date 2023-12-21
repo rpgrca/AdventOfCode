@@ -1,4 +1,3 @@
-using System.Reflection;
 using Day20.Logic;
 using static Day20.UnitTests.Constants;
 
@@ -154,5 +153,21 @@ public class PulsePropagationMust
         var sut = new PulsePropagation(input);
         sut.Pulse(1000);
         Assert.Equal(expectedCount, sut.PulseMultiplication);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new PulsePropagation(PUZZLE_INPUT);
+        sut.Pulse(1000);
+        Assert.Equal(731517480, sut.PulseMultiplication);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new PulsePropagation(PUZZLE_INPUT);
+        var amount = sut.ButtonPressesUntilRxReceivesLowPulse();
+        Assert.Equal(244178746156661, amount);
     }
 }
