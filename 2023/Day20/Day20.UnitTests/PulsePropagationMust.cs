@@ -168,6 +168,9 @@ public class PulsePropagationMust
     {
         var sut = new PulsePropagation(PUZZLE_INPUT);
         var amount = sut.ButtonPressesUntilRxReceivesLowPulse();
+        Assert.True(281474976710656 > amount);
+        Assert.True(762286348560 < amount);
+        Assert.True(243931631539200 < amount);
         Assert.Equal(244178746156661, amount);
     }
 }
