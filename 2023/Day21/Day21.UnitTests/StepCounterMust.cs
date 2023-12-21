@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Day21.Logic;
 using static Day21.UnitTests.Constants;
 
@@ -41,7 +40,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(2);
-        Assert.Equal(4, sut.CurrentPositions.Count);
+        Assert.Equal(4UL, sut.CountCurrentPositions());
         Assert.Contains((3, 5), sut.CurrentPositions);
         Assert.Contains((4, 6), sut.CurrentPositions);
         Assert.Contains((5, 3), sut.CurrentPositions);
@@ -53,7 +52,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(3);
-        Assert.Equal(6, sut.CurrentPositions.Count);
+        Assert.Equal(6UL, sut.CountCurrentPositions());
         Assert.Contains((6, 3), sut.CurrentPositions);
         Assert.Contains((3, 4), sut.CurrentPositions);
         Assert.Contains((5, 4), sut.CurrentPositions);
@@ -67,7 +66,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(6);
-        Assert.Equal(16, sut.CurrentPositions.Count);
+        Assert.Equal(16UL, sut.CountCurrentPositions());
         Assert.Contains((8, 2), sut.CurrentPositions);
         Assert.Contains((1, 3), sut.CurrentPositions);
         Assert.Contains((3, 3), sut.CurrentPositions);
@@ -91,6 +90,14 @@ public class StepCounterMust
     {
         var sut = new StepCounter(PUZZLE_INPUT);
         sut.Step(64);
-        Assert.Equal(3770, sut.CurrentPositions.Count);
+        Assert.Equal(3770UL, sut.CountCurrentPositions());
     }
+/*
+    [Fact]
+    public void ExecuteSixStepsCorrectly_WhenUsingInfiniteMap()
+    {
+        var sut = new StepCounter(SAMPLE_INPUT);
+        sut.Step(6);
+        Assert.Equal(16UL, sut.CountCurrentPositions());
+    }*/
 }
