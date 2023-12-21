@@ -47,4 +47,18 @@ public class StepCounterMust
         Assert.Contains((5, 3), sut.CurrentPositions);
         Assert.Contains((5, 5), sut.CurrentPositions);
     }
+
+    [Fact]
+    public void ExecuteThreeStepsCorrectly()
+    {
+        var sut = new StepCounter(SAMPLE_INPUT);
+        sut.Step(3);
+        Assert.Equal(6, sut.CurrentPositions.Count);
+        Assert.Contains((6, 3), sut.CurrentPositions);
+        Assert.Contains((3, 4), sut.CurrentPositions);
+        Assert.Contains((5, 4), sut.CurrentPositions);
+        Assert.Contains((4, 5), sut.CurrentPositions);
+        Assert.Contains((3, 6), sut.CurrentPositions);
+        Assert.Contains((4, 7), sut.CurrentPositions);
+    }
 }
