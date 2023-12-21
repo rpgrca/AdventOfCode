@@ -119,4 +119,14 @@ public class PulsePropagationMust
         Assert.Equal(4, sut.LowPulseCount);
         Assert.Equal(4, sut.HighPulseCount);
     }
+
+    [Fact]
+    public void HandleTwoPulsesCorrectly_WhenUsingSecondSampleInput()
+    {
+        var sut = new PulsePropagation(SECOND_SAMPLE_INPUT);
+        sut.Pulse();
+        sut.Pulse();
+        Assert.Equal(8, sut.LowPulseCount);
+        Assert.Equal(6, sut.HighPulseCount);
+    }
 }
