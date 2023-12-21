@@ -105,8 +105,7 @@ public class PulsePropagationMust
     public void HandleTwoPulsesCorrectly_WhenUsingSampleInput()
     {
         var sut = new PulsePropagation(SAMPLE_INPUT);
-        sut.Pulse();
-        sut.Pulse();
+        sut.Pulse(2);
         Assert.Equal(16, sut.LowPulseCount);
         Assert.Equal(8, sut.HighPulseCount);
     }
@@ -124,8 +123,7 @@ public class PulsePropagationMust
     public void HandleTwoPulsesCorrectly_WhenUsingSecondSampleInput()
     {
         var sut = new PulsePropagation(SECOND_SAMPLE_INPUT);
-        sut.Pulse();
-        sut.Pulse();
+        sut.Pulse(2);
         Assert.Equal(8, sut.LowPulseCount);
         Assert.Equal(6, sut.HighPulseCount);
     }

@@ -73,31 +73,51 @@ public class PulsePropagation
         }
     }
 
-    public void Pulse()
+    public void Pulse(int amount = 1)
     {
-        LowPulseCount++;
-
-        var queue = new Queue<(string Source, string Target, int Pulse)>();
-        foreach (var target in _broadcastTarget)
+        while (amount-- > 0)
         {
-            queue.Enqueue(("broadcaster", target, 0));
             LowPulseCount++;
-        }
 
-        while (queue.Count > 0)
-        {
-            var target = queue.Dequeue();
-
-            if (_flipflops.TryGetValue(target.Target, out var flipflop))
+            var queue = new Queue<(string Source, string Target, int Pulse)>();
+            foreach (var target in _broadcastTarget)
             {
-                if (target.Pulse == 0)
+                queue.Enqueue(("broadcaster", target, 0));
+                LowPulseCount++;
+            }
+
+            while (queue.Count > 0)
+            {
+                var target = queue.Dequeue();
+
+                if (_flipflops.TryGetValue(target.Target, out var flipflop))
                 {
-                    flipflop = (~flipflop.State, flipflop.Targets);
-                    _flipflops[target.Target] = flipflop;
-                    foreach (var flipflopTarget in flipflop.Targets)
+                    if (target.Pulse == 0)
                     {
-                        queue.Enqueue((target.Target, flipflopTarget, flipflop.State));
-                        if (flipflop.State == 0)
+                        flipflop = (~flipflop.State, flipflop.Targets);
+                        _flipflops[target.Target] = flipflop;
+                        foreach (var flipflopTarget in flipflop.Targets)
+                        {
+                            queue.Enqueue((target.Target, flipflopTarget, flipflop.State));
+                            if (flipflop.State == 0)
+                            {
+                                LowPulseCount++;
+                            }
+                            else
+                            {
+                                HighPulseCount++;
+                            }
+                        }
+                    }
+                }
+                else if (_conjunctions.TryGetValue(target.Target, out var conjunction))
+                {
+                    conjunction.States[target.Source] = target.Pulse;
+                    var pulseToSend = conjunction.States.Values.Any(p => p == 0)? -1 : 0;
+                    foreach (var conjunctionTarget in conjunction.Targets)
+                    {
+                        queue.Enqueue((target.Target, conjunctionTarget, pulseToSend));
+                        if (pulseToSend == 0)
                         {
                             LowPulseCount++;
                         }
@@ -105,23 +125,6 @@ public class PulsePropagation
                         {
                             HighPulseCount++;
                         }
-                    }
-                }
-            }
-            else if (_conjunctions.TryGetValue(target.Target, out var conjunction))
-            {
-                conjunction.States[target.Source] = target.Pulse;
-                var pulseToSend = conjunction.States.Values.Any(p => p == 0)? -1 : 0;
-                foreach (var conjunctionTarget in conjunction.Targets)
-                {
-                    queue.Enqueue((target.Target, conjunctionTarget, pulseToSend));
-                    if (pulseToSend == 0)
-                    {
-                        LowPulseCount++;
-                    }
-                    else
-                    {
-                        HighPulseCount++;
                     }
                 }
             }
