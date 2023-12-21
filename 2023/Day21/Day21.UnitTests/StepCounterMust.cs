@@ -61,4 +61,29 @@ public class StepCounterMust
         Assert.Contains((3, 6), sut.CurrentPositions);
         Assert.Contains((4, 7), sut.CurrentPositions);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new StepCounter(SAMPLE_INPUT);
+        sut.Step(6);
+        Assert.Equal(16, sut.CurrentPositions.Count);
+        Assert.Contains((8, 2), sut.CurrentPositions);
+        Assert.Contains((1, 3), sut.CurrentPositions);
+        Assert.Contains((3, 3), sut.CurrentPositions);
+        Assert.Contains((5, 3), sut.CurrentPositions);
+        Assert.Contains((7, 3), sut.CurrentPositions);
+        Assert.Contains((0, 4), sut.CurrentPositions);
+        Assert.Contains((2, 4), sut.CurrentPositions);
+        Assert.Contains((8, 4), sut.CurrentPositions);
+        Assert.Contains((3, 5), sut.CurrentPositions);
+        Assert.Contains((5, 5), sut.CurrentPositions);
+        Assert.Contains((4, 6), sut.CurrentPositions);
+        Assert.Contains((6, 6), sut.CurrentPositions);
+        Assert.Contains((1, 7), sut.CurrentPositions);
+        Assert.Contains((3, 7), sut.CurrentPositions);
+        Assert.Contains((5, 7), sut.CurrentPositions);
+        Assert.Contains((3, 9), sut.CurrentPositions);
+    }
+
 }
