@@ -35,4 +35,16 @@ public class StepCounterMust
             c1 => Assert.Equal((4, 5), c1),
             c2 => Assert.Equal((5, 4), c2));
     }
+
+    [Fact]
+    public void ExecuteTwoStepsCorrectly()
+    {
+        var sut = new StepCounter(SAMPLE_INPUT);
+        sut.Step(2);
+        Assert.Equal(4, sut.CurrentPositions.Count);
+        Assert.Contains((3, 5), sut.CurrentPositions);
+        Assert.Contains((4, 6), sut.CurrentPositions);
+        Assert.Contains((5, 3), sut.CurrentPositions);
+        Assert.Contains((5, 5), sut.CurrentPositions);
+    }
 }
