@@ -1,5 +1,6 @@
 
 using System.IO.Compression;
+using System.Xml.XPath;
 
 namespace Day22.Logic;
 
@@ -41,14 +42,17 @@ public class SandSlabs
         }
     }
 
-    public void Drop()
+    public bool Drop()
     {
+        var dropped = false;
         var bricksAfterDrop = new List<Brick>();
         foreach (var brick in _bricks)
         {
-            if (brick.Start.Z == 1 || brick.End.Z == 1)
+            var canDrop = true;
+
+            if (brick.Start.Z == 1)
             {
-                bricksAfterDrop.Add(brick);
+                canDrop = false;
             }
             else
             {
@@ -56,43 +60,49 @@ public class SandSlabs
                 {
                     if (brick.Start.X == brick.End.X)
                     {
-                        for (var z = brick.Start.Z - 1; z > 0; z--)
+                        for (var y = brick.Start.Y; y <= brick.End.Y; y++)
                         {
-                            for (var y = brick.Start.Y; y <= brick.End.Y; y++)
+                            if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
+                                (b.Start.X == brick.Start.X || b.End.X == brick.Start.X) &&
+                                b.Start.Y <= y && y <= b.End.Y))
                             {
-                                if (bricksAfterDrop.Any(b => (b.Start.Z == z || b.End.Z == z) &&
-                                    (b.Start.X == brick.Start.X || b.End.X == brick.Start.X) &&
-                                    b.Start.Y <= y && y <= b.End.Y))
-                                {
-                                    bricksAfterDrop.Add(new Brick((brick.Start.X, brick.Start.Y, z + 1), (brick.End.X, brick.End.Y, z + 1)));
-                                    goto Placed;
-                                }
+                                canDrop = false;
+                                break;
                             }
                         }
                     }
                     else
                     {
-                        for (var z = brick.Start.Z - 1; z > 0; z--)
+                        for (var x = brick.Start.X; x <= brick.End.X; x++)
                         {
-                            for (var x = brick.Start.X; x <= brick.End.X; x++)
+                            if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
+                                (b.Start.Y == brick.Start.Y || b.End.Y == brick.Start.Y) &&
+                                b.Start.X <= x && x <= b.End.X))
                             {
-                                if (bricksAfterDrop.Any(b => (b.Start.Z == z || b.End.Z == z) &&
-                                    (b.Start.Y == brick.Start.Y || b.End.Y == brick.Start.Y) &&
-                                    b.Start.X <= x && x <= b.End.X))
-                                {
-                                    bricksAfterDrop.Add(new Brick((brick.Start.X, brick.Start.Y, z + 1), (brick.End.X, brick.End.Y, z + 1)));
-                                    goto Placed;
-                                }
+                                canDrop = false;
+                                break;
                             }
                         }
-
                     }
                 }
             }
 
-            Placed:;
+            if (canDrop)
+            {
+                bricksAfterDrop.Add(new Brick((brick.Start.X, brick.Start.Y, brick.Start.Z - 1), (brick.End.X, brick.End.Y, brick.End.Z - 1)));
+                dropped = true;
+            }
+            else
+            {
+                bricksAfterDrop.Add(brick);
+            }
         }
 
         _bricks = bricksAfterDrop;
+        return dropped;
+    }
+
+    public void DropUntilRest()
+    {
     }
 }

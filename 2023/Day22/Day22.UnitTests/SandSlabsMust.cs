@@ -26,7 +26,7 @@ public class SandSlabsMust
     }
 
     [Fact]
-    public void DoNotDropBricks_WhenBricksAreRestingOnEachOther()
+    public void DoNotDropBricks_WhenBrickIsResting()
     {
         var sut = new SandSlabs("1,0,1~1,2,1\n0,0,2~2,0,2");
         sut.Drop();
@@ -45,7 +45,9 @@ public class SandSlabsMust
     public void DropBricksCorrectly_WhenBricksHaveGapBelow()
     {
         var sut = new SandSlabs("1,0,1~1,2,1\n0,0,2~2,0,2\n0,2,3~2,2,3");
-        sut.Drop();
+        var result = sut.Drop();
+
+        Assert.True(result);
         Assert.Collection(sut.Bricks,
               b1 => {
                 Assert.Equal((1, 0, 1), b1.Start);
@@ -59,5 +61,34 @@ public class SandSlabsMust
                 Assert.Equal((0, 2, 2), b3.Start);
                 Assert.Equal((2, 2, 2), b3.End);
             });
+    }
+
+    [Fact]
+    public void DoNotDropBricks_WhenEveryBrickIsResting()
+    {
+        var sut = new SandSlabs("1,0,1~1,2,1\n0,0,2~2,0,2\n0,2,2~2,2,2");
+        var result = sut.Drop();
+
+        Assert.False(result);
+        Assert.Collection(sut.Bricks,
+              b1 => {
+                Assert.Equal((1, 0, 1), b1.Start);
+                Assert.Equal((1, 2, 1), b1.End);
+            },
+            b2 => {
+                Assert.Equal((0, 0, 2), b2.Start);
+                Assert.Equal((2, 0, 2), b2.End);
+            },
+            b3 => {
+                Assert.Equal((0, 2, 2), b3.Start);
+                Assert.Equal((2, 2, 2), b3.End);
+            });
+    }
+
+    [Fact]
+    public void DropBricksCorrectlyUntilResting()
+    {
+        var sut = new SandSlabs(SAMPLE_INPUT);
+        sut.DropUntilRest();
     }
 }
