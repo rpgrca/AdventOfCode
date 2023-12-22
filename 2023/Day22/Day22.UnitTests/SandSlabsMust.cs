@@ -13,4 +13,15 @@ public class SandSlabsMust
         var sut = new SandSlabs(input);
         Assert.Equal(expectedCount, sut.BrickCount);
     }
+
+    [Fact]
+    public void ParseInputCorrectly()
+    {
+        var sut = new SandSlabs("1,0,1~1,2,1");
+        Assert.Collection(sut.Bricks,
+            b1 => {
+                Assert.Equal((1,0,1), b1.Start);
+                Assert.Equal((1,2,1), b1.End);
+            });
+    }
 }
