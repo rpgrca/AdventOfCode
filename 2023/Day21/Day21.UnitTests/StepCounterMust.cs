@@ -92,12 +92,14 @@ public class StepCounterMust
         sut.Step(64);
         Assert.Equal(3770UL, sut.CountCurrentPositions());
     }
-/*
-    [Fact]
-    public void ExecuteSixStepsCorrectly_WhenUsingInfiniteMap()
+
+    [Theory]
+    [InlineData(6, 16)]
+    [InlineData(10, 50)]
+    public void ExecuteStepsCorrectly_WhenUsingInfiniteMap(int steps, ulong expectedPlots)
     {
         var sut = new StepCounter(SAMPLE_INPUT);
-        sut.Step(6);
-        Assert.Equal(16UL, sut.CountCurrentPositions());
-    }*/
+        sut.Step(steps);
+        Assert.Equal(expectedPlots, sut.CountCurrentPositions());
+    }
 }

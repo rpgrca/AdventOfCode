@@ -100,6 +100,21 @@ public class StepCounter
                 }
                 else
                 {
+                    if (_map[position.Y, Width - 1] == '.')
+                    {
+                        var newDimensions = position.Dimensions.Select(d => ((d >> 8) << 8) | ((d & 0xff) - 1)).ToHashSet();
+                        var codedPosition = (position.Y << 8) | (Width - 1);
+                        if (! cache.ContainsKey(codedPosition))
+                        {
+                            var newPosition = new Tile(Width - 1, position.Y, newDimensions);
+                            newPositions.Add(newPosition);
+                            cache.Add(codedPosition, newPosition);
+                        }
+                        else
+                        {
+                            cache[codedPosition].Merge(newDimensions);
+                        }
+                    }
                 }
 
                 if (position.X + 1 < Width)
@@ -116,6 +131,24 @@ public class StepCounter
                         else
                         {
                             cache[codedPosition].Merge(position.Dimensions);
+                        }
+                    }
+                }
+                else
+                {
+                    if (_map[position.Y, 0] == '.')
+                    {
+                        var newDimensions = position.Dimensions.Select(d => ((d >> 8) << 8) | ((d & 0xff) + 1)).ToHashSet();
+                        var codedPosition = (position.Y << 8) | 0;
+                        if (! cache.ContainsKey(codedPosition))
+                        {
+                            var newPosition = new Tile(0, position.Y, newDimensions);
+                            newPositions.Add(newPosition);
+                            cache.Add(codedPosition, newPosition);
+                        }
+                        else
+                        {
+                            cache[codedPosition].Merge(newDimensions);
                         }
                     }
                 }
@@ -137,6 +170,24 @@ public class StepCounter
                         }
                     }
                 }
+                else
+                {
+                    if (_map[Height - 1, position.X] == '.')
+                    {
+                        var newDimensions = position.Dimensions.Select(d => (((d >> 8) - 1) << 8) | (d & 0xff)).ToHashSet();
+                        var codedPosition = ((Height - 1) << 8) | position.X;
+                        if (! cache.ContainsKey(codedPosition))
+                        {
+                            var newPosition = new Tile(position.X, Height - 1, newDimensions);
+                            newPositions.Add(newPosition);
+                            cache.Add(codedPosition, newPosition);
+                        }
+                        else
+                        {
+                            cache[codedPosition].Merge(newDimensions);
+                        }
+                    }
+                }
 
                 if (position.Y + 1 < Height)
                 {
@@ -152,6 +203,24 @@ public class StepCounter
                         else
                         {
                             cache[codedPosition].Merge(position.Dimensions);
+                        }
+                    }
+                }
+                else
+                {
+                    if (_map[0, position.X] == '.')
+                    {
+                        var newDimensions = position.Dimensions.Select(d => (((d >> 8) + 1) << 8) | (d & 0xff)).ToHashSet();
+                        var codedPosition = (0 << 8) | position.X;
+                        if (! cache.ContainsKey(codedPosition))
+                        {
+                            var newPosition = new Tile(position.X, 0, newDimensions);
+                            newPositions.Add(newPosition);
+                            cache.Add(codedPosition, newPosition);
+                        }
+                        else
+                        {
+                            cache[codedPosition].Merge(newDimensions);
                         }
                     }
                 }
