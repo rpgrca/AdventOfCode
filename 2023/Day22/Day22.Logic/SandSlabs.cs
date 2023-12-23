@@ -1,5 +1,7 @@
 
 using System.Diagnostics;
+using System.IO.Compression;
+using System.Runtime.CompilerServices;
 
 namespace Day22.Logic;
 
@@ -37,11 +39,27 @@ public class SandSlabs
         {
             var points = line.Split("~")
                 .Select(p => p.Split(",").Select(int.Parse).ToArray())
-                .Select(d => (d[0], d[1], d[2]))
+                .Select(d => (X: d[0], Y: d[1], Z: d[2]))
                 .ToArray();
 
+            if (points[0].X > points[1].X)
+            {
+                throw new Exception("Invalid X format");
+            }
+
+            if (points[0].Y > points[1].Y)
+            {
+                throw new Exception("Invalid Y format");
+            }
+
+            if (points[0].Z > points[1].Z)
+            {
+                throw new Exception("Invalid Z format");
+            }
             _bricks.Add(new Brick(points[0], points[1]));
         }
+
+        _bricks = _bricks.OrderBy(p => p.Start.Z).OrderBy(p => p.End.Z).ToList();
     }
 
     public bool Drop()
@@ -76,7 +94,7 @@ public class SandSlabs
                     {
                         for (var y = brick.Start.Y; y <= brick.End.Y; y++)
                         {
-                            if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
+                            if (bricksAfterDrop.Any(b => (b.End.Z == brick.Start.Z - 1) &&
                                 (b.Start.X <= brick.Start.X && brick.Start.X <= b.End.X) &&
                                 b.Start.Y <= y && y <= b.End.Y))
                             {
@@ -89,7 +107,7 @@ public class SandSlabs
                     {
                         for (var x = brick.Start.X; x <= brick.End.X; x++)
                         {
-                            if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
+                            if (bricksAfterDrop.Any(b => (b.End.Z == brick.Start.Z - 1) &&
                                 (b.Start.Y <= brick.Start.Y && brick.Start.Y <= b.End.Y) &&
                                 (b.Start.X <= x && x <= b.End.X)))
                             {
@@ -101,7 +119,7 @@ public class SandSlabs
                 }
                 else
                 {
-                    if ((bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1) &&
+                    if ((bricksAfterDrop.Any(b => (b.End.Z == brick.Start.Z - 1) &&
                         (b.Start.X <= brick.Start.X && b.End.X >= brick.Start.X) &&
                         (b.Start.Y <= brick.Start.Y && b.End.Y >= brick.Start.Y))))
                     {

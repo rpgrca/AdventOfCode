@@ -128,4 +128,14 @@ public class SandSlabsMust
         sut.DropUntilRest();
         Assert.Equal(5, sut.CalculateEligibleSlabs());
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new SandSlabs(PUZZLE_INPUT);
+        sut.DropUntilRest();
+        //Assert.True(1050 > sut.CalculateEligibleSlabs());
+        //Assert.True(428 > sut.CalculateEligibleSlabs());
+        Assert.Equal(426, sut.CalculateEligibleSlabs());
+    }
 }
