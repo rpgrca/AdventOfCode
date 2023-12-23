@@ -14,4 +14,13 @@ public class LongWalkMust
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT)]
+    [InlineData(PUZZLE_INPUT)]
+    public void FindStartPositionCorrectly(string input)
+    {
+        var sut = new LongWalk(input);
+        Assert.Equal((1, 0), sut.StartingPosition);
+    }
 }
