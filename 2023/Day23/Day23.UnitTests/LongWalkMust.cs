@@ -65,4 +65,12 @@ public class LongWalkMust
         sut.FindLongestDryPath();
         Assert.Equal(154, sut.LongestPathLength);
     }
+
+    [Fact(Skip = "Slow test, 7m41s")]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new LongWalk(PUZZLE_INPUT);
+        sut.FindLongestDryPath();
+        Assert.Equal(0, sut.LongestPathLength);
+    }
 }

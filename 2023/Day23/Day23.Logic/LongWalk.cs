@@ -5,17 +5,19 @@ public class LongWalk
 {
     private readonly string _input;
     private readonly string[] _lines;
+    private readonly bool[,] _visited;
 
     public int Width => _lines[0].Length;
     public int Height => _lines.Length;
     public (int X, int Y) StartingPosition { get; set; }
     public (int X, int Y) EndingPosition { get; set; }
-    public int LongestPathLength { get; set; } = 4;
+    public int LongestPathLength { get; set; }
 
     public LongWalk(string input)
     {
         _input = input;
         _lines = _input.Split("\n");
+        _visited = new bool[Width, Height];
 
         StartingPosition = (_lines[0].IndexOf("."), 0);
         EndingPosition = (_lines[Height - 1].IndexOf("."), Height - 1);
@@ -101,45 +103,43 @@ public class LongWalk
 
     public void FindLongestDryPath()
     {
-        var visited = new HashSet<int> { StartingPosition.Y << 8 | StartingPosition.X };
-        FindLongestDryPath(StartingPosition.X, StartingPosition.Y, visited, 0);
+        FindLongestDryPath(StartingPosition.X, StartingPosition.Y, 0);
     }
 
-    private void FindLongestDryPath(int currentX, int currentY, HashSet<int> visited, int steps)
+    private void FindLongestDryPath(int currentX, int currentY, int steps)
     {
         if (EndingPosition.X == currentX && EndingPosition.Y == currentY)
         {
             if (LongestPathLength < steps)
             {
                 LongestPathLength = steps;
+                Console.WriteLine($"{DateTime.Now}: {steps}");
                 return;
             }
         }
 
-        visited.Add(currentX, currentY);
+        _visited[currentX, currentY] = true;
 
-        if (currentY - 1 >= 0 && _lines[currentY - 1][currentX] != '#' && !visited.Contains(currentX, currentY - 1))
+        if (currentY - 1 >= 0 && _lines[currentY - 1][currentX] != '#' && !_visited[currentX, currentY - 1])
         {
-            FindLongestDryPath(currentX, currentY - 1, visited, steps + 1);
+            FindLongestDryPath(currentX, currentY - 1, steps + 1);
         }
 
-        if (currentX - 1 >= 0 && _lines[currentY][currentX - 1] != '#' && ! visited.Contains(currentX - 1, currentY))
+        if (currentX - 1 >= 0 && _lines[currentY][currentX - 1] != '#' && ! _visited[currentX - 1, currentY])
         {
-            FindLongestDryPath(currentX - 1, currentY, visited, steps + 1);
+            FindLongestDryPath(currentX - 1, currentY, steps + 1);
         }
 
-        if (currentX + 1 < Width && _lines[currentY][currentX + 1] != '#' && ! visited.Contains(currentX + 1, currentY))
+        if (currentX + 1 < Width && _lines[currentY][currentX + 1] != '#' && ! _visited[currentX + 1, currentY])
         {
-            FindLongestDryPath(currentX + 1, currentY, visited, steps + 1);
+            FindLongestDryPath(currentX + 1, currentY, steps + 1);
         }
 
-        if (currentY + 1 < Height && _lines[currentY + 1][currentX] != '#' && ! visited.Contains(currentX, currentY + 1))
+        if (currentY + 1 < Height && _lines[currentY + 1][currentX] != '#' && ! _visited[currentX, currentY + 1])
         {
-            FindLongestDryPath(currentX, currentY + 1, visited, steps + 1);
+            FindLongestDryPath(currentX, currentY + 1, steps + 1);
         }
 
-        visited.Remove(currentX, currentY);
+        _visited[currentX, currentY] = false;
     }
-
-
 }
