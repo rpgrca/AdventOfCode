@@ -38,7 +38,7 @@ public class LongWalkMust
     public void FindLongestPathCorrectly(string input, int expectedLength)
     {
         var sut = new LongWalk(input);
-        sut.FindLongestPath();
+        sut.FindLongestSlipperyPath();
         Assert.Equal(expectedLength, sut.LongestPathLength);
     }
 
@@ -46,7 +46,23 @@ public class LongWalkMust
     public void SolveFirstSampleCorrectly()
     {
         var sut = new LongWalk(SAMPLE_INPUT);
-        sut.FindLongestPath();
+        sut.FindLongestSlipperyPath();
         Assert.Equal(94, sut.LongestPathLength);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new LongWalk(PUZZLE_INPUT);
+        sut.FindLongestSlipperyPath();
+        Assert.Equal(2130, sut.LongestPathLength);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new LongWalk(SAMPLE_INPUT);
+        sut.FindLongestDryPath();
+        Assert.Equal(154, sut.LongestPathLength);
     }
 }

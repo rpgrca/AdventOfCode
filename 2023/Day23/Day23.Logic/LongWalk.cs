@@ -1,3 +1,4 @@
+
 namespace Day23.Logic;
 
 public class LongWalk
@@ -20,7 +21,7 @@ public class LongWalk
         EndingPosition = (_lines[Height - 1].IndexOf("."), Height - 1);
     }
 
-    public void FindLongestPath()
+    public void FindLongestSlipperyPath()
     {
         var visited = new HashSet<int> { StartingPosition.Y << 8 | StartingPosition.X };
         FindLongestPath(StartingPosition.X, StartingPosition.Y, visited, 0);
@@ -97,4 +98,48 @@ public class LongWalk
 
         visited.Remove(currentX, currentY);
     }
+
+    public void FindLongestDryPath()
+    {
+        var visited = new HashSet<int> { StartingPosition.Y << 8 | StartingPosition.X };
+        FindLongestDryPath(StartingPosition.X, StartingPosition.Y, visited, 0);
+    }
+
+    private void FindLongestDryPath(int currentX, int currentY, HashSet<int> visited, int steps)
+    {
+        if (EndingPosition.X == currentX && EndingPosition.Y == currentY)
+        {
+            if (LongestPathLength < steps)
+            {
+                LongestPathLength = steps;
+                return;
+            }
+        }
+
+        visited.Add(currentX, currentY);
+
+        if (currentY - 1 >= 0 && _lines[currentY - 1][currentX] != '#' && !visited.Contains(currentX, currentY - 1))
+        {
+            FindLongestDryPath(currentX, currentY - 1, visited, steps + 1);
+        }
+
+        if (currentX - 1 >= 0 && _lines[currentY][currentX - 1] != '#' && ! visited.Contains(currentX - 1, currentY))
+        {
+            FindLongestDryPath(currentX - 1, currentY, visited, steps + 1);
+        }
+
+        if (currentX + 1 < Width && _lines[currentY][currentX + 1] != '#' && ! visited.Contains(currentX + 1, currentY))
+        {
+            FindLongestDryPath(currentX + 1, currentY, visited, steps + 1);
+        }
+
+        if (currentY + 1 < Height && _lines[currentY + 1][currentX] != '#' && ! visited.Contains(currentX, currentY + 1))
+        {
+            FindLongestDryPath(currentX, currentY + 1, visited, steps + 1);
+        }
+
+        visited.Remove(currentX, currentY);
+    }
+
+
 }
