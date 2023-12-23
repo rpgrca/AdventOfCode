@@ -9,6 +9,7 @@ public class LongWalk
     public int Height => _lines.Length;
     public (int X, int Y) StartingPosition { get; set; }
     public (int X, int Y) EndingPosition { get; set; }
+    public int LongestPathLength { get; set; } = 4;
 
     public LongWalk(string input)
     {
@@ -19,4 +20,81 @@ public class LongWalk
         EndingPosition = (_lines[Height - 1].IndexOf("."), Height - 1);
     }
 
+    public void FindLongestPath()
+    {
+        var visited = new HashSet<int> { StartingPosition.Y << 8 | StartingPosition.X };
+        FindLongestPath(StartingPosition.X, StartingPosition.Y, visited, 0);
+    }
+
+    private void FindLongestPath(int currentX, int currentY, HashSet<int> visited, int steps)
+    {
+        if (EndingPosition.X == currentX && EndingPosition.Y == currentY)
+        {
+            if (LongestPathLength < steps)
+            {
+                LongestPathLength = steps;
+                return;
+            }
+        }
+
+        visited.Add(currentX, currentY);
+
+        switch (_lines[currentY][currentX])
+        {
+            case '>':
+                if (! visited.Contains(currentX + 1, currentY))
+                {
+                    FindLongestPath(currentX + 1, currentY, visited, steps + 1);
+                }
+                break;
+
+            case '<':
+                if (! visited.Contains(currentX - 1, currentY))
+                {
+                    FindLongestPath(currentX - 1, currentY, visited, steps + 1);
+                }
+                break;
+
+            case '^':
+                if (! visited.Contains(currentX, currentY - 1))
+                {
+                    FindLongestPath(currentX, currentY - 1, visited, steps + 1);
+                }
+                break;
+
+            case 'v':
+                if (! visited.Contains(currentX, currentY + 1))
+                {
+                    FindLongestPath(currentX, currentY + 1, visited, steps + 1);
+                }
+                break;
+
+            case '.':
+                if (currentY - 1 >= 0 && !visited.Contains(currentX, currentY - 1))
+                {
+                    FindLongestPath(currentX, currentY - 1, visited, steps + 1);
+                }
+
+                if (currentX - 1 >= 0 && ! visited.Contains(currentX - 1, currentY))
+                {
+                    FindLongestPath(currentX - 1, currentY, visited, steps + 1);
+                }
+
+                if (currentX + 1 < Width && ! visited.Contains(currentX + 1, currentY))
+                {
+                    FindLongestPath(currentX + 1, currentY, visited, steps + 1);
+                }
+
+                if (currentY + 1 < Height && ! visited.Contains(currentX, currentY + 1))
+                {
+                    FindLongestPath(currentX, currentY + 1, visited, steps + 1);
+                }
+                break;
+
+            default: // #
+                break;
+        }
+
+        visited.Remove(currentX, currentY);
+    }
 }

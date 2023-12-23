@@ -31,4 +31,14 @@ public class LongWalkMust
         var sut = new LongWalk(input);
         Assert.Equal((expectedX, expectedY), sut.EndingPosition);
     }
+
+    [Theory]
+    [InlineData("#.###\n#...#\n###.#", 4)]
+    [InlineData("#.#######\n#.......#\n#.###.#.#\n#.....#.#\n#######.#", 14)]
+    public void FindLongestPathCorrectly(string input, int expectedLength)
+    {
+        var sut = new LongWalk(input);
+        sut.FindLongestPath();
+        Assert.Equal(expectedLength, sut.LongestPathLength);
+    }
 }
