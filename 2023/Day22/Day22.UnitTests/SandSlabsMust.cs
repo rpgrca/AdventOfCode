@@ -146,4 +146,12 @@ public class SandSlabsMust
         sut.DropUntilRest();
         Assert.Equal(7, sut.CalculateSumOfChainReaction());
     }
+
+    [Fact(Skip = "Slow test, 27s")]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new SandSlabs(PUZZLE_INPUT);
+        sut.DropUntilRest();
+        Assert.Equal(61920, sut.CalculateSumOfChainReaction());
+    }
 }
