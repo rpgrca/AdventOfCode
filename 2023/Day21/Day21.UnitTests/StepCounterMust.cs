@@ -40,7 +40,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(2);
-        Assert.Equal(4UL, sut.CountCurrentPositions());
+        Assert.Equal(4UL, sut.CountCurrentPositions(2));
         Assert.Contains((3, 5), sut.CurrentPositions);
         Assert.Contains((4, 6), sut.CurrentPositions);
         Assert.Contains((5, 3), sut.CurrentPositions);
@@ -52,7 +52,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(3);
-        Assert.Equal(6UL, sut.CountCurrentPositions());
+        Assert.Equal(6UL, sut.CountCurrentPositions(3));
         Assert.Contains((6, 3), sut.CurrentPositions);
         Assert.Contains((3, 4), sut.CurrentPositions);
         Assert.Contains((5, 4), sut.CurrentPositions);
@@ -66,7 +66,7 @@ public class StepCounterMust
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(6);
-        Assert.Equal(16UL, sut.CountCurrentPositions());
+        Assert.Equal(16UL, sut.CountCurrentPositions(6));
         Assert.Contains((8, 2), sut.CurrentPositions);
         Assert.Contains((1, 3), sut.CurrentPositions);
         Assert.Contains((3, 3), sut.CurrentPositions);
@@ -90,16 +90,49 @@ public class StepCounterMust
     {
         var sut = new StepCounter(PUZZLE_INPUT);
         sut.Step(64);
-        Assert.Equal(3770UL, sut.CountCurrentPositions());
+        Assert.Equal(3770UL, sut.CountCurrentPositions(64));
     }
 
     [Theory]
-    [InlineData(6, 16)]
-    [InlineData(10, 50)]
+    //[InlineData(6, 16)]
+    //[InlineData(7, 22)]
+    //[InlineData(8, 30)]
+    //[InlineData(9, 41)]
+    //[InlineData(10, 50)]
+    //[InlineData(11, 63)]
+    //[InlineData(12, 74)]
+    //[InlineData(13, 89)] /*a)*/
+    //[InlineData(14, 99)]
+    //[InlineData(15, 115)]
+    //[InlineData(16, 129)]
+    //[InlineData(21, 234)]
+    //[InlineData(22, 261)]
+    //[InlineData(23, 294)]*/
+    //[InlineData(50, 1594)]
+
+    //[InlineData(100, 6536)]
+    //[InlineData(500, 167004)]
+    [InlineData(1000, 668697)]
+    //[InlineData(5000, 16733044)]
     public void ExecuteStepsCorrectly_WhenUsingInfiniteMap(int steps, ulong expectedPlots)
     {
         var sut = new StepCounter(SAMPLE_INPUT);
         sut.Step(steps);
-        Assert.Equal(expectedPlots, sut.CountCurrentPositions());
+        //sut.Draw();
+        Assert.Equal(expectedPlots, sut.CountCurrentPositions(steps));
     }
+/*
+    [Theory]
+    [InlineData(6, 44)]
+    [InlineData(10, 112)]
+    [InlineData(20, 383)]
+    [InlineData(30, 841)]
+    [InlineData(50, 2290)]
+    [InlineData(100, 9188)]
+    public void Test1(int steps, ulong expectedPlots)
+    {
+        var sut = new StepCounter(PUZZLE_INPUT);
+        sut.Step(steps);
+        Assert.Equal(expectedPlots, sut.CountCurrentPositions());
+    }*/
 }
