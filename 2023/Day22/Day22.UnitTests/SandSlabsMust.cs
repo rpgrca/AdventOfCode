@@ -120,4 +120,12 @@ public class SandSlabsMust
                 Assert.Equal((1, 1, 6), b7.End);
             });
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new SandSlabs(SAMPLE_INPUT);
+        sut.DropUntilRest();
+        Assert.Equal(5, sut.CalculateEligibleSlabs());
+    }
 }

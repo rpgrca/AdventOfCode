@@ -8,11 +8,13 @@ public class Brick
 {
     public (int X, int Y, int Z) Start { get; }
     public (int X, int Y, int Z) End { get; }
+    public bool Enabled { get; set; }
 
     public Brick((int, int, int) start, (int, int, int) end)
     {
         Start = start;
         End = end;
+        Enabled = true;
     }
 }
 
@@ -44,9 +46,21 @@ public class SandSlabs
 
     public bool Drop()
     {
-        var dropped = false;
         var bricksAfterDrop = new List<Brick>();
-        foreach (var brick in _bricks)
+        var dropped = Drop(_bricks, bricksAfterDrop);
+
+        if (dropped)
+        {
+            _bricks = bricksAfterDrop;
+        }
+
+        return dropped;
+    }
+
+    public bool Drop(List<Brick> original, List<Brick> bricksAfterDrop)
+    {
+        var dropped = false;
+        foreach (var brick in original)
         {
             var canDrop = true;
 
@@ -107,12 +121,25 @@ public class SandSlabs
             }
         }
 
-        _bricks = bricksAfterDrop;
         return dropped;
     }
 
     public void DropUntilRest()
     {
         while (Drop());
+    }
+
+    public int CalculateEligibleSlabs()
+    {
+        var counter = 0;
+
+        foreach (var brick in _bricks)
+        {
+            var list = _bricks.Where(p => p != brick).ToList();
+            var bricksAfterDrop = new List<Brick>();
+            counter += Drop(list, bricksAfterDrop)? 0 : 1;
+        }
+
+        return counter;
     }
 }
