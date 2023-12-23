@@ -23,4 +23,12 @@ public class LongWalkMust
         var sut = new LongWalk(input);
         Assert.Equal((1, 0), sut.StartingPosition);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 21, 22)]
+    public void FindEndPositionCorrectly(string input, int expectedX, int expectedY)
+    {
+        var sut = new LongWalk(input);
+        Assert.Equal((expectedX, expectedY), sut.EndingPosition);
+    }
 }
