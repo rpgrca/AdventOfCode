@@ -41,4 +41,12 @@ public class LongWalkMust
         sut.FindLongestPath();
         Assert.Equal(expectedLength, sut.LongestPathLength);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new LongWalk(SAMPLE_INPUT);
+        sut.FindLongestPath();
+        Assert.Equal(94, sut.LongestPathLength);
+    }
 }
