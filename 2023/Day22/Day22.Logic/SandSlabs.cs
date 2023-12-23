@@ -1,9 +1,9 @@
 
-using System.IO.Compression;
-using System.Xml.XPath;
+using System.Diagnostics;
 
 namespace Day22.Logic;
 
+[DebuggerDisplay("{Start}...{End}")]
 public class Brick
 {
     public (int X, int Y, int Z) Start { get; }
@@ -63,7 +63,7 @@ public class SandSlabs
                         for (var y = brick.Start.Y; y <= brick.End.Y; y++)
                         {
                             if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
-                                (b.Start.X == brick.Start.X || b.End.X == brick.Start.X) &&
+                                (b.Start.X <= brick.Start.X && brick.Start.X <= b.End.X) &&
                                 b.Start.Y <= y && y <= b.End.Y))
                             {
                                 canDrop = false;
@@ -76,13 +76,22 @@ public class SandSlabs
                         for (var x = brick.Start.X; x <= brick.End.X; x++)
                         {
                             if (bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1 || b.End.Z == brick.Start.Z - 1) &&
-                                (b.Start.Y == brick.Start.Y || b.End.Y == brick.Start.Y) &&
-                                b.Start.X <= x && x <= b.End.X))
+                                (b.Start.Y <= brick.Start.Y && brick.Start.Y <= b.End.Y) &&
+                                (b.Start.X <= x && x <= b.End.X)))
                             {
                                 canDrop = false;
                                 break;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if ((bricksAfterDrop.Any(b => (b.Start.Z == brick.Start.Z - 1) &&
+                        (b.Start.X <= brick.Start.X && b.End.X >= brick.Start.X) &&
+                        (b.Start.Y <= brick.Start.Y && b.End.Y >= brick.Start.Y))))
+                    {
+                        canDrop = false;
                     }
                 }
             }
@@ -104,5 +113,6 @@ public class SandSlabs
 
     public void DropUntilRest()
     {
+        while (Drop());
     }
 }

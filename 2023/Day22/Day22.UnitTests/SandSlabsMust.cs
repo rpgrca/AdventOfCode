@@ -90,5 +90,34 @@ public class SandSlabsMust
     {
         var sut = new SandSlabs(SAMPLE_INPUT);
         sut.DropUntilRest();
+        Assert.Collection(sut.Bricks,
+            b1 => {
+                Assert.Equal((1, 0, 1), b1.Start);
+                Assert.Equal((1, 2, 1), b1.End);
+            },
+            b2 => {
+                Assert.Equal((0, 0, 2), b2.Start);
+                Assert.Equal((2, 0, 2), b2.End);
+            },
+            b3 => {
+                Assert.Equal((0, 2, 2), b3.Start);
+                Assert.Equal((2, 2, 2), b3.End);
+            },
+            b4 => {
+                Assert.Equal((0, 0, 3), b4.Start);
+                Assert.Equal((0, 2, 3), b4.End);
+            },
+            b5 => {
+                Assert.Equal((2, 0, 3), b5.Start);
+                Assert.Equal((2, 2, 3), b5.End);
+            },
+            b6 => {
+                Assert.Equal((0, 1, 4), b6.Start);
+                Assert.Equal((2, 1, 4), b6.End);
+            },
+            b7 => {
+                Assert.Equal((1, 1, 5), b7.Start);
+                Assert.Equal((1, 1, 6), b7.End);
+            });
     }
 }
