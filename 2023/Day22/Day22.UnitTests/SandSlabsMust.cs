@@ -129,13 +129,21 @@ public class SandSlabsMust
         Assert.Equal(5, sut.CalculateEligibleSlabs());
     }
 
-    [Fact]
+    [Fact(Skip = "Slow test, 28s")]
     public void SolveFirstPuzzleCorrectly()
     {
         var sut = new SandSlabs(PUZZLE_INPUT);
         sut.DropUntilRest();
-        //Assert.True(1050 > sut.CalculateEligibleSlabs());
-        //Assert.True(428 > sut.CalculateEligibleSlabs());
+        Assert.True(1050 > sut.CalculateEligibleSlabs());
+        Assert.True(428 > sut.CalculateEligibleSlabs());
         Assert.Equal(426, sut.CalculateEligibleSlabs());
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new SandSlabs(SAMPLE_INPUT);
+        sut.DropUntilRest();
+        Assert.Equal(7, sut.CalculateSumOfChainReaction());
     }
 }

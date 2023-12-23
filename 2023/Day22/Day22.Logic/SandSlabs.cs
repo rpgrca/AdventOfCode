@@ -67,17 +67,17 @@ public class SandSlabs
         var bricksAfterDrop = new List<Brick>();
         var dropped = Drop(_bricks, bricksAfterDrop);
 
-        if (dropped)
+        if (dropped > 0)
         {
             _bricks = bricksAfterDrop;
         }
 
-        return dropped;
+        return dropped > 0;
     }
 
-    public bool Drop(List<Brick> original, List<Brick> bricksAfterDrop)
+    public int Drop(List<Brick> original, List<Brick> bricksAfterDrop)
     {
-        var dropped = false;
+        var dropped = 0;
         foreach (var brick in original)
         {
             var canDrop = true;
@@ -131,7 +131,7 @@ public class SandSlabs
             if (canDrop)
             {
                 bricksAfterDrop.Add(new Brick((brick.Start.X, brick.Start.Y, brick.Start.Z - 1), (brick.End.X, brick.End.Y, brick.End.Z - 1)));
-                dropped = true;
+                dropped++;
             }
             else
             {
@@ -155,7 +155,30 @@ public class SandSlabs
         {
             var list = _bricks.Where(p => p != brick).ToList();
             var bricksAfterDrop = new List<Brick>();
-            counter += Drop(list, bricksAfterDrop)? 0 : 1;
+            counter += Drop(list, bricksAfterDrop) == 0? 1 : 0;
+        }
+
+        return counter;
+    }
+
+    public int CalculateSumOfChainReaction()
+    {
+        var counter = 0;
+
+        foreach (var brick in _bricks)
+        {
+            var list = _bricks.Where(p => p != brick).ToList();
+            var bricksAfterDrop = new List<Brick>();
+
+            counter += Drop(list, bricksAfterDrop);
+            /*while (accumulator > 0)
+            {
+                counter += accumulator;
+                accumulator = 0;
+                list = bricksAfterDrop;
+                bricksAfterDrop = new List<Brick>();
+                accumulator = Drop(list, bricksAfterDrop);
+            }*/
         }
 
         return counter;
