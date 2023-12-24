@@ -1,5 +1,7 @@
 
 
+
+
 namespace Day24.Logic;
 
 public class Hail
@@ -31,6 +33,7 @@ public class NeverTellMeTheOdds
     public int HailCount => _lines.Length;
 
     public List<Hail> Hails { get; }
+    public int Intersections { get; set; }
 
     public NeverTellMeTheOdds(string input)
     {
@@ -48,4 +51,22 @@ public class NeverTellMeTheOdds
         }
     }
 
+    public void IntersectBetween(ulong @from, ulong to)
+    {
+        for (var index = 0; index < Hails.Count - 1; index++)
+        {
+            for (var subIndex = index + 1; subIndex < Hails.Count; subIndex++)
+            {
+                var areParallel = Hails[index].Vx / Hails[subIndex].Vx == Hails[index].Vy / Hails[subIndex].Vy;
+                if (areParallel)
+                {
+                    continue;
+                }
+                else
+                {
+                    Intersections++;
+                }
+            }
+        }
+    }
 }

@@ -26,4 +26,12 @@ public class NeverTellMeTheOddsMust
             h4 => Assert.Equal(((12UL, 31UL, 28UL), (-1, -2, -1)), h4.Data),
             h5 => Assert.Equal(((20UL, 19UL, 15UL), ( 1, -5, -3)), h5.Data));
     }
+
+    [Fact]
+    public void CalculateIntersectionCorrectly_WhenVelocitiesIn2dAreParallel()
+    {
+        var sut = new NeverTellMeTheOdds("18, 19, 22 @ -1, -1, -2\n20, 25, 34 @ -2, -2, -4");
+        sut.IntersectBetween(7, 27);
+        Assert.Equal(0, sut.Intersections);
+    }
 }
