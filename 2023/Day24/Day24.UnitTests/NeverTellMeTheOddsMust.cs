@@ -20,17 +20,33 @@ public class NeverTellMeTheOddsMust
     {
         var sut = new NeverTellMeTheOdds(SAMPLE_INPUT);
         Assert.Collection(sut.Hails,
-            h1 => Assert.Equal(((19UL, 13UL, 30UL), (-2,  1, -2)), h1.Data),
-            h2 => Assert.Equal(((18UL, 19UL, 22UL), (-1, -1, -2)), h2.Data),
-            h3 => Assert.Equal(((20UL, 25UL, 34UL), (-2, -2, -4)), h3.Data),
-            h4 => Assert.Equal(((12UL, 31UL, 28UL), (-1, -2, -1)), h4.Data),
-            h5 => Assert.Equal(((20UL, 19UL, 15UL), ( 1, -5, -3)), h5.Data));
+            h1 => Assert.Equal(((19, 13, 30), (-2,  1, -2)), h1.Data),
+            h2 => Assert.Equal(((18, 19, 22), (-1, -1, -2)), h2.Data),
+            h3 => Assert.Equal(((20, 25, 34), (-2, -2, -4)), h3.Data),
+            h4 => Assert.Equal(((12, 31, 28), (-1, -2, -1)), h4.Data),
+            h5 => Assert.Equal(((20, 19, 15), ( 1, -5, -3)), h5.Data));
     }
 
     [Fact]
     public void CalculateIntersectionCorrectly_WhenVelocitiesIn2dAreParallel()
     {
         var sut = new NeverTellMeTheOdds("18, 19, 22 @ -1, -1, -2\n20, 25, 34 @ -2, -2, -4");
+        sut.IntersectBetween(7, 27);
+        Assert.Equal(0, sut.Intersections);
+    }
+
+    [Fact]
+    public void CalculateIntersectionCorrectly_WhenRoutesCollideInsideWindow()
+    {
+        var sut = new NeverTellMeTheOdds("19, 13, 30 @ -2, 1, -2\n18, 19, 22 @ -1, -1, -2");
+        sut.IntersectBetween(7, 27);
+        Assert.Equal(1, sut.Intersections);
+    }
+
+    [Fact]
+    public void CalculateIntersectionCorrectly_WhenRoutesCollideAfterWindow()
+    {
+        var sut = new NeverTellMeTheOdds("19, 13, 30 @ -2, 1, -2\n12, 31, 28 @ -1, -2, -1");
         sut.IntersectBetween(7, 27);
         Assert.Equal(0, sut.Intersections);
     }
