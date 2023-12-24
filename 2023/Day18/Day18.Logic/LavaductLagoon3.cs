@@ -118,16 +118,47 @@ public class LavaductLagoon3
                 var topRightNode = topLeftNode.Next;
                 var bottomRightNode = topRightNode.Next;
 
-                if (bottomLeftNode.Value.Y < bottomRightNode.Value.Y)
+                if (bottomLeftNode.Value.Y == bottomRightNode.Value.Y)
                 {
                     var y = FindInternalRoute(vertices, topLeftNode.Value.X, topLeftNode.Value.Y, bottomRightNode.Value.X, bottomRightNode.Value.Y);
-                    if (y != -1)
+                    if (y == -1)
                     {
-                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X) * (bottomLeftNode.Value.Y - topLeftNode.Value.Y);
+                        if (bottomRightNode.Next == bottomLeftNode)
+                        {
+                            // final square
+                            vertices.Clear();
+                        }
+                        else
+                        if (bottomRightNode.Next.Value.X < bottomRightNode.Value.X)
+                        {
+                            vertices.Relink(bottomLeftNode.Previous, bottomRightNode.Next);
+                        }
+                        else
+                        {
+                            if (bottomLeftNode.Previous.Value.X > bottomLeftNode.Value.X)
+                            {
+                            }
+                            else
+                            {
+                                vertices.Relink(bottomLeftNode.Previous, bottomRightNode);
+                            }
+                        }
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X + 1) * (bottomLeftNode.Value.Y - topLeftNode.Value.Y);
+                    }
+                    else
+                    {
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X) * (y - topLeftNode.Value.Y);
+                    }
 
-                        bottomLeftNode.Previous.Next = new CircularList.CircularListNode((topRightNode.Value.X, bottomLeftNode.Value.Y));
-                        bottomLeftNode.Previous.Next.Next = bottomRightNode;
-                        bottomRightNode.Previous = bottomLeftNode.Previous.Next;
+                }
+                else if (bottomLeftNode.Value.Y < bottomRightNode.Value.Y)
+                {
+                    var y = FindInternalRoute(vertices, topLeftNode.Value.X, topLeftNode.Value.Y, topRightNode.Value.X, bottomLeftNode.Value.Y);
+                    if (y == -1)
+                    {
+                        var newNode = new CircularList.CircularListNode((topRightNode.Value.X, bottomLeftNode.Value.Y));
+                        vertices.Relink(newNode, bottomLeftNode.Previous, bottomRightNode);
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X + 1) * (bottomLeftNode.Value.Y - topLeftNode.Value.Y + 1) - (topRightNode.Value.X - topLeftNode.Value.X - 1);
                     }
                     else
                     {
@@ -136,7 +167,17 @@ public class LavaductLagoon3
                 }
                 else
                 {
-
+                    var y = FindInternalRoute(vertices, topLeftNode.Value.X, topLeftNode.Value.Y, bottomRightNode.Value.X, bottomRightNode.Value.Y);
+                    if (y == -1)
+                    {
+                        var newNode = new CircularList.CircularListNode((topLeftNode.Value.X, bottomRightNode.Value.Y));
+                        vertices.Relink(newNode, bottomLeftNode, bottomRightNode.Next);
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X) * (bottomRightNode.Value.Y - topLeftNode.Value.Y) - (topRightNode.Value.X - topLeftNode.Value.X - 1);
+                    }
+                    else
+                    {
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X) * (y - topLeftNode.Value.Y);
+                    }
                 }
             }
         }

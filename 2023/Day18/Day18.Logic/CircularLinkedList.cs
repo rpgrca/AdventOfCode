@@ -76,19 +76,24 @@ public class CircularList : IEnumerable<CircularList.CircularListNode>
         }
     }
 
-    private CircularListNode _head;
-    private CircularListNode _tail;
-    public CircularListNode Head => _head;
-    public CircularListNode Tail => _tail;
+    private CircularListNode? _head;
+    private CircularListNode? _tail;
+    public CircularListNode? Head => _head;
+    public CircularListNode? Tail => _tail;
     private int _count;
 
     public int Count => _count;
 
-    public CircularList() => _count = 0;
+    public CircularList()
+    {
+        _count = 0;
+        _head = null;
+        _tail = null;
+    }
 
     public void AddLast((int X, int Y) value)
     {
-        if (Tail is null)
+        if (_tail is null || _head is null)
         {
             var newNode = new CircularListNode(value);
             _head = newNode;
@@ -114,4 +119,59 @@ public class CircularList : IEnumerable<CircularList.CircularListNode>
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public void Relink(CircularListNode newNode, CircularListNode previous, CircularListNode next)
+    {
+        for (var node = previous.Next; node != next.Previous; node = node.Next)
+        {
+            if (node == Head)
+            {
+                _head = newNode;
+                _tail = previous;
+            }
+
+            if (node == Tail)
+            {
+                _tail = newNode;
+                _head = next;
+            }
+
+            _count--;
+        }
+
+        newNode.Previous = previous;
+        newNode.Next = next;
+        newNode.Next.Previous = newNode;
+        newNode.Previous.Next = newNode;
+    }
+
+    public void Relink(CircularListNode previous, CircularListNode next)
+    {
+        for (var node = previous.Next; node != next.Previous; node = node.Next)
+        {
+            if (node == Head)
+            {
+                _head = next;
+                _tail = previous;
+            }
+
+            if (node == Tail)
+            {
+                _tail = next;
+                _head = next.Next;
+            }
+
+            _count--;
+        }
+
+        previous.Next = next;
+        next.Previous = previous;
+    }
+
+    internal void Clear()
+    {
+        _count = 0;
+        _head = null;
+        _tail = null;
+    }
 }
