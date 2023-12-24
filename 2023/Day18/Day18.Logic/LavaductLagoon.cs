@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Data;
 using System.Runtime.ExceptionServices;
-
 namespace Day18.Logic;
 
 public class LavaductLagoon
 {
+    private const int MapMaximumLength = 10_000;
     private readonly string _input;
     private readonly string[] _lines;
     private readonly char[][] _map;
@@ -186,86 +185,124 @@ public class LavaductLagoon
 
     public void CalculateArea2()
     {
-        var array = Enumerable.Range(0, 5_000_000).Select(p => new SortedList<int, (int Begin, int End)>()).ToArray();
         var currentX = _initialX;
         var currentY = _initialY;
-
+        var mapRow = Enumerable.Range(0, MapMaximumLength).Select(p => new SortedList<int, (int Begin, int End)>()).ToArray();
+        var inst = 0;
         foreach (var instruction in RealInstructions)
         {
+            inst++;
             switch (instruction.Direction)
             {
                 case 'R': // r
-                    array[currentY].Add(currentX, (currentX, currentX + instruction.Length));
+                    for (var index = currentX; index < currentX + instruction.Length; index++)
+                    {
+                        if (mapRow[index].Any(p => p.Value.Begin == currentY || p.Value.End == currentY))
+                        {
+                            continue;
+                        }
+
+                        mapRow[index].Add(currentY, (currentY, currentY));
+                    }
+
+                    currentX += instruction.Length;
+                    break;
+
+                case 'D': // d
+                    mapRow[currentX].Add(currentY, (currentY, currentY + instruction.Length));
+                    currentY += instruction.Length;
+                    break;
+
+                case 'L': // l
+                    for (var index = currentX; index > currentX - instruction.Length; index--)
+                    {
+                        if (mapRow[index].Any(p => p.Value.Begin == currentY || p.Value.End == currentY))
+                        {
+                            continue;
+                        }
+
+                        mapRow[index].Add(currentY, (currentY, currentY));
+                    }
+
+                    currentX -= instruction.Length;
+                    break;
+
+                case 'U': // u
+                    var previous = currentY - instruction.Length;
+                    if (mapRow[currentX].ContainsKey(previous))
+                    {
+                        mapRow[currentX].TryAdd(previous, (previous, currentY));
+                    }
+                    else
+                    {
+                        mapRow[currentX].Add(previous, (previous, currentY));
+                    }
+                    currentY = previous;
+                    break;
+            }
+        }
+
+        var mapColumn = Enumerable.Range(0, MapMaximumLength).Select(p => new SortedList<int, (int Begin, int End)>()).ToArray();
+        currentX = _initialX;
+        currentY = _initialY;
+        inst = 0;
+        foreach (var instruction in RealInstructions)
+        {
+            inst++;
+            switch (instruction.Direction)
+            {
+                case 'R': // r
+                    mapColumn[currentY].Add(currentX, (currentX, currentX + instruction.Length));
                     currentX += instruction.Length;
                     break;
 
                 case 'D': // d
                     for (var index = currentY; index < currentY + instruction.Length; index++)
                     {
-                        if (array[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
+                        if (mapColumn[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
                         {
                             continue;
                         }
 
-                        //if (!array[index].ContainsKey(currentX))
-                        //{
-                            array[index].Add(currentX, (currentX, currentX));
-                        //}
-                        //else
-                        //{
-                        //    System.Diagnostics.Debugger.Break();
-                       // }
+                        mapColumn[index].Add(currentX, (currentX, currentX));
                     }
+
                     currentY += instruction.Length;
                     break;
 
                 case 'L': // l
                     var previous = currentX - instruction.Length;
-                    array[currentY].Add(previous, (previous, currentX));
+                    mapColumn[currentY].Add(previous, (previous, currentX));
                     currentX = previous;
                     break;
 
                 case 'U': // u
                     for (var index = currentY; index > currentY - instruction.Length; index--)
                     {
-                        if (array[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
+                        if (mapColumn[index].Any(p => p.Value.Begin == currentX || p.Value.End == currentX))
                         {
                             continue;
                         }
 
-                        array[index].Add(currentX, (currentX, currentX));
-                        /*
-                        if (!array[index].ContainsKey(currentX))
-                        {
-                            array[index].Add(currentX, (currentX, currentX));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }*/
+                        mapColumn[index].Add(currentX, (currentX, currentX));
                     }
                     currentY -= instruction.Length;
                     break;
             }
         }
 
-        var accountedFor = new HashSet<int>();
-        var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
-        var dubious = new List<(int Y, int Begin, int End)>();
-        for (var index = 0; index < array.Length; index++)
+        var helperCoveredColumns = Enumerable.Range(0, MapMaximumLength).Select(p => new List<(int Begin, int End)>()).ToArray();
+        for (var index = 0; index < mapRow.Length; index++)
         {
-            var area = 0L;
             var lastHole = -1;
 
-            if (array[index].Count > 0)
+            if (mapRow[index].Count > 0)
             {
                 // process only points
-                if (array[index].Sum(p => p.Value.End - p.Value.Begin) == 0)
+                if (mapRow[index].Sum(p => p.Value.End - p.Value.Begin) == 0)
                 {
-                    accountedFor.Add(index);
-
                     var inside = false;
-                    foreach (var block in array[index])
+                    foreach (var block in mapRow[index])
                     {
                         if (!inside)
                         {
@@ -274,11 +311,60 @@ public class LavaductLagoon
                         }
                         else
                         {
+                            helperCoveredColumns[index].Add((lastHole, block.Value.Begin));
+                            lastHole = -1;
+                            inside = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        var t = helperCoveredColumns.Count(p => p.Count > 0);
+        var accountedFor = new HashSet<int>();
+        var coveredArea = Enumerable.Range(0, MapMaximumLength).Select(p => new List<(int Begin, int End)>()).ToArray();
+        var uncoveredArea = Enumerable.Range(0, MapMaximumLength).Select(p => new List<(int Begin, int End)>()).ToArray();
+        var dubious = new List<(int Y, int Begin, int End)>();
+        for (var index = 0; index < mapColumn.Length; index++)
+        {
+            var area = 0L;
+            var lastHole = -1;
+
+            if (mapColumn[index].Count > 0)
+            {
+                // process only points
+                if (mapColumn[index].Sum(p => p.Value.End - p.Value.Begin) == 0)
+                {
+                    accountedFor.Add(index);
+
+                    var inside = false;
+                    var lastEmptyStart = 0;
+                    foreach (var block in mapColumn[index])
+                    {
+                        if (!inside)
+                        {
+                            lastHole = block.Value.Begin;
+                            uncoveredArea[index].Add((lastEmptyStart, block.Value.Begin - 1));
+                            inside = true;
+                            lastEmptyStart = -1;
+                        }
+                        else
+                        {
                             coveredArea[index].Add((lastHole, block.Value.Begin));
                             area += block.Value.Begin - lastHole + 1;
                             lastHole = -1;
                             inside = false;
+                            lastEmptyStart = block.Value.Begin + 1;
                         }
+                    }
+
+                    if (lastEmptyStart != -1)
+                    {
+                        uncoveredArea[index].Add((lastEmptyStart, int.MaxValue));
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debugger.Break();
                     }
                 }
             }
@@ -289,24 +375,26 @@ public class LavaductLagoon
             }
         }
 
-
-        for (var index = 0; index < array.Length; index++)
+        for (var index = 0; index < mapColumn.Length; index++)
         {
             var area = 0;
 
-            if (array[index].Count > 0)
+            if (mapColumn[index].Count > 0)
             {
                 if (accountedFor.Contains(index))
                 {
                     continue;
                 }
 
-                if (array[index].Count == 1 && array[index].Values.Count == 1)
+                if (mapColumn[index].Count == 1 && mapColumn[index].Values.Count == 1)
                 {
-                    var first = array[index].Single().Value;
+                    var first = mapColumn[index].Single().Value;
                     accountedFor.Add(index);
                     coveredArea[index].Add((first.Begin, first.End));
                     area += first.End - first.Begin + 1;
+
+                    uncoveredArea[index].Add((0, first.Begin - 1));
+                    uncoveredArea[index].Add((first.End + 1, int.MaxValue));
                 }
 
                 if (area != 0)
@@ -316,11 +404,11 @@ public class LavaductLagoon
             }
         }
 
-        for (var index = 0; index < array.Length; index++)
+        for (var index = 0; index < mapColumn.Length; index++)
         {
             var area = 0L;
 
-            if (array[index].Count > 0)
+            if (mapColumn[index].Count > 0)
             {
                 if (accountedFor.Contains(index))
                 {
@@ -329,11 +417,13 @@ public class LavaductLagoon
 
                 accountedFor.Add(index);
 
+                // 3134 no anda
+                // 45.#iiiiiiiiiiiiiiiiii#oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo#####oooooooooooooooooooooo#iiiiiiiii#ooooo#iiiiiii#.
                 var inside = true;
-                for (var subIndex = 0; subIndex < array[index].Count - 1; subIndex +=2)
+                for (var subIndex = 0; subIndex < mapColumn[index].Count - 1; subIndex++)
                 {
-                    var first = array[index].ElementAt(subIndex);
-                    var second = array[index].ElementAt(subIndex + 1);
+                    var first = mapColumn[index].ElementAt(subIndex);
+                    var second = mapColumn[index].ElementAt(subIndex + 1);
 
                     if (inside)
                     {
@@ -351,6 +441,16 @@ public class LavaductLagoon
                     {
                         dubious.Add((index, first.Value.End, second.Value.Begin));
                         inside = true;
+                    }
+                }
+
+                if (inside)
+                {
+                    var last = mapColumn[index].Last();
+                    if (last.Value.Begin != last.Value.End)
+                    {
+                        coveredArea[index].Add((last.Value.Begin, last.Value.End));
+                        area += last.Value.End - last.Value.Begin + 1;
                     }
                 }
             }
@@ -399,7 +499,7 @@ public class LavaductLagoon
 
 
 /*
-        var coveredArea = Enumerable.Range(0, 5_000_000).Select(p => new List<(int Begin, int End)>()).ToArray();
+        var coveredArea = Enumerable.Range(0, MapMaximumLength).Select(p => new List<(int Begin, int End)>()).ToArray();
         var dubious = new List<(int Y, int Begin, int End)>();
         for (var index = 0; index < array.Length; index++)
         {
@@ -566,5 +666,118 @@ public class LavaductLagoon
             TrenchArea += area;
         }
 */
+    }
+}
+
+
+public class LavaductLagoon2
+{
+    private readonly string _input;
+    private readonly string[] _lines;
+    private readonly char[][] _map;
+    private readonly int _length;
+
+    public int DigPlanLength => _lines.Length;
+
+    public int TrenchPerimeter { get; private set; }
+    public long TrenchArea { get; private set; }
+    public List<(char Direction, int Amount)> RealInstructions { get; }
+
+    public LavaductLagoon2(string input)
+    {
+        _input = input;
+        _lines = _input.Split("\n");
+        RealInstructions = new List<(char, int)>();
+    }
+
+    public void Decode()
+    {
+        var facing = 'U';
+        foreach (var line in _lines)
+        {
+            var command = line.Split(" ");
+            var hex = command[2][1..^1];
+            switch (facing)
+            {
+                case 'U':
+                    switch (hex[^1])
+                    {
+                        case 'R':
+                            RealInstructions.Add(('R', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'R';
+                            break;
+
+                        case 'L':
+                            RealInstructions.Add(('L', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'L';
+                            break;
+
+                        default:
+                            throw new Exception();
+                    }
+                    break;
+
+                case 'R':
+                    switch (hex[^1])
+                    {
+                        case 'U':
+                            RealInstructions.Add(('L', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'U';
+                            break;
+
+                        case 'D':
+                            RealInstructions.Add(('R', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'D';
+                            break;
+
+                        default:
+                            throw new Exception();
+                    }
+                    break;
+
+                case 'D':
+                    switch (hex[^1])
+                    {
+                        case 'L':
+                            RealInstructions.Add(('R', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'L';
+                            break;
+
+                        case 'R':
+                            RealInstructions.Add(('L', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'R';
+                            break;
+
+                        default:
+                            throw new Exception();
+                    }
+                    break;
+
+                case 'L':
+                    switch (hex[^1])
+                    {
+                        case 'U':
+                            RealInstructions.Add(('R', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'U';
+                            break;
+
+                        case 'D':
+                            RealInstructions.Add(('L', -1));
+                            RealInstructions.Add(('F', Convert.ToInt32(hex[1..^1], 16)));
+                            facing = 'L';
+                            break;
+                    }
+                    break;
+            }
+
+            var length = Convert.ToInt32(hex[1..^1], 16);
+        }
     }
 }
