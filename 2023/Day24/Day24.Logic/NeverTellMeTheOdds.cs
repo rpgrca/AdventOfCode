@@ -51,7 +51,7 @@ public class NeverTellMeTheOdds
         }
     }
 
-    public void IntersectBetween(ulong @from, ulong to)
+    public void IntersectBetween(long @from, long to)
     {
         for (var index = 0; index < Hails.Count - 1; index++)
         {
@@ -75,9 +75,14 @@ public class NeverTellMeTheOdds
                 var px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / (double)denominator;
                 var py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / (double)denominator;
 
-                if (px >= @from && px <= to && py >= @from && py <= to)
+                if (@from <= px && px <= @to && @from <= py && py <= @to)
                 {
-                    Intersections++;
+                    var pointDistance = Math.Pow(x1 - px, 2) + Math.Pow(y1 - py, 2);
+                    var offsetDistance = Math.Pow(x2 - px, 2) + Math.Pow(y2 - py, 2);
+                    if (offsetDistance < pointDistance)
+                    {
+                        Intersections++;
+                    }
                 }
             }
         }

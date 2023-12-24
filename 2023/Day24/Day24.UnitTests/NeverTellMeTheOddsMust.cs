@@ -50,4 +50,12 @@ public class NeverTellMeTheOddsMust
         sut.IntersectBetween(7, 27);
         Assert.Equal(0, sut.Intersections);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new NeverTellMeTheOdds(SAMPLE_INPUT);
+        sut.IntersectBetween(7, 27);
+        Assert.Equal(2, sut.Intersections);
+    }
 }
