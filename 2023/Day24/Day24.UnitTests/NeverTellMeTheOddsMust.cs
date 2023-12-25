@@ -58,4 +58,17 @@ public class NeverTellMeTheOddsMust
         sut.IntersectBetween(7, 27);
         Assert.Equal(2, sut.Intersections);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new NeverTellMeTheOdds(PUZZLE_INPUT);
+        sut.IntersectBetween(200_000_000_000_000, 400_000_000_000_000);
+        /*Assert.True(14364 < sut.Intersections);
+        Assert.True(16031 < sut.Intersections);
+        Assert.True(16518 < sut.Intersections);
+        Assert.True(19548 > sut.Intersections);
+        Assert.NotEqual(16724, sut.Intersections);*/
+        Assert.Equal(0, sut.Intersections);
+    }
 }
