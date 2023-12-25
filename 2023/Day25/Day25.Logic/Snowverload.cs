@@ -1,10 +1,3 @@
-
-
-
-
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-
 namespace Day25.Logic;
 
 public class Snowverload
@@ -60,10 +53,22 @@ public class Snowverload
             }
         }
 
+        var excluded = new List<string>();
         foreach (var (key, values) in Components)
         {
-            var excluded = new List<string> { key };
-            CalculateDistances(key, distances, values, excluded, 1);
+            foreach (var value in values)
+            {
+                excluded.Add(key);
+                CalculateDistances(key, distances, Components[value].Except(excluded), excluded, 2);
+                Console.WriteLine($"Distances {distances.Count}, larger {distances.Max(p => p.Value)}");
+                excluded.Remove(key);
+            }
+        }
+
+        var max = distances.Max(p => p.Value);
+        foreach (var x in distances.Where(p => p.Value >= max - 2))
+        {
+            Console.WriteLine($"{x} (distance {max})");
         }
 
 /*
@@ -238,13 +243,14 @@ public class Snowverload
 
     private void CalculateDistances(string key, Dictionary<string, int> distances, IEnumerable<string> components, List<string> excluded, int depth)
     {
-        Console.WriteLine($"Distances {distances.Count}, larger {distances.Max(p => p.Value)}");
+        var process = new List<string>();
         foreach (var g in components)
         {
             if (! distances.ContainsKey(key + g) || ! distances.ContainsKey(g + key))
             {
                 distances.Add(key + g, depth);
                 distances.Add(g + key, depth);
+                process.Add(g);
             }
             else
             {
@@ -252,11 +258,12 @@ public class Snowverload
                 {
                     distances[key + g] = depth;
                     distances[g + key] = depth;
+                    process.Add(g);
                 }
             }
         }
 
-        foreach (var g in components)
+        foreach (var g in process)
         {
             excluded.Add(g);
             CalculateDistances(key, distances, Components[g].Except(excluded), excluded, depth + 1);
