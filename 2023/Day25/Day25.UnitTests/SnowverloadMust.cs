@@ -22,4 +22,23 @@ public class SnowverloadMust
         var sut = new Snowverload(input);
         Assert.Equal(expectedComponentCount, sut.Components.Count);
     }
+
+    [Fact]
+    public void Test()
+    {
+        var sut = new Snowverload(@"jqt: rhn xhk
+rsh: pzl
+xhk: hfx
+rhn: xhk bvb hfx
+bvb: xhk hfx
+pzl: hfx lsr
+rsh: lsr");
+
+        Assert.Collection(sut.WeakLinks,
+            w1 =>
+            {
+                Assert.Equal("pzl", w1.Left);
+                Assert.Equal("hfx", w1.Right);
+            });
+    }
 }

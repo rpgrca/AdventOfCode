@@ -1,5 +1,6 @@
 
 
+
 namespace Day25.Logic;
 
 public class Snowverload
@@ -9,6 +10,7 @@ public class Snowverload
     public int InputLength => _lines.Length;
 
     public Dictionary<string, List<string>> Components { get; }
+    public List<(string Left, string Right)> WeakLinks { get; }
 
     public Snowverload(string input)
     {
@@ -37,5 +39,50 @@ public class Snowverload
 
             Components[values[0]].AddRange(components);
         }
+
+        WeakLinks = new List<(string Left, string Right)>();
+        foreach (var (source, targets) in Components)
+        {
+            foreach (var target in targets)
+            {
+                var bypass = false;
+                var grandchildren = Components[target];
+                foreach (var grandchild in grandchildren.Where(p => p != target))
+                {
+                    bypass = ExistsBypassFrom(source, grandchild, target);
+                    if (bypass)
+                    {
+                        break;
+                    }
+                }
+
+                if (! bypass)
+                {
+                    if (!WeakLinks.Contains((source, target)) && !WeakLinks.Contains((target, source)))
+                    {
+                        WeakLinks.Add((source, target));
+                    }
+                }
+            }
+        }
+    }
+
+    private bool ExistsBypassFrom(string source, string target, string skipping)
+    {
+        var level1s = Components[source];
+        if (level1s.Contains(target))
+        {
+            return true;
+        }
+
+        foreach (var level2 in level1s.Where(p => p != skipping))
+        {
+            if (level2 == target)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
