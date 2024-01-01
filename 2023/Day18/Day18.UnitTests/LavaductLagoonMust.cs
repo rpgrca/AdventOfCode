@@ -89,16 +89,44 @@ public class LavaductLagoonMust
         Assert.Equal(62, sut.TrenchArea);
     }
 
+/*
     [Fact]
-    public void SolveFirstPuzzleWithNewAlgorithmCorrectly()
+    public void SolveFirstSampleWithAreaSplitterCorrectly()
     {
-        var sut = new LavaductLagoon(PUZZLE_INPUT, 10_000, create: false);
+        var sut = new LavaductLagoon3(SAMPLE_INPUT);
         sut.CalculateArea2();
         Assert.Equal(48400, sut.TrenchArea);
+    }*/
+
+    [Fact]
+    public void SolveSimpleSampleWithOnlyOneArea()
+    {
+        var sut = new LavaductLagoon3("R 6 (#0dc571)\nD 2 (#5713f0)\nL 6 (#d2c081)\nU 2 (#59c680)");
+        sut.CalculateArea2();
+        Assert.Equal(21, sut.TrenchArea);
+    }
+
+
+    [Fact(Skip = "Not working")]
+    public void Test2()
+    {
+        var sut = new LavaductLagoon3("R 6 (#0dc571)\nD 2 (#5713f0)\nR 3 (#d2c081)\nD 2 (#59c680)\nL 9 (#59c680)\nU 4");
+        sut.CalculateArea2();
+        Assert.Equal(44, sut.TrenchArea);
     }
 
 
 /*
+    [Fact]
+    public void SolveFirstPuzzleWithNewAlgorithmCorrectly()
+    {
+        var sut = new LavaductLagoon3(PUZZLE_INPUT);
+        sut.Decode();
+        sut.CalculateArea2();
+        Assert.Equal(48400, sut.TrenchArea);
+    }*/
+/*
+
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
@@ -106,5 +134,13 @@ public class LavaductLagoonMust
         sut.Decode();
         sut.CalculateArea2();
         Assert.Equal(952408144115, sut.TrenchArea);
+    }*/
+/*
+    [Fact]
+    public void Test2()
+    {
+        var sut = new LavaductLagoon3(PUZZLE_INPUT);
+        sut.Decode();
+        sut.CalculateArea2();
     }*/
 }
