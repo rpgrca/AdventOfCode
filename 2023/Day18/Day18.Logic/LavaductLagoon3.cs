@@ -143,7 +143,7 @@ public class LavaductLagoon3
                                 vertices.Relink(bottomLeftNode.Previous, bottomRightNode);
                             }
                         }
-                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X + 1) * (bottomLeftNode.Value.Y - topLeftNode.Value.Y);
+                        TrenchArea += (topRightNode.Value.X - topLeftNode.Value.X + 1) * (bottomLeftNode.Value.Y - topLeftNode.Value.Y + 1);
                     }
                     else
                     {
