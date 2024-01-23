@@ -63,6 +63,7 @@ rsh: lsr");
     public void SolveFirstPuzzleCorrectly()
     {
         var sut = new Snowverload(PUZZLE_INPUT);
+        sut.CalculateGroups();
         Assert.Equal(0, sut.SizeMultiplication);
     }*/
 }
