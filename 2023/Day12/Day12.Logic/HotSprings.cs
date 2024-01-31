@@ -1,5 +1,3 @@
-
-using System.ComponentModel;
 using System.Data;
 
 namespace Day12.Logic;
@@ -12,7 +10,7 @@ public class HotSprings
     public List<(string Map, int[] Groups)> Rows { get; private set; }
     public List<string[]> Combinations { get; private set; }
     public List<int> CombinationCount { get; private set; }
-    public long SumOfArrangements { get; private set; }
+    public double SumOfArrangements { get; private set; }
 
     public HotSprings(string input, bool combine = false, bool unfold = false)
     {
@@ -33,7 +31,8 @@ public class HotSprings
             foreach (var row in Rows)
             {
                 var combinations = new List<string>();
-                CalculateCombinations(row, 0, string.Empty, combinations);
+                //CalculateCombinations(row, 0, string.Empty, combinations);
+                CalculateCombinations3(row, 0, string.Empty, combinations);
                 Combinations.Add(combinations.ToArray());
             }
 
@@ -188,40 +187,38 @@ public class HotSprings
 //                    SumOfArrangements += (long)Math.Pow(validCombinations2, 4) * Combinations[index].Length;
 //                }
 
-                var newRow1 = ('?' + row.Map, row.Groups);
-                var combi1 = new List<string>();
                 var validCombinations = 0;
-                CalculateCombinations2(newRow1, 0, string.Empty, ref validCombinations);
-
-                var newRow2 = (row.Map + '?', row.Groups);
-                var combi2 = new List<string>();
                 var validCombinations2 = 0;
-                CalculateCombinations2(newRow2, 0, string.Empty, ref validCombinations2);
-
-                // A? A? A? A? A?
-                // A? A
-/*
-                var values = combi1.SelectMany(p => Combinations[index], (n, p) => p + n).ToList();
-                var values2 = combi2.SelectMany(p => Combinations[index], (n, p) => n + p).ToList();
-                var union = values.Union(values2).Count();
-                SumOfArrangements += Combinations[index].Length * (long)Math.Pow(union, 3);
-*/
 
                 if (row.Map.Length == (row.Groups.Sum() + row.Groups.Length - 1))
                 {
                     validCombinations = validCombinations2 = 1;
                 }
+                else
+                {
+                    var newRow1 = ('?' + row.Map, row.Groups);
+                    CalculateCombinations2(newRow1, 0, string.Empty, ref validCombinations);
+
+                    var combinations = new List<string>();
+                    CalculateCombinations3(newRow1, 0, string.Empty, combinations);
+
+                    var newRow2 = (row.Map + '?', row.Groups);
+                    CalculateCombinations2(newRow2, 0, string.Empty, ref validCombinations2);
+
+                    CalculateCombinations3(newRow2, 0, string.Empty, combinations);
+
+                    combinations = combinations.Distinct().ToList();
+                }
 
 
                 if (validCombinations > validCombinations2)
                 {
-                    SumOfArrangements += (long)Math.Pow(validCombinations, 4) * Combinations[index].Length;
+                    SumOfArrangements += Math.Pow(validCombinations, 4) * Combinations[index].Length;
                 }
                 else
                 {
-                    SumOfArrangements += (long)Math.Pow(validCombinations2, 4) * Combinations[index].Length;
+                    SumOfArrangements += Math.Pow(validCombinations2, 4) * Combinations[index].Length;
                 }
-
             }
         }
     }
@@ -251,6 +248,35 @@ public class HotSprings
         }
     }
 
+    private void CalculateCombinations3((string Map, int[] Groups) row, int currentIndex, string currentCombination, List<string> combinations)
+    {
+        currentIndex = 0;
+
+        var combs = new List<string> { "" };
+        while (currentIndex < row.Map.Length)
+        {
+            if (row.Map[currentIndex] == '?')
+            {
+                var temp = new List<string>();
+                temp.AddRange(combs.Select(p => p + '#'));
+                temp.AddRange(combs.Select(p => p + '.'));
+                combs = temp;
+            }
+            else
+            {
+                var temp = new List<string>();
+                temp.AddRange(combs.Select(p => p + row.Map[currentIndex]));
+                combs = temp;
+            }
+            currentIndex++;
+        }
+
+        combinations.AddRange(combs
+            .Select(p => new { Original = p, Groups = p.Split(".").Where(q => !string.IsNullOrEmpty(q)).Select(r => r.Length).ToArray() })
+            .Where(p => p.Groups.SequenceEqual(row.Groups))
+            .Select(p => p.Original));
+    }
+
     private void CalculateCombinations2((string Map, int[] Groups) row, int currentIndex, string currentCombination, ref int validCombinations)
     {
         while (currentIndex < row.Map.Length && row.Map[currentIndex] != '?')
@@ -266,13 +292,15 @@ public class HotSprings
             return;
         }
 
-        if (currentCombination.Length == row.Map.Length)
+        var splittedMap = currentCombination
+            .Split(".")
+            .Where(p => !string.IsNullOrEmpty(p))
+            .Select(p => p.Length)
+            .ToArray();
+
+        if (splittedMap.SequenceEqual(row.Groups))
         {
-            var splittedMap = currentCombination.Split(".").Where(p => !string.IsNullOrEmpty(p)).Select(p => p.Length).ToArray();
-            if (splittedMap.SequenceEqual(row.Groups))
-            {
-                validCombinations++;
-            }
+            validCombinations++;
         }
     }
 
