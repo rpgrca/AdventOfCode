@@ -33,6 +33,7 @@ jobs:
 
     - name: Testing Advent of Code ${{ matrix.year }} project
       run: |
+           pwd
            for d in `seq 25`; do
                if [ -d ${{ matrix.year }}/Day$d ]; then
                  coverlet ${{ matrix.year }}/Day$d/Day$d.UnitTests/bin/Debug/net7.0/Day$d.UnitTests.dll --target "dotnet" --targetargs "test ${{ matrix.year }}/Day$d/Day$d.UnitTests/Day$d.UnitTests.csproj --no-build" --format OpenCover --output adventofcode-${{ matrix.year }}-day$d.coverage.xml
