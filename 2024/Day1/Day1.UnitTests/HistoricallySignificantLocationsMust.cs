@@ -5,10 +5,12 @@ namespace Day1.UnitTests;
 
 public class HistoricallySignificantLocationsMust
 {
-    [Fact]
-    public void LoadDataCorrectly()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 6)]
+    [InlineData(PUZZLE_INPUT, 1000)]
+    public void LoadDataCorrectly(string input, int expectedLength)
     {
-        var sut = new HistoricallySignificantLocations(SAMPLE_INPUT);
-        Assert.Equal(6, sut.Length);
+        var sut = new HistoricallySignificantLocations(input);
+        Assert.Equal(expectedLength, sut.Length);
     }
 }
