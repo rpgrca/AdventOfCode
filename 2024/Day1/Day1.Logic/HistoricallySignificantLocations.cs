@@ -19,6 +19,15 @@ public class HistoricallySignificantLocations
 
         SplitLists();
         CalculateTotalDistance();
+        CalculateSimilarityScore();
+    }
+
+    private void CalculateSimilarityScore()
+    {
+        foreach (var first in _firstColumn)
+        {
+            SimilarityScore += first * _secondColumn.Count(p => p == first);
+        }
     }
 
     private void SplitLists()

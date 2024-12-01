@@ -38,4 +38,11 @@ public class HistoricallySignificantLocationsMust
         var sut = new HistoricallySignificantLocations(PUZZLE_INPUT);
         Assert.Equal(1151792, sut.TotalDistance);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new HistoricallySignificantLocations(SAMPLE_INPUT);
+        Assert.Equal(31, sut.SimilarityScore);
+    }
 }
