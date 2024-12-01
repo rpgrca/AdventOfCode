@@ -13,4 +13,15 @@ public class HistoricallySignificantLocationsMust
         var sut = new HistoricallySignificantLocations(input);
         Assert.Equal(expectedLength, sut.Length);
     }
+
+    [Theory]
+    [InlineData("1   1", 0)]
+    [InlineData("1   2", 1)]
+    [InlineData("2   1", 1)]
+    [InlineData("1   2\n2   1", 2)]
+    public void CalculateTotalDistanceCorrectly(string input, int expectedDistance)
+    {
+        var sut = new HistoricallySignificantLocations(input);
+        Assert.Equal(expectedDistance, sut.TotalDistance);
+    }
 }
