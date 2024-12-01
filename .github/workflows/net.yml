@@ -10,6 +10,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        year: [2024, 2023, 2022, 2021, 2020]
 
     steps:
     - uses: actions/checkout@v4
@@ -19,29 +22,21 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    - name: Restore packages
-      run: |
-           for s in 2023 2022 2021 2020; do
-               dotnet restore $s/AdventOfCode$s.sln
-           done
+    - name: Restore packages for Advent of Code ${{ matrix.year }}
+      run: dotnet restore ${{ matrix.year }}/AdventOfCode${{ matrix.year }}.sln
 
     - name: Install Coverlet
       run: dotnet tool install --global coverlet.console
 
-    - name: Build solutions
-      run: |
-           for s in 2023 2022 2021 2020; do
-               dotnet build --configuration Debug --no-restore $s/AdventOfCode$s.sln /p:DefineConstants="CI_CONTEXT"
-           done
+    - name: Build Advent of Code ${{ matrix.year }} solution
+      run: dotnet build --configuration Debug --no-restore ${{ matrix.year }}/AdventOfCode${{ matrix.year }}.sln /p:DefineConstants="CI_CONTEXT"
 
-    - name: Testing projects
+    - name: Testing Advent of Code ${{ matrix.year }} project
       run: |
-           for s in 2023 2022 2021 2020; do
-               for d in `seq 25`; do
-                   if [ -d $s/Day$d ]; then
-                     coverlet $s/Day$d/Day$d.UnitTests/bin/Debug/net7.0/Day$d.UnitTests.dll --target "dotnet" --targetargs "test $s/Day$d/Day$d.UnitTests/Day$d.UnitTests.csproj --no-build" --format OpenCover --output adventofcode-$s-day$d.coverage.xml
-                   fi
-               done
+           for d in `seq 25`; do
+               if [ -d $s/Day$d ]; then
+                 coverlet ${{ matrix.year }}/Day$d/Day$d.UnitTests/bin/Debug/net7.0/Day$d.UnitTests.dll --target "dotnet" --targetargs "test ${{ matrix.year }}/Day$d/Day$d.UnitTests/Day$d.UnitTests.csproj --no-build" --format OpenCover --output adventofcode-${{ matrix.year }}-day$d.coverage.xml
+               fi
            done
 
     - name: Upload coverage to CodeCov
