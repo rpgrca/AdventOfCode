@@ -6,6 +6,10 @@ public class HistoricallySignificantLocations
     private readonly List<int> _firstColumn;
     private readonly List<int> _secondColumn;
 
+    public int Length { get; private set; }
+    public int TotalDistance { get; private set; }
+    public int SimilarityScore { get; private set; }
+
     public HistoricallySignificantLocations(string input)
     {
         _firstColumn = new();
@@ -16,14 +20,6 @@ public class HistoricallySignificantLocations
         SplitLists();
         CalculateTotalDistance();
         CalculateSimilarityScore();
-    }
-
-    private void CalculateSimilarityScore()
-    {
-        foreach (var first in _firstColumn)
-        {
-            SimilarityScore += first * _secondColumn.Count(p => p == first);
-        }
     }
 
     private void SplitLists()
@@ -49,7 +45,8 @@ public class HistoricallySignificantLocations
         }
     }
 
-    public int Length { get; private set; }
-    public int TotalDistance { get; private set; }
-    public int SimilarityScore { get; private set; }
+   private void CalculateSimilarityScore() =>
+        SimilarityScore = _firstColumn
+            .GroupJoin(_secondColumn, p => p, q => q, (p, q) => p * q.Count())
+            .Sum();
 }
