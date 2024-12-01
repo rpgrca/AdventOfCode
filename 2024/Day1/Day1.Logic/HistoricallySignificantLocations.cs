@@ -1,6 +1,7 @@
 
 
 
+
 namespace Day1.Logic;
 
 public class HistoricallySignificantLocations
@@ -44,5 +45,6 @@ public class HistoricallySignificantLocations
     }
 
     public int Length { get; private set; }
-    public int TotalDistance { get; set; }
+    public int TotalDistance { get; private set; }
+    public int SimilarityScore { get; private set; }
 }
