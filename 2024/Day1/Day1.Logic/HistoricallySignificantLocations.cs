@@ -1,7 +1,3 @@
-
-
-
-
 namespace Day1.Logic;
 
 public class HistoricallySignificantLocations
