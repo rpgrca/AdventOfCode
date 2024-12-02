@@ -16,38 +16,42 @@ public class Reports
 
     private void CountSafeReports()
     {
-        var levels = _input[0].Split(" ").Select(int.Parse).ToArray();
-
-        if (levels[0] == levels[1])
+        foreach (var input in _input)
         {
-            return;
-        }
+            var levels = input.Split(" ").Select(int.Parse).ToArray();
 
-        var ascending = levels[0] < levels[1];
-        var safe = true;
-        for (var index = 0; index < levels.Length - 1; index++)
-        {
-            var difference = levels[index + 1] - levels[index];
-            if (difference == 0)
+            if (levels[0] == levels[1])
             {
-                break;
+                return;
             }
 
-            if ((ascending && (levels[index + 1] <= levels[index])) || (!ascending && (levels[index + 1] >= levels[index])))
+            var ascending = levels[0] < levels[1];
+            var safe = true;
+            for (var index = 0; index < levels.Length - 1; index++)
             {
-                break;
+                var difference = levels[index + 1] - levels[index];
+                if (difference == 0 || (ascending && difference < 0) || (!ascending && difference > 0))
+                {
+                    safe = false;
+                    break;
+                }
+
+                if ((ascending && (levels[index + 1] <= levels[index])) || (!ascending && (levels[index + 1] >= levels[index])))
+                {
+                    break;
+                }
+
+                var absolute = Math.Abs(difference);
+                if (absolute < 1 || absolute > 3)
+                {
+                    safe = false;
+                }
             }
 
-            var absolute = Math.Abs(difference);
-            if (absolute < 1 || absolute > 3)
+            if (safe)
             {
-                safe = false;
+                SafeReportsCount += 1;
             }
-        }
-
-        if (safe)
-        {
-            SafeReportsCount += 1;
         }
     }
 
