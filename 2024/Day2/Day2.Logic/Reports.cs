@@ -1,6 +1,8 @@
 
 
 
+using System.Diagnostics;
+
 namespace Day2.Logic;
 
 public class Reports
@@ -17,80 +19,67 @@ public class Reports
 
     private void CountSafeReports()
     {
-        foreach (var input in _input)
+        var lines = new List<List<int[]>>();
+        for (var subIndex = 0; subIndex < Length; subIndex++)
         {
+            var input = _input[subIndex];
             var levels = input.Split(" ").Select(int.Parse).ToArray();
 
-            if (levels[0] == levels[1])
+            lines.Add(new List<int[]>());
+            lines[subIndex].Add(levels);
+
+            for (var subSubIndex = 0; subSubIndex < levels.Length; subSubIndex++)
             {
-                continue;
+                lines[subIndex].Add(levels.Select((p, i) => (p, i)).Where(p => p.i != subSubIndex).Select(p => p.p).ToArray());
             }
+        }
 
-            var ascending = levels[0] < levels[1];
-            var safe = true;
-            var safeWithDampener = false;
-            var next = 0;
-            var index = 0;
-            var justActivatedDampener = false;
-            while (next + 1 < levels.Length)
+        foreach (var line in lines)
+        {
+            for (var combination = 0; combination < line.Count; combination++)
             {
-                next++;
-                var difference = levels[next] - levels[index];
-                if (difference == 0 || (ascending && difference < 0) || (!ascending && difference > 0))
+                var levels = line[combination];
+                if (levels[0] == levels[1])
                 {
-                    safe = false;
-                    if (! safeWithDampener)
-                    {
-                        safeWithDampener = true;
-                        justActivatedDampener = true;
-                        continue;
-                    }
-                    else {
-                        safeWithDampener = false;
-                    }
-                    break;
+                    continue;
                 }
 
-                if ((ascending && (levels[next] <= levels[index])) || (!ascending && (levels[next] >= levels[index])))
+                var ascending = levels[0] < levels[1];
+                var safe = true;
+                var next = 0;
+                var index = 0;
+                while (next + 1 < levels.Length)
                 {
-                    safe = false;
-                    break;
+                    next++;
+                    var difference = levels[next] - levels[index];
+                    if (difference == 0 || (ascending && difference < 0) || (!ascending && difference > 0))
+                    {
+                        safe = false;
+                        break;
+                    }
+
+                    var absolute = Math.Abs(difference);
+                    if (absolute < 1 || absolute > 3)
+                    {
+                        safe = false;
+                        break;
+                    }
+
+                    index++;
                 }
 
-                var absolute = Math.Abs(difference);
-                if (absolute < 1 || absolute > 3)
+                if (safe)
                 {
-                    safe = false;
-                    if (! safeWithDampener)
+                    if (combination == 0)
                     {
-                        safeWithDampener = true;
-                        justActivatedDampener = true;
-                        continue;
+                        SafeReportsCount += 1;
                     }
                     else
                     {
-                        safeWithDampener = false;
+                        SafeReportsWithDampener += 1;
+                        break;
                     }
-
-                    break;
                 }
-
-                index++;
-                if (justActivatedDampener)
-                {
-                    index++;
-                    justActivatedDampener = false;
-                }
-            }
-
-            if (safe)
-            {
-                SafeReportsCount += 1;
-            }
-
-            if (safe || safeWithDampener)
-            {
-                SafeReportsWithDampener += 1;
             }
         }
     }

@@ -52,6 +52,8 @@ public class ReportsMust
     [InlineData("9 7 8 6 7", 0)]
     [InlineData("1 2 7 3 4", 1)]
     [InlineData("1 2 7 3 8", 0)]
+    [InlineData("9 1 2 3 4", 1)]
+    [InlineData("4 4 5 6 7", 1)]
     public void HaveWorkingProblemDampener(string input, int expectedCount)
     {
         var sut = new Reports(input);
@@ -65,4 +67,10 @@ public class ReportsMust
         Assert.Equal(4, sut.SafeReportsWithDampener);
     }
 
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new Reports(PUZZLE_INPUT);
+        Assert.Equal(381, sut.SafeReportsWithDampener);
+    }
 }
