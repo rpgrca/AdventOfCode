@@ -5,10 +5,12 @@ namespace Day2.UnitTests;
 
 public class ReportsMust
 {
-    [Fact]
-    public void LoadInputCorrectly()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 6)]
+    [InlineData(PUZZLE_INPUT, 1000)]
+    public void LoadInputCorrectly(string input, int expectedLength)
     {
-        var sut = new Reports(SAMPLE_INPUT);
-        Assert.Equal(6, sut.Length);
+        var sut = new Reports(input);
+        Assert.Equal(expectedLength, sut.Length);
     }
 }
