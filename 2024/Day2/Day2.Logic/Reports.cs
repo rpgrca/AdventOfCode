@@ -28,16 +28,30 @@ public class Reports
 
             var ascending = levels[0] < levels[1];
             var safe = true;
-            for (var index = 0; index < levels.Length - 1; index++)
+            var safeWithDampener = false;
+            var next = 0;
+            var index = 0;
+            var justActivatedDampener = false;
+            while (next + 1 < levels.Length)
             {
-                var difference = levels[index + 1] - levels[index];
+                next++;
+                var difference = levels[next] - levels[index];
                 if (difference == 0 || (ascending && difference < 0) || (!ascending && difference > 0))
                 {
                     safe = false;
+                    if (! safeWithDampener)
+                    {
+                        safeWithDampener = true;
+                        justActivatedDampener = true;
+                        continue;
+                    }
+                    else {
+                        safeWithDampener = false;
+                    }
                     break;
                 }
 
-                if ((ascending && (levels[index + 1] <= levels[index])) || (!ascending && (levels[index + 1] >= levels[index])))
+                if ((ascending && (levels[next] <= levels[index])) || (!ascending && (levels[next] >= levels[index])))
                 {
                     safe = false;
                     break;
@@ -47,7 +61,25 @@ public class Reports
                 if (absolute < 1 || absolute > 3)
                 {
                     safe = false;
+                    if (! safeWithDampener)
+                    {
+                        safeWithDampener = true;
+                        justActivatedDampener = true;
+                        continue;
+                    }
+                    else
+                    {
+                        safeWithDampener = false;
+                    }
+
                     break;
+                }
+
+                index++;
+                if (justActivatedDampener)
+                {
+                    index++;
+                    justActivatedDampener = false;
                 }
             }
 
@@ -55,10 +87,15 @@ public class Reports
             {
                 SafeReportsCount += 1;
             }
+
+            if (safe || safeWithDampener)
+            {
+                SafeReportsWithDampener += 1;
+            }
         }
     }
 
     public int Length { get; private set; }
     public int SafeReportsCount { get; private set; }
-    public int SafeReportsWithDampener => SafeReportsCount;
+    public int SafeReportsWithDampener { get; private set;}
 }

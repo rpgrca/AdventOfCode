@@ -46,10 +46,23 @@ public class ReportsMust
     [InlineData("1 3 6 7 9", 1)]
     [InlineData("1 2 7 8 9", 0)]
     [InlineData("9 7 6 2 1", 0)]
-    //[InlineData("1 3 2 4 5", 1)]
+    [InlineData("1 3 2 4 5", 1)]
+    [InlineData("8 6 4 4 1", 1)]
+    [InlineData("1 3 2 4 3", 0)]
+    [InlineData("9 7 8 6 7", 0)]
+    [InlineData("1 2 7 3 4", 1)]
+    [InlineData("1 2 7 3 8", 0)]
     public void HaveWorkingProblemDampener(string input, int expectedCount)
     {
         var sut = new Reports(input);
         Assert.Equal(expectedCount, sut.SafeReportsWithDampener);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new Reports(SAMPLE_INPUT);
+        Assert.Equal(4, sut.SafeReportsWithDampener);
+    }
+
 }
