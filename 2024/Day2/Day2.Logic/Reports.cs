@@ -1,5 +1,6 @@
 
 
+
 namespace Day2.Logic;
 
 public class Reports
@@ -22,7 +23,7 @@ public class Reports
 
             if (levels[0] == levels[1])
             {
-                return;
+                continue;
             }
 
             var ascending = levels[0] < levels[1];
@@ -38,6 +39,7 @@ public class Reports
 
                 if ((ascending && (levels[index + 1] <= levels[index])) || (!ascending && (levels[index + 1] >= levels[index])))
                 {
+                    safe = false;
                     break;
                 }
 
@@ -45,6 +47,7 @@ public class Reports
                 if (absolute < 1 || absolute > 3)
                 {
                     safe = false;
+                    break;
                 }
             }
 
@@ -57,4 +60,5 @@ public class Reports
 
     public int Length { get; private set; }
     public int SafeReportsCount { get; private set; }
+    public int SafeReportsWithDampener => SafeReportsCount;
 }

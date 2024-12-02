@@ -33,4 +33,23 @@ public class ReportsMust
         var sut = new Reports(SAMPLE_INPUT);
         Assert.Equal(2, sut.SafeReportsCount);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new Reports(PUZZLE_INPUT);
+        Assert.Equal(326, sut.SafeReportsCount);
+    }
+
+    [Theory]
+    [InlineData("7 6 4 2 1", 1)]
+    [InlineData("1 3 6 7 9", 1)]
+    [InlineData("1 2 7 8 9", 0)]
+    [InlineData("9 7 6 2 1", 0)]
+    //[InlineData("1 3 2 4 5", 1)]
+    public void HaveWorkingProblemDampener(string input, int expectedCount)
+    {
+        var sut = new Reports(input);
+        Assert.Equal(expectedCount, sut.SafeReportsWithDampener);
+    }
 }
