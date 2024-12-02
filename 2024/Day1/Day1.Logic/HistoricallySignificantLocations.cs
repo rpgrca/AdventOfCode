@@ -24,21 +24,12 @@ public class HistoricallySignificantLocations
 
     private void SplitLists()
     {
-        var firstColumn = new List<int>();
-        var secondColumn = new List<int>();
-        foreach (var input in _input)
-        {
-            var values = input.Split(' ')
-                .Where(p => !string.IsNullOrWhiteSpace(p))
-                .Select(int.Parse)
-                .ToList();
+        var values = _input
+            .Select(p => p.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            .ToArray();
 
-            firstColumn.Add(values[0]);
-            secondColumn.Add(values[1]);
-        }
-
-        _firstColumn.AddRange(firstColumn.Order());
-        _secondColumn.AddRange(secondColumn.Order());
+        _firstColumn.AddRange(values.Select(p => int.Parse(p[0])).Order());
+        _secondColumn.AddRange(values.Select(p => int.Parse(p[1])).Order());
     }
 
     private void CalculateTotalDistance() =>
@@ -46,7 +37,7 @@ public class HistoricallySignificantLocations
             .Zip(_secondColumn)
             .Aggregate(0, (t, i) => t + Math.Abs(i.First - i.Second));
 
-   private void CalculateSimilarityScore() =>
+    private void CalculateSimilarityScore() =>
         SimilarityScore = _firstColumn
             .GroupJoin(_secondColumn, p => p, q => q, (p, q) => p * q.Count())
             .Sum();
