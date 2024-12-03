@@ -13,4 +13,13 @@ public class ProgramMemoryMust
         var sut = new ProgramMemory(input);
         Assert.Equal(expectedLength, sut.Length);
     }
+
+    [Theory]
+    [InlineData("mul(44,46)", 2024)]
+    [InlineData("mul(123,4)", 492)]
+    public void CalculateMultiplicationCorrectly(string input, int expectedResult)
+    {
+        var sut = new ProgramMemory(input);
+        Assert.Equal(expectedResult, sut.SumOfMultiplications);
+    }
 }
