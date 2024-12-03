@@ -5,9 +5,12 @@ namespace Day3.UnitTests;
 
 public class ProgramMemoryMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 71)]
+    [InlineData(PUZZLE_INPUT, 20187)]
+    public void LoadDataCorrectly(string input, int expectedLength)
     {
-
+        var sut = new ProgramMemory(input);
+        Assert.Equal(expectedLength, sut.Length);
     }
 }
