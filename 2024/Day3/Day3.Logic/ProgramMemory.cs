@@ -4,43 +4,43 @@ namespace Day3.Logic;
 
 public class ProgramMemory
 {
-    private string _input;
+    private readonly string _input;
+    private readonly IMultiplication _multiplication;
+    private IMultiplication _conditionalMultiplication;
+
+    public int Length => _input.Length;
+    public int SumOfMultiplications { get; private set; }
+    public int SumOfEnabledMultiplications { get; private set; }
 
     public ProgramMemory(string input)
     {
-        _input = input.Replace("\n", "");
+        _input = input;
+        _multiplication = new EnabledMultiplication();
+        _conditionalMultiplication = new EnabledMultiplication();
 
-        ParseMultiplications();
+        CalculateMultiplications();
     }
 
-    private void ParseMultiplications()
+    private void CalculateMultiplications()
     {
-        var matches = Regex.Matches(_input, @"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)");
-        var enabled = true;
+        var matches = Regex.Matches(_input, @"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)", RegexOptions.Compiled);
         foreach (Match match in matches)
         {
-            if (match.Value.StartsWith("mul"))
+            switch (match.Value)
             {
-                var result = int.Parse(match.Groups[1].Value) * int.Parse(match.Groups[2].Value);
-                SumOfMultiplications += result;
-                if (enabled)
-                {
-                    SumOfEnabledMultiplications += result;
-                }
-            }
-            else if (match.Value == "don't()")
-            {
-                enabled = false;
-            }
-            else
-            {
-                enabled = true;
+                case {} when match.Value.StartsWith("do()"):
+                    _conditionalMultiplication = new EnabledMultiplication();
+                    break;
+
+                case {} when match.Value.StartsWith("don't()"):
+                    _conditionalMultiplication = new DisabledMultiplication();
+                    break;
+
+                default:
+                    SumOfMultiplications += _multiplication.Calculate(match.Groups);
+                    SumOfEnabledMultiplications += _conditionalMultiplication.Calculate(match.Groups);
+                    break;
             }
         }
     }
-
-    public int Length => _input.Length;
-
-    public int SumOfMultiplications { get; private set; }
-    public int SumOfEnabledMultiplications { get; private set; }
 }

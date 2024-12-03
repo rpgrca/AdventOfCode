@@ -7,7 +7,7 @@ public class ProgramMemoryMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 71)]
-    [InlineData(PUZZLE_INPUT, 20187)]
+    [InlineData(PUZZLE_INPUT, 20192)]
     public void LoadDataCorrectly(string input, int expectedLength)
     {
         var sut = new ProgramMemory(input);
@@ -61,4 +61,10 @@ public class ProgramMemoryMust
         Assert.Equal(48, sut.SumOfEnabledMultiplications);
     }
 
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ProgramMemory(PUZZLE_INPUT);
+        Assert.Equal(100450138, sut.SumOfEnabledMultiplications);
+    }
 }
