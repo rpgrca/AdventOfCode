@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day3.Logic", "Day3.Logic\Day3.Logic.csproj", "{D202A63B-A88E-452B-BED0-18F0CCAD796E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day3.UnitTests", "Day3.UnitTests\Day3.UnitTests.csproj", "{1514FC29-71B7-46ED-8306-D7D2AED51426}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D202A63B-A88E-452B-BED0-18F0CCAD796E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D202A63B-A88E-452B-BED0-18F0CCAD796E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D202A63B-A88E-452B-BED0-18F0CCAD796E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D202A63B-A88E-452B-BED0-18F0CCAD796E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1514FC29-71B7-46ED-8306-D7D2AED51426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1514FC29-71B7-46ED-8306-D7D2AED51426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1514FC29-71B7-46ED-8306-D7D2AED51426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1514FC29-71B7-46ED-8306-D7D2AED51426}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
