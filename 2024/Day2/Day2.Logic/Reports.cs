@@ -1,7 +1,6 @@
-
-
-
-using System.Diagnostics;
+using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
+using System.Windows.Markup;
 
 namespace Day2.Logic;
 
@@ -17,7 +16,7 @@ public class Reports
         CountSafeReports();
     }
 
-    private void CountSafeReports()
+    private void CountSafeReports2()
     {
         var lines = new List<List<int[]>>();
         for (var subIndex = 0; subIndex < Length; subIndex++)
@@ -87,4 +86,150 @@ public class Reports
     public int Length { get; private set; }
     public int SafeReportsCount { get; private set; }
     public int SafeReportsWithDampener { get; private set;}
+
+    private void CountSafeReports()
+    {
+        foreach (var input in _input)
+        {
+            var values = input.Split(" ").Select(int.Parse).ToArray();
+            var levels = new Levels(values);
+            levels.State.WhenSuccessful(() => SafeReportsCount++);
+        }
+    }
+}
+
+
+public class Levels
+{
+    private readonly int[] _values;
+
+    public IState State { get; private set; }
+
+    public Levels(int[] values)
+    {
+        _values = values;
+        State = new StartState();
+
+        Run();
+    }
+
+    private void Run()
+    {
+        foreach (var value in _values)
+        {
+            State = State.NextValue(value);
+        }
+    }
+}
+
+public interface IState
+{
+    IState NextValue(int next);
+    void WhenSuccessful(Action action);
+}
+
+public abstract class State : IState
+{
+    public abstract IState NextValue(int next);
+
+    public abstract void WhenSuccessful(Action action);
+}
+
+public class SuccessfulState : State
+{
+    public override IState NextValue(int next) => this;
+
+    public override void WhenSuccessful(Action action) =>
+        action();
+}
+
+public class InvalidState : State
+{
+    private readonly int _index;
+
+    public InvalidState(int index) => _index = index;
+
+    public override IState NextValue(int next) => this;
+
+    public override void WhenSuccessful(Action action)
+    {
+    }
+}
+
+public class StartState : SuccessfulState
+{
+    public override IState NextValue(int next) =>
+        new HeadState(next);
+}
+
+public class HeadState : SuccessfulState
+{
+    private readonly int _current;
+    private readonly int _index;
+
+    public HeadState(int current)
+    {
+        _current = current;
+        _index = 0;
+    }
+
+    public override IState NextValue(int next)
+    {
+        if (next > _current)
+        {
+            return new AscendingState(next, _index + 1);
+        }
+        else if (next < _current)
+        {
+            return new DescendingState(next, _index + 1);
+        }
+        else
+        {
+            return new InvalidState(_index);
+        }
+    }
+}
+
+public class AscendingState : SuccessfulState
+{
+    private readonly int _current;
+    private readonly int _index;
+
+    public AscendingState(int current, int index)
+    {
+        _current = current;
+        _index = index;
+    }
+
+    public override IState NextValue(int next)
+    {
+        if (next > _current)
+        {
+            return new AscendingState(next, _index + 1);
+        }
+
+        return new InvalidState(_index);
+    }
+}
+
+public class DescendingState : SuccessfulState
+{
+    private readonly int _current;
+    private readonly int _index;
+
+    public DescendingState(int current, int index)
+    {
+        _current = current;
+        _index = index;
+    }
+
+    public override IState NextValue(int next)
+    {
+        if (next < _current)
+        {
+            return new DescendingState(next, _index + 1);
+        }
+
+        return new InvalidState(_index);
+    }
 }
