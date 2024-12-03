@@ -50,7 +50,15 @@ public class ProgramMemoryMust
     [Fact]
     public void HandleDoCorrectly()
     {
-         var sut = new ProgramMemory("don't()_do()mul(5,5)");
+        var sut = new ProgramMemory("don't()_do()mul(5,5)");
         Assert.Equal(25, sut.SumOfEnabledMultiplications);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ProgramMemory(SECOND_SAMPLE_INPUT);
+        Assert.Equal(48, sut.SumOfEnabledMultiplications);
+    }
+
 }
