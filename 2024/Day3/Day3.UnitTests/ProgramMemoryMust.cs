@@ -39,4 +39,18 @@ public class ProgramMemoryMust
         var sut = new ProgramMemory(PUZZLE_INPUT);
         Assert.Equal(173517243, sut.SumOfMultiplications);
     }
+
+    [Fact]
+    public void HandleDontCorrectly()
+    {
+        var sut = new ProgramMemory("don't()_mul(5,5)");
+        Assert.Equal(0, sut.SumOfEnabledMultiplications);
+    }
+
+    [Fact]
+    public void HandleDoCorrectly()
+    {
+         var sut = new ProgramMemory("don't()_do()mul(5,5)");
+        Assert.Equal(25, sut.SumOfEnabledMultiplications);
+    }
 }
