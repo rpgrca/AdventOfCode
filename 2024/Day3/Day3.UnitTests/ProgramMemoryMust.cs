@@ -17,9 +17,26 @@ public class ProgramMemoryMust
     [Theory]
     [InlineData("mul(44,46)", 2024)]
     [InlineData("mul(123,4)", 492)]
+    [InlineData("mul(4*, mul(6,9!, ?(12,34)", 0)]
+    [InlineData("mul ( 2 , 4 )", 0)]
+    [InlineData("mul(44,46)mul(44,46)", 4048)]
     public void CalculateMultiplicationCorrectly(string input, int expectedResult)
     {
         var sut = new ProgramMemory(input);
         Assert.Equal(expectedResult, sut.SumOfMultiplications);
+    }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ProgramMemory(SAMPLE_INPUT);
+        Assert.Equal(161, sut.SumOfMultiplications);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ProgramMemory(PUZZLE_INPUT);
+        Assert.Equal(173517243, sut.SumOfMultiplications);
     }
 }
