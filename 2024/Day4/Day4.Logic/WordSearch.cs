@@ -1,7 +1,3 @@
-
-
-using System.Linq.Expressions;
-
 namespace Day4.Logic;
 
 public class WordSearch
@@ -19,9 +15,9 @@ public class WordSearch
 
     private void FindXmas()
     {
-        for (var y = 0; y < Length; y++)
+        for (var y = 0; y < Height; y++)
         {
-            for (var x = 0; x < Length; x++)
+            for (var x = 0; x < Width; x++)
             {
                 if (_block[y][x] == 'X')
                 {
@@ -29,6 +25,10 @@ public class WordSearch
                     FindXmasReverseHorizontally(y, x);
                     FindXmasVertically(y, x);
                     FindXmasReverseVertically(y, x);
+                    FindXmasDiagonallyDownwards(y, x);
+                    FindXmasDiagonallyReverseDownwards(y, x);
+                    FindXmasDiagonallyUpwards(y, x);
+                    FindXmasDiagonallyReverseUpwards(y, x);
                 }
             }
         }
@@ -36,7 +36,7 @@ public class WordSearch
 
     private void FindXmasHorizontally(int y, int x)
     {
-        if (x <= Length - 4)
+        if (x <= Width - 4)
         {
             if (_block[y][x+1] == 'M' && _block[y][x+2] == 'A' && _block[y][x+3] == 'S')
             {
@@ -58,7 +58,7 @@ public class WordSearch
 
     private void FindXmasVertically(int y, int x)
     {
-        if (y <= Length - 4)
+        if (y <= Height - 4)
         {
             if (_block[y+1][x] == 'M' && _block[y+2][x] == 'A' && _block[y+3][x] == 'S')
             {
@@ -78,7 +78,53 @@ public class WordSearch
         }
     }
 
-    public int Length => _block.Length;
+    private void FindXmasDiagonallyDownwards(int y, int x)
+    {
+        if ((x <= Width - 4) && (y <= Height - 4))
+        {
+            if (_block[y+1][x+1] == 'M' && _block[y+2][x+2] == 'A' && _block[y+3][x+3] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    private void FindXmasDiagonallyReverseDownwards(int y, int x)
+    {
+        if ((x >= 3) && (y <= Height - 4))
+        {
+            if (_block[y+1][x-1] == 'M' && _block[y+2][x-2] == 'A' && _block[y+3][x-3] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    private void FindXmasDiagonallyUpwards(int y, int x)
+    {
+        if ((x <= Width - 4) && (y >= 3))
+        {
+            if (_block[y-1][x+1] == 'M' && _block[y-2][x+2] == 'A' && _block[y-3][x+3] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    private void FindXmasDiagonallyReverseUpwards(int y, int x)
+    {
+        if ((x >= 3) && (y >= 3))
+        {
+            if (_block[y-1][x-1] == 'M' && _block[y-2][x-2] == 'A' && _block[y-3][x-3] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    public int Width => _block[0].Length;
+
+    public int Height => _block.Length;
 
     public int XmasCount { get; private set; }
 }
