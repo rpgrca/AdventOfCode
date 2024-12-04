@@ -91,4 +91,11 @@ S.MS..
         var sut = new WordSearch(input);
         Assert.Equal(expectedCount, sut.XmasCount);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new WordSearch(SAMPLE_INPUT);
+        Assert.Equal(18, sut.XmasCount);
+    }
 }
