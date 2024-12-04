@@ -123,4 +123,11 @@ S.MS..
         var sut = new WordSearch(SAMPLE_INPUT);
         Assert.Equal(9, sut.X_MasCount);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new WordSearch(PUZZLE_INPUT);
+        Assert.Equal(1941, sut.X_MasCount);
+    }
 }

@@ -1,10 +1,19 @@
-
 namespace Day4.Logic;
+
+public record ConditionalCoordinates(Func<int, int, bool> Condition, (int X, int Y)[] Coordinates);
 
 public class WordSearch
 {
     private readonly string _input;
     private readonly string[] _block;
+
+    public int Width => _block[0].Length;
+
+    public int Height => _block.Length;
+
+    public int XmasCount { get; private set; }
+
+    public int X_MasCount { get; private set; }
 
     public WordSearch(string input)
     {
@@ -16,169 +25,56 @@ public class WordSearch
 
     private void FindXmas()
     {
+        var xmasConditionals = new ConditionalCoordinates[]
+        {
+            new ((x, _) => x <= Width - 4, new[] { (1, 0), (2, 0), (3, 0) }),
+            new ((x, _) => x >= 3, new[] { (-1, 0), (-2, 0), (-3, 0) }),
+            new ((_, y) => y <= Height - 4, new[] { (0, 1), (0, 2), (0, 3) }),
+            new ((_, y) => y >= 3, new[] { (0, -1), (0, -2), (0, -3)}),
+            new ((x, y) => x <= Width - 4 && y <= Height - 4, new[] { (1, 1), (2, 2), (3, 3) }),
+            new ((x, y) => x >= 3 && y <= Height - 4, new[] { (-1, 1), (-2, 2), (-3, 3) }),
+            new ((x, y) => x <= Width - 4 && y >= 3, new[] { (1, -1), (2, -2), (3, -3) }),
+            new ((x, y) => x >= 3 && y >= 3, new[] { (-1, -1), (-2, -2), (-3, -3) })
+        };
+
+        Func<int, int, bool> condition = (x, y) => y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2;
+        var x_masConditionals = new ConditionalCoordinates[]
+        {
+            new(condition, new[] { (-1, -1), (1, 1), (1, -1), (-1, 1) }),
+            new(condition, new[] { (1, 1), (-1, -1), (-1, 1), (1, -1) }),
+            new(condition, new[] { (-1, -1), (1, 1), (-1, 1), (1, -1) }),
+            new(condition, new[] { (1, 1), (-1, -1), (1, -1), (-1, 1) })
+        };
+
         for (var y = 0; y < Height; y++)
         {
             for (var x = 0; x < Width; x++)
             {
                 if (_block[y][x] == 'X')
                 {
-                    FindXmasHorizontally(y, x);
-                    FindXmasReverseHorizontally(y, x);
-                    FindXmasVertically(y, x);
-                    FindXmasReverseVertically(y, x);
-                    FindXmasDiagonallyDownwards(y, x);
-                    FindXmasDiagonallyReverseDownwards(y, x);
-                    FindXmasDiagonallyUpwards(y, x);
-                    FindXmasDiagonallyReverseUpwards(y, x);
+                    var result = xmasConditionals
+                        .Where(p => p.Condition(x, y))
+                        .Select(p => p.Coordinates)
+                        .Count(p => _block[y + p[0].Y][x + p[0].X] == 'M' &&
+                                    _block[y + p[1].Y][x + p[1].X] == 'A' &&
+                                    _block[y + p[2].Y][x + p[2].X] == 'S');
+
+                    XmasCount += result;
                 }
 
                 if (_block[y][x] == 'A')
                 {
-                    FindX_MasDownwards(y, x);
-                    FindX_MasUpwards(y, x);
-                    FindX_MasDownwardsUpwards(y, x);
-                    FindX_MasUpwardsDownwards(y, x);
+                    var result = x_masConditionals
+                        .Where(p => p.Condition(x, y))
+                        .Select(p => p.Coordinates)
+                        .Count(p => _block[y + p[0].Y][x + p[0].X] == 'M' &&
+                                    _block[y + p[1].Y][x + p[1].X] == 'S' &&
+                                    _block[y + p[2].Y][x + p[2].X] == 'M' &&
+                                    _block[y + p[3].Y][x + p[3].X] == 'S');
+
+                    X_MasCount += result;
                 }
             }
         }
     }
-
-    private void FindX_MasDownwards(int y, int x)
-    {
-        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
-        {
-            if (_block[y-1][x-1] == 'M' && _block[y+1][x+1] == 'S' && _block[y-1][x+1] == 'M' && _block[y+1][x-1] == 'S')
-            {
-                X_MasCount++;
-            }
-        }
-    }
-
-    private void FindX_MasUpwards(int y, int x)
-    {
-        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
-        {
-            if (_block[y-1][x-1] == 'S' && _block[y+1][x+1] == 'M' && _block[y-1][x+1] == 'S' && _block[y+1][x-1] == 'M')
-            {
-                X_MasCount++;
-            }
-        }
-    }
-
-    private void FindX_MasDownwardsUpwards(int y, int x)
-    {
-        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
-        {
-            if (_block[y-1][x-1] == 'M' && _block[y+1][x+1] == 'S' && _block[y-1][x+1] == 'S' && _block[y+1][x-1] == 'M')
-            {
-                X_MasCount++;
-            }
-        }
-    }
-
-    private void FindX_MasUpwardsDownwards(int y, int x)
-    {
-        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
-        {
-            if (_block[y-1][x-1] == 'S' && _block[y+1][x+1] == 'M' && _block[y-1][x+1] == 'M' && _block[y+1][x-1] == 'S')
-            {
-                X_MasCount++;
-            }
-        }
-    }
-
-    private void FindXmasHorizontally(int y, int x)
-    {
-        if (x <= Width - 4)
-        {
-            if (_block[y][x+1] == 'M' && _block[y][x+2] == 'A' && _block[y][x+3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasReverseHorizontally(int y, int x)
-    {
-        if (x >= 3)
-        {
-            if (_block[y][x-1] == 'M' && _block[y][x-2] == 'A' && _block[y][x-3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasVertically(int y, int x)
-    {
-        if (y <= Height - 4)
-        {
-            if (_block[y+1][x] == 'M' && _block[y+2][x] == 'A' && _block[y+3][x] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasReverseVertically(int y, int x)
-    {
-        if (y >= 3)
-        {
-            if (_block[y-1][x] == 'M' && _block[y-2][x] == 'A' && _block[y-3][x] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasDiagonallyDownwards(int y, int x)
-    {
-        if ((x <= Width - 4) && (y <= Height - 4))
-        {
-            if (_block[y+1][x+1] == 'M' && _block[y+2][x+2] == 'A' && _block[y+3][x+3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasDiagonallyReverseDownwards(int y, int x)
-    {
-        if ((x >= 3) && (y <= Height - 4))
-        {
-            if (_block[y+1][x-1] == 'M' && _block[y+2][x-2] == 'A' && _block[y+3][x-3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasDiagonallyUpwards(int y, int x)
-    {
-        if ((x <= Width - 4) && (y >= 3))
-        {
-            if (_block[y-1][x+1] == 'M' && _block[y-2][x+2] == 'A' && _block[y-3][x+3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    private void FindXmasDiagonallyReverseUpwards(int y, int x)
-    {
-        if ((x >= 3) && (y >= 3))
-        {
-            if (_block[y-1][x-1] == 'M' && _block[y-2][x-2] == 'A' && _block[y-3][x-3] == 'S')
-            {
-                XmasCount++;
-            }
-        }
-    }
-
-    public int Width => _block[0].Length;
-
-    public int Height => _block.Length;
-
-    public int XmasCount { get; private set; }
-    public int X_MasCount { get; private set; }
 }
