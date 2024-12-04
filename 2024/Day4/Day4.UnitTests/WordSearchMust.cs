@@ -11,7 +11,7 @@ public class UnitTest1
     [InlineData(PUZZLE_INPUT, 140, 140)]
     public void LoadInputCorrectly(string input, int expectedWidth, int expectedHeight)
     {
-        var sut = new WordSearch(input);
+        var sut = new WordSearch(input, new XmasCounter());
         Assert.Equal(expectedWidth, sut.Width);
         Assert.Equal(expectedHeight, sut.Height);
     }
@@ -34,7 +34,7 @@ XMAS..
 ......", 2)]
     public void FindXmasHorizontally(string input, int expectedLength)
     {
-        var sut = new WordSearch(input);
+        var sut = new WordSearch(input, new XmasCounter());
         Assert.Equal(expectedLength, sut.XmasCount);
     }
 
@@ -56,7 +56,7 @@ XMAS..
 .X....", 2)]
     public void FindXmasVertically(string input, int expectedLength)
     {
-        var sut = new WordSearch(input);
+        var sut = new WordSearch(input, new XmasCounter());
         Assert.Equal(expectedLength, sut.XmasCount);
     }
 
@@ -88,21 +88,21 @@ S.MS..
 .X.X..", 4)]
     public void FindXmasDiagonally(string input, int expectedCount)
     {
-        var sut = new WordSearch(input);
+        var sut = new WordSearch(input, new XmasCounter());
         Assert.Equal(expectedCount, sut.XmasCount);
     }
 
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new WordSearch(SAMPLE_INPUT);
+        var sut = new WordSearch(SAMPLE_INPUT, new XmasCounter());
         Assert.Equal(18, sut.XmasCount);
     }
 
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new WordSearch(PUZZLE_INPUT);
+        var sut = new WordSearch(PUZZLE_INPUT, new XmasCounter());
         Assert.Equal(2532, sut.XmasCount);
     }
 
@@ -113,21 +113,21 @@ S.MS..
     [InlineData("S.M\n.A.\nS.M")]
     public void FindX_MasCorrectly(string input)
     {
-        var sut = new WordSearch(input);
-        Assert.Equal(1, sut.X_MasCount);
+        var sut = new WordSearch(input, new X_MasCounter());
+        Assert.Equal(1, sut.XmasCount);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new WordSearch(SAMPLE_INPUT);
-        Assert.Equal(9, sut.X_MasCount);
+        var sut = new WordSearch(SAMPLE_INPUT, new X_MasCounter());
+        Assert.Equal(9, sut.XmasCount);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new WordSearch(PUZZLE_INPUT);
-        Assert.Equal(1941, sut.X_MasCount);
+        var sut = new WordSearch(PUZZLE_INPUT, new X_MasCounter());
+        Assert.Equal(1941, sut.XmasCount);
     }
 }
