@@ -27,6 +27,8 @@ public class WordSearch
                 {
                     FindXmasHorizontally(y, x);
                     FindXmasReverseHorizontally(y, x);
+                    FindXmasVertically(y, x);
+                    FindXmasReverseVertically(y, x);
                 }
             }
         }
@@ -48,6 +50,28 @@ public class WordSearch
         if (x >= 3)
         {
             if (_block[y][x-1] == 'M' && _block[y][x-2] == 'A' && _block[y][x-3] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    private void FindXmasVertically(int y, int x)
+    {
+        if (y <= Length - 4)
+        {
+            if (_block[y+1][x] == 'M' && _block[y+2][x] == 'A' && _block[y+3][x] == 'S')
+            {
+                XmasCount++;
+            }
+        }
+    }
+
+    private void FindXmasReverseVertically(int y, int x)
+    {
+        if (y >= 3)
+        {
+            if (_block[y-1][x] == 'M' && _block[y-2][x] == 'A' && _block[y-3][x] == 'S')
             {
                 XmasCount++;
             }
