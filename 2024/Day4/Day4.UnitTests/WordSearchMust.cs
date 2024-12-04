@@ -116,4 +116,11 @@ S.MS..
         var sut = new WordSearch(input);
         Assert.Equal(1, sut.X_MasCount);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new WordSearch(SAMPLE_INPUT);
+        Assert.Equal(9, sut.X_MasCount);
+    }
 }
