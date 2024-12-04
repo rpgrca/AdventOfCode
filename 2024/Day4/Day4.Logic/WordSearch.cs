@@ -1,3 +1,4 @@
+
 namespace Day4.Logic;
 
 public class WordSearch
@@ -30,6 +31,58 @@ public class WordSearch
                     FindXmasDiagonallyUpwards(y, x);
                     FindXmasDiagonallyReverseUpwards(y, x);
                 }
+
+                if (_block[y][x] == 'A')
+                {
+                    FindX_MasDownwards(y, x);
+                    FindX_MasUpwards(y, x);
+                    FindX_MasDownwardsUpwards(y, x);
+                    FindX_MasUpwardsDownwards(y, x);
+                }
+            }
+        }
+    }
+
+    private void FindX_MasDownwards(int y, int x)
+    {
+        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
+        {
+            if (_block[y-1][x-1] == 'M' && _block[y+1][x+1] == 'S' && _block[y-1][x+1] == 'M' && _block[y+1][x-1] == 'S')
+            {
+                X_MasCount++;
+            }
+        }
+    }
+
+    private void FindX_MasUpwards(int y, int x)
+    {
+        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
+        {
+            if (_block[y-1][x-1] == 'S' && _block[y+1][x+1] == 'M' && _block[y-1][x+1] == 'S' && _block[y+1][x-1] == 'M')
+            {
+                X_MasCount++;
+            }
+        }
+    }
+
+    private void FindX_MasDownwardsUpwards(int y, int x)
+    {
+        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
+        {
+            if (_block[y-1][x-1] == 'M' && _block[y+1][x+1] == 'S' && _block[y-1][x+1] == 'S' && _block[y+1][x-1] == 'M')
+            {
+                X_MasCount++;
+            }
+        }
+    }
+
+    private void FindX_MasUpwardsDownwards(int y, int x)
+    {
+        if (y >= 1 && y <= Height - 2 && x >= 1 && x <= Width - 2)
+        {
+            if (_block[y-1][x-1] == 'S' && _block[y+1][x+1] == 'M' && _block[y-1][x+1] == 'M' && _block[y+1][x-1] == 'S')
+            {
+                X_MasCount++;
             }
         }
     }
@@ -127,4 +180,5 @@ public class WordSearch
     public int Height => _block.Length;
 
     public int XmasCount { get; private set; }
+    public int X_MasCount { get; private set; }
 }

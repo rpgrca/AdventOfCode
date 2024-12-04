@@ -98,4 +98,22 @@ S.MS..
         var sut = new WordSearch(SAMPLE_INPUT);
         Assert.Equal(18, sut.XmasCount);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new WordSearch(PUZZLE_INPUT);
+        Assert.Equal(2532, sut.XmasCount);
+    }
+
+    [Theory]
+    [InlineData("M.M\n.A.\nS.S")]
+    [InlineData("S.S\n.A.\nM.M")]
+    [InlineData("M.S\n.A.\nM.S")]
+    [InlineData("S.M\n.A.\nS.M")]
+    public void FindX_MasCorrectly(string input)
+    {
+        var sut = new WordSearch(input);
+        Assert.Equal(1, sut.X_MasCount);
+    }
 }
