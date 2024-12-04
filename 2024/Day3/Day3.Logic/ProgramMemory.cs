@@ -18,10 +18,10 @@ public class ProgramMemory
         _multiplication = new EnabledMultiplication();
         _conditionalMultiplication = new EnabledMultiplication();
 
-        CalculateMultiplications();
+        CalculateSumOfMultiplications();
     }
 
-    private void CalculateMultiplications()
+    private void CalculateSumOfMultiplications()
     {
         var matches = Regex.Matches(_input, @"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)", RegexOptions.Compiled);
         foreach (Match match in matches)
