@@ -10,7 +10,7 @@ public class ReportsMust
     [InlineData(PUZZLE_INPUT, 1000)]
     public void LoadInputCorrectly(string input, int expectedLength)
     {
-        var sut = new Reports(input);
+        var sut = new Reports(input, new NullDampener());
         Assert.Equal(expectedLength, sut.Length);
     }
 
@@ -23,21 +23,21 @@ public class ReportsMust
     [InlineData("1 3 6 7 9", 1)]
     public void DetermineSafeReportCorrectly(string input, int expectedCount)
     {
-        var sut = new Reports(input);
+        var sut = new Reports(input, new NullDampener());
         Assert.Equal(expectedCount, sut.SafeReportsCount);
     }
 
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new Reports(SAMPLE_INPUT);
+        var sut = new Reports(SAMPLE_INPUT, new NullDampener());
         Assert.Equal(2, sut.SafeReportsCount);
     }
 
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new Reports(PUZZLE_INPUT);
+        var sut = new Reports(PUZZLE_INPUT, new NullDampener());
         Assert.Equal(326, sut.SafeReportsCount);
     }
 
@@ -56,21 +56,21 @@ public class ReportsMust
     [InlineData("4 4 5 6 7", 1)]
     public void HaveWorkingProblemDampener(string input, int expectedCount)
     {
-        var sut = new Reports(input);
-        Assert.Equal(expectedCount, sut.SafeReportsWithDampener);
+        var sut = new Reports(input, new ProblemDampener());
+        Assert.Equal(expectedCount, sut.SafeReportsCount);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new Reports(SAMPLE_INPUT);
-        Assert.Equal(4, sut.SafeReportsWithDampener);
+        var sut = new Reports(SAMPLE_INPUT, new ProblemDampener());
+        Assert.Equal(4, sut.SafeReportsCount);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new Reports(PUZZLE_INPUT);
-        Assert.Equal(381, sut.SafeReportsWithDampener);
+        var sut = new Reports(PUZZLE_INPUT, new ProblemDampener());
+        Assert.Equal(381, sut.SafeReportsCount);
     }
 }
