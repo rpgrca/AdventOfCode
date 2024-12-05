@@ -1,22 +1,9 @@
 namespace Day2.Logic.States;
 
-internal class AscendingState : SuccessfulState
+internal class AscendingState : MovingState<AscendingState>
 {
     public AscendingState(int current, int index, IState previous)
-        : base(current, index, previous)
+        : base(current, index, previous, (n, c) => n > c, (n, i, s) => new(n, i + 1, s))
     {
-    }
-
-    public override IState NextValue(int next)
-    {
-        IState result = IsValueNearEnough(next);
-        result.WhenSuccessful(() =>
-        {
-            result = next > _current
-                ? new AscendingState(next, _index + 1, this)
-                : new InvalidState(_index, this);
-        });
-
-        return result;
     }
 }
