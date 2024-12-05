@@ -9,6 +9,7 @@ internal abstract class State : IState, IResult
     protected readonly int _index;
 
     public IState PreviousState => _previousState;
+    public int Index => _index;
 
     public State(int current, int index, IState previousState)
     {
@@ -22,12 +23,9 @@ internal abstract class State : IState, IResult
     protected IState IsValueNearEnough(int next)
     {
         var difference = Math.Abs(next - _current);
-        if (1 <= difference && difference <= 3)
-        {
-            return new SuccessfulState(_current, _index, this);
-        }
-
-        return new InvalidState(_index, this);
+        return 1 <= difference && difference <= 3
+            ? new SuccessfulState(_current, _index, this)
+            : new InvalidState(_index, this);
     }
 
     public virtual IResult WhenSuccessful(Action action) =>

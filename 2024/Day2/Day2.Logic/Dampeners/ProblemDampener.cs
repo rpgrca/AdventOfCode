@@ -16,7 +16,7 @@ internal class ProblemDampener : IDampener
 
     public IEnumerable<int[]> GenerateCombinations(int[] values, IState state)
     {
-        for (var index = 0; index < values.Length; index++)
+        for (var index = state.PreviousState.PreviousState.Index; index <= state.Index; index++)
         {
             yield return values
                 .Select((p, i) => new { p, i })

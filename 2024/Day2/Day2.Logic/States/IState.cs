@@ -4,4 +4,5 @@ internal interface IState : IResult
 {
     IState PreviousState { get; }
     IState NextValue(int next);
+    int Index { get; }
 }

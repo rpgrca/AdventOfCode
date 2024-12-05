@@ -16,12 +16,16 @@ internal class MovingState<T> : SuccessfulState where T : class, IState
     public override IState NextValue(int next)
     {
         IState result = IsValueNearEnough(next);
-        result.WhenSuccessful(() =>
-        {
-            result = _conditional.Invoke(next, _current)
-                ? _constructor.Invoke(next, _index + 1, this)
-                : new InvalidState(_index, this);
-        });
+        result
+            .WhenSuccessful(() =>
+            {
+                result = _conditional.Invoke(next, _current)
+                    ? _constructor.Invoke(next, _index + 1, this)
+                    : new InvalidState(_index + 1, this);
+            })
+            .WhenInvalid(() => {
+                result = new InvalidState(_index + 1, this);
+            });
 
         return result;
     }

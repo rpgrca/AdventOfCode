@@ -54,6 +54,9 @@ public class ReportsMust
     [InlineData("1 2 7 3 8", 0)]
     [InlineData("9 1 2 3 4", 1)]
     [InlineData("4 4 5 6 7", 1)]
+    // Special cases for optimized GenerateCombinations based on puzzle input
+    [InlineData("19 20 21 23 24 25 28 26", 1)]
+    [InlineData("24 28 26", 1)] // Does not generate combinations
     public void HaveWorkingProblemDampener(string input, int expectedCount)
     {
         var sut = Reports.CreateWithDampener(input);
