@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Day2.Logic.States;
 
 internal abstract class State : IState, IResult
@@ -28,7 +30,9 @@ internal abstract class State : IState, IResult
         return new InvalidState(_index, this);
     }
 
-    public abstract IResult WhenSuccessful(Action action);
+    public virtual IResult WhenSuccessful(Action action) =>
+        throw new UnreachableException();
 
-    public abstract IResult WhenInvalid(Action result);
+    public virtual IResult WhenInvalid(Action result) =>
+        throw new UnreachableException();
 }

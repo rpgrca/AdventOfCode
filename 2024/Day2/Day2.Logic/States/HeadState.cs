@@ -30,10 +30,4 @@ namespace Day2.Logic.States;
 
         return result;
     }
-
-    public override IResult WhenInvalid(Action result) =>
-        throw new UnreachableException();
-
-    public override IResult WhenSuccessful(Action action) =>
-        throw new UnreachableException();
 }
