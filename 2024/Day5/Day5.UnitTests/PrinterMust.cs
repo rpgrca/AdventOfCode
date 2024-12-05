@@ -14,4 +14,11 @@ public class PrinterMust
         Assert.Equal(expectedRules, sut.RuleCount);
         Assert.Equal(expectedUpdates, sut.UpdatesCount);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new Printer(SAMPLE_INPUT);
+        Assert.Equal(143, sut.SumOfMiddlePagesFromCorrectUpdates);
+    }
 }
