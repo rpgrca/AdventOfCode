@@ -21,4 +21,11 @@ public class PrinterMust
         var sut = new Printer(SAMPLE_INPUT);
         Assert.Equal(143, sut.SumOfMiddlePagesFromCorrectUpdates);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new Printer(PUZZLE_INPUT);
+        Assert.Equal(4135, sut.SumOfMiddlePagesFromCorrectUpdates);
+    }
 }
