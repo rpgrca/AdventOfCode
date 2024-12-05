@@ -5,9 +5,13 @@ namespace Day5.UnitTests;
 
 public class PrinterMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 21, 6)]
+    [InlineData(PUZZLE_INPUT, 1176, 190)]
+    public void LoadInputCorrectly(string input, int expectedRules, int expectedUpdates)
     {
-
+        var sut = new Printer(input);
+        Assert.Equal(expectedRules, sut.RuleCount);
+        Assert.Equal(expectedUpdates, sut.UpdatesCount);
     }
 }
