@@ -13,18 +13,9 @@ namespace Day2.Logic.States;
         result
             .WhenSuccessful(() =>
             {
-                if (next > _current)
-                {
-                    result = new AscendingState(next, _index + 1, this);
-                }
-                else if (next < _current)
-                {
-                    result = new DescendingState(next, _index + 1, this);
-                }
-                else
-                {
-                    result = new InvalidState(_index + 1, this);
-                }
+                result = next > _current
+                    ? new AscendingState(next, _index + 1, this)
+                    : new DescendingState(next, _index + 1, this);
             })
             .WhenInvalid(() => {
                 result = new InvalidState(_index + 1, this);

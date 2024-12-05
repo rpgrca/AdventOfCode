@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Day2.Logic.States;
 
@@ -28,9 +29,11 @@ internal abstract class State : IState, IResult
             : new InvalidState(_index, this);
     }
 
+    [ExcludeFromCodeCoverage]
     public virtual IResult WhenSuccessful(Action action) =>
         throw new UnreachableException();
 
+    [ExcludeFromCodeCoverage]
     public virtual IResult WhenInvalid(Action result) =>
         throw new UnreachableException();
 }

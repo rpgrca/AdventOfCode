@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Day2.Logic.States;
 
+[ExcludeFromCodeCoverage]
 internal class NullState : IState
 {
     public int Index => throw new UnreachableException();

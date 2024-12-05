@@ -10,8 +10,6 @@ internal class ProblemDampener : IDampener
 {
     private IState _state;
 
-    internal IState PreviousState => throw new NotImplementedException();
-
     public ProblemDampener() => _state = new NullState();
 
     public IEnumerable<int[]> GenerateCombinations(int[] values, IState state)
@@ -24,11 +22,5 @@ internal class ProblemDampener : IDampener
                 .Select(p => p.p)
                 .ToArray();
         }
-    }
-
-    public IState NextValue(int next)
-    {
-        _state = _state.NextValue(next);
-        return _state;
     }
 }
