@@ -1,6 +1,6 @@
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public abstract class State : IState, IResult
+internal abstract class State : IState, IResult
 {
     protected IState _previousState;
     protected readonly int _current;

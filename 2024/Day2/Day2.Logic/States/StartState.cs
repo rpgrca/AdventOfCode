@@ -1,8 +1,8 @@
 using System.Diagnostics;
 
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public class StartState : State
+internal class StartState : State
 {
     public StartState()
         : base(0, 0, new NullState())

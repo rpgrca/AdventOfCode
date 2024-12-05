@@ -1,6 +1,6 @@
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public class InvalidState : State
+internal class InvalidState : State
 {
     public InvalidState(int index, IState previousState)
         : base(0, index, previousState)

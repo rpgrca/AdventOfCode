@@ -1,6 +1,6 @@
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public class SuccessfulState : State
+internal class SuccessfulState : State
 {
     public SuccessfulState(int current, int index, IState previousState)
         : base(current, index, previousState)

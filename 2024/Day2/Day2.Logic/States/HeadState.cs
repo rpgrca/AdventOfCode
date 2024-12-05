@@ -1,8 +1,8 @@
 using System.Diagnostics;
 
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public class HeadState : State
+ internal class HeadState : State
 {
     public HeadState(int current, IState state)
         : base(current, 0, state)

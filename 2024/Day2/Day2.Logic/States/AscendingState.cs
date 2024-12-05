@@ -1,6 +1,6 @@
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public class AscendingState : SuccessfulState
+internal class AscendingState : SuccessfulState
 {
     public AscendingState(int current, int index, IState previous)
         : base(current, index, previous)
@@ -12,14 +12,9 @@ public class AscendingState : SuccessfulState
         IState result = IsValueNearEnough(next);
         result.WhenSuccessful(() =>
         {
-            if (next > _current)
-            {
-                result = new AscendingState(next, _index + 1, this);
-            }
-            else
-            {
-                result = new InvalidState(_index, this);
-            }
+            result = next > _current
+                ? new AscendingState(next, _index + 1, this)
+                : new InvalidState(_index, this);
         });
 
         return result;

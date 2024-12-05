@@ -1,6 +1,6 @@
-namespace Day2.Logic;
+namespace Day2.Logic.States;
 
-public interface IState : IResult
+internal interface IState : IResult
 {
     IState PreviousState { get; }
     IState NextValue(int next);
