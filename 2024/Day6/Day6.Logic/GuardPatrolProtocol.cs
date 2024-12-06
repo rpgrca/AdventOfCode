@@ -24,29 +24,25 @@ public class GuardPatrolProtocol
         }
     }
 
-    private List<List<HashSet<int>>> CreateCache()
+    private HashSet<int>[,] CreateCache()
     {
-        var cache = new List<List<HashSet<int>>>();
+        var cache = new HashSet<int>[Length,Length];
         for (var y = 0; y < Length; y++)
         {
-            cache.Add(new List<HashSet<int>>());
             for (var x = 0; x < Length; x++)
             {
-                cache[y].Add(new HashSet<int>());
+                cache[y,x] = new HashSet<int>();
             }
         }
 
         return cache;
     }
 
-    private void ClearCache(List<List<HashSet<int>>> cache)
+    private void ClearCache(HashSet<int>[,] cache)
     {
         foreach (var row in cache)
         {
-            foreach (var column in row)
-            {
-                column.Clear();
-            }
+            row.Clear();
         }
     }
 
@@ -111,18 +107,17 @@ public class GuardPatrolProtocol
         var cache = CreateCache();
         foreach (var (x, y) in _walked.Skip(1))
         {
-            var oldPosition = _map[y][x];
             _map[y][x] = '#';
             if (CheckForLoop(cache))
             {
                 PossibleObstructions++;
             }
-            _map[y][x] = oldPosition;
+            _map[y][x] = '.';
             ClearCache(cache);
         }
     }
 
-    private bool CheckForLoop(List<List<HashSet<int>>> cache)
+    private bool CheckForLoop(HashSet<int>[,] cache)
     {
         var directions = new List<(int X, int Y)>
         {
@@ -142,7 +137,7 @@ public class GuardPatrolProtocol
         {
             if (_map[nextY][nextX] != '#')
             {
-                if (cache[nextY][nextX].Contains(currentDirection))
+                if (cache[nextY,nextX].Contains(currentDirection))
                 {
                     inLoop = true;
                     break;
@@ -150,7 +145,7 @@ public class GuardPatrolProtocol
 
                 currentX = nextX;
                 currentY = nextY;
-                cache[currentY][currentX].Add(currentDirection);
+                cache[currentY,currentX].Add(currentDirection);
             }
             else
             {
@@ -162,84 +157,6 @@ public class GuardPatrolProtocol
         }
 
         return inLoop;
-    }
-
-    private void TransverseMap1()
-    {
-        var initialX = 0;
-        var initialY = 0;
-        for (var y = 0; y < Length; y++)
-        {
-            for (var x = 0; x < Length; x++)
-            {
-                if (_map[y][x] == '^')
-                {
-                    initialX = x;
-                    initialY = y;
-                    goto found;
-                }
-            }
-        }
-
-found:
-        var directions = new List<(int X, int Y)>
-        {
-            (0, -1), // up 0
-            (1, 0),
-            (0, 1),
-            (-1, 0)
-        };
-        var currentDirection = 0;
-        var currentX = initialX;
-        var currentY = initialY;
-        var nextX = currentX + directions[currentDirection].X;
-        var nextY = currentY + directions[currentDirection].Y;
-
-        while (nextX >= 0 && nextX < Length && nextY >= 0 && nextY < Length)
-        {
-            if (nextX == 1 && nextY == 8)
-            {
-                System.Diagnostics.Debugger.Break();
-            }
-
-            if (_map[nextY][nextX] != '#')
-            {/*
-                var possibleDirection = (currentDirection + 1) % 4;
-                var obstacleChangedDirection = directions[possibleDirection];
-                var possibleX = currentX + obstacleChangedDirection.X;
-                var possibleY = currentY + obstacleChangedDirection.Y;
-                if (possibleX >= 0 && possibleX < Length && possibleY >= 0 && possibleY < Length)
-                {
-                    if (_cache[possibleY][possibleX].Contains(possibleDirection))
-                    {
-                        PossibleObstructions++;
-                    }
-                }*/
-
-                currentX = nextX;
-                currentY = nextY;
-                _map[currentY][currentX] = 'X';
-            }
-            else
-            {
-                currentDirection = (currentDirection + 1) % 4;
-            }
-
-            nextX = currentX + directions[currentDirection].X;
-            nextY = currentY + directions[currentDirection].Y;
-        }
-
-        for (var y = 0; y < Length; y++)
-        {
-            for (var x = 0; x < Length; x++)
-            {
-                if (_map[y][x] == 'X' || _map[y][x] == '^')
-                {
-                    DistinctVisitedPositions++;
-                }
-            }
-        }
-
     }
 
     public int Length => _map.Length;
