@@ -91,4 +91,11 @@ public class GuardPatrolProtocolMust
         var sut = new GuardPatrolProtocol(SAMPLE_INPUT);
         Assert.Equal(41, sut.DistinctVisitedPositions);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new GuardPatrolProtocol(PUZZLE_INPUT);
+        Assert.Equal(5162, sut.DistinctVisitedPositions);
+    }
 }
