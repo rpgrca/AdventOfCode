@@ -1,25 +1,27 @@
-
-
-
 namespace Day6.Logic;
 
 public class GuardPatrolProtocol
 {
     private readonly string _input;
     private readonly char[][] _map;
-    private readonly List<List<HashSet<int>>> _cache;
     private readonly List<(int X, int Y, int Direction)> _steps;
     private readonly HashSet<(int X, int Y)> _walked;
+    private int _initialX;
+    private int _initialY;
 
-    public GuardPatrolProtocol(string input)
+    public GuardPatrolProtocol(string input, bool calculateObstructions = false)
     {
         _input = input;
         _steps = new();
         _walked = new();
         _map = _input.Split('\n').Select(p => p.ToCharArray()).ToArray();
-        _cache = CreateCache();
 
+        CalculateInitialPosition();
         TransverseMap();
+        if (calculateObstructions)
+        {
+            CalculatePossibleObstructions();
+        }
     }
 
     private List<List<HashSet<int>>> CreateCache()
@@ -48,26 +50,25 @@ public class GuardPatrolProtocol
         }
     }
 
-    private void TransverseMap()
+    private void CalculateInitialPosition()
     {
-        var initialX = 0;
-        var initialY = 0;
         for (var y = 0; y < Length; y++)
         {
             for (var x = 0; x < Length; x++)
             {
                 if (_map[y][x] == '^')
                 {
-                    initialX = x;
-                    initialY = y;
-                    goto found;
+                    _initialX = x;
+                    _initialY = y;
+                    return;
                 }
             }
         }
+    }
 
-found:
-
-        _walked.Add((initialX, initialY));
+    private void TransverseMap()
+    {
+        _walked.Add((_initialX, _initialY));
         var directions = new List<(int X, int Y)>
         {
             (0, -1), // up 0
@@ -76,26 +77,18 @@ found:
             (-1, 0)
         };
         var currentDirection = 0;
-        var currentX = initialX;
-        var currentY = initialY;
+        var currentX = _initialX;
+        var currentY = _initialY;
         var nextX = currentX + directions[currentDirection].X;
         var nextY = currentY + directions[currentDirection].Y;
-        var inLoop = false;
 
         while (nextX >= 0 && nextX < Length && nextY >= 0 && nextY < Length)
         {
             if (_map[nextY][nextX] != '#')
             {
-                if (_cache[nextY][nextX].Contains(currentDirection))
-                {
-                    inLoop = true;
-                    break;
-                }
-
                 currentX = nextX;
                 currentY = nextY;
                 _map[currentY][currentX] = 'X';
-                _cache[currentY][currentX].Add(currentDirection);
                 if (! _walked.Contains((currentX, currentY)))
                 {
                     _walked.Add((currentX, currentY));
@@ -111,13 +104,16 @@ found:
         }
 
         DistinctVisitedPositions = _walked.Count;
+    }
 
+    private void CalculatePossibleObstructions()
+    {
         var cache = CreateCache();
         foreach (var (x, y) in _walked.Skip(1))
         {
             var oldPosition = _map[y][x];
             _map[y][x] = '#';
-            if (CheckForLoop(cache, initialX, initialY))
+            if (CheckForLoop(cache))
             {
                 PossibleObstructions++;
             }
@@ -126,7 +122,7 @@ found:
         }
     }
 
-    private bool CheckForLoop(List<List<HashSet<int>>> cache, int initialX, int initialY)
+    private bool CheckForLoop(List<List<HashSet<int>>> cache)
     {
         var directions = new List<(int X, int Y)>
         {
@@ -136,8 +132,8 @@ found:
             (-1, 0)
         };
         var currentDirection = 0;
-        var currentX = initialX;
-        var currentY = initialY;
+        var currentX = _initialX;
+        var currentY = _initialY;
         var nextX = currentX + directions[currentDirection].X;
         var nextY = currentY + directions[currentDirection].Y;
         var inLoop = false;
@@ -223,7 +219,6 @@ found:
                 currentX = nextX;
                 currentY = nextY;
                 _map[currentY][currentX] = 'X';
-                _cache[currentY][currentX].Add(currentDirection);
             }
             else
             {

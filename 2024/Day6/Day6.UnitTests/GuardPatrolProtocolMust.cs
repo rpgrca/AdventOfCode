@@ -112,7 +112,7 @@ public class GuardPatrolProtocolMust
 ........#.
 ..........
 ..........";
-        var sut = new GuardPatrolProtocol(input);
+        var sut = new GuardPatrolProtocol(input, true);
         Assert.Equal(1, sut.PossibleObstructions);
     }
 
@@ -130,21 +130,21 @@ public class GuardPatrolProtocolMust
 ..........
 ..........";
 
-        var sut = new GuardPatrolProtocol(input);
+        var sut = new GuardPatrolProtocol(input, true);
         Assert.Equal(2, sut.PossibleObstructions);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new GuardPatrolProtocol(SAMPLE_INPUT);
+        var sut = new GuardPatrolProtocol(SAMPLE_INPUT, true);
         Assert.Equal(6, sut.PossibleObstructions);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new GuardPatrolProtocol(PUZZLE_INPUT);
+        var sut = new GuardPatrolProtocol(PUZZLE_INPUT, true);
         Assert.Equal(1909, sut.PossibleObstructions);
     }
 }
