@@ -5,9 +5,12 @@ namespace Day6.UnitTests;
 
 public class GuardPatrolProtocolMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 10)]
+    [InlineData(PUZZLE_INPUT, 130)]
+    public void LoadInputCorrectly(string input, int expectedLength)
     {
-
+        var sut = new GuardPatrolProtocol(input);
+        Assert.Equal(expectedLength, sut.Length);
     }
 }
