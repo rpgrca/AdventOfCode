@@ -100,7 +100,7 @@ public class GuardPatrolProtocolMust
     }
 
     [Fact]
-    public void CountPossibleObstructionsCorrectly()
+    public void CountOnePossibleObstructionCorrectly()
     {
         const string input = @"....#.....
 .........#
@@ -114,5 +114,30 @@ public class GuardPatrolProtocolMust
 ..........";
         var sut = new GuardPatrolProtocol(input);
         Assert.Equal(1, sut.PossibleObstructions);
+    }
+
+    [Fact]
+    public void CountTwoPossibleObstructionsCorrectly()
+    {
+        const string input = @"....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+..........
+..........";
+
+        var sut = new GuardPatrolProtocol(input);
+        Assert.Equal(2, sut.PossibleObstructions);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new GuardPatrolProtocol(SAMPLE_INPUT);
+        Assert.Equal(6, sut.PossibleObstructions);
     }
 }
