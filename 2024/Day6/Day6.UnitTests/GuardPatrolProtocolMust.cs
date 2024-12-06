@@ -84,4 +84,11 @@ public class GuardPatrolProtocolMust
         var sut = new GuardPatrolProtocol(input);
         Assert.Equal(22, sut.DistinctVisitedPositions);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new GuardPatrolProtocol(SAMPLE_INPUT);
+        Assert.Equal(41, sut.DistinctVisitedPositions);
+    }
 }
