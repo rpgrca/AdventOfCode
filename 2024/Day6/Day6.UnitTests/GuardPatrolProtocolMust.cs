@@ -140,4 +140,11 @@ public class GuardPatrolProtocolMust
         var sut = new GuardPatrolProtocol(SAMPLE_INPUT);
         Assert.Equal(6, sut.PossibleObstructions);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new GuardPatrolProtocol(PUZZLE_INPUT);
+        Assert.Equal(1909, sut.PossibleObstructions);
+    }
 }
