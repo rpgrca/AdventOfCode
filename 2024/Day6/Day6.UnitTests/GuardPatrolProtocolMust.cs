@@ -66,4 +66,22 @@ public class GuardPatrolProtocolMust
         var sut = new GuardPatrolProtocol(input);
         Assert.Equal(18, sut.DistinctVisitedPositions);
     }
+
+    [Fact]
+    public void CalculateLeftMovementCorrectly()
+    {
+        const string input = @"....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+....^.....
+........#.
+#.........
+......#...";
+
+        var sut = new GuardPatrolProtocol(input);
+        Assert.Equal(22, sut.DistinctVisitedPositions);
+    }
 }
