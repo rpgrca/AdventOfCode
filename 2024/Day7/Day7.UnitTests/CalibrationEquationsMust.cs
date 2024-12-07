@@ -40,7 +40,8 @@ public class CalibrationEquationsMust
 
     [Theory]
     [InlineData("156: 15 6", 156)]
-    public void ConcatenateCorrectly(string input, int expectedResult)
+    [InlineData("4948000293: 5 173 5 4 7 286 10 2 81", 4948000293)]
+    public void ConcatenateCorrectly(string input, long expectedResult)
     {
         var sut = new CalibrationEquations(input, true);
         Assert.Equal(expectedResult, sut.TotalCalibration);

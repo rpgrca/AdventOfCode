@@ -46,12 +46,13 @@ public class CalibrationEquations
         foreach (var combination in combinations)
         {
             var solution = factors[0];
-            for (var index = 0; index < factors.Length - 1; index++)
+            for (var index = 0; index < factors.Length - 1 && solution <= result; index++)
             {
+                var operand = factors[index + 1];
                 solution = combination[index] switch {
-                    '*' => solution * factors[index + 1],
-                    '+' => solution + factors[index + 1],
-                    '|' => long.Parse(solution.ToString() + factors[index + 1].ToString())
+                    '*' => solution * operand,
+                    '+' => solution + operand,
+                    _ => solution * (operand >= 100? 1000 : (operand >= 10? 100 : 10)) + operand
                 };
             }
 
