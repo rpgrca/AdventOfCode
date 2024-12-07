@@ -2,12 +2,14 @@ namespace Day7.Logic;
 
 public class CalibrationEquations
 {
-    private string _input;
+    private readonly string _input;
+    private readonly string[] _equations;
 
-    public int Count { get; private set; } = 9;
+    public int Count => _equations.Length;
 
     public CalibrationEquations(string input)
     {
         _input = input;
+        _equations = _input.Split('\n');
     }
 }

@@ -7,6 +7,7 @@ public class CalibrationEquationsMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 9)]
+    [InlineData(PUZZLE_INPUT, 850)]
     public void LoadInputCorrectly(string input, int expectedCount)
     {
         var sut = new CalibrationEquations(input);
