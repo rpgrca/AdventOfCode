@@ -10,7 +10,7 @@ public class PrinterMust
     [InlineData(PUZZLE_INPUT, 1176, 190)]
     public void LoadInputCorrectly(string input, int expectedRules, int expectedUpdates)
     {
-        var sut = new Printer(input);
+        var sut = Printer.WithoutReordering(input);
         Assert.Equal(expectedRules, sut.RuleCount);
         Assert.Equal(expectedUpdates, sut.UpdatesCount);
     }
@@ -18,28 +18,28 @@ public class PrinterMust
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new Printer(SAMPLE_INPUT);
-        Assert.Equal(143, sut.SumOfMiddlePagesFromCorrectUpdates);
+        var sut = Printer.WithoutReordering(SAMPLE_INPUT);
+        Assert.Equal(143, sut.SumOfMiddlePages);
     }
 
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new Printer(PUZZLE_INPUT);
-        Assert.Equal(4135, sut.SumOfMiddlePagesFromCorrectUpdates);
+        var sut = Printer.WithoutReordering(PUZZLE_INPUT);
+        Assert.Equal(4135, sut.SumOfMiddlePages);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new Printer(SAMPLE_INPUT);
-        Assert.Equal(123, sut.SumOfMiddlePagesFromIncorrectUpdates);
+        var sut = Printer.WithReordering(SAMPLE_INPUT);
+        Assert.Equal(123, sut.SumOfMiddlePages);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new Printer(PUZZLE_INPUT);
-        Assert.Equal(5285, sut.SumOfMiddlePagesFromIncorrectUpdates);
+        var sut = Printer.WithReordering(PUZZLE_INPUT);
+        Assert.Equal(5285, sut.SumOfMiddlePages);
     }
 }
