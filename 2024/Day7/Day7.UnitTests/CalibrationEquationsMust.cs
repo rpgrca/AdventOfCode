@@ -46,4 +46,11 @@ public class CalibrationEquationsMust
         Assert.Equal(expectedResult, sut.TotalCalibration);
     }
 
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new CalibrationEquations(SAMPLE_INPUT, true);
+        Assert.Equal(11387, sut.TotalCalibration);
+    }
+
 }
