@@ -37,4 +37,13 @@ public class CalibrationEquationsMust
         var sut = new CalibrationEquations(PUZZLE_INPUT);
         Assert.Equal(8401132154762, sut.TotalCalibration);
     }
+
+    [Theory]
+    [InlineData("156: 15 6", 156)]
+    public void ConcatenateCorrectly(string input, int expectedResult)
+    {
+        var sut = new CalibrationEquations(input, true);
+        Assert.Equal(expectedResult, sut.TotalCalibration);
+    }
+
 }

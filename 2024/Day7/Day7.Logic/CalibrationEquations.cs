@@ -4,15 +4,17 @@ namespace Day7.Logic;
 public class CalibrationEquations
 {
     private readonly string _input;
+    private readonly bool _concatenationAvailable;
     private readonly string[] _equations;
 
     public int Count => _equations.Length;
 
     public long TotalCalibration { get; private set; }
 
-    public CalibrationEquations(string input)
+    public CalibrationEquations(string input, bool concatenationAvailable = false)
     {
         _input = input;
+        _concatenationAvailable = concatenationAvailable;
         _equations = _input.Split('\n');
 
         Parse();
@@ -48,7 +50,8 @@ public class CalibrationEquations
             {
                 solution = combination[index] switch {
                     '*' => solution * factors[index + 1],
-                    '+' => solution + factors[index + 1]
+                    '+' => solution + factors[index + 1],
+                    '|' => long.Parse(solution.ToString() + factors[index + 1].ToString())
                 };
             }
 
@@ -71,5 +74,10 @@ public class CalibrationEquations
 
         Combine(combinations, count - 1, equation + "+");
         Combine(combinations, count - 1, equation + "*");
+
+        if (_concatenationAvailable)
+        {
+            Combine(combinations, count - 1, equation + "|");
+        }
     }
 }
