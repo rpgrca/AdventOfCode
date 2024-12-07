@@ -30,4 +30,11 @@ public class CalibrationEquationsMust
         var sut = new CalibrationEquations(SAMPLE_INPUT);
         Assert.Equal(3749, sut.TotalCalibration);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new CalibrationEquations(PUZZLE_INPUT);
+        Assert.Equal(8401132154762, sut.TotalCalibration);
+    }
 }
