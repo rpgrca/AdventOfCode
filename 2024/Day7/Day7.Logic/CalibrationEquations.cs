@@ -4,29 +4,38 @@ namespace Day7.Logic;
 public class CalibrationEquations
 {
     private readonly string _input;
-    private readonly bool _concatenationAvailable;
+    private readonly Func<long, long, long>[] _operations;
     private readonly string[] _equations;
 
     public int Count => _equations.Length;
 
     public long TotalCalibration { get; private set; }
 
-    public CalibrationEquations(string input, bool concatenationAvailable = false)
+    public static CalibrationEquations WithConcatenation(string input) =>
+        new(input, new Func<long, long, long>[]
+            {
+                (t, i) => t * i,
+                (t, i) => t + i,
+                (t, i) => t * (i >= 100? 1000 : (i >= 10? 100 : 10)) + i
+            });
+
+    public static CalibrationEquations WithoutConcatenation(string input) =>
+        new(input, new Func<long, long, long>[]
+            {
+                (t, i) => t * i,
+                (t, i) => t + i
+            });
+
+    private CalibrationEquations(string input, Func<long, long, long>[] operations)
     {
         _input = input;
-        _concatenationAvailable = concatenationAvailable;
+        _operations = operations;
         _equations = _input.Split('\n');
 
-        if (concatenationAvailable)
-        {
-            Parse2();
-        }
-        else
-        {
-            Parse();
-        }
+        Parse2();
     }
 
+/*
     private void Parse()
     {
         foreach (var equation in _equations)
@@ -46,7 +55,7 @@ public class CalibrationEquations
                 TotalCalibration += result;
             }
         }
-    }
+    }*/
 
     private void Parse2()
     {
@@ -74,20 +83,18 @@ public class CalibrationEquations
         }
 
         var factor = factors[index];
-        if (HasSolution(result, factors, index + 1, currentResult * factor))
+        foreach (var operation in _operations)
         {
-            return true;
+            if (HasSolution(result, factors, index + 1, operation.Invoke(currentResult, factor)))
+            {
+                return true;
+            }
         }
 
-        if (HasSolution(result, factors, index + 1, currentResult + factor))
-        {
-            return true;
-        }
-
-
-        return HasSolution(result, factors, index + 1, currentResult * (factor >= 100? 1000 : (factor >= 10? 100 : 10)) + factor);
+        return false;
     }
 
+/*
     private bool CanSolveEquation(long result, long[] factors, List<string> combinations)
     {
         foreach (var combination in combinations)
@@ -128,5 +135,5 @@ public class CalibrationEquations
         Combine(combinations, count - 1, equation + "*");
         Combine(combinations, count - 1, equation + "+");
     }
-
+*/
 }

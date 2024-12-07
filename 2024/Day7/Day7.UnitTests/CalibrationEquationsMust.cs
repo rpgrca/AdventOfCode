@@ -10,7 +10,7 @@ public class CalibrationEquationsMust
     [InlineData(PUZZLE_INPUT, 850)]
     public void LoadInputCorrectly(string input, int expectedCount)
     {
-        var sut = new CalibrationEquations(input);
+        var sut = CalibrationEquations.WithoutConcatenation(input);
         Assert.Equal(expectedCount, sut.Count);
     }
 
@@ -20,21 +20,21 @@ public class CalibrationEquationsMust
     [InlineData("3267: 81 40 27", 3267)]
     public void ReturnCorrectTotalCalibration(string input, int expectedResult)
     {
-        var sut = new CalibrationEquations(input);
+        var sut = CalibrationEquations.WithoutConcatenation(input);
         Assert.Equal(expectedResult, sut.TotalCalibration);
     }
 
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new CalibrationEquations(SAMPLE_INPUT);
+        var sut = CalibrationEquations.WithoutConcatenation(SAMPLE_INPUT);
         Assert.Equal(3749, sut.TotalCalibration);
     }
 
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new CalibrationEquations(PUZZLE_INPUT);
+        var sut = CalibrationEquations.WithoutConcatenation(PUZZLE_INPUT);
         Assert.Equal(8401132154762, sut.TotalCalibration);
     }
 
@@ -43,21 +43,21 @@ public class CalibrationEquationsMust
     [InlineData("4948000293: 5 173 5 4 7 286 10 2 81", 4948000293)]
     public void ConcatenateCorrectly(string input, long expectedResult)
     {
-        var sut = new CalibrationEquations(input, true);
+        var sut = CalibrationEquations.WithConcatenation(input);
         Assert.Equal(expectedResult, sut.TotalCalibration);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new CalibrationEquations(SAMPLE_INPUT, true);
+        var sut = CalibrationEquations.WithConcatenation(SAMPLE_INPUT);
         Assert.Equal(11387, sut.TotalCalibration);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new CalibrationEquations(PUZZLE_INPUT, true);
+        var sut = CalibrationEquations.WithConcatenation(PUZZLE_INPUT);
         Assert.Equal(95297119227552, sut.TotalCalibration);
     }
 }
