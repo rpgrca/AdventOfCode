@@ -34,7 +34,7 @@ public class CalibrationEquations
 
             if (CanSolveEquation(result, factors, combinations))
             {
-                TotalCalibration = result;
+                TotalCalibration += result;
             }
         }
     }

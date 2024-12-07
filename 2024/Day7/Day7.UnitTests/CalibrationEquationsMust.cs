@@ -17,9 +17,17 @@ public class CalibrationEquationsMust
     [Theory]
     [InlineData("190: 10 19", 190)]
     [InlineData("83: 17 5", 0)]
+    [InlineData("3267: 81 40 27", 3267)]
     public void ReturnCorrectTotalCalibration(string input, int expectedResult)
     {
         var sut = new CalibrationEquations(input);
         Assert.Equal(expectedResult, sut.TotalCalibration);
+    }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new CalibrationEquations(SAMPLE_INPUT);
+        Assert.Equal(3749, sut.TotalCalibration);
     }
 }
