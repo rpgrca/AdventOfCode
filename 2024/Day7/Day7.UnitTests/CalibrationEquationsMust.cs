@@ -53,4 +53,10 @@ public class CalibrationEquationsMust
         Assert.Equal(11387, sut.TotalCalibration);
     }
 
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new CalibrationEquations(PUZZLE_INPUT, true);
+        Assert.Equal(95297119227552, sut.TotalCalibration);
+    }
 }
