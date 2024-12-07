@@ -17,7 +17,14 @@ public class CalibrationEquations
         _concatenationAvailable = concatenationAvailable;
         _equations = _input.Split('\n');
 
-        Parse();
+        if (concatenationAvailable)
+        {
+            Parse2();
+        }
+        else
+        {
+            Parse();
+        }
     }
 
     private void Parse()
@@ -39,6 +46,46 @@ public class CalibrationEquations
                 TotalCalibration += result;
             }
         }
+    }
+
+    private void Parse2()
+    {
+        foreach (var equation in _equations)
+        {
+            var members = equation.Split(':', StringSplitOptions.TrimEntries);
+            var result = long.Parse(members[0]);
+            var factors = members[1]
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(long.Parse)
+                .ToArray();
+
+            if (HasSolution(result, factors, 1, factors[0]))
+            {
+                TotalCalibration += result;
+            }
+        }
+    }
+
+    private bool HasSolution(long result, long[] factors, int index, long currentResult)
+    {
+        if (index >= factors.Length)
+        {
+            return result == currentResult;
+        }
+
+        var factor = factors[index];
+        if (HasSolution(result, factors, index + 1, currentResult * factor))
+        {
+            return true;
+        }
+
+        if (HasSolution(result, factors, index + 1, currentResult + factor))
+        {
+            return true;
+        }
+
+
+        return HasSolution(result, factors, index + 1, currentResult * (factor >= 100? 1000 : (factor >= 10? 100 : 10)) + factor);
     }
 
     private bool CanSolveEquation(long result, long[] factors, List<string> combinations)
@@ -73,12 +120,13 @@ public class CalibrationEquations
             return;
         }
 
-        Combine(combinations, count - 1, equation + "+");
-        Combine(combinations, count - 1, equation + "*");
-
         if (_concatenationAvailable)
         {
             Combine(combinations, count - 1, equation + "|");
         }
+
+        Combine(combinations, count - 1, equation + "*");
+        Combine(combinations, count - 1, equation + "+");
     }
+
 }
