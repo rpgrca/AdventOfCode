@@ -8,10 +8,6 @@ namespace Day2.Logic.Dampeners;
 // 3 1 2 1 0
 internal class ProblemDampener : IDampener
 {
-    private IState _state;
-
-    public ProblemDampener() => _state = new NullState();
-
     public IEnumerable<int[]> GenerateCombinations(int[] values, IState state)
     {
         for (var index = state.PreviousState.PreviousState.Index; index <= state.Index; index++)
