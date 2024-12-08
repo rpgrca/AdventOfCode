@@ -55,4 +55,11 @@ public class AntinodeMapMust
         var sut = new AntinodeMap(PUZZLE_INPUT);
         Assert.Equal(398, sut.AntinodeCount);
     }
+
+    [Fact]
+    public void CalculateAntinodesWithResonantHarmonicsCorrectly()
+    {
+        var sut = new AntinodeMap(FIFTH_SAMPLE_INPUT, true);
+        Assert.Equal(9, sut.AntinodeCount);
+    }
 }

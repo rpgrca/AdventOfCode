@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Day8.Logic;
 
 public record Antenna(char Frequency, int X, int Y);
@@ -14,7 +16,7 @@ public class AntinodeMap
     public List<Antenna> Antennas { get; private set; }
     public int AntinodeCount => _antinodes.Count;
 
-    public AntinodeMap(string input)
+    public AntinodeMap(string input, bool withHarmonics = false)
     {
         _input = input;
         _map = _input.Split('\n');
@@ -23,7 +25,15 @@ public class AntinodeMap
         Antennas = new();
 
         Parse();
-        CalculateAntinodes();
+
+        if (withHarmonics)
+        {
+            CalculateAntinodesWithHarmonics();
+        }
+        else
+        {
+            CalculateAntinodes();
+        }
     }
 
     private void Parse()
@@ -82,6 +92,102 @@ public class AntinodeMap
                                 _antinodes.Add(antinode);
                             }
                         }
+                    }
+                    else
+                    {
+                        antinode = new(second.X - xDiff, second.Y + yDiff);
+                        if (! _antinodes.Contains(antinode))
+                        {
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
+                        }
+
+                        antinode = new(first.X + xDiff, first.Y - yDiff);
+                        if (! _antinodes.Contains(antinode))
+                        {
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void CalculateAntinodesWithHarmonics()
+    {
+        Antinode antinode;
+
+        foreach (var (_, antennas) in _antennasByFrequency)
+        {
+            for (var index = 0; index < antennas.Count - 1; index++)
+            {
+                for (var subIndex = index + 1; subIndex < antennas.Count; subIndex++)
+                {
+                    var first = antennas[index];
+                    var second = antennas[subIndex];
+
+                    var antennaAsAntinode = new Antinode(first.X, first.Y);
+                    if (! _antinodes.Contains(antennaAsAntinode))
+                    {
+                        _antinodes.Add(antennaAsAntinode);
+                    }
+
+                    antennaAsAntinode = new Antinode(second.X, second.Y);
+                    if (! _antinodes.Contains(antennaAsAntinode))
+                    {
+                        _antinodes.Add(antennaAsAntinode);
+                    }
+
+                    var xDiff = Math.Abs(first.X - second.X);
+                    var yDiff = Math.Abs(first.Y - second.Y);
+
+                    if (first.X < second.X)
+                    {
+                        var addMore = true;
+                        var count = 1;
+                        while (addMore)
+                        {
+                            antinode = new Antinode(first.X - (xDiff * count), first.Y - (yDiff * count));
+                            if (! _antinodes.Contains(antinode))
+                            {
+                                if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                                {
+                                    _antinodes.Add(antinode);
+                                }
+                                else
+                                {
+                                    addMore = false;
+                                }
+                            }
+
+                            count++;
+                        }
+
+                        addMore = true;
+                        count = 1;
+                        while (addMore)
+                        {
+                            antinode = new(second.X + (xDiff * count), second.Y + (yDiff * count));
+                            if (! _antinodes.Contains(antinode))
+                            {
+                                if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                                {
+                                    _antinodes.Add(antinode);
+                                }
+                                else
+                                {
+                                    addMore = false;
+                                }
+                            }
+
+                            count++;
+                        }
+
                     }
                     else
                     {
