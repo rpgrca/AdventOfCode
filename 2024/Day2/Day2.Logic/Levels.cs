@@ -28,7 +28,6 @@ internal class Levels
 
         State.WhenInvalid(() =>
         {
-            var combinationFound = false;
             var combinations = _problemDampener.GenerateCombinations(_values, State);
 
             foreach (var combination in combinations)
@@ -36,13 +35,7 @@ internal class Levels
                 var subLevel = new Levels(combination, new NullDampener());
                 subLevel.State.WhenSuccessful(() => {
                     State = subLevel.State;
-                    combinationFound = true;
                 });
-
-                if (combinationFound)
-                {
-                    break;
-                }
             }
         });
     }

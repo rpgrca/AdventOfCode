@@ -29,42 +29,48 @@ public class CalibrationEquations
         _operations = operations;
         _equations = input.Split('\n');
 
-        ParseEquations();
+        SolveEquations();
     }
 
-    private void ParseEquations()
+    private void SolveEquations()
     {
         foreach (var equation in _equations)
         {
-            var members = equation.Split(':', StringSplitOptions.TrimEntries);
-            var result = long.Parse(members[0]);
-            var factors = members[1]
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Select(long.Parse)
-                .ToArray();
-
-            if (HasSolution(result, factors, 1, factors[0]))
+            var (result, operands) = ParseEquation(equation);
+            if (HasSolution(result, operands, 1, operands[0]))
             {
                 TotalCalibration += result;
             }
         }
     }
 
-    private bool HasSolution(long result, long[] factors, int index, long currentResult)
+    private static (long, long[]) ParseEquation(string equation)
+    {
+        var members = equation.Split(':', StringSplitOptions.TrimEntries);
+        var result = long.Parse(members[0]);
+        var operands = members[1]
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(long.Parse)
+            .ToArray();
+
+        return (result, operands);
+    }
+
+    private bool HasSolution(long result, long[] operands, int index, long currentResult)
     {
         if (result < currentResult)
         {
             return false;
         }
 
-        if (index >= factors.Length)
+        if (index >= operands.Length)
         {
             return result == currentResult;
         }
 
         foreach (var operation in _operations)
         {
-            if (HasSolution(result, factors, index + 1, operation.Invoke(currentResult, factors[index])))
+            if (HasSolution(result, operands, index + 1, operation.Invoke(currentResult, operands[index])))
             {
                 return true;
             }
