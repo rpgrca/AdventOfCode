@@ -57,9 +57,16 @@ public class AntinodeMapMust
     }
 
     [Fact]
-    public void CalculateAntinodesWithResonantHarmonicsCorrectly()
+    public void CalculateAntinodesCorrectly_WhenUsingResonantHarmonics()
     {
         var sut = new AntinodeMap(FIFTH_SAMPLE_INPUT, true);
         Assert.Equal(9, sut.AntinodeCount);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new AntinodeMap(SAMPLE_INPUT, true);
+        Assert.Equal(34, sut.AntinodeCount);
     }
 }

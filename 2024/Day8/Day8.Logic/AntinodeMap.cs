@@ -191,22 +191,44 @@ public class AntinodeMap
                     }
                     else
                     {
-                        antinode = new(second.X - xDiff, second.Y + yDiff);
-                        if (! _antinodes.Contains(antinode))
+                        var addMore = true;
+                        var count = 1;
+                        while (addMore)
                         {
-                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            antinode = new(second.X - (xDiff * count), second.Y + (yDiff * count));
+                            if (! _antinodes.Contains(antinode))
                             {
-                                _antinodes.Add(antinode);
+                                if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                                {
+                                    _antinodes.Add(antinode);
+                                }
+                                else
+                                {
+                                    addMore = false;
+                                }
                             }
+
+                            count++;
                         }
 
-                        antinode = new(first.X + xDiff, first.Y - yDiff);
-                        if (! _antinodes.Contains(antinode))
+                        addMore = true;
+                        count = 1;
+                        while (addMore)
                         {
-                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            antinode = new(first.X + (xDiff * count), first.Y - (yDiff * count));
+                            if (! _antinodes.Contains(antinode))
                             {
-                                _antinodes.Add(antinode);
+                                if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                                {
+                                    _antinodes.Add(antinode);
+                                }
+                                else
+                                {
+                                    addMore = false;
+                                }
                             }
+
+                            count++;
                         }
                     }
                 }
