@@ -31,4 +31,11 @@ public class AntinodeMapMust
             p6 => Assert.Equal(new('A', 8, 8), p6),
             p7 => Assert.Equal(new('A', 9, 9), p7));
     }
+
+    [Fact]
+    public void CalculateAntinodesCorrectly()
+    {
+        var sut = new AntinodeMap(SECOND_SAMPLE_INPUT);
+        Assert.Equal(2, sut.AntinodeCount);
+    }
 }
