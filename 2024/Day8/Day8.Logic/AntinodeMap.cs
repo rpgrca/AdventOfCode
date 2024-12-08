@@ -53,26 +53,38 @@ public class AntinodeMap
         {
             for (var index = 0; index < antennas.Count - 1; index++)
             {
-                var first = antennas[index];
-                var second = antennas[index + 1];
-
-                var xDiff = Math.Abs(first.X - second.X);
-                var yDiff = first.Y - second.Y;
-
-                if (first.X < second.X)
+                for (var subIndex = index + 1; subIndex < antennas.Count; subIndex++)
                 {
-                    antinodeX = first.X - xDiff;
-                    antinodeY = first.Y - yDiff;
-                    if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
-                    {
-                        AntinodeCount++;
-                    }
+                    var first = antennas[index];
+                    var second = antennas[subIndex];
 
-                    antinodeX = second.X + xDiff;
-                    antinodeY = second.Y + yDiff;
-                    if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                    var xDiff = Math.Abs(first.X - second.X);
+                    var yDiff = first.Y - second.Y;
+
+                    if (first.X < second.X)
                     {
-                        AntinodeCount++;
+                        antinodeX = first.X - xDiff;
+                        antinodeY = first.Y - yDiff;
+                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        {
+                            AntinodeCount++;
+                        }
+
+                        antinodeX = second.X + xDiff;
+                        antinodeY = second.Y + yDiff;
+                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        {
+                            AntinodeCount++;
+                        }
+                    }
+                    else
+                    {
+                        antinodeX = second.X - xDiff;
+                        antinodeY = second.Y + yDiff;
+                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        {
+                            AntinodeCount++;
+                        }
                     }
                 }
             }
