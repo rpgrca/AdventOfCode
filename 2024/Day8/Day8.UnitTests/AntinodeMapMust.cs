@@ -41,4 +41,11 @@ public class AntinodeMapMust
         var sut = new AntinodeMap(input);
         Assert.Equal(expectedCount, sut.AntinodeCount);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new AntinodeMap(SAMPLE_INPUT);
+        Assert.Equal(14, sut.AntinodeCount);
+    }
 }

@@ -1,22 +1,25 @@
 namespace Day8.Logic;
 
 public record Antenna(char Frequency, int X, int Y);
+public record Antinode(int X, int Y);
 
 public class AntinodeMap
 {
     private readonly string _input;
     private readonly string[] _map;
+    private readonly HashSet<Antinode> _antinodes;
     private readonly Dictionary<char, List<Antenna>> _antennasByFrequency;
 
     public int Size => _map.Length;
     public List<Antenna> Antennas { get; private set; }
-    public int AntinodeCount { get; private set; }
+    public int AntinodeCount => _antinodes.Count;
 
     public AntinodeMap(string input)
     {
         _input = input;
         _map = _input.Split('\n');
         _antennasByFrequency = new();
+        _antinodes = new();
         Antennas = new();
 
         Parse();
@@ -46,8 +49,7 @@ public class AntinodeMap
 
     private void CalculateAntinodes()
     {
-        int antinodeX = 0;
-        int antinodeY = 0;
+        Antinode antinode;
 
         foreach (var (_, antennas) in _antennasByFrequency)
         {
@@ -59,31 +61,46 @@ public class AntinodeMap
                     var second = antennas[subIndex];
 
                     var xDiff = Math.Abs(first.X - second.X);
-                    var yDiff = first.Y - second.Y;
+                    var yDiff = Math.Abs(first.Y - second.Y);
 
                     if (first.X < second.X)
                     {
-                        antinodeX = first.X - xDiff;
-                        antinodeY = first.Y - yDiff;
-                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        antinode = new Antinode(first.X - xDiff, first.Y - yDiff);
+                        if (! _antinodes.Contains(antinode))
                         {
-                            AntinodeCount++;
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
                         }
 
-                        antinodeX = second.X + xDiff;
-                        antinodeY = second.Y + yDiff;
-                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        antinode = new(second.X + xDiff, second.Y + yDiff);
+                        if (! _antinodes.Contains(antinode))
                         {
-                            AntinodeCount++;
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
                         }
                     }
                     else
                     {
-                        antinodeX = second.X - xDiff;
-                        antinodeY = second.Y + yDiff;
-                        if (antinodeX >= 0 && antinodeX < Size && antinodeY >= 0 && antinodeY < Size)
+                        antinode = new(second.X - xDiff, second.Y + yDiff);
+                        if (! _antinodes.Contains(antinode))
                         {
-                            AntinodeCount++;
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
+                        }
+
+                        antinode = new(first.X + xDiff, first.Y - yDiff);
+                        if (! _antinodes.Contains(antinode))
+                        {
+                            if (antinode.X >= 0 && antinode.X < Size && antinode.Y >= 0 && antinode.Y < Size)
+                            {
+                                _antinodes.Add(antinode);
+                            }
                         }
                     }
                 }
