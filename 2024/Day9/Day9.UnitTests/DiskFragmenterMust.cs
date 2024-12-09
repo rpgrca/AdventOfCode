@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using Day9.Logic;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
+using NuGet.Frameworks;
 using static Day9.UnitTests.Constants;
 
 namespace Day9.UnitTests;
@@ -57,5 +58,29 @@ public class DiskFragmenterMust
             p17 => Assert.Equal(new(8, 4), p17),
             p18 => Assert.Equal(new(9, 2), p18)
         );
+    }
+
+    [Fact]
+    public void CompactAlreadyCompactedFileSystemCorrectly()
+    {
+        var sut = new DiskFragmenter(THIRD_SAMPLE_INPUT);
+        sut.Compact();
+        Assert.Collection(sut.Map,
+            p1 => Assert.Equal(new(0, 9), p1),
+            p2 => Assert.Equal(new(1, 9), p2),
+            p3 => Assert.Equal(new(2, 9), p3));
+    }
+
+    [Fact]
+    public void CompactFileSystemCorrectly()
+    {
+        var sut = new DiskFragmenter(SECOND_SAMPLE_INPUT);
+        sut.Compact();
+        Assert.Collection(sut.Map,
+            p1 => Assert.Equal(new(0, 1), p1),
+            p2 => Assert.Equal(new(2, 2), p2),
+            p3 => Assert.Equal(new(1, 3), p3),
+            p4 => Assert.Equal(new(2, 3), p4),
+            p5 => Assert.Equal(new(-1, 6), p5));
     }
 }
