@@ -1,26 +1,8 @@
-
-
-using System.Globalization;
-using System.Reflection;
-
 namespace Day9.Logic;
 
-public record ContiguousSpace
-{
-    public int Id;
-    public int Length;
-
-    public ContiguousSpace(int id, int length)
-    {
-        Id = id;
-        Length = length;
-    }
-}
-
-public class DiskFragmenter
+public partial class DiskFragmenter
 {
     private readonly string _input;
-
     public int Length => _input.Length;
     public LinkedList<ContiguousSpace> Map { get; set; }
     public long Checksum { get; private set; }
@@ -35,23 +17,16 @@ public class DiskFragmenter
 
     private void Parse()
     {
-        var isFile = true;
-        var id = 0;
+        var index = 0;
+        var parser = new IParser[]
+        {
+            new FileParser(),
+            new FreeSpaceParser()
+        };
+
         foreach (var space in _input.Select(p => p - '0'))
         {
-            if (isFile)
-            {
-                Map.AddLast(new LinkedListNode<ContiguousSpace>(new(id++, space)));
-            }
-            else
-            {
-                if (space > 0)
-                {
-                    Map.AddLast(new LinkedListNode<ContiguousSpace>(new (-1, space)));
-                }
-            }
-
-            isFile = !isFile;
+            parser[index++ & 1].Add(Map, space);
         }
     }
 
