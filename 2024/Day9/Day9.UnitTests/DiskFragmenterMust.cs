@@ -114,4 +114,44 @@ public class DiskFragmenterMust
         sut.Compact();
         Assert.Equal(1928, sut.Checksum);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new DiskFragmenter(PUZZLE_INPUT);
+        sut.Compact();
+        Assert.Equal(6607511583593, sut.Checksum);
+    }
+
+    [Fact]
+    public void MoveWholeFileCorrectly()
+    {
+        var sut = new DiskFragmenter(SAMPLE_INPUT);
+        sut.Compact2();
+        Assert.Collection(sut.Map,
+            p1 => Assert.Equal(new(0, 2), p1),
+            p2 => Assert.Equal(new(9, 2), p2),
+            p3 => Assert.Equal(new(2, 1), p3),
+            p4 => Assert.Equal(new(1, 3), p4),
+            p5 => Assert.Equal(new(7, 3), p5),
+            p6 => Assert.Equal(new(-1, 1), p6),
+            p7 => Assert.Equal(new(4, 2), p7),
+            p8 => Assert.Equal(new(-1, 1), p8),
+            p9 => Assert.Equal(new(3, 3), p9),
+            p10 => Assert.Equal(new(-1, 4), p10),
+            p11 => Assert.Equal(new(5, 4), p11),
+            p12 => Assert.Equal(new(-1, 1), p12),
+            p13 => Assert.Equal(new(6, 4), p13),
+            p14 => Assert.Equal(new(-1, 5), p14),
+            p15 => Assert.Equal(new(8, 4), p15),
+            p16 => Assert.Equal(new(-1, 2), p16));
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new DiskFragmenter(SAMPLE_INPUT);
+        sut.Compact2();
+        Assert.Equal(2858, sut.Checksum);
+    }
 }
