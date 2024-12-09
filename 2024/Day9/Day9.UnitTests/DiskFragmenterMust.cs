@@ -154,4 +154,12 @@ public class DiskFragmenterMust
         sut.Compact2();
         Assert.Equal(2858, sut.Checksum);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new DiskFragmenter(PUZZLE_INPUT);
+        sut.Compact2();
+        Assert.Equal(6636608781232, sut.Checksum);
+    }
 }
