@@ -1,8 +1,4 @@
-using System.Reflection.PortableExecutable;
-using System.Security.Cryptography;
 using Day9.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
-using NuGet.Frameworks;
 using static Day9.UnitTests.Constants;
 
 namespace Day9.UnitTests;
@@ -23,7 +19,7 @@ public class DiskFragmenterMust
     public void MapFileWithoutFreeSpaceCorrectly()
     {
         var sut = new DiskFragmenter("1");
-        Assert.Collection(sut.Map, p1 => Assert.Equal(new(0, 1), p1));
+        Assert.Collection(sut.Map, p1 => Assert.Equal(new OccupiedSpace(0, 1), p1));
     }
 
     [Fact]
@@ -31,8 +27,8 @@ public class DiskFragmenterMust
     {
         var sut = new DiskFragmenter("12");
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 1), p1),
-            p2 => Assert.Equal(new(-1, 2), p2));
+            p1 => Assert.Equal(new OccupiedSpace(0, 1), p1),
+            p2 => Assert.Equal(new FreeSpace(2), p2));
     }
 
     [Fact]
@@ -40,24 +36,24 @@ public class DiskFragmenterMust
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 2), p1),
-            p2 => Assert.Equal(new(-1, 3), p2),
-            p3 => Assert.Equal(new(1, 3), p3),
-            p4 => Assert.Equal(new(-1, 3), p4),
-            p5 => Assert.Equal(new(2, 1), p5),
-            p6 => Assert.Equal(new(-1, 3), p6),
-            p7 => Assert.Equal(new(3, 3), p7),
-            p8 => Assert.Equal(new(-1, 1), p8),
-            p9 => Assert.Equal(new(4, 2), p9),
-            p10 => Assert.Equal(new(-1, 1), p10),
-            p11 => Assert.Equal(new(5, 4), p11),
-            p12 => Assert.Equal(new(-1, 1), p12),
-            p13 => Assert.Equal(new(6, 4), p13),
-            p14 => Assert.Equal(new(-1, 1), p14),
-            p15 => Assert.Equal(new(7,3), p15),
-            p16 => Assert.Equal(new(-1, 1), p16),
-            p17 => Assert.Equal(new(8, 4), p17),
-            p18 => Assert.Equal(new(9, 2), p18)
+            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
+            p2 => Assert.Equal(new FreeSpace(3), p2),
+            p3 => Assert.Equal(new OccupiedSpace(1, 3), p3),
+            p4 => Assert.Equal(new FreeSpace(3), p4),
+            p5 => Assert.Equal(new OccupiedSpace(2, 1), p5),
+            p6 => Assert.Equal(new FreeSpace(3), p6),
+            p7 => Assert.Equal(new OccupiedSpace(3, 3), p7),
+            p8 => Assert.Equal(new FreeSpace(1), p8),
+            p9 => Assert.Equal(new OccupiedSpace(4, 2), p9),
+            p10 => Assert.Equal(new FreeSpace(1), p10),
+            p11 => Assert.Equal(new OccupiedSpace(5, 4), p11),
+            p12 => Assert.Equal(new FreeSpace(1), p12),
+            p13 => Assert.Equal(new OccupiedSpace(6, 4), p13),
+            p14 => Assert.Equal(new FreeSpace(1), p14),
+            p15 => Assert.Equal(new OccupiedSpace(7,3), p15),
+            p16 => Assert.Equal(new FreeSpace(1), p16),
+            p17 => Assert.Equal(new OccupiedSpace(8, 4), p17),
+            p18 => Assert.Equal(new OccupiedSpace(9, 2), p18)
         );
     }
 
@@ -67,9 +63,9 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(THIRD_SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 9), p1),
-            p2 => Assert.Equal(new(1, 9), p2),
-            p3 => Assert.Equal(new(2, 9), p3));
+            p1 => Assert.Equal(new OccupiedSpace(0, 9), p1),
+            p2 => Assert.Equal(new OccupiedSpace(1, 9), p2),
+            p3 => Assert.Equal(new OccupiedSpace(2, 9), p3));
     }
 
     [Fact]
@@ -78,11 +74,11 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SECOND_SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 1), p1),
-            p2 => Assert.Equal(new(2, 2), p2),
-            p3 => Assert.Equal(new(1, 3), p3),
-            p4 => Assert.Equal(new(2, 3), p4),
-            p5 => Assert.Equal(new(-1, 6), p5));
+            p1 => Assert.Equal(new OccupiedSpace(0, 1), p1),
+            p2 => Assert.Equal(new OccupiedSpace(2, 2), p2),
+            p3 => Assert.Equal(new OccupiedSpace(1, 3), p3),
+            p4 => Assert.Equal(new OccupiedSpace(2, 3), p4),
+            p5 => Assert.Equal(new FreeSpace(6), p5));
     }
 
     [Fact]
@@ -91,20 +87,20 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 2), p1),
-            p2 => Assert.Equal(new(9, 2), p2),
-            p3 => Assert.Equal(new(8, 1), p3),
-            p4 => Assert.Equal(new(1, 3), p4),
-            p5 => Assert.Equal(new(8, 3), p5),
-            p6 => Assert.Equal(new(2, 1), p6),
-            p7 => Assert.Equal(new(7, 3), p7),
-            p8 => Assert.Equal(new(3, 3), p8),
-            p9 => Assert.Equal(new(6, 1), p9),
-            p10 => Assert.Equal(new(4, 2), p10),
-            p11 => Assert.Equal(new(6, 1), p11),
-            p12 => Assert.Equal(new(5, 4), p12),
-            p13 => Assert.Equal(new(6, 2), p13),
-            p14 => Assert.Equal(new(-1, 14), p14));
+            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
+            p2 => Assert.Equal(new OccupiedSpace(9, 2), p2),
+            p3 => Assert.Equal(new OccupiedSpace(8, 1), p3),
+            p4 => Assert.Equal(new OccupiedSpace(1, 3), p4),
+            p5 => Assert.Equal(new OccupiedSpace(8, 3), p5),
+            p6 => Assert.Equal(new OccupiedSpace(2, 1), p6),
+            p7 => Assert.Equal(new OccupiedSpace(7, 3), p7),
+            p8 => Assert.Equal(new OccupiedSpace(3, 3), p8),
+            p9 => Assert.Equal(new OccupiedSpace(6, 1), p9),
+            p10 => Assert.Equal(new OccupiedSpace(4, 2), p10),
+            p11 => Assert.Equal(new OccupiedSpace(6, 1), p11),
+            p12 => Assert.Equal(new OccupiedSpace(5, 4), p12),
+            p13 => Assert.Equal(new OccupiedSpace(6, 2), p13),
+            p14 => Assert.Equal(new FreeSpace(14), p14));
     }
 
     [Fact]
@@ -129,22 +125,22 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         sut.Compact2();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new(0, 2), p1),
-            p2 => Assert.Equal(new(9, 2), p2),
-            p3 => Assert.Equal(new(2, 1), p3),
-            p4 => Assert.Equal(new(1, 3), p4),
-            p5 => Assert.Equal(new(7, 3), p5),
-            p6 => Assert.Equal(new(-1, 1), p6),
-            p7 => Assert.Equal(new(4, 2), p7),
-            p8 => Assert.Equal(new(-1, 1), p8),
-            p9 => Assert.Equal(new(3, 3), p9),
-            p10 => Assert.Equal(new(-1, 4), p10),
-            p11 => Assert.Equal(new(5, 4), p11),
-            p12 => Assert.Equal(new(-1, 1), p12),
-            p13 => Assert.Equal(new(6, 4), p13),
-            p14 => Assert.Equal(new(-1, 5), p14),
-            p15 => Assert.Equal(new(8, 4), p15),
-            p16 => Assert.Equal(new(-1, 2), p16));
+            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
+            p2 => Assert.Equal(new OccupiedSpace(9, 2), p2),
+            p3 => Assert.Equal(new OccupiedSpace(2, 1), p3),
+            p4 => Assert.Equal(new OccupiedSpace(1, 3), p4),
+            p5 => Assert.Equal(new OccupiedSpace(7, 3), p5),
+            p6 => Assert.Equal(new FreeSpace(1), p6),
+            p7 => Assert.Equal(new OccupiedSpace(4, 2), p7),
+            p8 => Assert.Equal(new FreeSpace(1), p8),
+            p9 => Assert.Equal(new OccupiedSpace(3, 3), p9),
+            p10 => Assert.Equal(new FreeSpace(4), p10),
+            p11 => Assert.Equal(new OccupiedSpace(5, 4), p11),
+            p12 => Assert.Equal(new FreeSpace(1), p12),
+            p13 => Assert.Equal(new OccupiedSpace(6, 4), p13),
+            p14 => Assert.Equal(new FreeSpace(5), p14),
+            p15 => Assert.Equal(new OccupiedSpace(8, 4), p15),
+            p16 => Assert.Equal(new FreeSpace(2), p16));
     }
 
     [Fact]

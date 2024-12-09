@@ -6,8 +6,8 @@ public class FileParser : IParser
 
     public FileParser() => _id = 0;
 
-    public void Add(LinkedList<ContiguousSpace> map, int space)
+    public void Add(LinkedList<ISpace> map, int space)
     {
-        map.AddLast(new LinkedListNode<ContiguousSpace>(new(_id++, space)));
+        map.AddLast(new LinkedListNode<ISpace>(new OccupiedSpace(_id++, space)));
     }
 }
