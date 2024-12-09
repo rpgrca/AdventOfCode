@@ -23,6 +23,7 @@ public class DiskFragmenter
 
     public int Length => _input.Length;
     public LinkedList<ContiguousSpace> Map { get; set; }
+    public long Checksum { get; private set; }
 
     public DiskFragmenter(string input)
     {
@@ -117,20 +118,17 @@ public class DiskFragmenter
             head = head.Next;
         }
 
-/*
-        var tail = Map.Last;
-        var finalEmptySpace = 0;
-        while (tail != null && tail.Value.Id == -1)
+        head = Map.First;
+        var position = 0;
+        while (head != null && head.Value.Id != -1)
         {
-            finalEmptySpace += tail.Value.Length;
-            tail = tail.Previous;
-            Map.RemoveLast();
-        }
+            for (var index = 0; index < head.Value.Length; index++)
+            {
+                Checksum += (position + index) * head.Value.Id;
+            }
 
-        if (finalEmptySpace > 0)
-        {
-            var last = new LinkedListNode<ContiguousSpace>(new(-1, finalEmptySpace));
-            Map.AddAfter(tail, last);
-        }*/
+            position += head.Value.Length;
+            head = head.Next;
+        }
     }
 }

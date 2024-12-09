@@ -106,4 +106,12 @@ public class DiskFragmenterMust
             p13 => Assert.Equal(new(6, 2), p13),
             p14 => Assert.Equal(new(-1, 14), p14));
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new DiskFragmenter(SAMPLE_INPUT);
+        sut.Compact();
+        Assert.Equal(1928, sut.Checksum);
+    }
 }
