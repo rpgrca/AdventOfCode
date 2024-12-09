@@ -1,6 +1,4 @@
-using System.Security.Cryptography;
 using Day8.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day8.UnitTests.Constants;
 
 namespace Day8.UnitTests;

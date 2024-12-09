@@ -19,4 +19,16 @@ public class AntinodeCreator : ICreator
 
     public bool ShouldExecuteFor(Antenna first, Antenna second) =>
         _condition(first, second);
+
+    public void Repeat(Func<int, bool> block)
+    {
+        var count = 1;
+        bool addMore;
+
+        do
+        {
+            addMore = block(count++);
+        }
+        while (addMore);
+    }
 }
