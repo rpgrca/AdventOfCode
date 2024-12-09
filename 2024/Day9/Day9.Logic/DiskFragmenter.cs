@@ -100,6 +100,24 @@ public class DiskFragmenter
             }
         }
 
+        var head = Map.First;
+        while (head != null)
+        {
+            var counter = 0;
+            var next = head.Next;
+            while (next != null && next.Value.Id == head.Value.Id)
+            {
+                counter += next.Value.Length;
+                var toDelete = next;
+                next = next.Next;
+                Map.Remove(toDelete);
+            }
+
+            head.ValueRef.Length += counter;
+            head = head.Next;
+        }
+
+/*
         var tail = Map.Last;
         var finalEmptySpace = 0;
         while (tail != null && tail.Value.Id == -1)
@@ -113,6 +131,6 @@ public class DiskFragmenter
         {
             var last = new LinkedListNode<ContiguousSpace>(new(-1, finalEmptySpace));
             Map.AddAfter(tail, last);
-        }
+        }*/
     }
 }
