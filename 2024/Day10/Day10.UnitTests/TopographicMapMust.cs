@@ -95,4 +95,11 @@ public class TopographicMapMust
         var sut = new TopographicMap(input);
         Assert.Equal(expectedRating, sut.TrailheadRating);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new TopographicMap(SAMPLE_INPUT);
+        Assert.Equal(81, sut.TrailheadRating);
+    }
 }
