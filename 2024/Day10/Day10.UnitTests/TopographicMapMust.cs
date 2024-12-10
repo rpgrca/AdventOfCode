@@ -1,7 +1,4 @@
-using System.Numerics;
-using System.Security.Cryptography;
 using Day10.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day10.UnitTests.Constants;
 
 namespace Day10.UnitTests;
@@ -16,14 +13,14 @@ public class TopographicMapMust
     [InlineData(PUZZLE_INPUT, 47)]
     public void LoadInputCorrectly(string input, int expectedSize)
     {
-        var sut = new TopographicMap(input);
+        var sut = TopographicMap.ForScore(input);
         Assert.Equal(expectedSize, sut.Size);
     }
 
     [Fact]
     public void LocateTrailheadsCorrectly_WhenUsingSecondSample()
     {
-        var sut = new TopographicMap(SECOND_SAMPLE_INPUT);
+        var sut = TopographicMap.ForScore(SECOND_SAMPLE_INPUT);
         Assert.Collection(sut.Trailheads, p1 => Assert.Equal((0, 0), p1));
     }
 
@@ -32,14 +29,14 @@ public class TopographicMapMust
     [InlineData(FOURTH_SAMPLE_INPUT)]
     public void LocateTrailheadsCorrectly_WhenUsingThirdOrFourthSample(string input)
     {
-        var sut = new TopographicMap(input);
+        var sut = TopographicMap.ForScore(input);
         Assert.Collection(sut.Trailheads, p1 => Assert.Equal((3, 0), p1));
     }
 
     [Fact]
     public void LocateTrailheadsCorrectly_WhenUsingFifthSample()
     {
-        var sut = new TopographicMap(FIFTH_SAMPLE_INPUT);
+        var sut = TopographicMap.ForScore(FIFTH_SAMPLE_INPUT);
         Assert.Collection(sut.Trailheads,
             p1 => Assert.Equal((1, 0), p1),
             p2 => Assert.Equal((5, 6), p2));
@@ -48,7 +45,7 @@ public class TopographicMapMust
     [Fact]
     public void LocateTrailheadsCorrectly_WhenUsingSampleMap()
     {
-        var sut = new TopographicMap(SAMPLE_INPUT);
+        var sut = TopographicMap.ForScore(SAMPLE_INPUT);
         Assert.Collection(sut.Trailheads,
             p1 => Assert.Equal((2, 0), p1),
             p2 => Assert.Equal((4, 0), p2),
@@ -68,22 +65,22 @@ public class TopographicMapMust
     [InlineData(FIFTH_SAMPLE_INPUT, 3)]
     public void CalculateTrailheadScoreCorrectly(string input, int expectedScore)
     {
-        var sut = new TopographicMap(input);
-        Assert.Equal(expectedScore, sut.TrailheadScore);
+        var sut = TopographicMap.ForScore(input);
+        Assert.Equal(expectedScore, sut.Result);
     }
 
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
-        var sut = new TopographicMap(SAMPLE_INPUT);
-        Assert.Equal(36, sut.TrailheadScore);
+        var sut = TopographicMap.ForScore(SAMPLE_INPUT);
+        Assert.Equal(36, sut.Result);
     }
 
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
-        var sut = new TopographicMap(PUZZLE_INPUT);
-        Assert.Equal(607, sut.TrailheadScore);
+        var sut = TopographicMap.ForScore(PUZZLE_INPUT);
+        Assert.Equal(607, sut.Result);
     }
 
     [Theory]
@@ -92,21 +89,21 @@ public class TopographicMapMust
     [InlineData(EIGHTH_SAMPLE_INPUT, 227)]
     public void CalculateRatingCorrectly(string input, int expectedRating)
     {
-        var sut = new TopographicMap(input);
-        Assert.Equal(expectedRating, sut.TrailheadRating);
+        var sut = TopographicMap.ForRating(input);
+        Assert.Equal(expectedRating, sut.Result);
     }
 
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
-        var sut = new TopographicMap(SAMPLE_INPUT);
-        Assert.Equal(81, sut.TrailheadRating);
+        var sut = TopographicMap.ForRating(SAMPLE_INPUT);
+        Assert.Equal(81, sut.Result);
     }
 
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
-        var sut = new TopographicMap(PUZZLE_INPUT);
-        Assert.Equal(1384, sut.TrailheadRating);
+        var sut = TopographicMap.ForRating(PUZZLE_INPUT);
+        Assert.Equal(1384, sut.Result);
     }
 }
