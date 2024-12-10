@@ -1,8 +1,4 @@
-using System.Reflection.PortableExecutable;
-using System.Security.Cryptography;
 using Day9.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
-using NuGet.Frameworks;
 using static Day9.UnitTests.Constants;
 
 namespace Day9.UnitTests;

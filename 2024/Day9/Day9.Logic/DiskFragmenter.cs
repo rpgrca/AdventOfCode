@@ -1,3 +1,4 @@
+
 namespace Day9.Logic;
 
 public record ContiguousSpace
@@ -64,35 +65,33 @@ public class DiskFragmenter
                 compacted = false;
                 while (emptySpace != null && emptySpace != file && length > 0)
                 {
-                    var emptySpaceValue = emptySpace.Value;
-                    if (emptySpaceValue.Id == -1)
+                    if (emptySpace.ValueRef.Id == -1)
                     {
-                        if (length == emptySpaceValue.Length)
+                        if (length == emptySpace.ValueRef.Length)
                         {
-                            emptySpaceValue.Id = file.ValueRef.Id;
-                            file.ValueRef.Id = -1;
+                            (emptySpace.ValueRef.Id, file.ValueRef.Id) = (file.ValueRef.Id, emptySpace.ValueRef.Id);
                             length = 0;
                         }
                         else
                         {
-                            if (length < emptySpaceValue.Length)
+                            if (length < emptySpace.ValueRef.Length)
                             {
                                 var newNode = new LinkedListNode<ContiguousSpace>(new(file.ValueRef.Id, length));
                                 Map.AddBefore(emptySpace, newNode);
-                                emptySpaceValue.Length -= length;
+                                emptySpace.ValueRef.Length -= length;
                                 file.ValueRef.Id = -1;
                                 length = 0;
                             }
                             else
                             {
-                                if (! wholeFile)
+                                if (!wholeFile)
                                 {
-                                    emptySpaceValue.Id = file.ValueRef.Id;
-                                    file.ValueRef.Length -= emptySpaceValue.Length;
+                                    emptySpace.ValueRef.Id = file.ValueRef.Id;
+                                    file.ValueRef.Length -= emptySpace.ValueRef.Length;
 
-                                    var newNode = new LinkedListNode<ContiguousSpace>(new(-1, emptySpaceValue.Length));
+                                    var newNode = new LinkedListNode<ContiguousSpace>(new(-1, emptySpace.ValueRef.Length));
                                     Map.AddAfter(file, newNode);
-                                    length -= emptySpaceValue.Length;
+                                    length -= emptySpace.ValueRef.Length;
                                 }
                             }
                         }
@@ -107,6 +106,28 @@ public class DiskFragmenter
             file = file.Previous;
         }
 
+        MergeFragmentedSpace();
+        CalculateChecksum();
+    }
+
+    private void CalculateChecksum()
+    {
+        var head = Map.First;
+        var position = 0;
+        while (head != null)
+        {
+            if (head.ValueRef.Id != -1)
+            {
+                Checksum += (long)head.ValueRef.Length * (2 * position + head.ValueRef.Length - 1) / 2 * head.ValueRef.Id;
+            }
+
+            position += head.ValueRef.Length;
+            head = head.Next;
+        }
+    }
+
+    private void MergeFragmentedSpace()
+    {
         var head = Map.First;
         while (head != null)
         {
@@ -121,22 +142,6 @@ public class DiskFragmenter
             }
 
             head.ValueRef.Length += counter;
-            head = head.Next;
-        }
-
-        head = Map.First;
-        var position = 0;
-        while (head != null)
-        {
-            if (head.ValueRef.Id != -1)
-            {
-                for (var index = 0; index < head.ValueRef.Length; index++)
-                {
-                    Checksum += (position + index) * head.ValueRef.Id;
-                }
-            }
-
-            position += head.ValueRef.Length;
             head = head.Next;
         }
     }
