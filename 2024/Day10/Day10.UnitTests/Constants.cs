@@ -40,6 +40,29 @@ public static class Constants
 ...9..2
 .....01";
 
+    public const string SIXTH_SAMPLE_INPUT = @".....0.
+..4321.
+..5..2.
+..6543.
+..7..4.
+..8765.
+..9....";
+
+    public const string SEVENTH_SAMPLE_INPUT = @"..90..9
+...1.98
+...2..7
+6543456
+765.987
+876....
+987....";
+
+    public const string EIGHTH_SAMPLE_INPUT = @"012345
+123456
+234567
+345678
+4.6789
+56789.";
+
     public const string PUZZLE_INPUT = @"23456734567892109810123432345698901208765434101
 10549825676783478454398521050787432019010125014
 01234918985490565569207649801456541023121076523

@@ -85,4 +85,14 @@ public class TopographicMapMust
         var sut = new TopographicMap(PUZZLE_INPUT);
         Assert.Equal(607, sut.TrailheadScore);
     }
+
+    [Theory]
+    [InlineData(SIXTH_SAMPLE_INPUT, 3)]
+    [InlineData(SEVENTH_SAMPLE_INPUT, 13)]
+    [InlineData(EIGHTH_SAMPLE_INPUT, 227)]
+    public void CalculateRatingCorrectly(string input, int expectedRating)
+    {
+        var sut = new TopographicMap(input);
+        Assert.Equal(expectedRating, sut.TrailheadRating);
+    }
 }
