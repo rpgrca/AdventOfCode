@@ -1,8 +1,3 @@
-
-
-
-using System.Security.Cryptography.X509Certificates;
-
 namespace Day10.Logic;
 
 public class TopographicMap

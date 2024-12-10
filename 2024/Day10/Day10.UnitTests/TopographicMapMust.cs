@@ -102,4 +102,11 @@ public class TopographicMapMust
         var sut = new TopographicMap(SAMPLE_INPUT);
         Assert.Equal(81, sut.TrailheadRating);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new TopographicMap(PUZZLE_INPUT);
+        Assert.Equal(1384, sut.TrailheadRating);
+    }
 }
