@@ -30,88 +30,62 @@ public partial class DiskFragmenter
         }
     }
 
-    public interface IMover
+    public void Compact(bool wholeFile = false)
     {
-        int Move(LinkedList<ContiguousSpace> map, LinkedListNode<ContiguousSpace> lastFile, LinkedListNode<ContiguousSpace> emptySpace);
-    }
-
-    public class SameSizeMover : IMover
-    {
-        public int Move(LinkedList<ContiguousSpace> map, LinkedListNode<ContiguousSpace> lastFile, LinkedListNode<ContiguousSpace> emptySpace)
-        {
-            (lastFile.ValueRef, emptySpace.ValueRef) = (emptySpace.ValueRef, lastFile.ValueRef);
-            return 0;
-        }
-    }
-
-    public class LargerFileMover : IMover
-    {
-        public int Move(LinkedList<ContiguousSpace> map, LinkedListNode<ContiguousSpace> lastFile, LinkedListNode<ContiguousSpace> emptySpace)
-        {
-            map.AddAfter(emptySpace, new LinkedListNode<ContiguousSpace>(lastFile.ValueRef.SplitAt(emptySpace.ValueRef.Length)));
-            map.Remove(emptySpace);
-            map.AddAfter(lastFile, emptySpace);
-            return lastFile.ValueRef.Length;
-        }
-    }
-
-    public class SmallerFileMover : IMover
-    {
-        public int Move(LinkedList<ContiguousSpace> map, LinkedListNode<ContiguousSpace> lastFile, LinkedListNode<ContiguousSpace> emptySpace)
-        {
-            map.AddBefore(emptySpace, new LinkedListNode<ContiguousSpace>(lastFile.ValueRef));
-            lastFile.ValueRef = new FreeSpace(lastFile.ValueRef.Length);
-            emptySpace.ValueRef.Length -= lastFile.ValueRef.Length;
-            return 0;
-        }
-    }
-
-    public void Compact()
-    {
-        var smallerMover = new SmallerFileMover();
-        var sameSizeMover = new SameSizeMover();
-        var largerFileMover = new LargerFileMover();
-
         var compacted = true;
-        var lastFile = Map.Last;
-        while (lastFile != null && compacted)
+        var file = Map.Last;
+        while (file != null && compacted)
         {
-            lastFile.ValueRef.WhenOccupied(o => {
-                var length = o.Length;
+            if (file.ValueRef.Id != -1)
+            {
+                var length = file.ValueRef.Length;
                 var emptySpace = Map.First;
 
                 compacted = false;
-                while (emptySpace != null && emptySpace != lastFile && length > 0)
+                while (emptySpace != null && emptySpace != file && length > 0)
                 {
-                    var nextSpace = emptySpace.Next;
-                    emptySpace.ValueRef.WhenFree(e => {
-                        if (length == e.Length)
+                    if (emptySpace.ValueRef.Id == -1)
+                    {
+                        if (length == emptySpace.ValueRef.Length)
                         {
-                            length = sameSizeMover.Move(Map, lastFile, emptySpace);
+                            (emptySpace.ValueRef.Id, file.ValueRef.Id) = (file.ValueRef.Id, emptySpace.ValueRef.Id);
+                            length = 0;
                         }
                         else
                         {
-                            if (length < e.Length)
+                            if (length < emptySpace.ValueRef.Length)
                             {
-                                length = smallerMover.Move(Map, lastFile, emptySpace);
+                                var newNode = new LinkedListNode<ContiguousSpace>(new(file.ValueRef.Id, length));
+                                Map.AddBefore(emptySpace, newNode);
+                                emptySpace.ValueRef.Length -= length;
+                                file.ValueRef.Id = -1;
+                                length = 0;
                             }
                             else
                             {
-                                length = largerFileMover.Move(Map, lastFile, emptySpace);
+                                if (!wholeFile)
+                                {
+                                    emptySpace.ValueRef.Id = file.ValueRef.Id;
+                                    file.ValueRef.Length -= emptySpace.ValueRef.Length;
+
+                                    var newNode = new LinkedListNode<ContiguousSpace>(new(-1, emptySpace.ValueRef.Length));
+                                    Map.AddAfter(file, newNode);
+                                    length -= emptySpace.ValueRef.Length;
+                                }
                             }
                         }
-                    });
 
-                    compacted = true;
-                    emptySpace = nextSpace;
+                        compacted = true;
+                    }
+
+                    emptySpace = emptySpace.Next;
                 }
+            }
 
-            });
-
-            lastFile = lastFile.Previous;
+            file = file.Previous;
         }
 
-        MergeContiguousSpace();
+        MergeFragmentedSpace();
         CalculateChecksum();
     }
 
@@ -121,26 +95,24 @@ public partial class DiskFragmenter
         var position = 0;
         while (head != null)
         {
-            head.ValueRef.WhenOccupied(o => {
-                for (var index = 0; index < head.ValueRef.Length; index++)
-                {
-                    Checksum += (position + index) * o.Id;
-                }
-            });
+            if (head.ValueRef.Id != -1)
+            {
+                Checksum += (long)head.ValueRef.Length * (2 * position + head.ValueRef.Length - 1) / 2 * head.ValueRef.Id;
+            }
 
             position += head.ValueRef.Length;
             head = head.Next;
         }
     }
 
-    private void MergeContiguousSpace()
+    private void MergeFragmentedSpace()
     {
         var head = Map.First;
         while (head != null)
         {
             var counter = 0;
             var next = head.Next;
-            while (next != null && next.ValueRef.SameSpaceAs(head.ValueRef))
+            while (next != null && next.ValueRef.Id == head.ValueRef.Id)
             {
                 counter += next.ValueRef.Length;
                 var toDelete = next;
@@ -151,52 +123,5 @@ public partial class DiskFragmenter
             head.ValueRef.Length += counter;
             head = head.Next;
         }
-    }
-
-    public void Compact2()
-    {
-        var compacted = true;
-        var last = Map.Last;
-        while (last != null && compacted)
-        {
-            last.ValueRef.WhenOccupied(o => {
-
-                var length = o.Length;
-                compacted = false;
-                var emptySpace = Map.First;
-                while (emptySpace != null && emptySpace != last && length > 0)
-                {
-                    var nextSpace = emptySpace.Next;
-                    emptySpace.ValueRef.WhenFree(_ => {
-                        if (length == emptySpace.ValueRef.Length)
-                        {
-                            (last.ValueRef, emptySpace.ValueRef) = (emptySpace.ValueRef, last.ValueRef);
-                            length = 0;
-                        }
-                        else
-                        {
-                            if (length < emptySpace.ValueRef.Length)
-                            {
-                                var newNode = new LinkedListNode<ContiguousSpace>(last.ValueRef);
-                                Map.AddBefore(emptySpace, newNode);
-
-                                last.ValueRef = new FreeSpace(length);
-                                emptySpace.ValueRef.Length -= length;
-                                length = 0;
-                            }
-                        }
-                    });
-
-                    compacted = true;
-                    emptySpace = nextSpace;
-                }
-
-            });
-
-            last = last.Previous;
-        }
-
-        MergeContiguousSpace();
-        CalculateChecksum();
     }
 }

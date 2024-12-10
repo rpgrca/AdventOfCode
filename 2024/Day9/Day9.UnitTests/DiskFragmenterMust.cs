@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Xml;
 using Day9.Logic;
 using static Day9.UnitTests.Constants;
 
@@ -18,29 +16,29 @@ public class DiskFragmenterMust
     }
 
     [Fact]
-    public void MapFileWithoutFreeSpaceCorrectly()
+    public void MapFileWithoutContiguousSpaceCorrectly()
     {
         var sut = new DiskFragmenter("1");
         Assert.Collection(sut.Map,
             p1 => {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(1, space.Length);
             });
     }
 
     [Fact]
-    public void MapFileWithFreeSpaceCorrectly()
+    public void MapFileWithContiguousSpaceCorrectly()
     {
         var sut = new DiskFragmenter("12");
         Assert.Collection(sut.Map,
             p1 => {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p2 => {
-                var space = Assert.IsType<FreeSpace>(p2);
+                var space = Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(2, space.Length);
             });
     }
@@ -51,84 +49,84 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         Assert.Collection(sut.Map,
             p1 => {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p2 => {
-                var space = Assert.IsType<FreeSpace>(p2);
+                var space = Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(3, space.Length);
             },
             p3 => {
-                var space = Assert.IsType<OccupiedSpace>(p3);
+                var space = Assert.IsType<ContiguousSpace>(p3);
                 Assert.Equal(1, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p4 => {
-                var space = Assert.IsType<FreeSpace>(p4);
+                var space = Assert.IsType<ContiguousSpace>(p4);
                 Assert.Equal(3, space.Length);
             },
             p5 => {
-                var space = Assert.IsType<OccupiedSpace>(p5);
+                var space = Assert.IsType<ContiguousSpace>(p5);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p6 => {
-                var space = Assert.IsType<FreeSpace>(p6);
+                var space = Assert.IsType<ContiguousSpace>(p6);
                 Assert.Equal(3, space.Length);
             },
             p7 => {
-                var space = Assert.IsType<OccupiedSpace>(p7);
+                var space = Assert.IsType<ContiguousSpace>(p7);
                 Assert.Equal(3, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p8 => {
-                var space = Assert.IsType<FreeSpace>(p8);
+                var space = Assert.IsType<ContiguousSpace>(p8);
                 Assert.Equal(1, space.Length);
             },
             p9 => {
-                var space = Assert.IsType<OccupiedSpace>(p9);
+                var space = Assert.IsType<ContiguousSpace>(p9);
                 Assert.Equal(4, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p10 =>{
-                var space = Assert.IsType<FreeSpace>(p10);
+                var space = Assert.IsType<ContiguousSpace>(p10);
                 Assert.Equal(1, space.Length);
             },
             p11 =>{
-                var space = Assert.IsType<OccupiedSpace>(p11);
+                var space = Assert.IsType<ContiguousSpace>(p11);
                 Assert.Equal(5, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p12 =>{
-                var space = Assert.IsType<FreeSpace>(p12);
+                var space = Assert.IsType<ContiguousSpace>(p12);
                 Assert.Equal(1, space.Length);
             },
             p13 =>{
-                var space = Assert.IsType<OccupiedSpace>(p13);
+                var space = Assert.IsType<ContiguousSpace>(p13);
                 Assert.Equal(6, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p14 =>{
-                var space = Assert.IsType<FreeSpace>(p14);
+                var space = Assert.IsType<ContiguousSpace>(p14);
                 Assert.Equal(1, space.Length);
             },
             p15 =>{
-                var space = Assert.IsType<OccupiedSpace>(p15);
+                var space = Assert.IsType<ContiguousSpace>(p15);
                 Assert.Equal(7, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p16 =>{
-                var space = Assert.IsType<FreeSpace>(p16);
+                var space = Assert.IsType<ContiguousSpace>(p16);
                  Assert.Equal(1, space.Length);
             },
             p17 =>{
-                var space = Assert.IsType<OccupiedSpace>(p17);
+                var space = Assert.IsType<ContiguousSpace>(p17);
                 Assert.Equal(8, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p18 =>{
-                var space = Assert.IsType<OccupiedSpace>(p18);
+                var space = Assert.IsType<ContiguousSpace>(p18);
                 Assert.Equal(9, space.Id);
                 Assert.Equal(2, space.Length);
             }
@@ -143,19 +141,19 @@ public class DiskFragmenterMust
         Assert.Collection(sut.Map,
             p1 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(9, space.Length);
             },
             p2 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p2);
+                var space = Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(1, space.Id);
                 Assert.Equal(9, space.Length);
             },
             p3 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p3);
+                var space = Assert.IsType<ContiguousSpace>(p3);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(9, space.Length);
             });
@@ -169,31 +167,31 @@ public class DiskFragmenterMust
         Assert.Collection(sut.Map,
             p1 =>
             {
-                var space= Assert.IsType<OccupiedSpace>(p1);
+                var space= Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p2 =>
             {
-                var space= Assert.IsType<OccupiedSpace>(p2);
+                var space= Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p3 =>
             {
-                var space= Assert.IsType<OccupiedSpace>(p3);
+                var space= Assert.IsType<ContiguousSpace>(p3);
                 Assert.Equal(1, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p4 =>
             {
-                var space= Assert.IsType<OccupiedSpace>(p4);
+                var space= Assert.IsType<ContiguousSpace>(p4);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p5 =>
             {
-                var space = Assert.IsType<FreeSpace>(p5);
+                var space = Assert.IsType<ContiguousSpace>(p5);
                 Assert.Equal(6, space.Length);
             });
     }
@@ -205,77 +203,77 @@ public class DiskFragmenterMust
         sut.Compact();
         Assert.Collection(sut.Map,
             p1 => {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p2 => {
-                var space = Assert.IsType<OccupiedSpace>(p2);
+                var space = Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(9, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p3 => {
-                var space = Assert.IsType<OccupiedSpace>(p3);
+                var space = Assert.IsType<ContiguousSpace>(p3);
                 Assert.Equal(8, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p4 => {
-                var space = Assert.IsType<OccupiedSpace>(p4);
+                var space = Assert.IsType<ContiguousSpace>(p4);
                 Assert.Equal(1, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p5 => {
-                var space = Assert.IsType<OccupiedSpace>(p5);
+                var space = Assert.IsType<ContiguousSpace>(p5);
                 Assert.Equal(8, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p6 => {
-                var space = Assert.IsType<OccupiedSpace>(p6);
+                var space = Assert.IsType<ContiguousSpace>(p6);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p7 => {
-                var space = Assert.IsType<OccupiedSpace>(p7);
+                var space = Assert.IsType<ContiguousSpace>(p7);
                 Assert.Equal(7, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p8 => {
-                var space = Assert.IsType<OccupiedSpace>(p8);
+                var space = Assert.IsType<ContiguousSpace>(p8);
                 Assert.Equal(3, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p9 => {
-                var space = Assert.IsType<OccupiedSpace>(p9);
+                var space = Assert.IsType<ContiguousSpace>(p9);
                 Assert.Equal(6, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p10 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p10);
+                var space = Assert.IsType<ContiguousSpace>(p10);
                 Assert.Equal(4, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p11 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p11);
+                var space = Assert.IsType<ContiguousSpace>(p11);
                 Assert.Equal(6, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p12 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p12);
+                var space = Assert.IsType<ContiguousSpace>(p12);
                 Assert.Equal(5, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p13 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p13);
+                var space = Assert.IsType<ContiguousSpace>(p13);
                 Assert.Equal(6, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p14 =>
             {
-                var space = Assert.IsType<FreeSpace>(p14);
+                var space = Assert.IsType<ContiguousSpace>(p14);
                 Assert.Equal(14, space.Length);
             });
     }
@@ -300,96 +298,96 @@ public class DiskFragmenterMust
     public void MoveWholeFileCorrectly()
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Collection(sut.Map,
             p1 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p1);
+                var space = Assert.IsType<ContiguousSpace>(p1);
                 Assert.Equal(0, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p2 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p2);
+                var space = Assert.IsType<ContiguousSpace>(p2);
                 Assert.Equal(9, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p3 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p3);
+                var space = Assert.IsType<ContiguousSpace>(p3);
                 Assert.Equal(2, space.Id);
                 Assert.Equal(1, space.Length);
             },
             p4 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p4);
+                var space = Assert.IsType<ContiguousSpace>(p4);
                 Assert.Equal(1, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p5 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p5);
+                var space = Assert.IsType<ContiguousSpace>(p5);
                 Assert.Equal(7, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p6 =>
             {
-                var space = Assert.IsType<FreeSpace>(p6);
+                var space = Assert.IsType<ContiguousSpace>(p6);
                 Assert.Equal(1, space.Length);
             },
             p7 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p7);
+                var space = Assert.IsType<ContiguousSpace>(p7);
                 Assert.Equal(4, space.Id);
                 Assert.Equal(2, space.Length);
             },
             p8 =>
             {
-                var space = Assert.IsType<FreeSpace>(p8);
+                var space = Assert.IsType<ContiguousSpace>(p8);
                 Assert.Equal(1, space.Length);
             },
             p9 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p9);
+                var space = Assert.IsType<ContiguousSpace>(p9);
                 Assert.Equal(3, space.Id);
                 Assert.Equal(3, space.Length);
             },
             p10 =>
             {
-                var space = Assert.IsType<FreeSpace>(p10);
+                var space = Assert.IsType<ContiguousSpace>(p10);
                 Assert.Equal(4, space.Length);
             },
             p11 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p11);
+                var space = Assert.IsType<ContiguousSpace>(p11);
                 Assert.Equal(5, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p12 =>
             {
-                var space = Assert.IsType<FreeSpace>(p12);
+                var space = Assert.IsType<ContiguousSpace>(p12);
                 Assert.Equal(1, space.Length);
             },
             p13 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p13);
+                var space = Assert.IsType<ContiguousSpace>(p13);
                 Assert.Equal(6, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p14 =>
             {
-                var space = Assert.IsType<FreeSpace>(p14);
+                var space = Assert.IsType<ContiguousSpace>(p14);
                 Assert.Equal(5, space.Length);
             },
             p15 =>
             {
-                var space = Assert.IsType<OccupiedSpace>(p15);
+                var space = Assert.IsType<ContiguousSpace>(p15);
                 Assert.Equal(8, space.Id);
                 Assert.Equal(4, space.Length);
             },
             p16 =>
             {
-                var space = Assert.IsType<FreeSpace>(p16);
+                var space = Assert.IsType<ContiguousSpace>(p16);
                 Assert.Equal(2, space.Length);
             });
     }
@@ -398,7 +396,7 @@ public class DiskFragmenterMust
     public void SolveSecondSampleCorrectly()
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Equal(2858, sut.Checksum);
     }
 
@@ -406,7 +404,7 @@ public class DiskFragmenterMust
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new DiskFragmenter(PUZZLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Equal(6636608781232, sut.Checksum);
     }
 }

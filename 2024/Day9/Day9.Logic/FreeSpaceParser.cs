@@ -6,7 +6,7 @@ public class FreeSpaceParser : IParser
     {
         if (space > 0)
         {
-            map.AddLast(new LinkedListNode<ContiguousSpace>(new FreeSpace(space)));
+            map.AddLast(new LinkedListNode<ContiguousSpace>(new ContiguousSpace(-1, space)));
         }
     }
 }
