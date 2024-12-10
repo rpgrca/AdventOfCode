@@ -64,9 +64,18 @@ public class TopographicMapMust
     [Theory]
     [InlineData(SECOND_SAMPLE_INPUT, 1)]
     [InlineData(THIRD_SAMPLE_INPUT, 2)]
+    [InlineData(FOURTH_SAMPLE_INPUT, 4)]
+    [InlineData(FIFTH_SAMPLE_INPUT, 3)]
     public void CalculateTrailheadScoreCorrectly(string input, int expectedScore)
     {
         var sut = new TopographicMap(input);
         Assert.Equal(expectedScore, sut.TrailheadScore);
+    }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new TopographicMap(SAMPLE_INPUT);
+        Assert.Equal(36, sut.TrailheadScore);
     }
 }
