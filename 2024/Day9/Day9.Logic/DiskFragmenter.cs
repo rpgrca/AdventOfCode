@@ -1,8 +1,3 @@
-
-
-using System.Globalization;
-using System.Reflection;
-
 namespace Day9.Logic;
 
 public record ContiguousSpace
@@ -55,50 +50,61 @@ public class DiskFragmenter
         }
     }
 
-    public void Compact()
+    public void Compact(bool wholeFile = false)
     {
         var compacted = true;
-        for (var file = Map.Last; file != Map.First && compacted; file = file.Previous)
+        var file = Map.Last;
+        while (file != null && compacted)
         {
-            if (file.Value.Id != -1)
+            if (file.ValueRef.Id != -1)
             {
-                var length = file.Value.Length;
+                var length = file.ValueRef.Length;
+                var emptySpace = Map.First;
+
                 compacted = false;
-                for (var emptySpace = Map.First; emptySpace != file && length > 0; emptySpace = emptySpace.Next)
+                while (emptySpace != null && emptySpace != file && length > 0)
                 {
-                    if (emptySpace.Value.Id == -1)
+                    var emptySpaceValue = emptySpace.Value;
+                    if (emptySpaceValue.Id == -1)
                     {
-                        if (length == emptySpace.Value.Length)
+                        if (length == emptySpaceValue.Length)
                         {
-                            emptySpace.ValueRef.Id = file.Value.Id;
+                            emptySpaceValue.Id = file.ValueRef.Id;
                             file.ValueRef.Id = -1;
                             length = 0;
                         }
                         else
                         {
-                            if (length < emptySpace.Value.Length)
+                            if (length < emptySpaceValue.Length)
                             {
-                                var newNode = new LinkedListNode<ContiguousSpace>(new(file.Value.Id, length));
+                                var newNode = new LinkedListNode<ContiguousSpace>(new(file.ValueRef.Id, length));
                                 Map.AddBefore(emptySpace, newNode);
-                                emptySpace.ValueRef.Length -= length;
+                                emptySpaceValue.Length -= length;
                                 file.ValueRef.Id = -1;
                                 length = 0;
                             }
                             else
                             {
-                                emptySpace.ValueRef.Id = file.Value.Id;
-                                file.Value.Length -= emptySpace.Value.Length;
+                                if (! wholeFile)
+                                {
+                                    emptySpaceValue.Id = file.ValueRef.Id;
+                                    file.ValueRef.Length -= emptySpaceValue.Length;
 
-                                var newNode = new LinkedListNode<ContiguousSpace>(new(-1, emptySpace.Value.Length));
-                                Map.AddAfter(file, newNode);
-                                length -= emptySpace.Value.Length;
+                                    var newNode = new LinkedListNode<ContiguousSpace>(new(-1, emptySpaceValue.Length));
+                                    Map.AddAfter(file, newNode);
+                                    length -= emptySpaceValue.Length;
+                                }
                             }
                         }
 
                         compacted = true;
                     }
+
+                    emptySpace = emptySpace.Next;
                 }
             }
+
+            file = file.Previous;
         }
 
         var head = Map.First;
@@ -106,73 +112,9 @@ public class DiskFragmenter
         {
             var counter = 0;
             var next = head.Next;
-            while (next != null && next.Value.Id == head.Value.Id)
+            while (next != null && next.ValueRef.Id == head.ValueRef.Id)
             {
-                counter += next.Value.Length;
-                var toDelete = next;
-                next = next.Next;
-                Map.Remove(toDelete);
-            }
-
-            head.ValueRef.Length += counter;
-            head = head.Next;
-        }
-
-        head = Map.First;
-        var position = 0;
-        while (head != null && head.Value.Id != -1)
-        {
-            for (var index = 0; index < head.Value.Length; index++)
-            {
-                Checksum += (position + index) * head.Value.Id;
-            }
-
-            position += head.Value.Length;
-            head = head.Next;
-        }
-    }
-
-    public void Compact2()
-    {
-        for (var file = Map.Last; file != Map.First; file = file.Previous)
-        {
-            if (file.Value.Id != -1)
-            {
-                var length = file.Value.Length;
-                for (var emptySpace = Map.First; emptySpace != file && length > 0; emptySpace = emptySpace.Next)
-                {
-                    if (emptySpace.Value.Id == -1)
-                    {
-                        if (length == emptySpace.Value.Length)
-                        {
-                            emptySpace.ValueRef.Id = file.Value.Id;
-                            file.ValueRef.Id = -1;
-                            length = 0;
-                        }
-                        else
-                        {
-                            if (length < emptySpace.Value.Length)
-                            {
-                                var newNode = new LinkedListNode<ContiguousSpace>(new(file.Value.Id, length));
-                                Map.AddBefore(emptySpace, newNode);
-                                emptySpace.ValueRef.Length -= length;
-                                file.ValueRef.Id = -1;
-                                length = 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        var head = Map.First;
-        while (head != null)
-        {
-            var counter = 0;
-            var next = head.Next;
-            while (next != null && next.Value.Id == head.Value.Id)
-            {
-                counter += next.Value.Length;
+                counter += next.ValueRef.Length;
                 var toDelete = next;
                 next = next.Next;
                 Map.Remove(toDelete);
@@ -186,15 +128,15 @@ public class DiskFragmenter
         var position = 0;
         while (head != null)
         {
-            if (head.Value.Id != -1)
+            if (head.ValueRef.Id != -1)
             {
-                for (var index = 0; index < head.Value.Length; index++)
+                for (var index = 0; index < head.ValueRef.Length; index++)
                 {
-                    Checksum += (position + index) * head.Value.Id;
+                    Checksum += (position + index) * head.ValueRef.Id;
                 }
             }
 
-            position += head.Value.Length;
+            position += head.ValueRef.Length;
             head = head.Next;
         }
     }

@@ -127,7 +127,7 @@ public class DiskFragmenterMust
     public void MoveWholeFileCorrectly()
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Collection(sut.Map,
             p1 => Assert.Equal(new(0, 2), p1),
             p2 => Assert.Equal(new(9, 2), p2),
@@ -151,7 +151,7 @@ public class DiskFragmenterMust
     public void SolveSecondSampleCorrectly()
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Equal(2858, sut.Checksum);
     }
 
@@ -159,7 +159,7 @@ public class DiskFragmenterMust
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new DiskFragmenter(PUZZLE_INPUT);
-        sut.Compact2();
+        sut.Compact(true);
         Assert.Equal(6636608781232, sut.Checksum);
     }
 }
