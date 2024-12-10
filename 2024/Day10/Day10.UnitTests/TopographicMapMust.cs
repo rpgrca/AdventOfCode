@@ -60,4 +60,13 @@ public class TopographicMapMust
             p8 => Assert.Equal((6, 6), p8),
             p9 => Assert.Equal((1, 7), p9));
     }
+
+    [Theory]
+    [InlineData(SECOND_SAMPLE_INPUT, 1)]
+    [InlineData(THIRD_SAMPLE_INPUT, 2)]
+    public void CalculateTrailheadScoreCorrectly(string input, int expectedScore)
+    {
+        var sut = new TopographicMap(input);
+        Assert.Equal(expectedScore, sut.TrailheadScore);
+    }
 }
