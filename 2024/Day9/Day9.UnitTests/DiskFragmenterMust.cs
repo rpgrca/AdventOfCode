@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Xml;
 using Day9.Logic;
 using static Day9.UnitTests.Constants;
 
@@ -19,7 +21,12 @@ public class DiskFragmenterMust
     public void MapFileWithoutFreeSpaceCorrectly()
     {
         var sut = new DiskFragmenter("1");
-        Assert.Collection(sut.Map, p1 => Assert.Equal(new OccupiedSpace(0, 1), p1));
+        Assert.Collection(sut.Map,
+            p1 => {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(1, space.Length);
+            });
     }
 
     [Fact]
@@ -27,8 +34,15 @@ public class DiskFragmenterMust
     {
         var sut = new DiskFragmenter("12");
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 1), p1),
-            p2 => Assert.Equal(new FreeSpace(2), p2));
+            p1 => {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p2 => {
+                var space = Assert.IsType<FreeSpace>(p2);
+                Assert.Equal(2, space.Length);
+            });
     }
 
     [Fact]
@@ -36,24 +50,88 @@ public class DiskFragmenterMust
     {
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
-            p2 => Assert.Equal(new FreeSpace(3), p2),
-            p3 => Assert.Equal(new OccupiedSpace(1, 3), p3),
-            p4 => Assert.Equal(new FreeSpace(3), p4),
-            p5 => Assert.Equal(new OccupiedSpace(2, 1), p5),
-            p6 => Assert.Equal(new FreeSpace(3), p6),
-            p7 => Assert.Equal(new OccupiedSpace(3, 3), p7),
-            p8 => Assert.Equal(new FreeSpace(1), p8),
-            p9 => Assert.Equal(new OccupiedSpace(4, 2), p9),
-            p10 => Assert.Equal(new FreeSpace(1), p10),
-            p11 => Assert.Equal(new OccupiedSpace(5, 4), p11),
-            p12 => Assert.Equal(new FreeSpace(1), p12),
-            p13 => Assert.Equal(new OccupiedSpace(6, 4), p13),
-            p14 => Assert.Equal(new FreeSpace(1), p14),
-            p15 => Assert.Equal(new OccupiedSpace(7,3), p15),
-            p16 => Assert.Equal(new FreeSpace(1), p16),
-            p17 => Assert.Equal(new OccupiedSpace(8, 4), p17),
-            p18 => Assert.Equal(new OccupiedSpace(9, 2), p18)
+            p1 => {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p2 => {
+                var space = Assert.IsType<FreeSpace>(p2);
+                Assert.Equal(3, space.Length);
+            },
+            p3 => {
+                var space = Assert.IsType<OccupiedSpace>(p3);
+                Assert.Equal(1, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p4 => {
+                var space = Assert.IsType<FreeSpace>(p4);
+                Assert.Equal(3, space.Length);
+            },
+            p5 => {
+                var space = Assert.IsType<OccupiedSpace>(p5);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p6 => {
+                var space = Assert.IsType<FreeSpace>(p6);
+                Assert.Equal(3, space.Length);
+            },
+            p7 => {
+                var space = Assert.IsType<OccupiedSpace>(p7);
+                Assert.Equal(3, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p8 => {
+                var space = Assert.IsType<FreeSpace>(p8);
+                Assert.Equal(1, space.Length);
+            },
+            p9 => {
+                var space = Assert.IsType<OccupiedSpace>(p9);
+                Assert.Equal(4, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p10 =>{
+                var space = Assert.IsType<FreeSpace>(p10);
+                Assert.Equal(1, space.Length);
+            },
+            p11 =>{
+                var space = Assert.IsType<OccupiedSpace>(p11);
+                Assert.Equal(5, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p12 =>{
+                var space = Assert.IsType<FreeSpace>(p12);
+                Assert.Equal(1, space.Length);
+            },
+            p13 =>{
+                var space = Assert.IsType<OccupiedSpace>(p13);
+                Assert.Equal(6, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p14 =>{
+                var space = Assert.IsType<FreeSpace>(p14);
+                Assert.Equal(1, space.Length);
+            },
+            p15 =>{
+                var space = Assert.IsType<OccupiedSpace>(p15);
+                Assert.Equal(7, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p16 =>{
+                var space = Assert.IsType<FreeSpace>(p16);
+                 Assert.Equal(1, space.Length);
+            },
+            p17 =>{
+                var space = Assert.IsType<OccupiedSpace>(p17);
+                Assert.Equal(8, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p18 =>{
+                var space = Assert.IsType<OccupiedSpace>(p18);
+                Assert.Equal(9, space.Id);
+                Assert.Equal(2, space.Length);
+            }
         );
     }
 
@@ -63,9 +141,24 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(THIRD_SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 9), p1),
-            p2 => Assert.Equal(new OccupiedSpace(1, 9), p2),
-            p3 => Assert.Equal(new OccupiedSpace(2, 9), p3));
+            p1 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(9, space.Length);
+            },
+            p2 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p2);
+                Assert.Equal(1, space.Id);
+                Assert.Equal(9, space.Length);
+            },
+            p3 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p3);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(9, space.Length);
+            });
     }
 
     [Fact]
@@ -74,11 +167,35 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SECOND_SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 1), p1),
-            p2 => Assert.Equal(new OccupiedSpace(2, 2), p2),
-            p3 => Assert.Equal(new OccupiedSpace(1, 3), p3),
-            p4 => Assert.Equal(new OccupiedSpace(2, 3), p4),
-            p5 => Assert.Equal(new FreeSpace(6), p5));
+            p1 =>
+            {
+                var space= Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p2 =>
+            {
+                var space= Assert.IsType<OccupiedSpace>(p2);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p3 =>
+            {
+                var space= Assert.IsType<OccupiedSpace>(p3);
+                Assert.Equal(1, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p4 =>
+            {
+                var space= Assert.IsType<OccupiedSpace>(p4);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p5 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p5);
+                Assert.Equal(6, space.Length);
+            });
     }
 
     [Fact]
@@ -87,20 +204,80 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         sut.Compact();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
-            p2 => Assert.Equal(new OccupiedSpace(9, 2), p2),
-            p3 => Assert.Equal(new OccupiedSpace(8, 1), p3),
-            p4 => Assert.Equal(new OccupiedSpace(1, 3), p4),
-            p5 => Assert.Equal(new OccupiedSpace(8, 3), p5),
-            p6 => Assert.Equal(new OccupiedSpace(2, 1), p6),
-            p7 => Assert.Equal(new OccupiedSpace(7, 3), p7),
-            p8 => Assert.Equal(new OccupiedSpace(3, 3), p8),
-            p9 => Assert.Equal(new OccupiedSpace(6, 1), p9),
-            p10 => Assert.Equal(new OccupiedSpace(4, 2), p10),
-            p11 => Assert.Equal(new OccupiedSpace(6, 1), p11),
-            p12 => Assert.Equal(new OccupiedSpace(5, 4), p12),
-            p13 => Assert.Equal(new OccupiedSpace(6, 2), p13),
-            p14 => Assert.Equal(new FreeSpace(14), p14));
+            p1 => {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p2 => {
+                var space = Assert.IsType<OccupiedSpace>(p2);
+                Assert.Equal(9, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p3 => {
+                var space = Assert.IsType<OccupiedSpace>(p3);
+                Assert.Equal(8, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p4 => {
+                var space = Assert.IsType<OccupiedSpace>(p4);
+                Assert.Equal(1, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p5 => {
+                var space = Assert.IsType<OccupiedSpace>(p5);
+                Assert.Equal(8, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p6 => {
+                var space = Assert.IsType<OccupiedSpace>(p6);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p7 => {
+                var space = Assert.IsType<OccupiedSpace>(p7);
+                Assert.Equal(7, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p8 => {
+                var space = Assert.IsType<OccupiedSpace>(p8);
+                Assert.Equal(3, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p9 => {
+                var space = Assert.IsType<OccupiedSpace>(p9);
+                Assert.Equal(6, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p10 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p10);
+                Assert.Equal(4, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p11 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p11);
+                Assert.Equal(6, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p12 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p12);
+                Assert.Equal(5, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p13 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p13);
+                Assert.Equal(6, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p14 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p14);
+                Assert.Equal(14, space.Length);
+            });
     }
 
     [Fact]
@@ -125,22 +302,96 @@ public class DiskFragmenterMust
         var sut = new DiskFragmenter(SAMPLE_INPUT);
         sut.Compact2();
         Assert.Collection(sut.Map,
-            p1 => Assert.Equal(new OccupiedSpace(0, 2), p1),
-            p2 => Assert.Equal(new OccupiedSpace(9, 2), p2),
-            p3 => Assert.Equal(new OccupiedSpace(2, 1), p3),
-            p4 => Assert.Equal(new OccupiedSpace(1, 3), p4),
-            p5 => Assert.Equal(new OccupiedSpace(7, 3), p5),
-            p6 => Assert.Equal(new FreeSpace(1), p6),
-            p7 => Assert.Equal(new OccupiedSpace(4, 2), p7),
-            p8 => Assert.Equal(new FreeSpace(1), p8),
-            p9 => Assert.Equal(new OccupiedSpace(3, 3), p9),
-            p10 => Assert.Equal(new FreeSpace(4), p10),
-            p11 => Assert.Equal(new OccupiedSpace(5, 4), p11),
-            p12 => Assert.Equal(new FreeSpace(1), p12),
-            p13 => Assert.Equal(new OccupiedSpace(6, 4), p13),
-            p14 => Assert.Equal(new FreeSpace(5), p14),
-            p15 => Assert.Equal(new OccupiedSpace(8, 4), p15),
-            p16 => Assert.Equal(new FreeSpace(2), p16));
+            p1 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p1);
+                Assert.Equal(0, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p2 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p2);
+                Assert.Equal(9, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p3 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p3);
+                Assert.Equal(2, space.Id);
+                Assert.Equal(1, space.Length);
+            },
+            p4 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p4);
+                Assert.Equal(1, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p5 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p5);
+                Assert.Equal(7, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p6 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p6);
+                Assert.Equal(1, space.Length);
+            },
+            p7 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p7);
+                Assert.Equal(4, space.Id);
+                Assert.Equal(2, space.Length);
+            },
+            p8 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p8);
+                Assert.Equal(1, space.Length);
+            },
+            p9 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p9);
+                Assert.Equal(3, space.Id);
+                Assert.Equal(3, space.Length);
+            },
+            p10 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p10);
+                Assert.Equal(4, space.Length);
+            },
+            p11 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p11);
+                Assert.Equal(5, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p12 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p12);
+                Assert.Equal(1, space.Length);
+            },
+            p13 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p13);
+                Assert.Equal(6, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p14 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p14);
+                Assert.Equal(5, space.Length);
+            },
+            p15 =>
+            {
+                var space = Assert.IsType<OccupiedSpace>(p15);
+                Assert.Equal(8, space.Id);
+                Assert.Equal(4, space.Length);
+            },
+            p16 =>
+            {
+                var space = Assert.IsType<FreeSpace>(p16);
+                Assert.Equal(2, space.Length);
+            });
     }
 
     [Fact]

@@ -10,7 +10,7 @@ public interface ISpace
     void WhenOccupied(Action<OccupiedSpace> action);
 }
 
-public abstract record ContiguousSpace : ISpace
+public abstract class ContiguousSpace : ISpace
 {
     public int Length { get; set; }
 
@@ -23,7 +23,7 @@ public abstract record ContiguousSpace : ISpace
 }
 
 
-public record FreeSpace : ContiguousSpace
+public class FreeSpace : ContiguousSpace
 {
     public FreeSpace(int length) : base(length)
     {
@@ -50,7 +50,7 @@ public record FreeSpace : ContiguousSpace
     }
 }
 
-public record OccupiedSpace : ContiguousSpace
+public class OccupiedSpace : ContiguousSpace
 {
     public int Id { get; }
 
