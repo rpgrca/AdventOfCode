@@ -105,4 +105,20 @@ public class PlutonianPebblesMust
             p5 => Assert.Equal(28676032, p5));
     }
 
+    [Fact]
+    public void UpdatePebblesCorrectlyOnSample_WhenBlinkingFourTimes()
+    {
+        var sut = new PlutonianPebbles(SAMPLE_INPUT);
+        sut.Blink(4);
+        Assert.Collection(sut.Pebbles,
+            p1 => Assert.Equal(512, p1),
+            p2 => Assert.Equal(72, p2),
+            p3 => Assert.Equal(2024, p3),
+            p4 => Assert.Equal(2, p4),
+            p5 => Assert.Equal(0, p5),
+            p6 => Assert.Equal(2, p6),
+            p7 => Assert.Equal(4, p7),
+            p8 => Assert.Equal(2867, p8),
+            p9 => Assert.Equal(6032, p9));
+    }
 }
