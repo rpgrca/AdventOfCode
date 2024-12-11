@@ -23,38 +23,41 @@ public class PlutonianPebbles
         }
     }
 
-    public void Blink()
+    public void Blink(int count = 1)
     {
-        var current = _pebbles.First;
-        while (current != null)
+        for (; count > 0; count--)
         {
-            if (current.Value == 0)
+            var current = _pebbles.First;
+            while (current != null)
             {
-                current.Value = 1;
-            }
-            else
-            {
-                if (current.Value == 1)
+                if (current.Value == 0)
                 {
-                    current.Value *= 2024;
+                    current.Value = 1;
                 }
                 else
                 {
-                    var valueAsString = current.Value.ToString();
-                    if (valueAsString.Length % 2 == 0)
-                    {
-                        var left = valueAsString[0..(valueAsString.Length / 2)];
-                        var right = valueAsString[(valueAsString.Length / 2)..];
-                        _pebbles.AddBefore(current, long.Parse(left));
-                        current.Value = long.Parse(right);
-                    }
-                    else
+                    if (current.Value == 1)
                     {
                         current.Value *= 2024;
                     }
+                    else
+                    {
+                        var valueAsString = current.Value.ToString();
+                        if (valueAsString.Length % 2 == 0)
+                        {
+                            var left = valueAsString[0..(valueAsString.Length / 2)];
+                            var right = valueAsString[(valueAsString.Length / 2)..];
+                            _pebbles.AddBefore(current, long.Parse(left));
+                            current.Value = long.Parse(right);
+                        }
+                        else
+                        {
+                            current.Value *= 2024;
+                        }
+                    }
                 }
+                current = current.Next;
             }
-            current = current.Next;
-        }
+            }
     }
 }
