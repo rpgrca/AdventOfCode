@@ -48,6 +48,10 @@ public class PlutonianPebbles
                         _pebbles.AddBefore(current, long.Parse(left));
                         current.Value = long.Parse(right);
                     }
+                    else
+                    {
+                        current.Value *= 2024;
+                    }
                 }
             }
             current = current.Next;

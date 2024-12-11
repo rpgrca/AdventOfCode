@@ -17,7 +17,7 @@ public class PlutonianPebblesMust
     }
 
     [Fact]
-    public void UpdatePebblesCorrectly_WhenBlinkingOnceOnZeroPebble()
+    public void TransformPebbleTo1_WhenBlinkingOnceOnPebble0()
     {
         var sut = new PlutonianPebbles("0");
         sut.Blink();
@@ -25,7 +25,7 @@ public class PlutonianPebblesMust
     }
 
     [Fact]
-    public void UpdatePebblesCorrectly_WhenBlinkingOnceOnOnePebble()
+    public void MultiplyPebbleNumberBy2024_WhenBlinkingOnceOnPebble1()
     {
         var sut = new PlutonianPebbles("1");
         sut.Blink();
@@ -35,12 +35,20 @@ public class PlutonianPebblesMust
     [Theory]
     [InlineData("10", 1, 0)]
     [InlineData("1000", 10, 0)]
-    public void UpdatePebblesCorrectly_WhenPebbleHasEvenNumberOfDigits(string input, int expectedLeft, int expectedRight)
+    public void SplitPebbleInHalf_WhenPebbleHasEvenNumberOfDigits(string input, int expectedLeft, int expectedRight)
     {
         var sut = new PlutonianPebbles(input);
         sut.Blink();
         Assert.Collection(sut.Pebbles,
             p1 => Assert.Equal(expectedLeft, p1),
             p2 => Assert.Equal(expectedRight, p2));
+    }
+
+    [Fact]
+    public void MultiplyPebbleNumberBy2024_WhenBlinkingOnceOnPebbleNotCoveredByPreviousRules()
+    {
+        var sut = new PlutonianPebbles("999");
+        sut.Blink();
+        Assert.Collection(sut.Pebbles, p1 => Assert.Equal(2021976, p1));
     }
 }
