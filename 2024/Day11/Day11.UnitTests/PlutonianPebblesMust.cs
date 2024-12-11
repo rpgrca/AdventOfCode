@@ -22,4 +22,12 @@ public class PlutonianPebblesMust
         sut.Blink();
         Assert.Collection(sut.Pebbles, p1 => Assert.Equal(1, p1));
     }
+
+    [Fact]
+    public void UpdatePebblesCorrectly_WhenBlinkingOnceOnOnePebble()
+    {
+        var sut = new PlutonianPebbles("1");
+        sut.Blink();
+        Assert.Collection(sut.Pebbles, p1 => Assert.Equal(2024, p1));
+    }
 }
