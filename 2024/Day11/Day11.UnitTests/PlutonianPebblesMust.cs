@@ -14,4 +14,12 @@ public class PlutonianPebblesMust
         var sut = new PlutonianPebbles(input);
         Assert.Equal(expectedCount, sut.Count);
     }
+
+    [Fact]
+    public void UpdatePebblesCorrectly_WhenBlinkingOnceOnZeroPebble()
+    {
+        var sut = new PlutonianPebbles("0");
+        sut.Blink();
+        Assert.Collection(sut.Pebbles, p1 => Assert.Equal(1, p1));
+    }
 }
