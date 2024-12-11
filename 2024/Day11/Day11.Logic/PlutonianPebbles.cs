@@ -8,7 +8,7 @@ public class PlutonianPebbles
     private readonly List<long> _line;
     private readonly LinkedList<long> _pebbles;
 
-    public int Count => _line.Count;
+    public int Count => _pebbles.Count;
 
     public LinkedList<long> Pebbles => _pebbles;
 
@@ -58,6 +58,6 @@ public class PlutonianPebbles
                 }
                 current = current.Next;
             }
-            }
+        }
     }
 }
