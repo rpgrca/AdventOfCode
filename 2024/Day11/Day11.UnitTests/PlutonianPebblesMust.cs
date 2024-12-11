@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Security.Cryptography;
 using Day11.Logic;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day11.UnitTests.Constants;
@@ -89,6 +90,19 @@ public class PlutonianPebblesMust
             p2 => Assert.Equal(0, p2),
             p3 => Assert.Equal(2024, p3),
             p4 => Assert.Equal(14168, p4));
+    }
+
+    [Fact]
+    public void UpdatePebblesCorrectlyOnSample_WhenBlinkingThrice()
+    {
+        var sut = new PlutonianPebbles(SAMPLE_INPUT);
+        sut.Blink(3);
+        Assert.Collection(sut.Pebbles,
+            p1 => Assert.Equal(512072, p1),
+            p2 => Assert.Equal(1, p2),
+            p3 => Assert.Equal(20, p3),
+            p4 => Assert.Equal(24, p4),
+            p5 => Assert.Equal(28676032, p5));
     }
 
 }
