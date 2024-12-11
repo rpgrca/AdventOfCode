@@ -38,6 +38,17 @@ public class PlutonianPebbles
                 {
                     current.Value *= 2024;
                 }
+                else
+                {
+                    var valueAsString = current.Value.ToString();
+                    if (valueAsString.Length % 2 == 0)
+                    {
+                        var left = valueAsString[0..(valueAsString.Length / 2)];
+                        var right = valueAsString[(valueAsString.Length / 2)..];
+                        _pebbles.AddBefore(current, long.Parse(left));
+                        current.Value = long.Parse(right);
+                    }
+                }
             }
             current = current.Next;
         }
