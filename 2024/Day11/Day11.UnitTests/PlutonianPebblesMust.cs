@@ -32,9 +32,9 @@ public class PlutonianPebblesMust
     }
 
     [Theory]
-    [InlineData("10", 1, 0)]
-    [InlineData("1000", 10, 0)]
-    public void SplitPebbleInHalf_WhenPebbleHasEvenNumberOfDigits(string input, int expectedLeft, int expectedRight)
+    [InlineData("10")]
+    [InlineData("1000")]
+    public void SplitPebbleInHalf_WhenPebbleHasEvenNumberOfDigits(string input)
     {
         var sut = new PlutonianPebbles(input);
         sut.Blink();

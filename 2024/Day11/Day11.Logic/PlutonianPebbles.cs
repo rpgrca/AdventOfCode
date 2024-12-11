@@ -25,51 +25,49 @@ public class PlutonianPebbles
         var cycle = new Dictionary<long, long>();
         for (; count > 0; count--)
         {
-            var keys = _pebbles.Where(p => p.Value > 0).Select(p => p.Key).ToArray();
             cycle.Clear();
+            cycle.Add(0, 0);
+            cycle.Add(1, 0);
+            cycle.Add(2024, 0);
 
-            foreach (var key in keys)
+            foreach (var (key, value) in _pebbles.Where(p => p.Value > 0))
             {
-                if (key == 0)
+                switch (key)
                 {
-                    cycle.TryAdd(1, 0);
-                    cycle[1] += _pebbles[0];
-                    cycle.TryAdd(0, 0);
-                    cycle[0] -= _pebbles[0];
-                }
-                else
-                {
-                    if (key == 1)
-                    {
-                        cycle.TryAdd(2024, 0);
-                        cycle[2024] += _pebbles[1];
-                        cycle.TryAdd(1, 0);
-                        cycle[1] -= _pebbles[1];
-                    }
-                    else
-                    {
-                        var valueAsString = key.ToString();
-                        if (valueAsString.Length % 2 == 0)
-                        {
-                            var left = long.Parse(valueAsString[0..(valueAsString.Length / 2)]);
-                            var right = long.Parse(valueAsString[(valueAsString.Length / 2)..]);
-                            cycle.TryAdd(left, 0);
-                            cycle[left] += _pebbles[key];
+                    case 0:
+                        cycle[1] += value;
+                        cycle[0] -= value;
+                        break;
 
-                            cycle.TryAdd(right, 0);
-                            cycle[right] += _pebbles[key];
+                    case 1:
+                        cycle[2024] += value;
+                        cycle[1] -= value;
+                        break;
+
+                    default:
+                        var valueAsString = key.ToString();
+                        var digits = valueAsString.Length;
+                        if (digits % 2 == 0)
+                        {
+                            var (quotient, remainder) = Math.DivRem(key, (long)Math.Pow(10, digits / 2));
+                            cycle.TryAdd(quotient, 0);
+                            cycle.TryAdd(remainder, 0);
                             cycle.TryAdd(key, 0);
-                            cycle[key] -= _pebbles[key];
+
+                            cycle[quotient] += value;
+                            cycle[remainder] += value;
+                            cycle[key] -= value;
                         }
                         else
                         {
-                            var value = key * 2024;
-                            cycle.TryAdd(value, 0);
-                            cycle[value] += _pebbles[key];
+                            var newValue = key * 2024;
+                            cycle.TryAdd(newValue, 0);
                             cycle.TryAdd(key, 0);
-                            cycle[key] -= _pebbles[key];
+
+                            cycle[newValue] += value;
+                            cycle[key] -= value;
                         }
-                    }
+                        break;
                 }
             }
 
