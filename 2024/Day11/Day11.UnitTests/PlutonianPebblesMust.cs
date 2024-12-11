@@ -142,4 +142,12 @@ public class PlutonianPebblesMust
             p12 => Assert.Equal(60, p12),
             p13 => Assert.Equal(32, p13));
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new PlutonianPebbles(SAMPLE_INPUT);
+        sut.Blink(25);
+        Assert.Equal(55312, sut.Pebbles.Count);
+    }
 }
