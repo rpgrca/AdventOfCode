@@ -104,7 +104,7 @@ public class PlutonianPebblesMust
         sut.Blink(6);
         Assert.Equal(22, sut.Count);
     }
-/*
+
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
@@ -120,12 +120,12 @@ public class PlutonianPebblesMust
         sut.Blink(25);
         Assert.Equal(189092, sut.Count);
     }
-/*
+
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new PlutonianPebbles(PUZZLE_INPUT);
         sut.Blink(75);
-        Assert.Equal(0, sut.Count);
-    }*/
+        Assert.Equal(224_869_647_102_559, sut.Count);
+    }
 }
