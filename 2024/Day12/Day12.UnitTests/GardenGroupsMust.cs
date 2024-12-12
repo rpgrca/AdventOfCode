@@ -1,4 +1,5 @@
 using Day12.Logic;
+using Xunit.Sdk;
 using static Day12.UnitTests.Constants;
 
 namespace Day12.UnitTests;
@@ -36,12 +37,44 @@ public class GardenGroupsMust
             p1 => {
                 Assert.Equal('A', p1.Plant);
                 Assert.Equal(3, p1.Area);
-                Assert.Equal(7, p1.Perimeter);
+                Assert.Equal(8, p1.Perimeter);
             },
             p2 => {
                 Assert.Equal('B', p2.Plant);
                 Assert.Equal(1, p2.Area);
                 Assert.Equal(4, p2.Perimeter);
+            });
+    }
+
+    [Fact]
+    public void DivideIntoPlotsCorrectly_WhenUsingSample()
+    {
+        var sut = new GardenGroups(SAMPLE_INPUT);
+        Assert.Collection(sut.Plots,
+            p1 => {
+                Assert.Equal('A', p1.Plant);
+                Assert.Equal(4, p1.Area);
+                Assert.Equal(10, p1.Perimeter);
+            },
+            p2 => {
+                Assert.Equal('B', p2.Plant);
+                Assert.Equal(4, p2.Area);
+                Assert.Equal(8, p2.Perimeter);
+            },
+            p3 => {
+                Assert.Equal('C', p3.Plant);
+                Assert.Equal(4, p3.Area);
+                Assert.Equal(10, p3.Perimeter);
+            },
+            p4 => {
+                Assert.Equal('D', p4.Plant);
+                Assert.Equal(1, p4.Area);
+                Assert.Equal(4, p4.Perimeter);
+            },
+            p5 => {
+                Assert.Equal('E', p5.Plant);
+                Assert.Equal(3, p5.Area);
+                Assert.Equal(8, p5.Perimeter);
             });
     }
 }

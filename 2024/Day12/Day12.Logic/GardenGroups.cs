@@ -47,10 +47,7 @@ public class GardenGroups
         if (x < 0 || x >= Size || y < 0 || y >= Size || _plants[y][x] != plant)
         {
             var neighbor = new Position(x, y);
-            if (! neighbors.Contains(neighbor))
-            {
-                neighbors.Add(neighbor);
-            }
+            neighbors.Add(neighbor);
 
             return;
         }
