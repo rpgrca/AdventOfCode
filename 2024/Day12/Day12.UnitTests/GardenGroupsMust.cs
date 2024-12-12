@@ -15,4 +15,16 @@ public class GardenGroupsMust
         var sut = new GardenGroups(input);
         Assert.Equal(expectedSize, sut.Size);
     }
+
+    [Fact]
+    public void DivideIntoPlotsCorrectly()
+    {
+        var sut = new GardenGroups("A");
+        Assert.Collection(sut.Plots,
+            p1 => {
+                Assert.Equal('A', p1.Plant);
+                Assert.Equal(1, p1.Area);
+                Assert.Equal(4, p1.Perimeter);
+            });
+    }
 }
