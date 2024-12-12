@@ -46,19 +46,19 @@ public partial class DiskFragmenter
                 {
                     if (emptySpace.ValueRef.Id == -1)
                     {
-                        if (length == emptySpace.ValueRef.Length)
+                        if (length < emptySpace.ValueRef.Length)
                         {
-                            (emptySpace.ValueRef.Id, file.ValueRef.Id) = (file.ValueRef.Id, emptySpace.ValueRef.Id);
+                            var newNode = new LinkedListNode<ContiguousSpace>(new(file.ValueRef.Id, length));
+                            Map.AddBefore(emptySpace, newNode);
+                            emptySpace.ValueRef.Length -= length;
+                            file.ValueRef.Id = -1;
                             length = 0;
                         }
                         else
                         {
-                            if (length < emptySpace.ValueRef.Length)
+                            if (length == emptySpace.ValueRef.Length)
                             {
-                                var newNode = new LinkedListNode<ContiguousSpace>(new(file.ValueRef.Id, length));
-                                Map.AddBefore(emptySpace, newNode);
-                                emptySpace.ValueRef.Length -= length;
-                                file.ValueRef.Id = -1;
+                                (emptySpace.ValueRef.Id, file.ValueRef.Id) = (file.ValueRef.Id, emptySpace.ValueRef.Id);
                                 length = 0;
                             }
                             else
