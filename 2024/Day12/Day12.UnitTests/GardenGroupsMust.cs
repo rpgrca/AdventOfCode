@@ -80,6 +80,8 @@ public class GardenGroupsMust
 
     [Theory]
     [InlineData(SAMPLE_INPUT, 140)]
+    [InlineData(SECOND_SAMPLE_INPUT, 772)]
+    [InlineData(THIRD_SAMPLE_INPUT, 1930)]
     public void CalculatePriceOfFencingCorrectly(string input, int expectedPrice)
     {
         var sut = new GardenGroups(input);
