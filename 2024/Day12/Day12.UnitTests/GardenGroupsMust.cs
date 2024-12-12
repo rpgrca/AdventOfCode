@@ -87,4 +87,11 @@ public class GardenGroupsMust
         var sut = new GardenGroups(input);
         Assert.Equal(expectedPrice, sut.PriceOfFencing);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new GardenGroups(PUZZLE_INPUT);
+        Assert.Equal(1400386, sut.PriceOfFencing);
+    }
 }
