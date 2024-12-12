@@ -77,4 +77,12 @@ public class GardenGroupsMust
                 Assert.Equal(8, p5.Perimeter);
             });
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 140)]
+    public void CalculatePriceOfFencingCorrectly(string input, int expectedPrice)
+    {
+        var sut = new GardenGroups(input);
+        Assert.Equal(expectedPrice, sut.PriceOfFencing);
+    }
 }

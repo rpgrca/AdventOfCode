@@ -1,3 +1,5 @@
+
+
 namespace Day12.Logic;
 
 public record Position(int X, int Y);
@@ -11,6 +13,7 @@ public class GardenGroups
 
     public int Size => _plants.Length;
     public List<Plot> Plots { get; private set; }
+    public int PriceOfFencing { get; private set; }
 
     public GardenGroups(string input)
     {
@@ -20,6 +23,16 @@ public class GardenGroups
         Plots = new();
 
         Parse();
+        CalculatePriceOfFencing();
+    }
+
+    private void CalculatePriceOfFencing()
+    {
+        PriceOfFencing = 0;
+        foreach (var plot in Plots)
+        {
+            PriceOfFencing += plot.Perimeter * plot.Area;
+        }
     }
 
     private void Parse()
