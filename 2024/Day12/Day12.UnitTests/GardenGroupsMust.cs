@@ -17,7 +17,7 @@ public class GardenGroupsMust
     }
 
     [Fact]
-    public void DivideIntoPlotsCorrectly()
+    public void DivideIntoPlotsCorrectly_WhenPlotIs1x1()
     {
         var sut = new GardenGroups("A");
         Assert.Collection(sut.Plots,
@@ -25,6 +25,23 @@ public class GardenGroupsMust
                 Assert.Equal('A', p1.Plant);
                 Assert.Equal(1, p1.Area);
                 Assert.Equal(4, p1.Perimeter);
+            });
+    }
+
+    [Fact]
+    public void DivideIntoPlotsCorrectly_WhenPlotIs2x2()
+    {
+        var sut = new GardenGroups("AA\nAB");
+        Assert.Collection(sut.Plots,
+            p1 => {
+                Assert.Equal('A', p1.Plant);
+                Assert.Equal(3, p1.Area);
+                Assert.Equal(7, p1.Perimeter);
+            },
+            p2 => {
+                Assert.Equal('B', p2.Plant);
+                Assert.Equal(1, p2.Area);
+                Assert.Equal(4, p2.Perimeter);
             });
     }
 }
