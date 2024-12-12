@@ -45,8 +45,7 @@ public class PlutonianPebbles
                         break;
 
                     default:
-                        var valueAsString = key.ToString();
-                        var digits = valueAsString.Length;
+                        var digits = (int)Math.Floor(Math.Log10(key) + 1);
                         if (digits % 2 == 0)
                         {
                             var (quotient, remainder) = Math.DivRem(key, (long)Math.Pow(10, digits / 2));
