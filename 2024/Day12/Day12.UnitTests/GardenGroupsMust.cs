@@ -94,4 +94,32 @@ public class GardenGroupsMust
         var sut = new GardenGroups(PUZZLE_INPUT);
         Assert.Equal(1400386, sut.PriceOfFencing);
     }
+/*
+    [Fact]
+    public void ZoomInCorrectly()
+    {
+        var sut = new GardenGroups(SAMPLE_INPUT);
+        sut.ZoomIn();
+        Assert.Collection(sut.Plots,
+            p1 => {
+                Assert.Equal('A', p1.Plant);
+                Assert.Equal(50, p1.Perimeter);
+            },
+            p2 => {
+                Assert.Equal('B', p2.Plant);
+                Assert.Equal(40, p2.Perimeter);
+            },
+            p3 => {
+                Assert.Equal('C', p3.Plant);
+                Assert.Equal(40, p3.Perimeter);
+            },
+            p4 => {
+                Assert.Equal('D', p4.Plant);
+                Assert.Equal(20, p4.Perimeter);
+            },
+            p5 => {
+                Assert.Equal('E', p5.Plant);
+                Assert.Equal(40, p5.Perimeter);
+            });
+    }*/
 }
