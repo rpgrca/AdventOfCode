@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Day6.Logic;
 
 /*
@@ -346,10 +348,9 @@ public class GuardPatrolProtocol
     private readonly string[] _input;
     private readonly bool[,] _map;
     private readonly HashSet<(int X, int Y)> _walked;
-    private readonly List<(int X, int Y, int Direction)> _steps;
     private int _initialX;
     private int _initialY;
-    private (int X, int Y)[] _directions =
+    private readonly (int X, int Y)[] _directions =
     {
         ( 0, -1),
         ( 1,  0),
@@ -366,7 +367,6 @@ public class GuardPatrolProtocol
         _input = input.Split('\n');
         _map = new bool[Length, Length];
         _walked = new();
-        _steps = new();
 
         CreateMultidimensionalMap();
         CalculateInitialPosition();
@@ -403,22 +403,17 @@ public class GuardPatrolProtocol
                 return;
             }
         }
+
+        throw new UnreachableException();
     }
 
     private void TransverseMap()
     {
-        var directions = new List<(int X, int Y)>
-        {
-            (0, -1), // up 0
-            (1, 0),
-            (0, 1),
-            (-1, 0)
-        };
         var currentDirection = 0;
         var currentX = _initialX;
         var currentY = _initialY;
-        var nextX = currentX + directions[currentDirection].X;
-        var nextY = currentY + directions[currentDirection].Y;
+        var nextX = currentX + _directions[currentDirection].X;
+        var nextY = currentY + _directions[currentDirection].Y;
 
         _walked.Add((_initialX, _initialY));
         while (nextX >= 0 && nextX < Length && nextY >= 0 && nextY < Length)
@@ -427,7 +422,6 @@ public class GuardPatrolProtocol
             {
                 currentX = nextX;
                 currentY = nextY;
-                _steps.Add((currentX, currentY, currentDirection));
                 if (! _walked.Contains((currentX, currentY)))
                 {
                     _walked.Add((currentX, currentY));
@@ -438,8 +432,8 @@ public class GuardPatrolProtocol
                 currentDirection = (currentDirection + 1) & 3;
             }
 
-            nextX = currentX + directions[currentDirection].X;
-            nextY = currentY + directions[currentDirection].Y;
+            nextX = currentX + _directions[currentDirection].X;
+            nextY = currentY + _directions[currentDirection].Y;
         }
 
         DistinctVisitedPositions = _walked.Count;

@@ -1,6 +1,6 @@
 namespace Day5.Logic.Solutions;
 
-public interface ISolution
+internal interface ISolution
 {
     List<int> Calculate(List<int> update);
 }

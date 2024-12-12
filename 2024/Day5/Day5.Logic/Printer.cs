@@ -2,7 +2,7 @@ using Day5.Logic.Rules;
 
 namespace Day5.Logic;
 
-public abstract class Printer
+internal abstract class Printer : IPrinter
 {
     private readonly string _input;
     protected Dictionary<int, List<int>> _children;
@@ -12,12 +12,6 @@ public abstract class Printer
     public int RuleCount => _children.Values.Aggregate(0, (t, i) => t + i.Count);
     public int UpdatesCount => _updates.Count;
     public int SumOfMiddlePages { get; protected set; }
-
-    public static Printer WithoutReordering(string input) =>
-        new PrinterWithoutReordering(input);
-
-    public static Printer WithReordering(string input) =>
-        new PrinterWithReordering(input);
 
     protected Printer(string input)
     {

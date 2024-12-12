@@ -1,6 +1,6 @@
 namespace Day5.Logic;
 
-public class PrinterWithoutReordering : Printer
+internal class PrinterWithoutReordering : Printer
 {
     public PrinterWithoutReordering(string input) : base(input) =>
         CalculateSumOfMiddlePages();

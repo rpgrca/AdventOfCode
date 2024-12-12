@@ -1,6 +1,6 @@
 namespace Day5.Logic.Rules;
 
-public class RuleCheck : IRule
+internal class RuleCheck : IRule
 {
     private readonly Dictionary<int, List<int>> _rules;
     private readonly Func<List<int>, int, IEnumerable<int>> _pageRetriever;

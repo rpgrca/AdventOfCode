@@ -1,6 +1,6 @@
 namespace Day5.Logic.Rules;
 
-public class CorrectResult : IResult
+internal class CorrectResult : IResult
 {
     public IResult IfSo(Action action)
     {

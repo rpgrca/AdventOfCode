@@ -24,6 +24,15 @@ public class CalibrationEquationsMust
         Assert.Equal(expectedResult, sut.TotalCalibration);
     }
 
+    [Theory]
+    [InlineData("5100: 5 100", 5100)]
+    [InlineData("510 : 5 10", 510)]
+    public void ReturnCorrectTotalCalibration_WhenInputIsBordeline(string input, int expectedResult)
+    {
+        var sut = CalibrationEquations.WithConcatenation(input);
+        Assert.Equal(expectedResult, sut.TotalCalibration);
+    }
+
     [Fact]
     public void SolveFirstSampleCorrectly()
     {

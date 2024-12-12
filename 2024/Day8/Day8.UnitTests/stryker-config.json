@@ -1,0 +1,10 @@
+{
+    "stryker-config":
+    {
+        "reporters": [ "progress", "cleartext", "html" ],
+        "solution": "../Day8.sln",
+        "project": "Day8.Logic.csproj",
+        "ignore-methods": ["ConfigureAwait", "Dispose"],
+        "coverage-analysis": "all"
+    }
+}

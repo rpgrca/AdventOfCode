@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Day6.Logic;
 using static Day6.UnitTests.Constants;
 
@@ -146,5 +147,13 @@ public class GuardPatrolProtocolMust
     {
         var sut = new GuardPatrolProtocol(PUZZLE_INPUT, true);
         Assert.Equal(1909, sut.PossibleObstructions);
+    }
+
+    // For mutation test
+    [Fact]
+    public void ThrowException_WhenMapDoesNotHaveInitialPoint()
+    {
+        const string input = "..\r..";
+        Assert.Throws<UnreachableException>(() => new GuardPatrolProtocol(input));
     }
 }

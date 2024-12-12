@@ -2,7 +2,7 @@ using Day5.Logic.Solutions;
 
 namespace Day5.Logic;
 
-public class PrinterWithReordering : Printer
+internal class PrinterWithReordering : Printer
 {
     private readonly List<Func<Dictionary<int, List<int>>, Dictionary<int, List<int>>, Solution>> _validators;
 
@@ -19,15 +19,17 @@ public class PrinterWithReordering : Printer
 
     protected override void PassthroughSolutionBreaksRule(List<int> update)
     {
-        for (var index = 0; index < _validators.Count; index++)
+        var next = true;
+        foreach (var step in _validators)
         {
-            var step = _validators[index];
             var possibleSolution = step(_parents, _children).Calculate(update);
             BreaksRule(possibleSolution)
                 .IfNot(() => {
                     SumOfMiddlePages += possibleSolution[possibleSolution.Count / 2];
-                    index = _validators.Count;
+                    next = false;
                 });
+
+            if (! next) break;
         }
     }
 

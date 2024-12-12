@@ -1,6 +1,6 @@
 namespace Day5.Logic.Rules;
 
-public interface IResult
+internal interface IResult
 {
     IResult IfSo(Action action);
     IResult IfNot(Action action);

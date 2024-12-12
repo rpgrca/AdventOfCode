@@ -1,3 +1,6 @@
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day8.Logic;
 
 public class AntinodeMap
@@ -10,12 +13,13 @@ public class AntinodeMap
     public int Size => _map.Length;
     public int AntinodeCount => _antinodes.Count;
 
+    private static readonly Func<int, int, bool> _lowerThan = (x1, x2) => x1 < x2;
     private static List<ICreator> CreateAntinodes(bool withHarmonics) =>
         new() {
-            new AntinodeCreator((a1, a2) => a1.X < a2.X, (a1, a2, dx, dy, c) => new(a1.X - dx * c, a1.Y - dy * c), withHarmonics),
-            new AntinodeCreator((a1, a2) => a1.X < a2.X, (a1, a2, dx, dy, c) => new(a2.X + dx * c, a2.Y + dy * c), withHarmonics),
-            new AntinodeCreator((a1, a2) => a1.X >= a2.X, (a1, a2, dx, dy, c) => new(a2.X - dx * c, a2.Y + dy * c), withHarmonics),
-            new AntinodeCreator((a1, a2) => a1.X >= a2.X, (a1, a2, dx, dy, c) => new(a1.X + dx * c, a1.Y - dy * c), withHarmonics)
+            new AntinodeCreator((a1, a2) => _lowerThan(a1.X, a2.X), (a1, a2, dx, dy, c) => new(a1.X - dx * c, a1.Y - dy * c), withHarmonics),
+            new AntinodeCreator((a1, a2) => _lowerThan(a1.X, a2.X), (a1, a2, dx, dy, c) => new(a2.X + dx * c, a2.Y + dy * c), withHarmonics),
+            new AntinodeCreator((a1, a2) => !_lowerThan(a1.X, a2.X), (a1, a2, dx, dy, c) => new(a2.X - dx * c, a2.Y + dy * c), withHarmonics),
+            new AntinodeCreator((a1, a2) => !_lowerThan(a1.X, a2.X), (a1, a2, dx, dy, c) => new(a1.X + dx * c, a1.Y - dy * c), withHarmonics)
         };
 
     public static AntinodeMap CreateWithoutHarmonics(string input) =>
@@ -67,7 +71,7 @@ public class AntinodeMap
     {
         foreach (var (_, antennas) in _antennasByFrequency)
         {
-            for (var index = 0; index < antennas.Count - 1; index++)
+            for (var index = 0; index <= antennas.Count - 1; index++)
             {
                 for (var subIndex = index + 1; subIndex < antennas.Count; subIndex++)
                 {
