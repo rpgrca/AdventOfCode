@@ -40,4 +40,13 @@ public class ClawContraptionsMust
                 Assert.Equal((18641, 10279), p1.Prize);
             });
     }
+
+    [Theory]
+    [InlineData("Button A: X+94, Y+34\nButton B: X+22, Y+67\nPrize: X=8400, Y=5400", 280)]
+    [InlineData("Button A: X+17, Y+86\nButton B: X+84, Y+37\nPrize: X=7870, Y=6450", 200)]
+    public void FindBestCombination(string input, int expectedWin)
+    {
+        var sut = new ClawContraptions(input);
+        Assert.Equal(expectedWin, sut.CheapestWin);
+    }
 }

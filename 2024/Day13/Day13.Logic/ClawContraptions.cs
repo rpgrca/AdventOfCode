@@ -1,4 +1,3 @@
-
 namespace Day13.Logic;
 
 public class ClawContraptions
@@ -9,11 +8,14 @@ public class ClawContraptions
     public List<((int OffsetX, int OffsetY) ButtonA, (int OffsetX, int OffsetY) ButtonB, (int X, int Y) Prize)> Contraptions => _contraptions;
     public int Count => _contraptions.Count;
 
+    public int CheapestWin { get; private set; }
+
     public ClawContraptions(string input)
     {
         _input = input;
         _contraptions = new();
         Parse();
+        FindCheapestWin();
     }
 
     private void Parse()
@@ -51,6 +53,31 @@ public class ClawContraptions
             }
 
             _contraptions.Add((buttonA, buttonB, prize));
+        }
+    }
+
+    private void FindCheapestWin()
+    {
+        foreach (var contraption in _contraptions)
+        {
+            var cheapestWin = int.MaxValue;
+            for (var a = 0; a <= 100; a++)
+            {
+                for (var b = 0; b <= 100; b++)
+                {
+                    if ((contraption.ButtonA.OffsetX * a + contraption.ButtonB.OffsetX * b == contraption.Prize.X) &&
+                        (contraption.ButtonA.OffsetY * a + contraption.ButtonB.OffsetY * b == contraption.Prize.Y))
+                    {
+                        var value = a * 3 + b;
+                        if (value < cheapestWin)
+                        {
+                            cheapestWin = value;
+                        }
+                    }
+                }
+            }
+
+            CheapestWin += cheapestWin;
         }
     }
 }
