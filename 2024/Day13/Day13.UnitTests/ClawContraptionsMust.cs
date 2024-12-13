@@ -22,22 +22,22 @@ public class ClawContraptionsMust
             p1 => {
                 Assert.Equal((94, 34), p1.ButtonA);
                 Assert.Equal((22, 67), p1.ButtonB);
-                Assert.Equal((8400, 5400), p1.Prize);
+                Assert.Equal((8400UL, 5400UL), p1.Prize);
             },
             p2 => {
                 Assert.Equal((26, 66), p2.ButtonA);
                 Assert.Equal((67, 21), p2.ButtonB);
-                Assert.Equal((12748, 12176), p2.Prize);
+                Assert.Equal((12748UL, 12176UL), p2.Prize);
             },
             p3 => {
                 Assert.Equal((17, 86), p3.ButtonA);
                 Assert.Equal((84, 37), p3.ButtonB);
-                Assert.Equal((7870, 6450), p3.Prize);
+                Assert.Equal((7870UL, 6450UL), p3.Prize);
             },
             p1 => {
                 Assert.Equal((69, 23), p1.ButtonA);
                 Assert.Equal((27, 71), p1.ButtonB);
-                Assert.Equal((18641, 10279), p1.Prize);
+                Assert.Equal((18641UL, 10279UL), p1.Prize);
             });
     }
 
@@ -71,5 +71,33 @@ public class ClawContraptionsMust
     {
         var sut = new ClawContraptions(PUZZLE_INPUT);
         Assert.Equal(28059, sut.CheapestWin);
+    }
+
+    [Fact]
+    public void ParseAdjustedInputCorrectly()
+    {
+        var sut = new ClawContraptions(SAMPLE_INPUT, 10000000000000);
+        Assert.Collection(sut.Contraptions,
+            p1 => {
+                Assert.Equal((94, 34), p1.ButtonA);
+                Assert.Equal((22, 67), p1.ButtonB);
+                Assert.Equal((10000000008400UL, 10000000005400UL), p1.Prize);
+            },
+            p2 => {
+                Assert.Equal((26, 66), p2.ButtonA);
+                Assert.Equal((67, 21), p2.ButtonB);
+                Assert.Equal((10000000012748UL, 10000000012176UL), p2.Prize);
+            },
+            p3 => {
+                Assert.Equal((17, 86), p3.ButtonA);
+                Assert.Equal((84, 37), p3.ButtonB);
+                Assert.Equal((10000000007870UL, 10000000006450UL), p3.Prize);
+            },
+            p1 => {
+                Assert.Equal((69, 23), p1.ButtonA);
+                Assert.Equal((27, 71), p1.ButtonB);
+                Assert.Equal((10000000018641UL, 10000000010279UL), p1.Prize);
+            });
+
     }
 }
