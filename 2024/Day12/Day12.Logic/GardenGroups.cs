@@ -13,6 +13,7 @@ public class GardenGroups
     private readonly char[,] _plants;
     private readonly char[,] _zoomedInPlants;
     private readonly int _zoomLevel;
+    private readonly bool _withZoom;
     private bool[,] _visited;
     private bool[,] _zoomedInVisited;
 
@@ -23,10 +24,19 @@ public class GardenGroups
     public int PriceOfFencing { get; private set; }
     public int PriceWithBulkDiscount { get; private set; }
 
-    public GardenGroups(string input, int zoomLevel = 1)
+    public GardenGroups(string input, int? zoomLevel = null)
     {
         _lines = input.Split('\n');
-        _zoomLevel = zoomLevel;
+        if (zoomLevel.HasValue)
+        {
+            _zoomLevel = zoomLevel.Value;
+            _withZoom = true;
+        }
+        else
+        {
+            _zoomLevel = 1;
+            _withZoom = false;
+        }
         _plants = new char[Size, Size];
         _zoomedInPlants = new char[ZoomedInSize, ZoomedInSize];
 
@@ -51,7 +61,7 @@ public class GardenGroups
         Plots = new();
         ZoomedInPlots = new();
 
-        if (zoomLevel == 1)
+        if (!_withZoom)
         {
             Parse();
             CalculatePriceOfFencing();
@@ -78,11 +88,13 @@ public class GardenGroups
         PriceWithBulkDiscount = 0;
         foreach (var zoomedInPlot in ZoomedInPlots)
         {
+            var eastCount = 0;
             var count = 0;
             var neighbors = zoomedInPlot.Neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
             var visited = new List<(int X, int Y)>();
             var direction = 'e';
             var current = neighbors.First();
+            var outskirts = true;
 
             current = (current.X - 1, current.Y);
             while (neighbors.Any())
@@ -92,41 +104,72 @@ public class GardenGroups
                     case 'e':
                         if (neighbors.Contains((current.X + 1, current.Y)))
                         {
+                            eastCount++;
                             current = (current.X + 1, current.Y);
                             neighbors.Remove(current);
                         }
                         else
                         {
                             direction = 'E';
-                            count += 1;
+                            if (eastCount > 1)
+                            {
+                                count += 1;
+                            }
+                            eastCount = 0;
                         }
                         break;
 
                     case 'E':
-                        if (neighbors.Contains((current.X + 1, current.Y + 1)))
+                        if (outskirts)
                         {
-                            direction = 's';
-                            current = (current.X + 1, current.Y);
-                        }
-                        else if (neighbors.Contains((current.X, current.Y + 1)))
-                        {
-                            direction = 's';
-                        }
-                        else if (neighbors.Contains((current.X + 1, current.Y - 1)))
-                        {
-                            direction = 'n';
-                            current = (current.X + 1, current.Y);
-                        }
-                        else if (neighbors.Contains((current.X, current.Y - 1)))
-                        {
-                            direction = 'n';
+                            if (neighbors.Contains((current.X + 1, current.Y + 1)))
+                            {
+                                direction = 's';
+                                current = (current.X + 1, current.Y);
+                            }
+                            else if (neighbors.Contains((current.X, current.Y + 1)))
+                            {
+                                direction = 's';
+                            }
+                            else if (neighbors.Contains((current.X + 1, current.Y - 1)))
+                            {
+                                direction = 'n';
+                                current = (current.X + 1, current.Y);
+                            }
+                            else if (neighbors.Contains((current.X, current.Y - 1)))
+                            {
+                                direction = 'n';
+                            }
+                            else
+                            {
+                                eastCount = 0;
+                                outskirts = false;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
                         }
                         else
                         {
-                            direction = 'e';
-                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
-                            current = neighbors.First();
-                            current = (current.X - 1, current.Y);
+                            if (neighbors.Contains((current.X, current.Y + 1)))
+                            {
+                                direction = 's';
+                            }
+                            else if (neighbors.Contains((current.X, current.Y - 1)))
+                            {
+                                direction = 'n';
+                            }
+                            else
+                            {
+                                eastCount = 0;
+                                outskirts = false;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
+
                         }
                         break;
 
@@ -144,30 +187,58 @@ public class GardenGroups
                         break;
 
                     case 'S':
-                        if (neighbors.Contains((current.X - 1, current.Y + 1)))
+                        if (outskirts)
                         {
-                            direction = 'w';
-                            current = (current.X, current.Y + 1);
-                        }
-                        else if (neighbors.Contains((current.X - 1, current.Y)))
-                        {
-                            direction = 'w';
-                        }
-                        else if (neighbors.Contains((current.X + 1, current.Y + 1)))
-                        {
-                            direction = 'e';
-                            current = (current.X, current.Y + 1);
-                        }
-                        else if (neighbors.Contains((current.X + 1, current.Y)))
-                        {
-                            direction = 'e';
+                           if (neighbors.Contains((current.X - 1, current.Y + 1)))
+                           {
+                               direction = 'w';
+                               current = (current.X, current.Y + 1);
+                           }
+                           else if (neighbors.Contains((current.X - 1, current.Y)))
+                           {
+                               direction = 'w';
+                           }
+                           else if (neighbors.Contains((current.X + 1, current.Y + 1)))
+                           {
+                               direction = 'e';
+                               current = (current.X, current.Y + 1);
+                               eastCount = 0;
+                           }
+                           else if (neighbors.Contains((current.X + 1, current.Y)))
+                           {
+                               direction = 'e';
+                               eastCount = 0;
+                           }
+                           else
+                           {
+                               outskirts = false;
+                               direction = 'e';
+                               eastCount = 0;
+                               neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                               current = neighbors.First();
+                               current = (current.X - 1, current.Y);
+                           }
                         }
                         else
                         {
-                            direction = 'e';
-                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
-                            current = neighbors.First();
-                            current = (current.X - 1, current.Y);
+                           if (neighbors.Contains((current.X - 1, current.Y)))
+                           {
+                               direction = 'w';
+                           }
+                           else if (neighbors.Contains((current.X + 1, current.Y)))
+                           {
+                               direction = 'e';
+                               eastCount = 0;
+                           }
+                           else
+                           {
+                               outskirts = false;
+                               direction = 'e';
+                               eastCount = 0;
+                               neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                               current = neighbors.First();
+                               current = (current.X - 1, current.Y);
+                           }
                         }
                         break;
 
@@ -185,30 +256,55 @@ public class GardenGroups
                         break;
 
                     case 'W':
-                        if (neighbors.Contains((current.X - 1, current.Y + 1)))
+                        if (outskirts)
                         {
-                            direction = 's';
-                            current = (current.X - 1, current.Y);
-                        }
-                        else if (neighbors.Contains((current.X, current.Y + 1)))
-                        {
-                            direction = 's';
-                        }
-                        else if (neighbors.Contains((current.X - 1, current.Y - 1)))
-                        {
-                            direction = 'n';
-                            current = (current.X - 1, current.Y);
-                        }
-                        else if (neighbors.Contains((current.X, current.Y - 1)))
-                        {
-                            direction = 'n';
+                            if (neighbors.Contains((current.X - 1, current.Y + 1)))
+                            {
+                                direction = 's';
+                                current = (current.X - 1, current.Y);
+                            }
+                            else if (neighbors.Contains((current.X, current.Y + 1)))
+                            {
+                                direction = 's';
+                            }
+                            else if (neighbors.Contains((current.X - 1, current.Y - 1)))
+                            {
+                                direction = 'n';
+                                current = (current.X - 1, current.Y);
+                            }
+                            else if (neighbors.Contains((current.X, current.Y - 1)))
+                            {
+                                direction = 'n';
+                            }
+                            else
+                            {
+                                outskirts = false;
+                                eastCount = 0;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
                         }
                         else
                         {
-                            direction = 'e';
-                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
-                            current = neighbors.First();
-                            current = (current.X - 1, current.Y);
+                            if (neighbors.Contains((current.X, current.Y + 1)))
+                            {
+                                direction = 's';
+                            }
+                            else if (neighbors.Contains((current.X, current.Y - 1)))
+                            {
+                                direction = 'n';
+                            }
+                            else
+                            {
+                                outskirts = false;
+                                eastCount = 0;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
                         }
                         break;
 
@@ -226,37 +322,65 @@ public class GardenGroups
                         break;
 
                     case 'N':
-                        if (neighbors.Contains((current.X - 1, current.Y - 1)))
+                        if (outskirts)
                         {
-                            direction = 'w';
-                            current = (current.X, current.Y - 1);
-                        }
-                        else if (neighbors.Contains((current.X - 1, current.Y)))
-                        {
-                            direction = 'w';
-                        }
-                        else if (neighbors.Contains((current.X + 1, current.Y - 1)))
-                        {
-                            direction = 'e';
-                            current = (current.X, current.Y - 1);
-                        }
-                        else if (neighbors.Contains((current.X + 1, current.Y)))
-                        {
-                            direction = 'e';
+                            if (neighbors.Contains((current.X - 1, current.Y - 1)))
+                            {
+                                direction = 'w';
+                                current = (current.X, current.Y - 1);
+                            }
+                            else if (neighbors.Contains((current.X - 1, current.Y)))
+                            {
+                                direction = 'w';
+                            }
+                            else if (neighbors.Contains((current.X + 1, current.Y - 1)))
+                            {
+                                direction = 'e';
+                                eastCount = 0;
+                                current = (current.X, current.Y - 1);
+                            }
+                            else if (neighbors.Contains((current.X + 1, current.Y)))
+                            {
+                                direction = 'e';
+                                eastCount = 0;
+                            }
+                            else
+                            {
+                                outskirts = false;
+                                eastCount = 0;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
                         }
                         else
                         {
-                            direction = 'e';
-                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
-                            current = neighbors.First();
-                            current = (current.X - 1, current.Y);
+                            if (neighbors.Contains((current.X - 1, current.Y)))
+                            {
+                                direction = 'w';
+                            }
+                            if (neighbors.Contains((current.X + 1, current.Y)))
+                            {
+                                eastCount = 0;
+                                direction = 'e';
+                            }
+                            else
+                            {
+                                outskirts = false;
+                                eastCount = 0;
+                                direction = 'e';
+                                neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                                current = neighbors.First();
+                                current = (current.X - 1, current.Y);
+                            }
                         }
                         break;
                 }
             }
 
             count++;
-            PriceWithBulkDiscount += count * (zoomedInPlot.Area / 9);
+            PriceWithBulkDiscount += count * (zoomedInPlot.Area / (_zoomLevel * _zoomLevel));
         }
     }
 

@@ -96,33 +96,32 @@ public class GardenGroupsMust
 
     [Theory]
     [InlineData("AA\nAA", 16)]
+    [InlineData("AAA\nABA\nAAA", 68)]
+    [InlineData("AAAAA\nABBBA\nABABA\nABBBA\nAAAAA", 196)]
+    [InlineData("AAAAA\nABBBA\nAABAA\nABBBA\nAAAAA", 372)] // cada area tendria que tener areas hijas
+    [InlineData("AAAA\nABBA\nAABA\nAAAA", 148)]
     [InlineData(SAMPLE_INPUT, 80)]
     [InlineData(SECOND_SAMPLE_INPUT, 436)]
+    [InlineData(FOURTH_SAMPLE_INPUT, 236)]
+    [InlineData(FIFTH_SAMPLE_INPUT, 368)]
     public void ZoomInCorrectly(string input, int expectedPrice)
     {
         var sut = new GardenGroups(input, 3);
         Assert.Equal(expectedPrice, sut.PriceWithBulkDiscount);
-/*
-        Assert.Collection(sut.Plots,
-            p1 => {
-                Assert.Equal('A', p1.Plant);
-                Assert.Equal(50, p1.Perimeter);
-            },
-            p2 => {
-                Assert.Equal('B', p2.Plant);
-                Assert.Equal(40, p2.Perimeter);
-            },
-            p3 => {
-                Assert.Equal('C', p3.Plant);
-                Assert.Equal(40, p3.Perimeter);
-            },
-            p4 => {
-                Assert.Equal('D', p4.Plant);
-                Assert.Equal(20, p4.Perimeter);
-            },
-            p5 => {
-                Assert.Equal('E', p5.Plant);
-                Assert.Equal(40, p5.Perimeter);
-            });*/
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new GardenGroups(THIRD_SAMPLE_INPUT, 3);
+        Assert.Equal(1206, sut.PriceWithBulkDiscount);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new GardenGroups(PUZZLE_INPUT, 3);
+        Assert.True(866533 > sut.PriceWithBulkDiscount);
+        Assert.Equal(851994, sut.PriceWithBulkDiscount);
     }
 }
