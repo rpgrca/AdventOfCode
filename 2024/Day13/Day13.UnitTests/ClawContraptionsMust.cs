@@ -58,4 +58,11 @@ public class ClawContraptionsMust
         var sut = new ClawContraptions(input);
         Assert.Equal(0, sut.CheapestWin);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ClawContraptions(SAMPLE_INPUT);
+        Assert.Equal(480, sut.CheapestWin);
+    }
 }
