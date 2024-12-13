@@ -1,5 +1,4 @@
 using Day12.Logic;
-using Xunit.Sdk;
 using static Day12.UnitTests.Constants;
 
 namespace Day12.UnitTests;
@@ -94,12 +93,13 @@ public class GardenGroupsMust
         var sut = new GardenGroups(PUZZLE_INPUT);
         Assert.Equal(1400386, sut.PriceOfFencing);
     }
-/*
+
     [Fact]
     public void ZoomInCorrectly()
     {
-        var sut = new GardenGroups(SAMPLE_INPUT);
-        sut.ZoomIn();
+        var sut = new GardenGroups("AA\nAA", 3);
+        Assert.Equal(4 * 4, sut.PriceWithBulkDiscount);
+/*
         Assert.Collection(sut.Plots,
             p1 => {
                 Assert.Equal('A', p1.Plant);
@@ -120,6 +120,6 @@ public class GardenGroupsMust
             p5 => {
                 Assert.Equal('E', p5.Plant);
                 Assert.Equal(40, p5.Perimeter);
-            });
-    }*/
+            });*/
+    }
 }
