@@ -108,16 +108,23 @@ public class GardenGroups
                             direction = 's';
                             current = (current.X + 1, current.Y);
                         }
-                        else
+                        else if (neighbors.Contains((current.X, current.Y + 1)))
                         {
-                            if (neighbors.Contains((current.X + 1, current.Y - 1)))
-                            {
-                                direction = 'n';
-                                current = (current.X + 1, current.Y);
-                            }
-                            else
-                                throw new UnreachableException();
+                            direction = 's';
+                            current = (current.X, current.Y - 1);
                         }
+                        else if (neighbors.Contains((current.X + 1, current.Y - 1)))
+                        {
+                            direction = 'n';
+                            current = (current.X + 1, current.Y);
+                        }
+                        else if (neighbors.Contains((current.X, current.Y - 1)))
+                        {
+                            direction = 'n';
+                            current = (current.X, current.Y + 1);
+                        }
+                        else
+                            throw new UnreachableException();
                         break;
 
                     case 's':
@@ -139,16 +146,23 @@ public class GardenGroups
                             direction = 'w';
                             current = (current.X, current.Y + 1);
                         }
-                        else
+                        else if (neighbors.Contains((current.X - 1, current.Y)))
                         {
-                            if (neighbors.Contains((current.X + 1, current.Y + 1)))
-                            {
-                                direction = 'e';
-                                current = (current.X, current.Y + 1);
-                            }
-                            else
-                                throw new UnreachableException();
+                            direction = 'w';
+                            current = (current.X + 1, current.Y);
                         }
+                        else if (neighbors.Contains((current.X + 1, current.Y + 1)))
+                        {
+                            direction = 'e';
+                            current = (current.X, current.Y + 1);
+                        }
+                        else if (neighbors.Contains((current.X + 1, current.Y)))
+                        {
+                            direction = 'e';
+                            current = (current.X - 1, current.Y);
+                        }
+                        else
+                            throw new UnreachableException();
                         break;
 
                     case 'w':
@@ -170,16 +184,23 @@ public class GardenGroups
                             direction = 's';
                             current = (current.X - 1, current.Y);
                         }
-                        else
+                        else if (neighbors.Contains((current.X, current.Y + 1)))
                         {
-                            if (neighbors.Contains((current.X - 1, current.Y - 1)))
-                            {
-                                direction = 'n';
-                                current = (current.X - 1, current.Y);
-                            }
-                            else
-                                throw new UnreachableException();
+                            direction = 's';
+                            current = (current.X, current.Y - 1);
                         }
+                        else if (neighbors.Contains((current.X - 1, current.Y - 1)))
+                        {
+                            direction = 'n';
+                            current = (current.X - 1, current.Y);
+                        }
+                        else if (neighbors.Contains((current.X, current.Y - 1)))
+                        {
+                            direction = 'n';
+                            current = (current.X, current.Y + 1);
+                        }
+                        else
+                            throw new UnreachableException();
                         break;
 
                     case 'n':
@@ -201,16 +222,23 @@ public class GardenGroups
                             direction = 'w';
                             current = (current.X, current.Y - 1);
                         }
-                        else
+                        else if (neighbors.Contains((current.X - 1, current.Y)))
                         {
-                            if (neighbors.Contains((current.X + 1, current.Y - 1)))
-                            {
-                                direction = 'e';
-                                current = (current.X, current.Y - 1);
-                            }
-                            else
-                                throw new UnreachableException();
+                            direction = 'w';
+                            current = (current.X + 1, current.Y);
                         }
+                        else if (neighbors.Contains((current.X + 1, current.Y - 1)))
+                        {
+                            direction = 'e';
+                            current = (current.X, current.Y - 1);
+                        }
+                        else if (neighbors.Contains((current.X + 1, current.Y)))
+                        {
+                            direction = 'e';
+                            current = (current.X - 1, current.Y);
+                        }
+                        else
+                            throw new UnreachableException();
                         break;
                 }
             }

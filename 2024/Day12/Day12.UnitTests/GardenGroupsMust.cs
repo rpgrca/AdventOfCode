@@ -94,11 +94,13 @@ public class GardenGroupsMust
         Assert.Equal(1400386, sut.PriceOfFencing);
     }
 
-    [Fact]
-    public void ZoomInCorrectly()
+    [Theory]
+    [InlineData("AA\nAA", 16)]
+    [InlineData(SAMPLE_INPUT, 80)]
+    public void ZoomInCorrectly(string input, int expectedPrice)
     {
-        var sut = new GardenGroups("AA\nAA", 3);
-        Assert.Equal(4 * 4, sut.PriceWithBulkDiscount);
+        var sut = new GardenGroups(input, 3);
+        Assert.Equal(expectedPrice, sut.PriceWithBulkDiscount);
 /*
         Assert.Collection(sut.Plots,
             p1 => {
