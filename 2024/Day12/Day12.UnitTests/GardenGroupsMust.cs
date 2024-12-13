@@ -97,6 +97,7 @@ public class GardenGroupsMust
     [Theory]
     [InlineData("AA\nAA", 16)]
     [InlineData(SAMPLE_INPUT, 80)]
+    [InlineData(SECOND_SAMPLE_INPUT, 436)]
     public void ZoomInCorrectly(string input, int expectedPrice)
     {
         var sut = new GardenGroups(input, 3);

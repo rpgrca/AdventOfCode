@@ -111,7 +111,6 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X, current.Y + 1)))
                         {
                             direction = 's';
-                            current = (current.X, current.Y - 1);
                         }
                         else if (neighbors.Contains((current.X + 1, current.Y - 1)))
                         {
@@ -121,10 +120,14 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X, current.Y - 1)))
                         {
                             direction = 'n';
-                            current = (current.X, current.Y + 1);
                         }
                         else
-                            throw new UnreachableException();
+                        {
+                            direction = 'e';
+                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                            current = neighbors.First();
+                            current = (current.X - 1, current.Y);
+                        }
                         break;
 
                     case 's':
@@ -149,7 +152,6 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X - 1, current.Y)))
                         {
                             direction = 'w';
-                            current = (current.X + 1, current.Y);
                         }
                         else if (neighbors.Contains((current.X + 1, current.Y + 1)))
                         {
@@ -159,10 +161,14 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X + 1, current.Y)))
                         {
                             direction = 'e';
-                            current = (current.X - 1, current.Y);
                         }
                         else
-                            throw new UnreachableException();
+                        {
+                            direction = 'e';
+                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                            current = neighbors.First();
+                            current = (current.X - 1, current.Y);
+                        }
                         break;
 
                     case 'w':
@@ -187,7 +193,6 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X, current.Y + 1)))
                         {
                             direction = 's';
-                            current = (current.X, current.Y - 1);
                         }
                         else if (neighbors.Contains((current.X - 1, current.Y - 1)))
                         {
@@ -197,10 +202,14 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X, current.Y - 1)))
                         {
                             direction = 'n';
-                            current = (current.X, current.Y + 1);
                         }
                         else
-                            throw new UnreachableException();
+                        {
+                            direction = 'e';
+                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                            current = neighbors.First();
+                            current = (current.X - 1, current.Y);
+                        }
                         break;
 
                     case 'n':
@@ -225,7 +234,6 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X - 1, current.Y)))
                         {
                             direction = 'w';
-                            current = (current.X + 1, current.Y);
                         }
                         else if (neighbors.Contains((current.X + 1, current.Y - 1)))
                         {
@@ -235,10 +243,14 @@ public class GardenGroups
                         else if (neighbors.Contains((current.X + 1, current.Y)))
                         {
                             direction = 'e';
-                            current = (current.X - 1, current.Y);
                         }
                         else
-                            throw new UnreachableException();
+                        {
+                            direction = 'e';
+                            neighbors = neighbors.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
+                            current = neighbors.First();
+                            current = (current.X - 1, current.Y);
+                        }
                         break;
                 }
             }
@@ -343,11 +355,17 @@ public class GardenGroups
 
     private void ZoomedInVisit(int x, int y, char plant, List<(int X, int Y)> plants, List<(int X, int Y)> neighbors)
     {
+        if (x == 1 && y == 0)
+        {
+            Debug.Print("Now");
+        }
         if (x < 0 || x >= ZoomedInSize || y < 0 || y >= ZoomedInSize || _zoomedInPlants[y, x] != plant)
         {
             var neighbor = (x, y);
-            neighbors.Add(neighbor);
-
+            if (!neighbors.Contains(neighbor))
+            {
+                neighbors.Add(neighbor);
+            }
             return;
         }
 
