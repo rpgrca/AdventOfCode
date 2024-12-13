@@ -20,23 +20,23 @@ public class ClawContraptionsMust
         var sut = new ClawContraptions(SAMPLE_INPUT);
         Assert.Collection(sut.Contraptions,
             p1 => {
-                Assert.Equal((94, 34), p1.ButtonA);
-                Assert.Equal((22, 67), p1.ButtonB);
+                Assert.Equal((94, 34), p1.A);
+                Assert.Equal((22, 67), p1.B);
                 Assert.Equal((8400, 5400), p1.Prize);
             },
             p2 => {
-                Assert.Equal((26, 66), p2.ButtonA);
-                Assert.Equal((67, 21), p2.ButtonB);
+                Assert.Equal((26, 66), p2.A);
+                Assert.Equal((67, 21), p2.B);
                 Assert.Equal((12748, 12176), p2.Prize);
             },
             p3 => {
-                Assert.Equal((17, 86), p3.ButtonA);
-                Assert.Equal((84, 37), p3.ButtonB);
+                Assert.Equal((17, 86), p3.A);
+                Assert.Equal((84, 37), p3.B);
                 Assert.Equal((7870, 6450), p3.Prize);
             },
             p1 => {
-                Assert.Equal((69, 23), p1.ButtonA);
-                Assert.Equal((27, 71), p1.ButtonB);
+                Assert.Equal((69, 23), p1.A);
+                Assert.Equal((27, 71), p1.B);
                 Assert.Equal((18641, 10279), p1.Prize);
             });
     }
@@ -79,23 +79,23 @@ public class ClawContraptionsMust
         var sut = new ClawContraptions(SAMPLE_INPUT, 10000000000000);
         Assert.Collection(sut.Contraptions,
             p1 => {
-                Assert.Equal((94, 34), p1.ButtonA);
-                Assert.Equal((22, 67), p1.ButtonB);
+                Assert.Equal((94, 34), p1.A);
+                Assert.Equal((22, 67), p1.B);
                 Assert.Equal((10000000008400, 10000000005400), p1.Prize);
             },
             p2 => {
-                Assert.Equal((26, 66), p2.ButtonA);
-                Assert.Equal((67, 21), p2.ButtonB);
+                Assert.Equal((26, 66), p2.A);
+                Assert.Equal((67, 21), p2.B);
                 Assert.Equal((10000000012748, 10000000012176), p2.Prize);
             },
             p3 => {
-                Assert.Equal((17, 86), p3.ButtonA);
-                Assert.Equal((84, 37), p3.ButtonB);
+                Assert.Equal((17, 86), p3.A);
+                Assert.Equal((84, 37), p3.B);
                 Assert.Equal((10000000007870, 10000000006450), p3.Prize);
             },
             p1 => {
-                Assert.Equal((69, 23), p1.ButtonA);
-                Assert.Equal((27, 71), p1.ButtonB);
+                Assert.Equal((69, 23), p1.A);
+                Assert.Equal((27, 71), p1.B);
                 Assert.Equal((10000000018641, 10000000010279), p1.Prize);
             });
     }

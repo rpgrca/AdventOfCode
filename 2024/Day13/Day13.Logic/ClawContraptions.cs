@@ -1,18 +1,15 @@
-using System.Runtime.Intrinsics.X86;
-
 namespace Day13.Logic;
 
 public class ClawContraptions
 {
     private readonly string _input;
     private readonly long _adjust;
-    private readonly bool _adjusting;
-    private readonly List<((long OffsetX, long OffsetY) ButtonA, (long OffsetX, long OffsetY) ButtonB, (long X, long Y) Prize)> _contraptions;
+    private readonly List<((long X, long Y) A, (long X, long Y) B, (long X, long Y) Prize)> _contraptions;
 
-    public List<((long OffsetX, long OffsetY) ButtonA, (long OffsetX, long OffsetY) ButtonB, (long X, long Y) Prize)> Contraptions => _contraptions;
+    public List<((long X, long Y) A, (long X, long Y) B, (long X, long Y) Prize)> Contraptions => _contraptions;
     public int Count => _contraptions.Count;
-
     public long CheapestWin { get; private set; }
+
 
     public ClawContraptions(string input, long? adjust = null)
     {
@@ -21,24 +18,14 @@ public class ClawContraptions
         if (adjust.HasValue)
         {
             _adjust = adjust.Value;
-            _adjusting = true;
         }
         else
         {
             _adjust = 0;
-            _adjusting = false;
         }
 
         Parse();
-
-        if (_adjusting)
-        {
-            FindCheapestWin2();
-        }
-        else
-        {
-            FindCheapestWin();
-        }
+        FindCheapestWin();
     }
 
     private void Parse()
@@ -79,54 +66,40 @@ public class ClawContraptions
         }
     }
 
-    private void FindCheapestWin2()
-    {
-        foreach (var contraption in _contraptions)
-        {
-            var determinant = (long)(contraption.ButtonA.OffsetX*contraption.ButtonB.OffsetY - contraption.ButtonB.OffsetX*contraption.ButtonA.OffsetY);
-            if (determinant != 0)
-            {
-                var numerator = contraption.Prize.X*contraption.ButtonB.OffsetY - contraption.ButtonB.OffsetX*contraption.Prize.Y;
-                var a = numerator / determinant;
-                if (a * determinant == numerator)
-                {
-                    numerator = contraption.ButtonA.OffsetX*contraption.Prize.Y - contraption.Prize.X*contraption.ButtonA.OffsetY;
-                    var b = numerator / determinant;
-                    if (b * determinant == numerator)
-                    {
-                        CheapestWin += (long)a*3 + (long)b;
-                    }
-                }
-            }
-        }
-    }
-
     private void FindCheapestWin()
     {
         foreach (var contraption in _contraptions)
         {
-            long? cheapestWin = null;
-            for (long a = 0; a <= 100; a++)
+            if (ApplyCramersRule(contraption.A.X, contraption.B.X, contraption.A.Y, contraption.B.Y, contraption.Prize.X, contraption.Prize.Y, out (long A, long B) result))
             {
-                for (long b = 0; b <= 100; b++)
-                {
-                    if (((contraption.ButtonA.OffsetX * a + contraption.ButtonB.OffsetX * b) == contraption.Prize.X) &&
-                        ((contraption.ButtonA.OffsetY * a + contraption.ButtonB.OffsetY * b) == contraption.Prize.Y))
-                    {
-                        var value = a * 3 + b;
-                        if (! cheapestWin.HasValue || value < cheapestWin)
-                        {
-                            cheapestWin = value;
-                        }
-                    }
-                }
-            }
-
-
-            if (cheapestWin.HasValue)
-            {
-                CheapestWin += cheapestWin.Value;
+                CheapestWin += result.A * 3 + result.B;
             }
         }
+    }
+
+    /*
+     * a b e
+     * c d f
+     */
+    private bool ApplyCramersRule(long a, long b, long c, long d, long e, long f, out (long X, long Y) result)
+    {
+        var determinant = a * d - b * c;
+        if (determinant != 0)
+        {
+            var numerator = e * d - b * f;
+            var (x, firstRemainder) = Math.DivRem(numerator, determinant);
+            if (firstRemainder == 0)
+            {
+                numerator = a * f - e * c;
+                var (y, secondRemainder) = Math.DivRem(numerator, determinant);
+                if (secondRemainder == 0)
+                {
+                    CheapestWin += x * 3 + y;
+                }
+            }
+        }
+
+        result = default;
+        return false;
     }
 }
