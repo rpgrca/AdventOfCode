@@ -49,4 +49,13 @@ public class ClawContraptionsMust
         var sut = new ClawContraptions(input);
         Assert.Equal(expectedWin, sut.CheapestWin);
     }
+
+    [Theory]
+    [InlineData("Button A: X+26, Y+66\nButton B: X+67, Y+21\nPrize: X=12748, Y=12176")]
+    [InlineData("Button A: X+69, Y+23\nButton B: X+27, Y+71\nPrize: X=18641, Y=10279")]
+    public void ReturnZero_WhenNoCombinationHasBeenFound(string input)
+    {
+        var sut = new ClawContraptions(input);
+        Assert.Equal(0, sut.CheapestWin);
+    }
 }

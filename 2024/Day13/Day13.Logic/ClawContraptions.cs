@@ -60,7 +60,7 @@ public class ClawContraptions
     {
         foreach (var contraption in _contraptions)
         {
-            var cheapestWin = int.MaxValue;
+            int? cheapestWin = null;
             for (var a = 0; a <= 100; a++)
             {
                 for (var b = 0; b <= 100; b++)
@@ -69,7 +69,7 @@ public class ClawContraptions
                         (contraption.ButtonA.OffsetY * a + contraption.ButtonB.OffsetY * b == contraption.Prize.Y))
                     {
                         var value = a * 3 + b;
-                        if (value < cheapestWin)
+                        if (! cheapestWin.HasValue || value < cheapestWin)
                         {
                             cheapestWin = value;
                         }
@@ -77,7 +77,11 @@ public class ClawContraptions
                 }
             }
 
-            CheapestWin += cheapestWin;
+
+            if (cheapestWin.HasValue)
+            {
+                CheapestWin += cheapestWin.Value;
+            }
         }
     }
 }
