@@ -195,6 +195,7 @@ public class RestroomRedoubt
                                         if (_robots.Any(p => p.Position.X == possibleTop.Position.X+3 && p.Position.Y == possibleTop.Position.Y+3))
                                         {
                                             TreeFoundAt = seconds;
+                                            Console.WriteLine(Plot(seconds));
                                             return;
                                         }
                                     }
@@ -230,3 +231,5 @@ public class RestroomRedoubt
         return sb.ToString();
     }
 }
+
+
