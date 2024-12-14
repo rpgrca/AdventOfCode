@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Pipes;
+using System.Text;
 
 namespace Day14.Logic;
 
@@ -93,6 +95,7 @@ public class RestroomRedoubt
     public List<Robot> Robots => _robots;
 
     public int SafetyFactor { get; private set; }
+    public int TreeFoundAt { get; private set; }
 
     public RestroomRedoubt(string input, int width, int height)
     {
@@ -122,26 +125,31 @@ public class RestroomRedoubt
         {
             foreach (var robot in _robots)
             {
-                robot.Position.X += robot.Velocity.X;
-                if (robot.Position.X >= _width)
-                {
-                    robot.Position.X -= _width;
-                }
-                else if (robot.Position.X < 0)
-                {
-                    robot.Position.X = _width + robot.Position.X;
-                }
-
-                robot.Position.Y += robot.Velocity.Y;
-                if (robot.Position.Y >= _height)
-                {
-                    robot.Position.Y -= _height;
-                }
-                if (robot.Position.Y < 0)
-                {
-                    robot.Position.Y = _height + robot.Position.Y;
-                }
+                MoveRobot(robot);
             }
+        }
+    }
+
+    private void MoveRobot(Robot robot)
+    {
+        robot.Position.X += robot.Velocity.X;
+        if (robot.Position.X >= _width)
+        {
+            robot.Position.X -= _width;
+        }
+        else if (robot.Position.X < 0)
+        {
+            robot.Position.X = _width + robot.Position.X;
+        }
+
+        robot.Position.Y += robot.Velocity.Y;
+        if (robot.Position.Y >= _height)
+        {
+            robot.Position.Y -= _height;
+        }
+        if (robot.Position.Y < 0)
+        {
+            robot.Position.Y = _height + robot.Position.Y;
         }
     }
 
@@ -155,5 +163,71 @@ public class RestroomRedoubt
         var bottomRight = _robots.Count(p => p.Position.X > quadrantWidth && p.Position.Y > quadrantHeight);
 
         SafetyFactor = topLeft * topRight * bottomLeft * bottomRight;
+    }
+
+    public void SearchForChristmasTree()
+    {
+        var seconds = 0;
+        var printAt = 52;
+        while (true)
+        {
+            seconds++;
+            foreach (var robot in _robots)
+            {
+                MoveRobot(robot);
+            }
+
+            var positionsY = _robots.GroupBy(p => p.Position.Y).OrderByDescending(p => p.Count()).ToList();
+            var y = positionsY.First();
+            if (y.Count() > 20)
+            {
+                foreach (var possibleTop in _robots)
+                {
+                    if (_robots.Any(p => p.Position.X == possibleTop.Position.X-1 && p.Position.Y == possibleTop.Position.Y+1))
+                    {
+                        if (_robots.Any(p => p.Position.X == possibleTop.Position.X+1 && p.Position.Y == possibleTop.Position.Y+1))
+                        {
+                            if (_robots.Any(p => p.Position.X == possibleTop.Position.X-2 && p.Position.Y == possibleTop.Position.Y+2))
+                            {
+                                if (_robots.Any(p => p.Position.X == possibleTop.Position.X+2 && p.Position.Y == possibleTop.Position.Y+2))
+                                {
+                                    if (_robots.Any(p => p.Position.X == possibleTop.Position.X-3 && p.Position.Y == possibleTop.Position.Y+3))
+                                    {
+                                        if (_robots.Any(p => p.Position.X == possibleTop.Position.X+3 && p.Position.Y == possibleTop.Position.Y+3))
+                                        {
+                                            TreeFoundAt = seconds;
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private string Plot(int line)
+    {
+        var sb = new StringBuilder();
+        for (var y = 0; y < _height; y++)
+        {
+            for (var x = 0; x < _width; x++)
+            {
+                if (_robots.Any(p => p.Position.X == x && p.Position.Y == y))
+                {
+                    sb.Append('#');
+                }
+                else
+                {
+                    sb.Append('.');
+                }
+            }
+
+            sb.Append($"  {line}\n");
+        }
+
+        return sb.ToString();
     }
 }

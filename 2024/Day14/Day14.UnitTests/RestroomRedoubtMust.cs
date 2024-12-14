@@ -117,4 +117,14 @@ public class RestroomRedoubtMust
         sut.CalculateSafetyFactor();
         Assert.Equal(224554908, sut.SafetyFactor);
     }
+
+    [Fact]
+    public void DetectChristmasTreeCorrectly()
+    {
+        var sut = new RestroomRedoubt(PUZZLE_INPUT, 101, 103);
+        sut.SearchForChristmasTree();
+        Assert.NotEqual(52, sut.TreeFoundAt);
+        Assert.Equal(6644, sut.TreeFoundAt);
+    }
+
 }
