@@ -177,8 +177,7 @@ public class RestroomRedoubt
                 MoveRobot(robot);
             }
 
-            var positionsY = _robots.GroupBy(p => p.Position.Y).OrderByDescending(p => p.Count()).ToList();
-            var y = positionsY.First();
+            var y = _robots.GroupBy(p => p.Position.Y).OrderByDescending(p => p.Count()).First();
             if (y.Count() > 20)
             {
                 foreach (var possibleTop in _robots)
