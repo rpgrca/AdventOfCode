@@ -118,16 +118,27 @@ public class RestroomRedoubt
     {
         while (seconds-- > 0)
         {
-            var robot = _robots[0];
-            robot.Position.X += robot.Velocity.X;
-            if (robot.Position.X >= _width)
+            foreach (var robot in _robots)
             {
-                robot.Position.X -= _width;
-            }
-            robot.Position.Y += robot.Velocity.Y;
-            if (robot.Position.Y < 0)
-            {
-                robot.Position.Y = _height + robot.Position.Y;
+                robot.Position.X += robot.Velocity.X;
+                if (robot.Position.X >= _width)
+                {
+                    robot.Position.X -= _width;
+                }
+                else if (robot.Position.X < 0)
+                {
+                    robot.Position.X = _width + robot.Position.X;
+                }
+
+                robot.Position.Y += robot.Velocity.Y;
+                if (robot.Position.Y >= _height)
+                {
+                    robot.Position.Y -= _height;
+                }
+                if (robot.Position.Y < 0)
+                {
+                    robot.Position.Y = _height + robot.Position.Y;
+                }
             }
         }
     }

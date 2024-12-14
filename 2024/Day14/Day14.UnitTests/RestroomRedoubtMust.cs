@@ -79,4 +79,24 @@ public class RestroomRedoubtMust
                 Assert.Equal(new(new(1, 3), new(2, -3)), p1);
             });
     }
+
+    [Fact]
+    public void MoveRobotsCorrectly_When100SecondsElapsed()
+    {
+        var sut = new RestroomRedoubt(SAMPLE_INPUT, 11, 7);
+        sut.CalculateAfter(100);
+        Assert.Collection(sut.Robots,
+            p1 => Assert.Equal(new(new(3, 5), new(3, -3)), p1),
+            p2 => Assert.Equal(new(new(5, 4), new(-1, -3)), p2),
+            p3 => Assert.Equal(new(new(9, 0), new(-1, 2)), p3),
+            p4 => Assert.Equal(new(new(4, 5), new(2, -1)), p4),
+            p5 => Assert.Equal(new(new(1, 6), new(1, 3)), p5),
+            p6 => Assert.Equal(new(new(1, 3), new(-2, -2)), p6),
+            p7 => Assert.Equal(new(new(6, 0), new(-1, -3)), p7),
+            p8 => Assert.Equal(new(new(2, 3), new(-1, -2)), p8),
+            p9 => Assert.Equal(new(new(0, 2), new(2, 3)), p9),
+            p10 => Assert.Equal(new(new(6, 0), new(-1, 2)), p10),
+            p11 => Assert.Equal(new(new(4, 5), new(2, -3)), p11),
+            p12 => Assert.Equal(new(new(6, 6), new(-3, -3)), p12));
+    }
 }
