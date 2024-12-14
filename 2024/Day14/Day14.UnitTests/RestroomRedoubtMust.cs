@@ -5,9 +5,12 @@ namespace Day14.UnitTests;
 
 public class RestroomRedoubtMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 11, 7, 12)]
+    [InlineData(PUZZLE_INPUT, 101, 103, 500)]
+    public void LoadInputCorrectly(string input, int width, int height, int expectedCount)
     {
-
+        var sut = new RestroomRedoubt(input, width, height);
+        Assert.Equal(expectedCount, sut.RobotCount);
     }
 }
