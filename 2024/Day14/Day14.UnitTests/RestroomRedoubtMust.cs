@@ -108,4 +108,13 @@ public class RestroomRedoubtMust
         sut.CalculateSafetyFactor();
         Assert.Equal(12, sut.SafetyFactor);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new RestroomRedoubt(PUZZLE_INPUT, 101, 103);
+        sut.CalculateAfter(100);
+        sut.CalculateSafetyFactor();
+        Assert.Equal(224554908, sut.SafetyFactor);
+    }
 }
