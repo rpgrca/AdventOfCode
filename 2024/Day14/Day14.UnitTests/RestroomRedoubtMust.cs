@@ -99,4 +99,13 @@ public class RestroomRedoubtMust
             p11 => Assert.Equal(new(new(4, 5), new(2, -3)), p11),
             p12 => Assert.Equal(new(new(6, 6), new(-3, -3)), p12));
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new RestroomRedoubt(SAMPLE_INPUT, 11, 7);
+        sut.CalculateAfter(100);
+        sut.CalculateSafetyFactor();
+        Assert.Equal(12, sut.SafetyFactor);
+    }
 }

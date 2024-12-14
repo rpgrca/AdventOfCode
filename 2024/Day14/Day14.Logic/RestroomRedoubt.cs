@@ -92,6 +92,8 @@ public class RestroomRedoubt
 
     public List<Robot> Robots => _robots;
 
+    public int SafetyFactor { get; private set; }
+
     public RestroomRedoubt(string input, int width, int height)
     {
         _input = input;
@@ -141,5 +143,17 @@ public class RestroomRedoubt
                 }
             }
         }
+    }
+
+    public void CalculateSafetyFactor()
+    {
+        var quadrantWidth = _width / 2;
+        var quadrantHeight = _height / 2;
+        var topLeft = _robots.Count(p => p.Position.X < quadrantWidth && p.Position.Y < quadrantHeight);
+        var topRight = _robots.Count(p => p.Position.X > quadrantWidth && p.Position.Y < quadrantHeight);
+        var bottomLeft = _robots.Count(p => p.Position.X < quadrantWidth && p.Position.Y > quadrantHeight);
+        var bottomRight = _robots.Count(p => p.Position.X > quadrantWidth && p.Position.Y > quadrantHeight);
+
+        SafetyFactor = topLeft * topRight * bottomLeft * bottomRight;
     }
 }
