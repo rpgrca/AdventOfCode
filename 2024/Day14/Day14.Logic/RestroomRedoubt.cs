@@ -1,5 +1,7 @@
 
 
+
+
 namespace Day14.Logic;
 
 public class RestroomRedoubt
@@ -10,6 +12,8 @@ public class RestroomRedoubt
     private readonly List<((int X, int Y) Position, (int X, int Y) Velocity)> _robots;
 
     public int RobotCount => _robots.Count;
+
+    public List<((int X, int Y) Position, (int X, int Y) Velocity)> Robots => _robots;
 
     public RestroomRedoubt(string input, int width, int height)
     {
@@ -31,5 +35,10 @@ public class RestroomRedoubt
             var velocity = coordinates[1][2..].Split(',').Select(int.Parse).ToArray();
             _robots.Add(((position[0], position[1]), (velocity[0], velocity[1])));
         }
+    }
+
+    public void CalculateAfter(int v)
+    {
+        throw new NotImplementedException();
     }
 }
