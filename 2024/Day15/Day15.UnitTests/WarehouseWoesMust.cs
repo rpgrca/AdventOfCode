@@ -88,4 +88,14 @@ public class WarehouseWoesMust
         Assert.Equal((3, 2), sut.Position);
         Assert.Equal(202, sut.SumOfGpsCoordinates);
     }
+
+    [Fact]
+    public void PushBoxLeft_WhenHittingBoxWithBoxAndFreeSpaceBehind()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#.OO@#\n#...#\n#####\n\n<");
+        sut.Execute();
+        Assert.Equal((3, 2), sut.Position);
+        Assert.Equal(403, sut.SumOfGpsCoordinates);
+    }
+
 }

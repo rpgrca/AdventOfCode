@@ -6,6 +6,7 @@
 
 
 
+
 namespace Day15.Logic;
 
 public class WarehouseWoes
@@ -63,9 +64,8 @@ public class WarehouseWoes
             switch (movement)
             {
                 case '<':
-                    if (CanMoveLeft(Position.X, Position.Y))
+                    if (Move(Position.X, Position.Y, -1, 0))
                     {
-                        MoveBoxesLeft(Position.X, Position.Y);
                         Position = (Position.X - 1, Position.Y);
                     }
                     break;
@@ -91,6 +91,31 @@ public class WarehouseWoes
         }
 
         CalculateSumOfGpsCoordinates();
+    }
+
+    private bool Move(int x, int y, int offsetX, int offsetY)
+    {
+        var newX = x + offsetX;
+        var newY = y + offsetY;
+
+        if (newX < 0 || newX >= Size || newY < 0 || newY >= Size) return false;
+        switch (_map[y + offsetY, x + offsetX])
+        {
+            case 'O':
+                if (Move(newX, newY, offsetX, offsetY))
+                {
+                    _map[newY, newX] = _map[y, x];
+                    _map[y, x] = '.';
+                    return true;
+                }
+                break;
+            case '.':
+                _map[newY, newX] = _map[y, x];
+                _map[y, x] = '.';
+                return true;
+        }
+
+        return false;
     }
 
     private void CalculateSumOfGpsCoordinates()
@@ -127,7 +152,11 @@ public class WarehouseWoes
                 break;
 
             case 'O':
-                MoveBoxesLeft(x - 1, y);
+                if (CanMoveLeft(x, y))
+                {
+                    MoveBoxesLeft(x - 1, y);
+                }
+                _map[y, x] = '.';
                 break;
         }
     }
