@@ -14,4 +14,13 @@ public class WarehouseWoesMust
         Assert.Equal(expectedSize, sut.Size);
         Assert.Equal(expectedMoves, sut.Count);
     }
+
+    [Fact]
+    public void MoveRobotCorrectly_WhenFacingLeft()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\n<<");
+        sut.Execute();
+        Assert.Equal(1, sut.RobotX);
+        Assert.Equal(2, sut.RobotY);
+    }
 }
