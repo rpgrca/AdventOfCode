@@ -57,11 +57,29 @@ public class WarehouseWoesMust
     }
 
     [Fact]
+    public void StayInPosition_WhenWallBlocksBoxLeft()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#O@.#\n#...#\n#####\n\n<");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(201, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
     public void StayInPosition_WhenWallBlocksUp()
     {
         var sut = new WarehouseWoes("#####\n#.@.#\n#...#\n#...#\n#####\n\n^");
         sut.Execute();
         Assert.Equal((2, 1), sut.Position);
+    }
+
+    [Fact]
+    public void StayInPosition_WhenWallBlocksBoxUp()
+    {
+        var sut = new WarehouseWoes("#####\n#.O.#\n#.@.#\n#...#\n#####\n\n^");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(102, sut.SumOfGpsCoordinates);
     }
 
     [Fact]
@@ -73,11 +91,29 @@ public class WarehouseWoesMust
     }
 
     [Fact]
+    public void StayInPosition_WhenWallBlocksBoxRight()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#.@O#\n#...#\n#####\n\n>");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(203, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
     public void SayInPosition_WhenWallBlocksDown()
     {
         var sut = new WarehouseWoes("#####\n#...#\n#...#\n#.@.#\n#####\n\nV");
         sut.Execute();
         Assert.Equal((2, 3), sut.Position);
+    }
+
+    [Fact]
+    public void SayInPosition_WhenWallBlocksBoxDown()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#.O.#\n#####\n\nV");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(302, sut.SumOfGpsCoordinates);
     }
 
     [Fact]
@@ -151,6 +187,4 @@ public class WarehouseWoesMust
         Assert.Equal((2, 2), sut.Position);
         Assert.Equal(704, sut.SumOfGpsCoordinates);
     }
-
-
 }
