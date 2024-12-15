@@ -42,5 +42,13 @@ public class WarehouseWoesMust
         Assert.Equal(2, sut.RobotY);
     }
 
+    [Fact]
+    public void MoveRobotCorrectly_WhenFacingDown()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\nV");
+        sut.Execute();
+        Assert.Equal(2, sut.RobotX);
+        Assert.Equal(3, sut.RobotY);
+    }
 
 }

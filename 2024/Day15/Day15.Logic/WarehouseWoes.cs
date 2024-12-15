@@ -75,6 +75,12 @@ public class WarehouseWoes
                         RobotX += 1;
                     }
                     break;
+                case 'V':
+                    if (_map[RobotY+1, RobotX] == '.')
+                    {
+                        RobotY += 1;
+                    }
+                    break;
             }
         }
     }
