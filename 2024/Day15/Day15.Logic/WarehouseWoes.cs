@@ -81,7 +81,7 @@ public class WarehouseWoes
                         Position = (Position.X + 1, Position.Y);
                     }
                     break;
-                case 'V':
+                case 'v':
                     if (Move(Position.X, Position.Y, 0, 1))
                     {
                         Position = (Position.X, Position.Y +1);
