@@ -12,7 +12,7 @@ public class WarehouseWoesMust
     public void LoadInputCorrectly(string input, int expectedSize, int expectedMoves)
     {
         var sut = new WarehouseWoes(input);
-        Assert.Equal(expectedSize, sut.Size);
+        Assert.Equal(expectedSize, sut.Height);
         Assert.Equal(expectedMoves, sut.Count);
     }
 
@@ -237,4 +237,20 @@ public class WarehouseWoesMust
         Assert.Equal(10092, sut.SumOfGpsCoordinates);
     }
 
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new WarehouseWoes(PUZZLE_INPUT);
+        sut.Execute();
+        Assert.Equal(1421727, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void GenerateWideMapCorrectly()
+    {
+        var sut = new WarehouseWoes(SAMPLE_INPUT, true);
+        sut.CalculateSumOfGpsCoordinates();
+        Assert.Equal((8, 4), sut.Position);
+        Assert.Equal(106+112+116+214+304+306+312+316+406+414+502+510+602+608+614+704+706+710+714+716+810, sut.SumOfGpsCoordinates);
+    }
 }
