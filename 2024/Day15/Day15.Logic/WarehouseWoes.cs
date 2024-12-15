@@ -76,7 +76,7 @@ public class WarehouseWoes
                     }
                     break;
                 case '>':
-                    if (_map[Position.Y, Position.X+1] == '.')
+                    if (Move(Position.X, Position.Y, 1, 0))
                     {
                         Position = (Position.X + 1, Position.Y);
                     }

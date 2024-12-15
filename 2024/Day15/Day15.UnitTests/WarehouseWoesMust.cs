@@ -83,19 +83,38 @@ public class WarehouseWoesMust
     [Fact]
     public void PushBoxLeft_WhenHittingBoxWithFreeSpaceBehind()
     {
-        var sut = new WarehouseWoes("#####\n#...#\n#..O@#\n#...#\n#####\n\n<");
+        var sut = new WarehouseWoes("#####\n#...#\n#.O@#\n#...#\n#####\n\n<");
         sut.Execute();
-        Assert.Equal((3, 2), sut.Position);
-        Assert.Equal(202, sut.SumOfGpsCoordinates);
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(201, sut.SumOfGpsCoordinates);
     }
 
     [Fact]
     public void PushBoxLeft_WhenHittingBoxWithBoxAndFreeSpaceBehind()
     {
-        var sut = new WarehouseWoes("#####\n#...#\n#.OO@#\n#...#\n#####\n\n<");
+        var sut = new WarehouseWoes("######\n#....#\n#.OO@#\n#....#\n#....#\n######\n\n<");
         sut.Execute();
         Assert.Equal((3, 2), sut.Position);
         Assert.Equal(403, sut.SumOfGpsCoordinates);
     }
+
+    [Fact]
+    public void PushBoxRight_WhenHittingBoxWithFreeSpaceBehind()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#@O.#\n#...#\n#####\n\n>");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(203, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void PushBoxRight_WhenHittingBoxWithBoxAndFreeSpaceBehind()
+    {
+        var sut = new WarehouseWoes("######\n#....#\n#@OO.#\n#....#\n#....#\n######\n\n>");
+        sut.Execute();
+        Assert.Equal((2, 2), sut.Position);
+        Assert.Equal(407, sut.SumOfGpsCoordinates);
+    }
+
 
 }
