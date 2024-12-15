@@ -1,96 +1,13 @@
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO.Pipes;
 using System.Text;
 
 namespace Day14.Logic;
 
-[DebuggerDisplay("({Position}, {Velocity})")]
-public class Robot
-{
-    public Coordinates Position;
-    public Coordinates Velocity;
-
-    public Robot(Coordinates position, Coordinates velocity)
-    {
-        Position = position;
-        Velocity = velocity;
-    }
-
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        if (obj is null) return false;
-        if (obj is Robot other)
-        {
-            return Position.Equals(other.Position) && Velocity.Equals(other.Velocity);
-        }
-
-        return false;
-    }
-
-    public static bool operator == (Robot left, Robot right)
-    {
-        return left.Equals(right);
-    }
-
-    public static bool operator != (Robot left, Robot right)
-    {
-        return !left.Equals(right);
-    }
-
-
-    public override string ToString()
-    {
-        return $"({Position}, {Velocity})";
-    }
-}
-
-public struct Coordinates
-{
-    public int X;
-    public int Y;
-
-    public Coordinates(int x, int y)
-    {
-        X = x;
-        Y = y;
-    }
-
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        if (obj is null) return false;
-        if (obj is Coordinates other)
-        {
-            return X == other.X && Y == other.Y;
-        }
-
-        return false;
-    }
-
-    public static bool operator == (Coordinates left, Coordinates right)
-    {
-        return left.Equals(right);
-    }
-
-    public static bool operator != (Coordinates left, Coordinates right)
-    {
-        return !left.Equals(right);
-    }
-
-    public override string ToString()
-    {
-        return $"({X}, {Y})";
-    }
-}
-
 public class RestroomRedoubt
 {
-    private string _input;
-    private int _width;
-    private int _height;
+    private readonly string _input;
+    private readonly int _width;
+    private readonly int _height;
     private readonly List<Robot> _robots;
-
-    public int RobotCount => _robots.Count;
 
     public List<Robot> Robots => _robots;
 
@@ -157,10 +74,36 @@ public class RestroomRedoubt
     {
         var quadrantWidth = _width / 2;
         var quadrantHeight = _height / 2;
-        var topLeft = _robots.Count(p => p.Position.X < quadrantWidth && p.Position.Y < quadrantHeight);
-        var topRight = _robots.Count(p => p.Position.X > quadrantWidth && p.Position.Y < quadrantHeight);
-        var bottomLeft = _robots.Count(p => p.Position.X < quadrantWidth && p.Position.Y > quadrantHeight);
-        var bottomRight = _robots.Count(p => p.Position.X > quadrantWidth && p.Position.Y > quadrantHeight);
+
+        var topLeft = 0;
+        var bottomLeft = 0;
+        var topRight = 0;
+        var bottomRight = 0;
+        foreach (var robot in _robots.Where(p => p.Position.X != quadrantWidth && p.Position.Y != quadrantHeight))
+        {
+            if (robot.Position.X < quadrantWidth)
+            {
+                if (robot.Position.Y < quadrantHeight)
+                {
+                    topLeft++;
+                }
+                else
+                {
+                    bottomLeft++;
+                }
+            }
+            else
+            {
+                if (robot.Position.Y < quadrantHeight)
+                {
+                    topRight++;
+                }
+                else
+                {
+                    bottomRight++;
+                }
+            }
+        }
 
         SafetyFactor = topLeft * topRight * bottomLeft * bottomRight;
     }
@@ -168,7 +111,6 @@ public class RestroomRedoubt
     public void SearchForChristmasTree()
     {
         var seconds = 0;
-        var printAt = 52;
         while (true)
         {
             seconds++;
@@ -177,37 +119,47 @@ public class RestroomRedoubt
                 MoveRobot(robot);
             }
 
-            var y = _robots.GroupBy(p => p.Position.Y).OrderByDescending(p => p.Count()).First();
-            if (y.Count() > 20)
+            if (AnyRowWithMoreThan20Robots())
             {
-                foreach (var possibleTop in _robots)
+                foreach (var possibleTop in _robots.OrderBy(p => p.Position.X).ThenBy(p => p.Position.Y))
                 {
-                    if (_robots.Any(p => p.Position.X == possibleTop.Position.X-1 && p.Position.Y == possibleTop.Position.Y+1))
+                    if (IsItTop(possibleTop))
                     {
-                        if (_robots.Any(p => p.Position.X == possibleTop.Position.X+1 && p.Position.Y == possibleTop.Position.Y+1))
-                        {
-                            if (_robots.Any(p => p.Position.X == possibleTop.Position.X-2 && p.Position.Y == possibleTop.Position.Y+2))
-                            {
-                                if (_robots.Any(p => p.Position.X == possibleTop.Position.X+2 && p.Position.Y == possibleTop.Position.Y+2))
-                                {
-                                    if (_robots.Any(p => p.Position.X == possibleTop.Position.X-3 && p.Position.Y == possibleTop.Position.Y+3))
-                                    {
-                                        if (_robots.Any(p => p.Position.X == possibleTop.Position.X+3 && p.Position.Y == possibleTop.Position.Y+3))
-                                        {
-                                            TreeFoundAt = seconds;
-                                            Console.WriteLine(Plot(seconds));
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        TreeFoundAt = seconds;
+                        //Console.WriteLine(Plot(seconds));
+                        return;
                     }
                 }
             }
         }
     }
 
+    private bool AnyRowWithMoreThan20Robots() =>
+        _robots
+            .GroupBy(p => p.Position.Y)
+            .OrderByDescending(p => p.Count())
+            .First()
+            .Count() > 20;
+
+    private bool IsItTop(Robot possibleTop)
+    {
+        var diagonalSize = 1;
+        bool next;
+        do
+        {
+            next = false;
+            if (_robots.Any(p => p.Position.X == possibleTop.Position.X - diagonalSize && p.Position.Y == possibleTop.Position.Y + diagonalSize) &&
+                _robots.Any(p => p.Position.X == possibleTop.Position.X + diagonalSize && p.Position.Y == possibleTop.Position.Y + diagonalSize))
+            {
+                diagonalSize++;
+                next = true;
+            }
+        }
+        while (next);
+        return diagonalSize > 3;
+    }
+
+/*
     private string Plot(int line)
     {
         var sb = new StringBuilder();
@@ -229,7 +181,5 @@ public class RestroomRedoubt
         }
 
         return sb.ToString();
-    }
+    }*/
 }
-
-
