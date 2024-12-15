@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Day15.Logic;
 using static Day15.UnitTests.Constants;
 
@@ -20,8 +21,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\n<");
         sut.Execute();
-        Assert.Equal(1, sut.RobotX);
-        Assert.Equal(2, sut.RobotY);
+        Assert.Equal((1, 2), sut.Position);
     }
 
     [Fact]
@@ -29,8 +29,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\n^");
         sut.Execute();
-        Assert.Equal(2, sut.RobotX);
-        Assert.Equal(1, sut.RobotY);
+        Assert.Equal((2, 1), sut.Position);
     }
 
     [Fact]
@@ -38,8 +37,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\n>");
         sut.Execute();
-        Assert.Equal(3, sut.RobotX);
-        Assert.Equal(2, sut.RobotY);
+        Assert.Equal((3, 2), sut.Position);
     }
 
     [Fact]
@@ -47,8 +45,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#.@.#\n#...#\n#####\n\nV");
         sut.Execute();
-        Assert.Equal(2, sut.RobotX);
-        Assert.Equal(3, sut.RobotY);
+        Assert.Equal((2, 3), sut.Position);
     }
 
     [Fact]
@@ -56,8 +53,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#@...#\n#...#\n#####\n\n<");
         sut.Execute();
-        Assert.Equal(1, sut.RobotX);
-        Assert.Equal(2, sut.RobotY);
+        Assert.Equal((1, 2), sut.Position);
     }
 
     [Fact]
@@ -65,8 +61,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#.@.#\n#...#\n#...#\n#####\n\n^");
         sut.Execute();
-        Assert.Equal(2, sut.RobotX);
-        Assert.Equal(1, sut.RobotY);
+        Assert.Equal((2, 1), sut.Position);
     }
 
     [Fact]
@@ -74,8 +69,7 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#..@#\n#...#\n#####\n\n>");
         sut.Execute();
-        Assert.Equal(3, sut.RobotX);
-        Assert.Equal(2, sut.RobotY);
+        Assert.Equal((3, 2), sut.Position);
     }
 
     [Fact]
@@ -83,9 +77,15 @@ public class WarehouseWoesMust
     {
         var sut = new WarehouseWoes("#####\n#...#\n#...#\n#.@.#\n#####\n\nV");
         sut.Execute();
-        Assert.Equal(2, sut.RobotX);
-        Assert.Equal(3, sut.RobotY);
+        Assert.Equal((2, 3), sut.Position);
     }
 
-
+    [Fact]
+    public void PushBoxLeft_WhenHittingBoxWithFreeSpaceBehind()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#..O@#\n#...#\n#####\n\n<");
+        sut.Execute();
+        Assert.Equal((3, 2), sut.Position);
+        Assert.Equal(202, sut.SumOfGpsCoordinates);
+    }
 }
