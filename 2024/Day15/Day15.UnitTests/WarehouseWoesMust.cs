@@ -228,4 +228,13 @@ public class WarehouseWoesMust
         sut.Execute();
         Assert.Equal(2028, sut.SumOfGpsCoordinates);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new WarehouseWoes(SAMPLE_INPUT);
+        sut.Execute();
+        Assert.Equal(10092, sut.SumOfGpsCoordinates);
+    }
+
 }
