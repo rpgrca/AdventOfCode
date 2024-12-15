@@ -70,7 +70,7 @@ public class WarehouseWoes
                     }
                     break;
                 case '^':
-                    if (_map[Position.Y-1, Position.X] == '.')
+                    if (Move(Position.X, Position.Y, 0, -1))
                     {
                         Position = (Position.X, Position.Y - 1);
                     }
@@ -82,7 +82,7 @@ public class WarehouseWoes
                     }
                     break;
                 case 'V':
-                    if (_map[Position.Y+1, Position.X] == '.')
+                    if (Move(Position.X, Position.Y, 0, 1))
                     {
                         Position = (Position.X, Position.Y +1);
                     }
