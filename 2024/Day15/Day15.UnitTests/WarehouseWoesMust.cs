@@ -51,4 +51,41 @@ public class WarehouseWoesMust
         Assert.Equal(3, sut.RobotY);
     }
 
+    [Fact]
+    public void StayInPosition_WhenWallBlocksLeft()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#@...#\n#...#\n#####\n\n<");
+        sut.Execute();
+        Assert.Equal(1, sut.RobotX);
+        Assert.Equal(2, sut.RobotY);
+    }
+
+    [Fact]
+    public void StayInPosition_WhenWallBlocksUp()
+    {
+        var sut = new WarehouseWoes("#####\n#.@.#\n#...#\n#...#\n#####\n\n^");
+        sut.Execute();
+        Assert.Equal(2, sut.RobotX);
+        Assert.Equal(1, sut.RobotY);
+    }
+
+    [Fact]
+    public void StayInPosition_WhenWallBlocksRight()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#..@#\n#...#\n#####\n\n>");
+        sut.Execute();
+        Assert.Equal(3, sut.RobotX);
+        Assert.Equal(2, sut.RobotY);
+    }
+
+    [Fact]
+    public void SayInPosition_WhenWallBlocksDown()
+    {
+        var sut = new WarehouseWoes("#####\n#...#\n#...#\n#.@.#\n#####\n\nV");
+        sut.Execute();
+        Assert.Equal(2, sut.RobotX);
+        Assert.Equal(3, sut.RobotY);
+    }
+
+
 }
