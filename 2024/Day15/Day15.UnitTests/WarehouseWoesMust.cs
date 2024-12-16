@@ -408,4 +408,114 @@ public class WarehouseWoesMust
         Assert.Equal((4, 3), sut.Position);
         Assert.Equal(102+104+203, sut.SumOfGpsCoordinates);
     }
+
+    [Theory]
+    [InlineData("#####\n#.@.#\n#.O.#\n#...#\n#####\n\nv", 4)]
+    [InlineData("#####\n#...#\n#.O@#\n#...#\n#####\n\n^<v", 5)]
+    public void MoveBoxDown_WhenThereIsFreeRoom(string input, int expectedX)
+    {
+        /*
+            ##########   ##########
+            ##..@...##   ##......##
+            ##..[]..##   ##..[]@.##
+            ##......##   ##......##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((expectedX, 2), sut.Position);
+        Assert.Equal(304, sut.SumOfGpsCoordinates);
+    }
+
+    [Theory]
+    [InlineData("#####\n#.@.#\n#.O.#\n#.O.#\n#...#\n#####\n\nv", 4)]
+    [InlineData("#####\n#...#\n#.O@#\n#.O.#\n#...#\n#####\n\n^<v", 5)]
+    public void MoveBoxDown_WhenThereIsFreeRoomAfterABox(string input, int expectedX)
+    {
+        /*
+            ##########   ##########
+            ##..@...##   ##......##
+            ##..[]..##   ##..[]@.##
+            ##..[]..##   ##..[]..##
+            ##......##   ##......##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((expectedX, 2), sut.Position);
+        Assert.Equal(304+404, sut.SumOfGpsCoordinates);
+    }
+
+    [Theory]
+    [InlineData("#####\n#.@.#\n#.O.#\n#.O.#\n#####\n\nv", 4)]
+    [InlineData("#####\n#...#\n#.O@#\n#.O.#\n#####\n\n^<v", 5)]
+    public void DoNotMoveBoxDown_WhenThereIsAWall(string input, int expectedX)
+    {
+        /*
+            ##########   ##########
+            ##..@...##   ##......##
+            ##..[]..##   ##..[]@.##
+            ##..[]..##   ##..[]..##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((expectedX, 1), sut.Position);
+        Assert.Equal(204+304, sut.SumOfGpsCoordinates);
+    }
+
+    [Theory]
+    [InlineData("#####\n#...#\n#.O@#\n#.O.#\n#####\n\n<^<v", 4, 203+304)]
+    [InlineData("#####\n#...#\n#@O.#\n#.O.#\n#####\n\n>>^>v", 5, 205+304)]
+    public void DoNotMoveBoxDown_WhenThereIsAWallOnOneSide(string input, int expectedX, int expectedResult)
+    {
+        /*
+            ##########   ##########
+            ##......##   ##......##
+            ##..[]@.##   ##@.[]..##
+            ##..[]..##   ##..[]..##
+            ##########   ##########
+        */
+
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((expectedX, 1), sut.Position);
+        Assert.Equal(expectedResult, sut.SumOfGpsCoordinates);
+    }
+
+    [Theory]
+    [InlineData("#####\n#...#\n#.O@#\n#OO.#\n##..#\n#####\n\n<^<v")]
+    [InlineData("#####\n#...#\n#.O@#\n#OO.#\n#.#.#\n#####\n\n<^<v")]
+    public void DoNotMoveBoxDown_WhenBottomLeftBoxIsBlocked(string input)
+    {
+        /*
+            ##########   ##########
+            ##......##   ##......##
+            ##..[]@.##   ##..[]@.##
+            ##[][]..##   ##[][]..##
+            ####....##   ##..##..##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((4, 1), sut.Position);
+        Assert.Equal(203+302+304, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBoxDown_WhenThereIsFreeRoomAfterBoxes()
+    {
+        /*
+            ##########
+            ##......##
+            ##..[]@.##
+            ##[][]..##
+            ##......##
+            ##########
+        */
+        var sut = new WarehouseWoes("#####\n#...#\n#.O@#\n#OO.#\n#...#\n#####\n\n<^<v", true);
+        sut.Execute();
+        Assert.Equal((4, 2), sut.Position);
+        Assert.Equal(303+402+404, sut.SumOfGpsCoordinates);
+    }
 }

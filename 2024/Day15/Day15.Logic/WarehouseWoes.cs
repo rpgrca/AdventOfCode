@@ -180,14 +180,28 @@ public class WarehouseWoes
         if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
         switch (_map[newY, x])
         {
+            case '[':
+                if (CanMoveBoxDown(newX, newY) && CanMoveBoxDown(newX+1, newY))
+                {
+                    MoveBoxDown(newX, newY, newX+1, newY);
+                    return true;
+                }
+                break;
+
+            case ']':
+                if (CanMoveBoxDown(newX - 1, newY) && CanMoveBoxDown(newX, newY))
+                {
+                    MoveBoxDown(newX - 1, newY, newX, newY);
+                    return true;
+                }
+                break;
+
             case '.':
                 return true;
         }
 
         return false;
     }
-
-
 
     private bool MoveRobotUp(int x, int y)
     {
@@ -266,6 +280,52 @@ public class WarehouseWoes
         }
     }
 
+    private void MoveBoxDown(int x1, int y1, int x2, int y2)
+    {
+        if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
+        {
+            return;
+        }
+
+        var newX1 = x1;
+        var newY1 = y1 + 1;
+        var newX2 = x2;
+        var newY2 = y2 + 1;
+
+        if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
+        {
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
+        if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
+        {
+            MoveBoxDown(newX1, newY1, newX2, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
+        if (_map[newY1, newX1] == ']')
+        {
+            MoveBoxDown(newX1-1, newY1, newX1, newY1);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[y1, x1] = '.';
+        }
+
+        if (_map[newY2, newX2] == '[')
+        {
+            MoveBoxDown(newX2, newY2, newX2+1, newY2);
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y2, x2] = '.';
+        }
+    }
+
     private bool CanMoveBoxUp(int x, int y)
     {
         var newX = x;
@@ -276,6 +336,22 @@ public class WarehouseWoes
         {
             case '[': return CanMoveBoxUp(newX, newY) && CanMoveBoxUp(newX+1, newY);
             case ']': return CanMoveBoxUp(newX-1, newY) && CanMoveBoxUp(newX, newY);
+            case '.': return true;
+        }
+
+        return false;
+    }
+
+    private bool CanMoveBoxDown(int x, int y)
+    {
+        var newX = x;
+        var newY = y + 1;
+
+        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
+        switch (_map[newY, newX])
+        {
+            case '[': return CanMoveBoxDown(newX, newY) && CanMoveBoxDown(newX+1, newY);
+            case ']': return CanMoveBoxDown(newX-1, newY) && CanMoveBoxDown(newX, newY);
             case '.': return true;
         }
 
