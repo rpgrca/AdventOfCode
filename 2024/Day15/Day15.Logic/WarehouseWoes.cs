@@ -1,22 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
 namespace Day15.Logic;
 
 public class WarehouseWoes
 {
-    private string _input;
+    private readonly string _input;
     private readonly bool _wide;
 
     public int Width { get; private set; }
@@ -180,17 +166,17 @@ public class WarehouseWoes
         switch (_map[newY, x])
         {
             case '[':
-                if (CanMoveBoxDown(newX, newY) && CanMoveBoxDown(newX+1, newY))
+                if (CanMoveBoxVertically(newX, newY, 1) && CanMoveBoxVertically(newX + 1, newY, 1))
                 {
-                    MoveBoxDown(newX, newY, newX+1, newY);
+                    MoveBoxVertically(newX, newY, newX + 1, newY, 1);
                     return true;
                 }
                 break;
 
             case ']':
-                if (CanMoveBoxDown(newX - 1, newY) && CanMoveBoxDown(newX, newY))
+                if (CanMoveBoxVertically(newX - 1, newY, 1) && CanMoveBoxVertically(newX, newY, 1))
                 {
-                    MoveBoxDown(newX - 1, newY, newX, newY);
+                    MoveBoxVertically(newX - 1, newY, newX, newY, 1);
                     return true;
                 }
                 break;
@@ -211,17 +197,17 @@ public class WarehouseWoes
         switch (_map[newY, x])
         {
             case '[':
-                if (CanMoveBoxUp(newX, newY) && CanMoveBoxUp(newX+1, newY))
+                if (CanMoveBoxVertically(newX, newY, -1) && CanMoveBoxVertically(newX+1, newY, -1))
                 {
-                    MoveBoxUp(newX, newY, newX+1, newY);
+                    MoveBoxVertically(newX, newY, newX + 1, newY, -1);
                     return true;
                 }
                 break;
 
             case ']':
-                if (CanMoveBoxUp(newX - 1, newY) && CanMoveBoxUp(newX, newY))
+                if (CanMoveBoxVertically(newX - 1, newY, -1) && CanMoveBoxVertically(newX, newY, -1))
                 {
-                    MoveBoxUp(newX - 1, newY, newX, newY);
+                    MoveBoxVertically(newX - 1, newY, newX, newY, -1);
                     return true;
                 }
                 break;
@@ -233,7 +219,7 @@ public class WarehouseWoes
         return false;
     }
 
-    private void MoveBoxUp(int x1, int y1, int x2, int y2)
+    private void MoveBoxVertically(int x1, int y1, int x2, int y2, int offsetY)
     {
         if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
         {
@@ -241,9 +227,9 @@ public class WarehouseWoes
         }
 
         var newX1 = x1;
-        var newY1 = y1 - 1;
+        var newY1 = y1 + offsetY;
         var newX2 = x2;
-        var newY2 = y2 - 1;
+        var newY2 = y2 + offsetY;
 
         if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
         {
@@ -256,7 +242,7 @@ public class WarehouseWoes
 
         if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
         {
-            MoveBoxUp(newX1, newY1, newX2, newY2);
+            MoveBoxVertically(newX1, newY1, newX2, newY2, offsetY);
             _map[newY1, newX1] = _map[y1, x1];
             _map[newY2, newX2] = _map[y2, x2];
             _map[y1, x1] = '.';
@@ -266,11 +252,11 @@ public class WarehouseWoes
 
         if (_map[newY1, newX1] == ']' && _map[newY1, newX1-1] == '[')
         {
-            MoveBoxUp(newX1-1, newY1, newX1, newY1);
+            MoveBoxVertically(newX1-1, newY1, newX1, newY1, offsetY);
             if (_map[newY2, newX2] != '.')
             {
                 // always '['
-                MoveBoxUp(newX2, newY2, newX2 + 1, newY2);
+                MoveBoxVertically(newX2, newY2, newX2 + 1, newY2, offsetY);
             }
 
             _map[newY1, newX1] = _map[y1, x1];
@@ -281,161 +267,24 @@ public class WarehouseWoes
 
         if (_map[newY2, newX2] == '[' && _map[newY2, newX2+1] == ']')
         {
-            MoveBoxUp(newX2, newY2, newX2+1, newY2);
+            MoveBoxVertically(newX2, newY2, newX2+1, newY2, offsetY);
             _map[newY1, newX1] = _map[y1, x1];
             _map[newY2, newX2] = _map[y2, x2];
             _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-        }
-/*
-        if (_map[newY2, newX2] == ']' && _map[newY2, newX2-1] == '[')
-        {
-            MoveBoxUp(newX2 - 1, newY2, newX2, newY2);
-            _map[newY2, newX2 - 1] = _map[y2, x2-1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y2, x2-1] = '.';
-            _map[y2, x2] = '.';
-        }*/
-    }
-
-/*
-    private void MoveBoxUp(int x1, int y1, int x2, int y2)
-    {
-        if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
-        {
-            return;
-        }
-
-        var newX1 = x1;
-        var newY1 = y1 - 1;
-        var newX2 = x2;
-        var newY2 = y2 - 1;
-
-        if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
-        {
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-            return;
-        }
-
-        if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
-        {
-            MoveBoxUp(newX1, newY1, newX2, newY2);
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-            return;
-        }
-
-        if (_map[newY1, newX1] == ']')
-        {
-            MoveBoxUp(newX1-1, newY1, newX1, newY1);
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[y1, x1] = '.';
-        }
-
-        if (_map[newY2, newX2] == '[')
-        {
-            MoveBoxUp(newX2, newY2, newX2+1, newY2);
-            _map[newY2, newX2] = _map[y2, x2];
             _map[y2, x2] = '.';
         }
     }
-*/
-    private void MoveBoxDown(int x1, int y1, int x2, int y2)
-    {
-        if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
-        {
-            return;
-        }
 
-        var newX1 = x1;
-        var newY1 = y1 + 1;
-        var newX2 = x2;
-        var newY2 = y2 + 1;
-
-        if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
-        {
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-            return;
-        }
-
-        if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
-        {
-            MoveBoxDown(newX1, newY1, newX2, newY2);
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-            return;
-        }
-
-        if (_map[newY1, newX1] == ']' && _map[newY1, newX1-1] == '[')
-        {
-            MoveBoxDown(newX1-1, newY1, newX1, newY1);
-            if (_map[newY2, newX2] != '.')
-            {
-                // always '['
-                MoveBoxDown(newX2, newY2, newX2 + 1, newY2);
-            }
-
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-        }
-
-        if (_map[newY2, newX2] == '[' && _map[newY2, newX2+1] == ']')
-        {
-            MoveBoxDown(newX2, newY2, newX2+1, newY2);
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y1, x1] = '.';
-            _map[y2, x2] = '.';
-        }
-/*
-        if (_map[newY2, newX2] == ']' && _map[newY2, newX2-1] == '[')
-        {
-            MoveBoxDown(newX2 - 1, newY2, newX2, newY2);
-            _map[newY2, newX2 - 1] = _map[y2, x2-1];
-            _map[newY2, newX2] = _map[y2, x2];
-            _map[y2, x2-1] = '.';
-            _map[y2, x2] = '.';
-        }*/
-    }
-
-    private bool CanMoveBoxUp(int x, int y)
+    private bool CanMoveBoxVertically(int x, int y, int offsetY)
     {
         var newX = x;
-        var newY = y - 1;
+        var newY = y + offsetY;
 
         if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
         switch (_map[newY, newX])
         {
-            case '[': return CanMoveBoxUp(newX, newY) && CanMoveBoxUp(newX+1, newY);
-            case ']': return CanMoveBoxUp(newX-1, newY) && CanMoveBoxUp(newX, newY);
-            case '.': return true;
-        }
-
-        return false;
-    }
-
-    private bool CanMoveBoxDown(int x, int y)
-    {
-        var newX = x;
-        var newY = y + 1;
-
-        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
-        switch (_map[newY, newX])
-        {
-            case '[': return CanMoveBoxDown(newX, newY) && CanMoveBoxDown(newX+1, newY);
-            case ']': return CanMoveBoxDown(newX-1, newY) && CanMoveBoxDown(newX, newY);
+            case '[': return CanMoveBoxVertically(newX, newY, offsetY) && CanMoveBoxVertically(newX + 1, newY, offsetY);
+            case ']': return CanMoveBoxVertically(newX - 1, newY, offsetY) && CanMoveBoxVertically(newX, newY, offsetY);
             case '.': return true;
         }
 
