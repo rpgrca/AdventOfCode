@@ -267,6 +267,72 @@ public class WarehouseWoes
             return;
         }
 
+        if (_map[newY1, newX1] == ']' && _map[newY1, newX1-1] == '[')
+        {
+            MoveBoxUp(newX1-1, newY1, newX1, newY1);
+            if (_map[newY2, newX2] != '.')
+            {
+                // always '['
+                MoveBoxUp(newX2, newY2, newX2 + 1, newY2);
+            }
+
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+        }
+
+        if (_map[newY2, newX2] == '[' && _map[newY2, newX2+1] == ']')
+        {
+            MoveBoxUp(newX2, newY2, newX2+1, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+        }
+/*
+        if (_map[newY2, newX2] == ']' && _map[newY2, newX2-1] == '[')
+        {
+            MoveBoxUp(newX2 - 1, newY2, newX2, newY2);
+            _map[newY2, newX2 - 1] = _map[y2, x2-1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y2, x2-1] = '.';
+            _map[y2, x2] = '.';
+        }*/
+    }
+
+/*
+    private void MoveBoxUp(int x1, int y1, int x2, int y2)
+    {
+        if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
+        {
+            return;
+        }
+
+        var newX1 = x1;
+        var newY1 = y1 - 1;
+        var newX2 = x2;
+        var newY2 = y2 - 1;
+
+        if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
+        {
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
+        if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
+        {
+            MoveBoxUp(newX1, newY1, newX2, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
         if (_map[newY1, newX1] == ']')
         {
             MoveBoxUp(newX1-1, newY1, newX1, newY1);
@@ -281,7 +347,7 @@ public class WarehouseWoes
             _map[y2, x2] = '.';
         }
     }
-
+*/
     private void MoveBoxDown(int x1, int y1, int x2, int y2)
     {
         if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
