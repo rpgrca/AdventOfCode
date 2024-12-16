@@ -72,7 +72,17 @@ public class ReindeerMazeMust
     [Theory]
     [InlineData("########\n#.....E#\n#.###.##\n#.###.##\n#.###..#\n#.####.#\n#S.....#\n########", 2010)]
     [InlineData("########\n#.....E#\n#####.##\n#.###.##\n#.###..#\n#.####.#\n#S.....#\n########", 4012)]
-    public void ChooseBestPathCorrectly_WhenTurningEastAndNorth(string input, int expectedScore)
+    public void ChooseBestPathCorrectly_WhenTurningEastWestAndNorth(string input, int expectedScore)
+    {
+        var sut = new ReindeerMaze(input);
+        sut.Run();
+        Assert.Equal(expectedScore, sut.LowestScore);
+    }
+
+    [Theory]
+    [InlineData("########\n#S.....#\n#.####.#\n#...#..#\n#.###.##\n#.###..#\n#.....E#\n########", 2010)]
+    [InlineData("########\n#S.....#\n#.####.#\n#...#..#\n#.###.##\n#.###..#\n##....E#\n########", 4012)]
+    public void ChooseBestPathCorrectly_WhenTurningEastWestAndSouth(string input, int expectedScore)
     {
         var sut = new ReindeerMaze(input);
         sut.Run();
