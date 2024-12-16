@@ -1,4 +1,5 @@
 
+
 namespace Day16.Logic;
 
 public class ReindeerMaze
@@ -8,9 +9,22 @@ public class ReindeerMaze
 
     public int Size => _lines.Length;
 
+    public (int X, int Y) StartPoint { get; set; }
+
     public ReindeerMaze(string input)
     {
         _input = input;
         _lines = _input.Split('\n');
+
+        for (var y = 0; y < Size; y++)
+        {
+            for (var x = 0; x < Size; x++)
+            {
+                if (_lines[y][x] == 'S')
+                {
+                    StartPoint = (x, y);
+                }
+            }
+        }
     }
 }
