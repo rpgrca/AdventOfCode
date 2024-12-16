@@ -7,11 +7,16 @@
 
 
 
+
+
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day15.Logic;
 
 public class WarehouseWoes
 {
     private string _input;
+    private readonly bool _wide;
 
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -27,7 +32,8 @@ public class WarehouseWoes
     public WarehouseWoes(string input, bool wide = false)
     {
         _input = input;
-        if (wide)
+        _wide = wide;
+        if (_wide)
         {
             WideParse();
         }
@@ -68,35 +74,73 @@ public class WarehouseWoes
 
     public void Execute()
     {
-        foreach (var movement in _movements)
+        if (! _wide)
         {
-            switch (movement)
+            foreach (var movement in _movements)
             {
-                case '<':
-                    if (Move(Position.X, Position.Y, -1, 0))
-                    {
-                        Position = (Position.X - 1, Position.Y);
-                    }
-                    break;
-                case '^':
-                    if (Move(Position.X, Position.Y, 0, -1))
-                    {
-                        Position = (Position.X, Position.Y - 1);
-                    }
-                    break;
-                case '>':
-                    if (Move(Position.X, Position.Y, 1, 0))
-                    {
-                        Position = (Position.X + 1, Position.Y);
-                    }
-                    break;
-                case 'v':
-                    if (Move(Position.X, Position.Y, 0, 1))
-                    {
-                        Position = (Position.X, Position.Y +1);
-                    }
-                    break;
+                switch (movement)
+                {
+                    case '<':
+                        if (Move(Position.X, Position.Y, -1, 0))
+                        {
+                            Position = (Position.X - 1, Position.Y);
+                        }
+                        break;
+                    case '^':
+                        if (Move(Position.X, Position.Y, 0, -1))
+                        {
+                            Position = (Position.X, Position.Y - 1);
+                        }
+                        break;
+                    case '>':
+                        if (Move(Position.X, Position.Y, 1, 0))
+                        {
+                            Position = (Position.X + 1, Position.Y);
+                        }
+                        break;
+                    case 'v':
+                        if (Move(Position.X, Position.Y, 0, 1))
+                        {
+                            Position = (Position.X, Position.Y +1);
+                        }
+                        break;
+                }
             }
+        }
+        else
+        {
+            foreach (var movement in _movements)
+            {
+                switch (movement)
+                {
+                    case '<':
+                        if (MoveHorizontallyWide(Position.X, Position.Y, -1, 0))
+                        {
+                            Position = (Position.X - 1, Position.Y);
+                        }
+                        break;
+                    case '^':
+                        if (MoveRobotUp(Position.X, Position.Y))
+                        {
+                            Position = (Position.X, Position.Y - 1);
+                        }
+                        break;
+                    case '>':
+                        if (MoveHorizontallyWide(Position.X, Position.Y, 1, 0))
+                        {
+                            Position = (Position.X + 1, Position.Y);
+                        }
+                        break;
+                        /*
+                    case 'v':
+                        if (MoveRobotVertically(Position.X, Position.Y, 0, 1))
+                        {
+                            Position = (Position.X, Position.Y +1);
+                        }
+                        break;*/
+                }
+            }
+
         }
 
         CalculateSumOfGpsCoordinates();
@@ -118,6 +162,117 @@ public class WarehouseWoes
                     return true;
                 }
                 break;
+            case '.':
+                _map[newY, newX] = _map[y, x];
+                _map[y, x] = '.';
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool MoveRobotUp(int x, int y)
+    {
+        var newX = x;
+        var newY = y - 1;
+
+        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
+        switch (_map[newY, x])
+        {
+            case '[':
+                if (CanMoveBoxUp(newX, newY) && CanMoveBoxUp(newX+1, newY))
+                {
+                    MoveBoxUp(newX, newY, newX+1, newY);
+                    return true;
+                }
+                break;
+
+            case ']':
+                break;
+
+            case '.':
+                return true;
+        }
+
+        return false;
+    }
+
+    private void MoveBoxUp(int x1, int y1, int x2, int y2)
+    {
+        if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
+        {
+            return;
+        }
+
+        var newX1 = x1;
+        var newY1 = y1 - 1;
+        var newX2 = x2;
+        var newY2 = y2 - 1;
+
+        if (_map[newY1, newX1] == '.' && _map[newY2, newX2] == '.')
+        {
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
+        if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
+        {
+            MoveBoxUp(newX1, newY1, newX2, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+            return;
+        }
+
+        if (_map[newY1, newX1] == ']')
+        {
+            MoveBoxUp(newX1-1, newY1, newX1, newY1);
+        }
+
+        if (_map[newY2, newX2] == '[')
+        {
+            MoveBoxUp(newX2, newY2, newX2+1, newY2);
+        }
+    }
+
+    private bool CanMoveBoxUp(int x, int y)
+    {
+        var newX = x;
+        var newY = y - 1;
+
+        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
+        switch (_map[newY, newX])
+        {
+            case '[': return CanMoveBoxUp(newX, newY) && CanMoveBoxUp(newX+1, newY);
+            case ']': return CanMoveBoxUp(newX-1, newY) && CanMoveBoxUp(newX, newY);
+            case '.': return true;
+        }
+
+        return false;
+    }
+
+    private bool MoveHorizontallyWide(int x, int y, int offsetX, int offsetY)
+    {
+        var newX = x + offsetX;
+        var newY = y + offsetY;
+
+        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
+        switch (_map[y + offsetY, x + offsetX])
+        {
+            case '[':
+            case ']':
+                if (MoveHorizontallyWide(newX, newY, offsetX, offsetY))
+                {
+                    _map[newY, newX] = _map[y, x];
+                    _map[y, x] = '.';
+                    return true;
+                }
+                break;
+
             case '.':
                 _map[newY, newX] = _map[y, x];
                 _map[y, x] = '.';
@@ -204,6 +359,4 @@ public class WarehouseWoes
 
         _movements = string.Concat(sections[1].Split('\n')).ToCharArray();
     }
-
-
 }

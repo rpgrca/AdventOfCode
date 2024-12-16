@@ -253,4 +253,83 @@ public class WarehouseWoesMust
         Assert.Equal((8, 4), sut.Position);
         Assert.Equal(106+112+116+214+304+306+312+316+406+414+502+510+602+608+614+704+706+710+714+716+810, sut.SumOfGpsCoordinates);
     }
+
+    [Fact]
+    public void MoveBigBoxLeftCorrectly()
+    {
+        var sut = new WarehouseWoes("#####\n#..O@#\n#####\n\n<", true);
+        sut.Execute();
+        Assert.Equal((7, 1), sut.Position);
+        Assert.Equal(105, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBigBoxesLeftCorrectly_WhenThereIsRoomAvailable()
+    {
+        var sut = new  WarehouseWoes("#####\n#.OO@#\n#####\n\n<", true);
+        sut.Execute();
+        Assert.Equal((7, 1), sut.Position);
+        Assert.Equal(208, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveRightCorrectly()
+    {
+        var sut = new WarehouseWoes("#####\n#@O.#\n#####\n\n>", true);
+        sut.Execute();
+        Assert.Equal((3, 1), sut.Position);
+        Assert.Equal(104, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBoxRightCorrectly()
+    {
+        var sut = new WarehouseWoes("#####\n#@O.#\n#####\n\n>>", true);
+        sut.Execute();
+        Assert.Equal((4, 1), sut.Position);
+        Assert.Equal(105, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBigBoxesRightCorrectly_WhenThereIsRoomAvailable()
+    {
+        var sut = new WarehouseWoes("#####\n#.OO@#\n#####\n\n<", true);
+        sut.Execute();
+        Assert.Equal((7, 1), sut.Position);
+        Assert.Equal(208, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBoxUp_WhenThereIsFreeRoom()
+    {
+        /*
+            ##########
+            ##......##
+            ##..[]..##
+            ##..@...##
+            ##########
+        */
+        var sut = new WarehouseWoes("#####\n#...#\n#.O.#\n#.@.#\n#####\n\n^", true);
+        sut.Execute();
+        Assert.Equal((4, 2), sut.Position);
+        Assert.Equal(104, sut.SumOfGpsCoordinates);
+    }
+
+    [Fact]
+    public void MoveBoxUp_WhenThereIsFreeRoomAfterABox()
+    {
+        /*
+            ##########
+            ##......##
+            ##..[]..##
+            ##..[]..##
+            ##..@...##
+            ##########
+        */
+        var sut = new WarehouseWoes("#####\n#...#\n#.O.#\n#.O.#\n#.@.#\n#####\n\n^", true);
+        sut.Execute();
+        Assert.Equal((4, 3), sut.Position);
+        Assert.Equal(104+204, sut.SumOfGpsCoordinates);
+    }
+
 }
