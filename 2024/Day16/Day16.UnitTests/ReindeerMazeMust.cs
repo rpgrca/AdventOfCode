@@ -35,4 +35,13 @@ public class ReindeerMazeMust
         Assert.Equal((expectedX, expectedY), sut.EndPoint);
     }
 
+    [Theory]
+    [InlineData("#####\n#####\n#####\n#S.E#\n#####", 2)]
+    [InlineData("######\n######\n######\n######\n#S..E#\n######", 3)]
+    public void MoveEastCorrectly(string input, int expectedScore)
+    {
+        var sut = new ReindeerMaze(input);
+        sut.Run();
+        Assert.Equal(expectedScore, sut.LowestScore);
+    }
 }

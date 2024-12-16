@@ -1,6 +1,10 @@
 
 
 
+
+
+using System.Security.Cryptography.X509Certificates;
+
 namespace Day16.Logic;
 
 public class ReindeerMaze
@@ -12,6 +16,7 @@ public class ReindeerMaze
 
     public (int X, int Y) StartPoint { get; private set; }
     public (int X, int Y) EndPoint { get; private set; }
+    public int LowestScore { get; private set; }
 
     public ReindeerMaze(string input)
     {
@@ -33,4 +38,46 @@ public class ReindeerMaze
             }
         }
     }
+
+    public enum Direction
+    {
+        East,
+        North,
+        West,
+        South
+    }
+
+    public void Run()
+    {
+        var priorityQueue = new PriorityQueue<(int X, int Y, Direction Direction, int Total), int>();
+        var x = StartPoint.X;
+        var y = StartPoint.Y;
+
+        priorityQueue.Enqueue((x, y, Direction.East, 0), 0);
+        priorityQueue.Enqueue((x, y, Direction.North, 90), 90);
+        while (priorityQueue.Count > 0)
+        {
+            var move = priorityQueue.Dequeue();
+            if (EndPoint == (move.X, move.Y))
+            {
+                LowestScore = move.Total;
+                return;
+            }
+
+            switch (move.Direction)
+            {
+                case Direction.East:
+                    if (x + 1 < Size)
+                    {
+                        if (_lines[y][x + 1] != '#')
+                        {
+                            priorityQueue.Enqueue((move.X + 1, move.Y, move.Direction, move.Total + 1), move.Total + 1);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    private int CalculatePriority(int x, int y) => y * Size + x;
 }
