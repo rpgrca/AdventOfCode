@@ -101,26 +101,26 @@ public class WarehouseWoes
                 switch (movement)
                 {
                     case '<':
-                        if (MoveHorizontallyWide(Position.X, Position.Y, -1, 0))
+                        if (MoveRobotHorizontally(Position.X, Position.Y, -1, 0))
                         {
                             Position = (Position.X - 1, Position.Y);
                         }
                         break;
                     case '^':
-                        if (MoveRobotUp(Position.X, Position.Y))
+                        if (MoveRobotVertically(Position.X, Position.Y, 0, -1))
                         {
                             Position = (Position.X, Position.Y - 1);
                         }
                         break;
                     case '>':
-                        if (MoveHorizontallyWide(Position.X, Position.Y, 1, 0))
+                        if (MoveRobotHorizontally(Position.X, Position.Y, 1, 0))
                         {
                             Position = (Position.X + 1, Position.Y);
                         }
                         break;
 
                     case 'v':
-                        if (MoveRobotDown(Position.X, Position.Y))
+                        if (MoveRobotVertically(Position.X, Position.Y, 0, 1))
                         {
                             Position = (Position.X, Position.Y + 1);
                         }
@@ -157,26 +157,26 @@ public class WarehouseWoes
         return false;
     }
 
-    private bool MoveRobotDown(int x, int y)
+    private bool MoveRobotVertically(int x, int y, int offsetX, int offsetY)
     {
-        var newX = x;
-        var newY = y + 1;
+        var newX = x + offsetX;
+        var newY = y + offsetY;
 
         if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
         switch (_map[newY, x])
         {
             case '[':
-                if (CanMoveBoxVertically(newX, newY, 1) && CanMoveBoxVertically(newX + 1, newY, 1))
+                if (CanMoveBoxVertically(newX, newY, offsetX, offsetY) && CanMoveBoxVertically(newX + 1, newY, offsetX, offsetY))
                 {
-                    MoveBoxVertically(newX, newY, newX + 1, newY, 1);
+                    MoveBoxVertically(newX, newY, newX + 1, newY, offsetX, offsetY);
                     return true;
                 }
                 break;
 
             case ']':
-                if (CanMoveBoxVertically(newX - 1, newY, 1) && CanMoveBoxVertically(newX, newY, 1))
+                if (CanMoveBoxVertically(newX - 1, newY, offsetX, offsetY) && CanMoveBoxVertically(newX, newY, offsetX, offsetY))
                 {
-                    MoveBoxVertically(newX - 1, newY, newX, newY, 1);
+                    MoveBoxVertically(newX - 1, newY, newX, newY, offsetX, offsetY);
                     return true;
                 }
                 break;
@@ -188,38 +188,7 @@ public class WarehouseWoes
         return false;
     }
 
-    private bool MoveRobotUp(int x, int y)
-    {
-        var newX = x;
-        var newY = y - 1;
-
-        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
-        switch (_map[newY, x])
-        {
-            case '[':
-                if (CanMoveBoxVertically(newX, newY, -1) && CanMoveBoxVertically(newX+1, newY, -1))
-                {
-                    MoveBoxVertically(newX, newY, newX + 1, newY, -1);
-                    return true;
-                }
-                break;
-
-            case ']':
-                if (CanMoveBoxVertically(newX - 1, newY, -1) && CanMoveBoxVertically(newX, newY, -1))
-                {
-                    MoveBoxVertically(newX - 1, newY, newX, newY, -1);
-                    return true;
-                }
-                break;
-
-            case '.':
-                return true;
-        }
-
-        return false;
-    }
-
-    private void MoveBoxVertically(int x1, int y1, int x2, int y2, int offsetY)
+    private void MoveBoxVertically(int x1, int y1, int x2, int y2, int offsetX, int offsetY)
     {
         if (!(_map[y1, x1] == '[' && _map[y2, x2] == ']'))
         {
@@ -242,7 +211,7 @@ public class WarehouseWoes
 
         if (_map[newY1, newX1] == '[') // _map[newY2, newX2] must be ']'
         {
-            MoveBoxVertically(newX1, newY1, newX2, newY2, offsetY);
+            MoveBoxVertically(newX1, newY1, newX2, newY2, offsetX, offsetY);
             _map[newY1, newX1] = _map[y1, x1];
             _map[newY2, newX2] = _map[y2, x2];
             _map[y1, x1] = '.';
@@ -252,11 +221,11 @@ public class WarehouseWoes
 
         if (_map[newY1, newX1] == ']' && _map[newY1, newX1-1] == '[')
         {
-            MoveBoxVertically(newX1-1, newY1, newX1, newY1, offsetY);
+            MoveBoxVertically(newX1-1, newY1, newX1, newY1, offsetX, offsetY);
             if (_map[newY2, newX2] != '.')
             {
                 // always '['
-                MoveBoxVertically(newX2, newY2, newX2 + 1, newY2, offsetY);
+                MoveBoxVertically(newX2, newY2, newX2 + 1, newY2, offsetX, offsetY);
             }
 
             _map[newY1, newX1] = _map[y1, x1];
@@ -267,7 +236,7 @@ public class WarehouseWoes
 
         if (_map[newY2, newX2] == '[' && _map[newY2, newX2+1] == ']')
         {
-            MoveBoxVertically(newX2, newY2, newX2+1, newY2, offsetY);
+            MoveBoxVertically(newX2, newY2, newX2+1, newY2, offsetX, offsetY);
             _map[newY1, newX1] = _map[y1, x1];
             _map[newY2, newX2] = _map[y2, x2];
             _map[y1, x1] = '.';
@@ -275,23 +244,23 @@ public class WarehouseWoes
         }
     }
 
-    private bool CanMoveBoxVertically(int x, int y, int offsetY)
+    private bool CanMoveBoxVertically(int x, int y, int offsetX, int offsetY)
     {
-        var newX = x;
+        var newX = x + offsetX;
         var newY = y + offsetY;
 
         if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
         switch (_map[newY, newX])
         {
-            case '[': return CanMoveBoxVertically(newX, newY, offsetY) && CanMoveBoxVertically(newX + 1, newY, offsetY);
-            case ']': return CanMoveBoxVertically(newX - 1, newY, offsetY) && CanMoveBoxVertically(newX, newY, offsetY);
+            case '[': return CanMoveBoxVertically(newX, newY, offsetX, offsetY) && CanMoveBoxVertically(newX + 1, newY, offsetX, offsetY);
+            case ']': return CanMoveBoxVertically(newX - 1, newY, offsetX, offsetY) && CanMoveBoxVertically(newX, newY, offsetX, offsetY);
             case '.': return true;
         }
 
         return false;
     }
 
-    private bool MoveHorizontallyWide(int x, int y, int offsetX, int offsetY)
+    private bool MoveRobotHorizontally(int x, int y, int offsetX, int offsetY)
     {
         var newX = x + offsetX;
         var newY = y + offsetY;
@@ -301,7 +270,7 @@ public class WarehouseWoes
         {
             case '[':
             case ']':
-                if (MoveHorizontallyWide(newX, newY, offsetX, offsetY))
+                if (MoveRobotHorizontally(newX, newY, offsetX, offsetY))
                 {
                     _map[newY, newX] = _map[y, x];
                     _map[y, x] = '.';
@@ -329,35 +298,6 @@ public class WarehouseWoes
                     SumOfGpsCoordinates += 100 * y + x;
                 }
             }
-        }
-    }
-
-    private bool CanMoveLeft(int x, int y)
-    {
-        switch (_map[y, x - 1])
-        {
-            case '.': return true;
-            case 'O': return CanMoveLeft(x - 1, y);
-            default: return false;
-        }
-    }
-
-    private void MoveBoxesLeft(int x, int y)
-    {
-        switch (_map[y, x - 1])
-        {
-            case '.':
-                _map[y, x - 1] = 'O';
-                _map[y, x] = '.';
-                break;
-
-            case 'O':
-                if (CanMoveLeft(x, y))
-                {
-                    MoveBoxesLeft(x - 1, y);
-                }
-                _map[y, x] = '.';
-                break;
         }
     }
 
