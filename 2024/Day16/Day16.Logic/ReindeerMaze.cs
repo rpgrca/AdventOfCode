@@ -1,16 +1,26 @@
 
-
-
-
-
-using System.Security.Cryptography.X509Certificates;
-
 namespace Day16.Logic;
+
+public enum Direction
+{
+    East,
+    North,
+    West,
+    South
+}
+
+public struct Tile
+{
+    public char Sprite;
+    //public Direction Direction;
+    //public int Weight;
+}
 
 public class ReindeerMaze
 {
     private string _input;
     private string[] _lines;
+    private readonly Tile[,] _map;
 
     public int Size => _lines.Length;
 
@@ -22,6 +32,7 @@ public class ReindeerMaze
     {
         _input = input;
         _lines = _input.Split('\n');
+        _map = new Tile[Size, Size];
 
         for (var y = 0; y < Size; y++)
         {
@@ -30,80 +41,80 @@ public class ReindeerMaze
                 if (_lines[y][x] == 'S')
                 {
                     StartPoint = (x, y);
+                    _map[y, x].Sprite = _lines[y][x];
                 }
                 else if (_lines[y][x] == 'E')
                 {
                     EndPoint = (x, y);
+                    _map[y, x].Sprite = _lines[y][x];
+                }
+                else
+                {
+                    _map[y, x].Sprite = _lines[y][x];
                 }
             }
         }
     }
 
-    public enum Direction
-    {
-        East,
-        North,
-        West,
-        South
-    }
-
     public void Run()
     {
-        var priorityQueue = new PriorityQueue<(int X, int Y, Direction Direction, int Total), int>();
-        var x = StartPoint.X;
-        var y = StartPoint.Y;
+        var priorityQueue = new PriorityQueue<(int X, int Y, Direction Direction, int Weight), int>();
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.East, 0), 0);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.North, 1000), 1000);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.West, 2000), 2000);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.South, 1000), 1000);
 
-        priorityQueue.Enqueue((x, y, Direction.East, 0), 0);
-        priorityQueue.Enqueue((x, y, Direction.North, 1000), 1000);
-        priorityQueue.Enqueue((x, y, Direction.West, 2000), 2000);
-        priorityQueue.Enqueue((x, y, Direction.South, 1000), 1000);
         while (priorityQueue.Count > 0)
         {
             var move = priorityQueue.Dequeue();
-            if (EndPoint == (move.X, move.Y))
+            if (IsEndPoint(move.X, move.Y))
             {
-                LowestScore = move.Total;
+                LowestScore = move.Weight;
                 return;
             }
 
             switch (move.Direction)
             {
                 case Direction.East:
-                    if (x + 1 < Size)
+                    var newX = move.X + 1;
+                    if (newX < Size)
                     {
-                        if (_lines[y][x + 1] != '#')
+                        if (_map[move.Y, newX].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((move.X + 1, move.Y, move.Direction, move.Total + 1), move.Total + 1);
+                            priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), CalculatePriority(newX, move.Y));
                         }
                     }
                     break;
 
                 case Direction.North:
-                    if (y - 1 >= 0)
+                    var newY = move.Y - 1;
+                    if (newY >= 0)
                     {
-                        if (_lines[y - 1][x] != '#')
+                        if (_lines[newY][move.X] != '#')
                         {
-                            priorityQueue.Enqueue((move.X, move.Y - 1, move.Direction, move.Total + 1), move.Total + 1);
+                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), CalculatePriority(move.X, newY));
                         }
                     }
                     break;
 
                 case Direction.West:
-                    if (x - 1 >= 0)
+                    newX = move.X - 1;
+                    if (newX >= 0)
                     {
-                        if (_lines[y][x - 1] != '#')
+                        if (_map[move.Y, newX].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((move.X - 1, move.Y, move.Direction, move.Total + 1), move.Total + 1);
+                            priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), CalculatePriority(newX, move.Y));
                         }
                     }
                     break;
 
                 case Direction.South:
-                    if (y + 1 < Size)
+                    newY = move.Y + 1;
+                    if (newY < Size)
                     {
-                        if (_lines[y + 1][x] != '#')
+                        if (_map[newY, move.X].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((move.X, move.Y + 1, move.Direction, move.Total + 1), move.Total + 1);
+                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), CalculatePriority(move.X, newY));
                         }
                     }
                     break;
@@ -111,5 +122,7 @@ public class ReindeerMaze
         }
     }
 
-    private int CalculatePriority(int x, int y) => y * Size + x;
+    private bool IsEndPoint(int x, int y) => _map[y, x].Sprite == 'E';
+
+    private int CalculatePriority(int x, int y) => (Size - y) * (Size - x);
 }
