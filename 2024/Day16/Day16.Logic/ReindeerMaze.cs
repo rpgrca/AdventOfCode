@@ -77,22 +77,43 @@ public class ReindeerMaze
             {
                 case Direction.East:
                     var newX = move.X + 1;
-                    if (newX < Size)
+                    if (newX < Size && _map[move.Y, newX].Sprite != '#')
                     {
-                        if (_map[move.Y, newX].Sprite != '#')
-                        {
-                            priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), CalculatePriority(newX, move.Y));
-                        }
+                        priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), move.Weight + 1);
+                    }
+
+                    var newY = move.Y - 1;
+                    if (newY >= 0 && _map[newY, move.X].Sprite != '#')
+                    {
+                        priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001), move.Weight + 1001);
                     }
                     break;
 
                 case Direction.North:
-                    var newY = move.Y - 1;
+                    newY = move.Y - 1;
                     if (newY >= 0)
                     {
-                        if (_lines[newY][move.X] != '#')
+                        if (_map[newY, move.X].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), CalculatePriority(move.X, newY));
+                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
+                        }
+                    }
+
+                    newX = move.X + 1;
+                    if (newX < Size)
+                    {
+                        if (_map[move.Y, newX].Sprite != '#')
+                        {
+                            priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001), move.Weight + 1001);
+                        }
+                    }
+
+                    newX = move.X - 1;
+                    if (newX >= 0)
+                    {
+                        if (_map[move.Y, newX].Sprite != '#')
+                        {
+                            priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001), move.Weight + 1001);
                         }
                     }
                     break;
@@ -103,7 +124,16 @@ public class ReindeerMaze
                     {
                         if (_map[move.Y, newX].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), CalculatePriority(newX, move.Y));
+                            priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), move.Weight + 1);
+                        }
+                    }
+
+                    newY = move.Y - 1;
+                    if (newY >= 0)
+                    {
+                        if (_map[newY, move.X].Sprite != '#')
+                        {
+                            priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001), move.Weight + 1001);
                         }
                     }
                     break;
@@ -114,7 +144,7 @@ public class ReindeerMaze
                     {
                         if (_map[newY, move.X].Sprite != '#')
                         {
-                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), CalculatePriority(move.X, newY));
+                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
                         }
                     }
                     break;
