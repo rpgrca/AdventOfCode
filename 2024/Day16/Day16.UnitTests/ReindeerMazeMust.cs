@@ -24,4 +24,15 @@ public class ReindeerMazeMust
         var sut = new ReindeerMaze(input);
         Assert.Equal((expectedX, expectedY), sut.StartPoint);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 13, 1)]
+    [InlineData(SECOND_SAMPLE_INPUT, 15, 1)]
+    [InlineData(PUZZLE_INPUT, 139, 1)]
+    public void LocateEndPointCorrectly(string input, int expectedX, int expectedY)
+    {
+        var sut = new ReindeerMaze(input);
+        Assert.Equal((expectedX, expectedY), sut.EndPoint);
+    }
+
 }
