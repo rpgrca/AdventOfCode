@@ -88,4 +88,15 @@ public class ReindeerMazeMust
         sut.Run();
         Assert.Equal(expectedScore, sut.LowestScore);
     }
+
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 7036)]
+    [InlineData(SECOND_SAMPLE_INPUT, 11048)]
+    public void SolveFirstSampleCorrectly(string input, int expectedScore)
+    {
+        var sut = new ReindeerMaze(input);
+        sut.Run();
+        Assert.Equal(expectedScore, sut.LowestScore);
+    }
+
 }

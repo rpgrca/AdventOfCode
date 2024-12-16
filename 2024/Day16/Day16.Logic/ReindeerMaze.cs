@@ -97,30 +97,21 @@ public class ReindeerMaze
 
                 case Direction.North:
                     newY = move.Y - 1;
-                    if (newY >= 0)
+                    if (newY >= 0 && _map[newY, move.X].Sprite != '#')
                     {
-                        if (_map[newY, move.X].Sprite != '#')
-                        {
-                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
-                        }
+                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
                     }
 
                     newX = move.X + 1;
-                    if (newX < Size)
+                    if (newX < Size && _map[move.Y, newX].Sprite != '#')
                     {
-                        if (_map[move.Y, newX].Sprite != '#')
-                        {
-                            priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001), move.Weight + 1001);
-                        }
+                        priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001), move.Weight + 1001);
                     }
 
                     newX = move.X - 1;
-                    if (newX >= 0)
+                    if (newX >= 0 && _map[move.Y, newX].Sprite != '#')
                     {
-                        if (_map[move.Y, newX].Sprite != '#')
-                        {
-                            priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001), move.Weight + 1001);
-                        }
+                        priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001), move.Weight + 1001);
                     }
                     break;
 
@@ -146,12 +137,9 @@ public class ReindeerMaze
 
                 case Direction.South:
                     newY = move.Y + 1;
-                    if (newY < Size)
+                    if (newY < Size && _map[newY, move.X].Sprite != '#')
                     {
-                        if (_map[newY, move.X].Sprite != '#')
-                        {
-                            priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
-                        }
+                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
                     }
 
                     newX = move.X + 1;
