@@ -131,13 +131,13 @@ public class WarehouseWoes
                             Position = (Position.X + 1, Position.Y);
                         }
                         break;
-                        /*
+
                     case 'v':
-                        if (MoveRobotVertically(Position.X, Position.Y, 0, 1))
+                        if (MoveRobotDown(Position.X, Position.Y))
                         {
-                            Position = (Position.X, Position.Y +1);
+                            Position = (Position.X, Position.Y + 1);
                         }
-                        break;*/
+                        break;
                 }
             }
 
@@ -171,6 +171,23 @@ public class WarehouseWoes
         return false;
     }
 
+    private bool MoveRobotDown(int x, int y)
+    {
+        var newX = x;
+        var newY = y + 1;
+
+        if (newX < 0 || newX >= Width || newY < 0 || newY >= Height) return false;
+        switch (_map[newY, x])
+        {
+            case '.':
+                return true;
+        }
+
+        return false;
+    }
+
+
+
     private bool MoveRobotUp(int x, int y)
     {
         var newX = x;
@@ -188,6 +205,11 @@ public class WarehouseWoes
                 break;
 
             case ']':
+                if (CanMoveBoxUp(newX - 1, newY) && CanMoveBoxUp(newX, newY))
+                {
+                    MoveBoxUp(newX - 1, newY, newX, newY);
+                    return true;
+                }
                 break;
 
             case '.':
