@@ -112,7 +112,6 @@ public class WarehouseWoes
         {
             foreach (var movement in _movements)
             {
-                Console.WriteLine($"{Plot()}\n");
                 switch (movement)
                 {
                     case '<':
@@ -142,8 +141,6 @@ public class WarehouseWoes
                         break;
                 }
             }
-
-            Console.WriteLine($"{Plot()}\n");
         }
 
         CalculateSumOfGpsCoordinates();
@@ -548,28 +545,5 @@ public class WarehouseWoes
         }
 
         _movements = string.Concat(sections[1].Split('\n')).ToCharArray();
-    }
-
-    public string Plot()
-    {
-        var sb = new StringBuilder();
-        for (var y = 0; y < Height; y++)
-        {
-            for (var x = 0; x < Width; x++)
-            {
-                if ((x, y) == Position)
-                {
-                    sb.Append('@');
-                }
-                else
-                {
-                    sb.Append(_map[y, x]);
-                }
-            }
-
-            sb.Append('\n');
-        }
-
-        return sb.ToString();
     }
 }

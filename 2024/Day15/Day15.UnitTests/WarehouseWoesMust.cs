@@ -554,12 +554,20 @@ public class WarehouseWoesMust
         Assert.Equal((5, 2), sut.Position);
         Assert.Equal(305+406, sut.SumOfGpsCoordinates);
     }
-/*
+
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
         var sut = new WarehouseWoes(SAMPLE_INPUT, true);
         sut.Execute();
         Assert.Equal(9021, sut.SumOfGpsCoordinates);
-    }*/
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new WarehouseWoes(PUZZLE_INPUT, true);
+        sut.Execute();
+        Assert.Equal(1463160, sut.SumOfGpsCoordinates);
+    }
 }
