@@ -373,6 +373,25 @@ public class WarehouseWoesMust
         Assert.Equal(expectedResult, sut.SumOfGpsCoordinates);
     }
 
+    [Theory]
+    [InlineData("#####\n##..#\n#OO.#\n#.O@#\n#...#\n#####\n\n<v<^")]
+    [InlineData("#####\n#.#.#\n#OO.#\n#.O@#\n#...#\n#####\n\n<v<^")]
+    public void DoNotMoveBoxUp_WhenLeftUpperBoxIsBlocked(string input)
+    {
+        /*
+            ##########   ##########
+            ####....##   ##..##..##
+            ##[][]..##   ##[][]..##
+            ##..[]@.##   ##..[]@.##
+            ##......##   ##......##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((4, 4), sut.Position);
+        Assert.Equal(202+204+303, sut.SumOfGpsCoordinates);
+    }
+
     [Fact]
     public void MoveBoxUp_WhenThereIsFreeRoomAfterBoxes()
     {
