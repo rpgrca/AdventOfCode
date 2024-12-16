@@ -10,6 +10,7 @@
 
 
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Day15.Logic;
 
@@ -253,11 +254,15 @@ public class WarehouseWoes
         if (_map[newY1, newX1] == ']')
         {
             MoveBoxUp(newX1-1, newY1, newX1, newY1);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[y1, x1] = '.';
         }
 
         if (_map[newY2, newX2] == '[')
         {
             MoveBoxUp(newX2, newY2, newX2+1, newY2);
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y2, x2] = '.';
         }
     }
 
@@ -380,5 +385,28 @@ public class WarehouseWoes
         }
 
         _movements = string.Concat(sections[1].Split('\n')).ToCharArray();
+    }
+
+    private string Plot()
+    {
+        var sb = new StringBuilder();
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                if ((x, y) == Position)
+                {
+                    sb.Append('@');
+                }
+                else
+                {
+                    sb.Append(_map[y, x]);
+                }
+            }
+
+            sb.Append('\n');
+        }
+
+        return sb.ToString();
     }
 }
