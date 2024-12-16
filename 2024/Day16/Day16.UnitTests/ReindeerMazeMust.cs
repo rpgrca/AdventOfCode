@@ -44,4 +44,28 @@ public class ReindeerMazeMust
         sut.Run();
         Assert.Equal(expectedScore, sut.LowestScore);
     }
+
+    [Fact]
+    public void MoveNorthCorrectly()
+    {
+        var sut = new ReindeerMaze("#####\n#..E#\n#..S#\n#...#\n#####");
+        sut.Run();
+        Assert.Equal(1001, sut.LowestScore);
+    }
+
+    [Fact]
+    public void MoveWestCorrectly()
+    {
+        var sut = new ReindeerMaze("#####\n#E.S#\n#...#\n#...#\n#####");
+        sut.Run();
+        Assert.Equal(2002, sut.LowestScore);
+    }
+
+    [Fact]
+    public void MoveSouthCorrectly()
+    {
+        var sut = new ReindeerMaze("#####\n#.S.#\n#...#\n#.E.#\n#####");
+        sut.Run();
+        Assert.Equal(1002, sut.LowestScore);
+    }
 }

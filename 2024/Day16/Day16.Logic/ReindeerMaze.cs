@@ -54,7 +54,9 @@ public class ReindeerMaze
         var y = StartPoint.Y;
 
         priorityQueue.Enqueue((x, y, Direction.East, 0), 0);
-        priorityQueue.Enqueue((x, y, Direction.North, 90), 90);
+        priorityQueue.Enqueue((x, y, Direction.North, 1000), 1000);
+        priorityQueue.Enqueue((x, y, Direction.West, 2000), 2000);
+        priorityQueue.Enqueue((x, y, Direction.South, 1000), 1000);
         while (priorityQueue.Count > 0)
         {
             var move = priorityQueue.Dequeue();
@@ -72,6 +74,36 @@ public class ReindeerMaze
                         if (_lines[y][x + 1] != '#')
                         {
                             priorityQueue.Enqueue((move.X + 1, move.Y, move.Direction, move.Total + 1), move.Total + 1);
+                        }
+                    }
+                    break;
+
+                case Direction.North:
+                    if (y - 1 >= 0)
+                    {
+                        if (_lines[y - 1][x] != '#')
+                        {
+                            priorityQueue.Enqueue((move.X, move.Y - 1, move.Direction, move.Total + 1), move.Total + 1);
+                        }
+                    }
+                    break;
+
+                case Direction.West:
+                    if (x - 1 >= 0)
+                    {
+                        if (_lines[y][x - 1] != '#')
+                        {
+                            priorityQueue.Enqueue((move.X - 1, move.Y, move.Direction, move.Total + 1), move.Total + 1);
+                        }
+                    }
+                    break;
+
+                case Direction.South:
+                    if (y + 1 < Size)
+                    {
+                        if (_lines[y + 1][x] != '#')
+                        {
+                            priorityQueue.Enqueue((move.X, move.Y + 1, move.Direction, move.Total + 1), move.Total + 1);
                         }
                     }
                     break;
