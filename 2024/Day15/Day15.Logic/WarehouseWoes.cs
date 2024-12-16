@@ -112,6 +112,7 @@ public class WarehouseWoes
         {
             foreach (var movement in _movements)
             {
+                Console.WriteLine($"{Plot()}\n");
                 switch (movement)
                 {
                     case '<':
@@ -142,6 +143,7 @@ public class WarehouseWoes
                 }
             }
 
+            Console.WriteLine($"{Plot()}\n");
         }
 
         CalculateSumOfGpsCoordinates();
@@ -311,19 +313,38 @@ public class WarehouseWoes
             return;
         }
 
-        if (_map[newY1, newX1] == ']')
+        if (_map[newY1, newX1] == ']' && _map[newY1, newX1-1] == '[')
         {
             MoveBoxDown(newX1-1, newY1, newX1, newY1);
-            _map[newY1, newX1] = _map[y1, x1];
-            _map[y1, x1] = '.';
-        }
+            if (_map[newY2, newX2] != '.')
+            {
+                // always '['
+                MoveBoxDown(newX2, newY2, newX2 + 1, newY2);
+            }
 
-        if (_map[newY2, newX2] == '[')
-        {
-            MoveBoxDown(newX2, newY2, newX2+1, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
             _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
             _map[y2, x2] = '.';
         }
+
+        if (_map[newY2, newX2] == '[' && _map[newY2, newX2+1] == ']')
+        {
+            MoveBoxDown(newX2, newY2, newX2+1, newY2);
+            _map[newY1, newX1] = _map[y1, x1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y1, x1] = '.';
+            _map[y2, x2] = '.';
+        }
+/*
+        if (_map[newY2, newX2] == ']' && _map[newY2, newX2-1] == '[')
+        {
+            MoveBoxDown(newX2 - 1, newY2, newX2, newY2);
+            _map[newY2, newX2 - 1] = _map[y2, x2-1];
+            _map[newY2, newX2] = _map[y2, x2];
+            _map[y2, x2-1] = '.';
+            _map[y2, x2] = '.';
+        }*/
     }
 
     private bool CanMoveBoxUp(int x, int y)
@@ -463,7 +484,7 @@ public class WarehouseWoes
         _movements = string.Concat(sections[1].Split('\n')).ToCharArray();
     }
 
-    private string Plot()
+    public string Plot()
     {
         var sb = new StringBuilder();
         for (var y = 0; y < Height; y++)

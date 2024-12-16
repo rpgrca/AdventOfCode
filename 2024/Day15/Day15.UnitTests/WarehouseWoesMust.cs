@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Day15.Logic;
 using static Day15.UnitTests.Constants;
 
@@ -502,20 +501,65 @@ public class WarehouseWoesMust
         Assert.Equal(203+302+304, sut.SumOfGpsCoordinates);
     }
 
+    [Theory]
+    [InlineData("#####\n#...#\n#.O@#\n#OO.#\n#...#\n#####\n\n<^<v", 4)]
+    [InlineData("#####\n#...#\n#.O@#\n#OO.#\n#...#\n#####\n\n<^<<v", 3)]
+    public void MoveBoxDown_WhenThereIsFreeRoomAfterBoxes(string input, int expectedX)
+    {
+        /*
+            ##########   ##########
+            ##......##   ##......##
+            ##..[]@.##   ##..[]@.##
+            ##[][]..##   ##[][]..##
+            ##......##   ##......##
+            ##########   ##########
+        */
+        var sut = new WarehouseWoes(input, true);
+        sut.Execute();
+        Assert.Equal((expectedX, 2), sut.Position);
+        Assert.Equal(303+402+404, sut.SumOfGpsCoordinates);
+    }
+
     [Fact]
-    public void MoveBoxDown_WhenThereIsFreeRoomAfterBoxes()
+    public void SolveSecondMiniSampleCorrectly()
+    {
+        var sut = new WarehouseWoes(@"#######
+#...#.#
+#.....#
+#..OO@#
+#..O..#
+#.....#
+#######
+
+<vv<<^^<<^^", true);
+        sut.Execute();
+        Assert.Equal((5, 2), sut.Position);
+        Assert.Equal(105+207+306, sut.SumOfGpsCoordinates);
+    }
+
+
+    [Fact]
+    public void MoveDown_WhenBoxesHaveRoomAndAreStackedRight()
     {
         /*
             ##########
             ##......##
-            ##..[]@.##
-            ##[][]..##
+            ##@.[]..##
+            ##....[]##
             ##......##
             ##########
         */
-        var sut = new WarehouseWoes("#####\n#...#\n#.O@#\n#OO.#\n#...#\n#####\n\n<^<v", true);
+        var sut = new WarehouseWoes("#####\n#...#\n#@O.#\n#..O#\n#...#\n######\n\n>>^>v", true);
         sut.Execute();
-        Assert.Equal((4, 2), sut.Position);
-        Assert.Equal(303+402+404, sut.SumOfGpsCoordinates);
+        Assert.Equal((5, 2), sut.Position);
+        Assert.Equal(305+406, sut.SumOfGpsCoordinates);
     }
+/*
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new WarehouseWoes(SAMPLE_INPUT, true);
+        sut.Execute();
+        Assert.Equal(9021, sut.SumOfGpsCoordinates);
+    }*/
 }
