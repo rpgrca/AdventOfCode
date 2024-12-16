@@ -3,6 +3,8 @@ namespace Day15.Logic;
 public class WarehouseWoes
 {
     private readonly string _input;
+    private readonly IOption _option;
+    private readonly Func<string, string> _mapConverter;
     private readonly bool _wide;
 
     public int Width { get; private set; }
@@ -16,24 +18,23 @@ public class WarehouseWoes
     public (int X, int Y) Position { get; private set; }
     public int SumOfGpsCoordinates { get; private set; }
 
-    public WarehouseWoes(string input, bool wide = false)
+    public static WarehouseWoes Create(string input) =>
+        new(input, new NormalOption());
+
+    public static WarehouseWoes CreateWiderMap(string input) =>
+        new(input, new WideOption());
+
+    private WarehouseWoes(string input, IOption option)
     {
         _input = input;
-        _wide = wide;
-        if (_wide)
-        {
-            WideParse();
-        }
-        else
-        {
-            Parse();
-        }
+        _option = option;
+        Parse();
     }
 
     private void Parse()
     {
         var sections = _input.Split("\n\n");
-        var lines = sections[0].Split('\n');
+        var lines = _option.Transform(sections[0]).Split('\n');
         Width = lines[0].Length;
         Height = lines.Length;
 
@@ -61,7 +62,7 @@ public class WarehouseWoes
 
     public void Execute()
     {
-        if (! _wide)
+        if (! _option.Wide())
         {
             foreach (var movement in _movements)
             {
@@ -299,40 +300,5 @@ public class WarehouseWoes
                 }
             }
         }
-    }
-
-    private void WideParse()
-    {
-        var sections = _input.Split("\n\n");
-        var lines = sections[0]
-            .Replace("#", "##")
-            .Replace("O", "[]")
-            .Replace(".", "..")
-            .Replace("@", "@.")
-            .Split('\n');
-
-        Height = lines.Length;
-        Width = lines[0].Length;
-
-        _map = new char[Height, Width];
-        for (var y = 0; y < Height; y++)
-        {
-            for (var x = 0; x < Width; x++)
-            {
-                switch (lines[y][x])
-                {
-                    case '@':
-                        Position = (x, y);
-                        _map[y, x] = '.';
-                        break;
-
-                    default:
-                        _map[y, x] = lines[y][x];
-                        break;
-                }
-            }
-        }
-
-        _movements = string.Concat(sections[1].Split('\n')).ToCharArray();
     }
 }
