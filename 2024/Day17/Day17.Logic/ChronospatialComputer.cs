@@ -59,7 +59,7 @@ public class ChronospatialComputer
                             A /= C;
                             break;
                         case 7:
-                            break;
+                            throw new ArgumentException("Invalid operand 7");
                     }
                     IP++;
                     break;
