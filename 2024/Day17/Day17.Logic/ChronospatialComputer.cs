@@ -1,3 +1,4 @@
+
 namespace Day17.Logic;
 
 public class ChronospatialComputer
@@ -10,6 +11,7 @@ public class ChronospatialComputer
     public int C { get; private set; }
     public int IP { get; private set;}
     public int Length => _program.Count;
+    public string OUT { get; private set; }
 
     public ChronospatialComputer(string input)
     {
@@ -41,7 +43,7 @@ public class ChronospatialComputer
             switch (opcode)
             {
                 case 0: // adv
-                    A /= GetOperand(operand);
+                    A /= (int)Math.Pow(2, GetComboOperand(operand));
                     break;
 
                 case 1: // bxl
@@ -49,7 +51,7 @@ public class ChronospatialComputer
                     break;
 
                 case 2: // bst
-                    B = GetOperand(operand) % 8;
+                    B = GetComboOperand(operand) % 8;
                     break;
 
                 case 3: // jnz
@@ -59,20 +61,32 @@ public class ChronospatialComputer
                     }
                     break;
 
-                case 4:
+                case 4: // bxc
                     B ^= C;
+                    break;
+
+                case 5: // out
+                    var result = GetComboOperand(operand) % 8;
+                    if (string.IsNullOrEmpty(OUT))
+                    {
+                        OUT += result;
+                    }
+                    else
+                    {
+                        OUT += $",{result}";
+                    }
                     break;
             }
         }
     }
 
-    private int GetOperand(int operand) =>
+    private int GetComboOperand(int operand) =>
         operand switch
         {
             < 4 => operand,
-            4 => (int)Math.Pow(2, A),
-            5 => (int)Math.Pow(2, B),
-            6 => (int)Math.Pow(2, C),
+            4 => A,
+            5 => B,
+            6 => C,
             _ => throw new ArgumentException($"Invalid operand {operand}")
         };
 }
