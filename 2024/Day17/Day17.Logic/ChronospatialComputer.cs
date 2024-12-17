@@ -17,6 +17,7 @@ public class ChronospatialComputer
     {
         _input = input;
         var sections = _input.Split("\n\n");
+        OUT = string.Empty;
         foreach (var section in sections[0].Split('\n'))
         {
             var words = section.Split(':', StringSplitOptions.TrimEntries);
