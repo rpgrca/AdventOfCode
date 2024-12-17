@@ -176,4 +176,12 @@ public class ChronospatialComputerMust
         Assert.Equal(expectedC, sut.C);
         Assert.Equal(expectedOut, sut.OUT);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new ChronospatialComputer(SAMPLE_INPUT);
+        sut.Run();
+        Assert.Equal("4,6,3,5,6,3,5,2,1,0", sut.OUT);
+    }
 }
