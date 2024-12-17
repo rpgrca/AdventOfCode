@@ -8,6 +8,12 @@ Register C: 0
 
 Program: 0,1,5,4,3,0";
 
+    public const string SECOND_SAMPLE_INPUT = @"Register A: 2024
+Register B: 0
+Register C: 0
+
+Program: 0,3,5,4,3,0";
+
     public const string PUZZLE_INPUT = @"Register A: 63281501
 Register B: 0
 Register C: 0

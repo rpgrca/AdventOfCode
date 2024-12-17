@@ -1,9 +1,9 @@
-
 namespace Day17.Logic;
 
 public class ChronospatialComputer
 {
     private readonly string _input;
+    private readonly string _textProgram;
     private readonly List<int> _program;
 
     public int A { get; private set; }
@@ -12,6 +12,7 @@ public class ChronospatialComputer
     public int IP { get; private set;}
     public int Length => _program.Count;
     public string OUT { get; private set; }
+    public int Answer { get; private set; }
 
     public ChronospatialComputer(string input)
     {
@@ -30,6 +31,7 @@ public class ChronospatialComputer
         }
 
         var programs = sections[1].Split(':', StringSplitOptions.TrimEntries);
+        _textProgram = programs[1];
         _program = programs[1].Split(',').Select(int.Parse).ToList();
     }
 
@@ -98,4 +100,21 @@ public class ChronospatialComputer
             6 => C,
             _ => throw new ArgumentException($"Invalid operand {operand}")
         };
+
+    public void Solve()
+    {
+        var originalB = B;
+        var originalC = C;
+        var originalA = 0;
+        while (OUT != _textProgram)
+        {
+            A = originalA++;
+            B = originalB;
+            C = originalC;
+            OUT = string.Empty;
+            Run();
+        }
+
+        Answer = originalA - 1;
+    }
 }

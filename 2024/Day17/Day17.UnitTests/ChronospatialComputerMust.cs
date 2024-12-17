@@ -192,4 +192,12 @@ public class ChronospatialComputerMust
         sut.Run();
         Assert.Equal("3,4,3,1,7,6,5,6,0", sut.OUT);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ChronospatialComputer(SECOND_SAMPLE_INPUT);
+        sut.Solve();
+        Assert.Equal(117440, sut.Answer);
+    }
 }
