@@ -109,6 +109,7 @@ public class ReindeerMazeMust
 
     [Theory]
     [InlineData("######\n#...E#\n#.#.##\n#.#.##\n#S..##\n######", 11)]
+    [InlineData("########\n#.....E#\n#.....##\n#.....##\n#.....##\n#.....##\n#S....##\n########", 31)]
     public void CountTilesForEverySolutionCorrectly(string input, int expectedCount)
     {
         var sut = new ReindeerMaze(input);
@@ -125,12 +126,12 @@ public class ReindeerMazeMust
         sut.Run2();
         Assert.Equal(expectedCount, sut.ShortestPathTiles);
     }
-/*
+
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new ReindeerMaze(PUZZLE_INPUT);
         sut.Run2();
         Assert.Equal(0, sut.ShortestPathTiles);
-    }*/
+    }
 }
