@@ -184,4 +184,12 @@ public class ChronospatialComputerMust
         sut.Run();
         Assert.Equal("4,6,3,5,6,3,5,2,1,0", sut.OUT);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ChronospatialComputer(PUZZLE_INPUT);
+        sut.Run();
+        Assert.Equal("3,4,3,1,7,6,5,6,0", sut.OUT);
+    }
 }
