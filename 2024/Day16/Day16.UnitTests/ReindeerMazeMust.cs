@@ -116,11 +116,13 @@ public class ReindeerMazeMust
         Assert.Equal(expectedCount, sut.ShortestPathTiles);
     }
 
-    [Fact]
-    public void SolveSecondSampleCorrectly()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 45)]
+    [InlineData(SECOND_SAMPLE_INPUT, 64)]
+    public void SolveSecondSampleCorrectly(string input, int expectedCount)
     {
-        var sut = new ReindeerMaze(SAMPLE_INPUT);
+        var sut = new ReindeerMaze(input);
         sut.Run2();
-        Assert.Equal(45, sut.ShortestPathTiles);
+        Assert.Equal(expectedCount, sut.ShortestPathTiles);
     }
 }
