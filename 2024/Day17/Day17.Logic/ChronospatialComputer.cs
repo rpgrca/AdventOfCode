@@ -80,6 +80,10 @@ public class ChronospatialComputer
                 case 6: // bdv
                     B = A / (int)Math.Pow(2, GetComboOperand(operand));
                     break;
+
+                case 7: // cdv
+                    C = A / (int)Math.Pow(2, GetComboOperand(operand));
+                    break;
             }
         }
     }
