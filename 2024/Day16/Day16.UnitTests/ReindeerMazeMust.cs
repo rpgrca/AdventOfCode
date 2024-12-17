@@ -125,4 +125,12 @@ public class ReindeerMazeMust
         sut.Run2();
         Assert.Equal(expectedCount, sut.ShortestPathTiles);
     }
+/*
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ReindeerMaze(PUZZLE_INPUT);
+        sut.Run2();
+        Assert.Equal(0, sut.ShortestPathTiles);
+    }*/
 }

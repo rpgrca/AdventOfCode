@@ -18,7 +18,7 @@ public class ReindeerMaze
     private string _input;
     private string[] _lines;
     private readonly Tile[,] _map;
-    private readonly HashSet<(int X, int Y)> _uniqueSolutionTiles;
+    private readonly HashSet<int> _uniqueSolutionTiles;
 
     public int Size => _lines.Length;
 
@@ -176,15 +176,17 @@ public class ReindeerMaze
     {
         Run();
 
-        _uniqueSolutionTiles.Add((StartPoint.X, StartPoint.Y));
-        _uniqueSolutionTiles.Add((EndPoint.X, EndPoint.Y));
-        var tiles = new LinkedList<(int X, int Y)>();
-        FindPath(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0);
+        _uniqueSolutionTiles.Add(StartPoint.Y * 1000 + StartPoint.X);
+        _uniqueSolutionTiles.Add(EndPoint.Y * 1000 + EndPoint.X);
+
+        var tiles = new HashSet<int>();
+        var (turns, steps) = Math.DivRem(LowestScore, 1000);
+        FindPath(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0, turns, steps);
     }
 
-    private void FindPath(int x, int y, Direction direction, LinkedList<(int X, int Y)> tiles, int weight)
+    private void FindPath(int x, int y, Direction direction, HashSet<int> tiles, int weight, int turns, int steps)
     {
-        if (tiles.Contains((x, y)))
+        if (tiles.Contains(y * 1000 + x))
         {
             return;
         }
@@ -198,18 +200,23 @@ public class ReindeerMaze
         {
             if (IsEndPoint(x, y))
             {
-                var current = tiles.First;
-                while (current != null)
+                foreach (var tile in tiles)
                 {
-                    _uniqueSolutionTiles.Add(current.Value);
-                    current = current.Next;
+                    _uniqueSolutionTiles.Add(tile);
                 }
+
+                Console.WriteLine(_uniqueSolutionTiles.Count);
             }
 
             return;
         }
 
-        tiles.AddLast((x, y));
+        if (turns < 0 || steps < 0)
+        {
+            return;
+        }
+
+        tiles.Add(y * 1000 + x);
 
         var incrementedX = x + 1;
         var incrementedY = y + 1;
@@ -221,25 +228,11 @@ public class ReindeerMaze
             switch (direction)
             {
                 case Direction.East:
-                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1);
+                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.North:
                 case Direction.South:
-                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1001);
-                    break;
-            }
-        }
-
-        if (direction != Direction.East && _map[y, decrementedX].Sprite != '#')
-        {
-            switch (direction)
-            {
-                case Direction.West:
-                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1);
-                    break;
-                case Direction.North:
-                case Direction.South:
-                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1001);
+                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
@@ -249,11 +242,25 @@ public class ReindeerMaze
             switch (direction)
             {
                 case Direction.North:
-                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1);
+                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.East:
                 case Direction.West:
-                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1001);
+                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1001, turns - 1, steps - 1);
+                    break;
+            }
+        }
+
+        if (direction != Direction.East && _map[y, decrementedX].Sprite != '#')
+        {
+            switch (direction)
+            {
+                case Direction.West:
+                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1, turns, steps - 1);
+                    break;
+                case Direction.North:
+                case Direction.South:
+                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
@@ -263,15 +270,15 @@ public class ReindeerMaze
             switch (direction)
             {
                 case Direction.South:
-                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1);
+                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.East:
                 case Direction.West:
-                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1001);
+                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
 
-        tiles.RemoveLast();
+        tiles.Remove(y * 1000 + x);
     }
 }
