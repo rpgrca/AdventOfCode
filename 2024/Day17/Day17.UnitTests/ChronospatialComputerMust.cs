@@ -24,9 +24,9 @@ public class ChronospatialComputerMust
     [InlineData("Register A: 64\nRegister B: 0\nRegister C: 0\n\nProgram: 0,1", 64, 0, 0)]
     [InlineData("Register A: 64\nRegister B: 0\nRegister C: 0\n\nProgram: 0,2", 32, 0, 0)]
     [InlineData("Register A: 64\nRegister B: 0\nRegister C: 0\n\nProgram: 0,3", 21, 0, 0)]
-    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,4", 1, 2, 5)]
-    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,5", 32, 2, 5)]
-    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,6", 12, 2, 5)]
+    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,4", 0, 2, 5)]
+    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,5", 16, 2, 5)]
+    [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,6", 2, 2, 5)]
     public void ExecuteOpcodeAdvCorrectly(string input, int expectedA, int expectedB, int expectedC)
     {
         var sut = new ChronospatialComputer(input);

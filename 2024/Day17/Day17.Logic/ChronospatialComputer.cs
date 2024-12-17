@@ -50,13 +50,13 @@ public class ChronospatialComputer
                             A /= operand;
                             break;
                         case 4:
-                            A /= A;
+                            A /= (long)Math.Pow(2, A);
                             break;
                         case 5:
-                            A /= B;
+                            A /= (long)Math.Pow(2, B);
                             break;
                         case 6:
-                            A /= C;
+                            A /= (long)Math.Pow(2, C);
                             break;
                         case 7:
                             throw new ArgumentException("Invalid operand 7");
