@@ -5,9 +5,9 @@ public class ChronospatialComputer
     private readonly string _input;
     private readonly List<int> _program;
 
-    public long A { get; private set; }
-    public long B { get; private set; }
-    public long C { get; private set; }
+    public int A { get; private set; }
+    public int B { get; private set; }
+    public int C { get; private set; }
     public int IP { get; private set;}
     public int Length => _program.Count;
 
@@ -20,9 +20,9 @@ public class ChronospatialComputer
             var words = section.Split(':', StringSplitOptions.TrimEntries);
             switch (words[0][^1])
             {
-                case 'A': A = long.Parse(words[1]); break;
-                case 'B': B = long.Parse(words[1]); break;
-                case 'C': C = long.Parse(words[1]); break;
+                case 'A': A = int.Parse(words[1]); break;
+                case 'B': B = int.Parse(words[1]); break;
+                case 'C': C = int.Parse(words[1]); break;
             }
         }
 
@@ -36,34 +36,28 @@ public class ChronospatialComputer
         while (IP < Length)
         {
             var opcode = _program[IP++];
-            var operand = _program[IP];
+            var operand = _program[IP++];
 
             switch (opcode)
             {
                 case 0: // adv
-                    switch (operand)
-                    {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                            A /= operand;
-                            break;
-                        case 4:
-                            A /= (long)Math.Pow(2, A);
-                            break;
-                        case 5:
-                            A /= (long)Math.Pow(2, B);
-                            break;
-                        case 6:
-                            A /= (long)Math.Pow(2, C);
-                            break;
-                        case 7:
-                            throw new ArgumentException("Invalid operand 7");
-                    }
-                    IP++;
+                    A /= GetOperand(operand);
+                    break;
+
+                case 1: // bxl
+                    B ^= operand;
                     break;
             }
         }
     }
+
+    private int GetOperand(int operand) =>
+        operand switch
+        {
+            < 4 => operand,
+            4 => (int)Math.Pow(2, A),
+            5 => (int)Math.Pow(2, B),
+            6 => (int)Math.Pow(2, C),
+            _ => throw new ArgumentException($"Invalid operand {operand}")
+        };
 }
