@@ -27,7 +27,7 @@ public class ChronospatialComputerMust
     [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,4", 0, 2, 5)]
     [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,5", 16, 2, 5)]
     [InlineData("Register A: 64\nRegister B: 2\nRegister C: 5\n\nProgram: 0,6", 2, 2, 5)]
-    public void ExecuteAdvOpcodeCorrectly(string input, int expectedA, int expectedB, int expectedC)
+    public void DivideAByOperand_WhenExecutingAdvOpcode(string input, int expectedA, int expectedB, int expectedC)
     {
         var sut = new ChronospatialComputer(input);
         sut.Run();
@@ -79,6 +79,18 @@ public class ChronospatialComputerMust
     [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,5", 2, 0, 3)]
     [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,6", 2, 0, 3)]
     public void ExecuteBstOpcodeCorrectly(string input, int expectedA, int expectedB, int expectedC)
+    {
+        var sut = new ChronospatialComputer(input);
+        sut.Run();
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedB, sut.B);
+        Assert.Equal(expectedC, sut.C);
+    }
+
+    [Theory]
+    [InlineData("Register A: 0\nRegister B: 15\nRegister C: 3\n\nProgram: 3,4,0,2", 0, 15, 3)]
+    [InlineData("Register A: 64\nRegister B: 15\nRegister C: 3\n\nProgram: 3,4,0,2", 64, 15, 3)]
+    public void ExecuteJnzOpcodeCorrectly(string input, int expectedA, int expectedB, int expectedC)
     {
         var sut = new ChronospatialComputer(input);
         sut.Run();

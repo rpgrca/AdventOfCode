@@ -51,6 +51,13 @@ public class ChronospatialComputer
                 case 2: // bst
                     B = GetOperand(operand) % 8;
                     break;
+
+                case 3: // jnz
+                    if (A != 0)
+                    {
+                        IP = operand;
+                    }
+                    break;
             }
         }
     }
