@@ -2,10 +2,10 @@ namespace Day16.Logic;
 
 public enum Direction
 {
-    East,
-    North,
-    West,
-    South
+    East = 0,
+    North = 1,
+    West = 2,
+    South = 3
 }
 
 public class ReindeerMaze
@@ -13,6 +13,7 @@ public class ReindeerMaze
     private string _input;
     private string[] _lines;
     private readonly char[,] _map;
+    private readonly int[,,] _weight;
     private readonly HashSet<int> _uniqueSolutionTiles;
 
     public int Size => _lines.Length;
@@ -28,6 +29,7 @@ public class ReindeerMaze
         _input = input;
         _lines = _input.Split('\n');
         _map = new char[Size, Size];
+        _weight = new int[Size, Size, 4];
         _uniqueSolutionTiles = new();
         LowestScore = int.MaxValue;
 
@@ -49,6 +51,11 @@ public class ReindeerMaze
                 {
                     _map[y, x] = _lines[y][x];
                 }
+
+                _weight[y, x, (int)Direction.North] = int.MaxValue;
+                _weight[y, x, (int)Direction.West] = int.MaxValue;
+                _weight[y, x, (int)Direction.South] = int.MaxValue;
+                _weight[y, x, (int)Direction.East] = int.MaxValue;
             }
         }
     }
@@ -176,18 +183,7 @@ public class ReindeerMaze
         var (turns, steps) = Math.DivRem(LowestScore, 1000);
         FindPath(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0, turns, steps);
     }
-/*
-    public void Run3()
-    {
-        Run();
-        _uniqueSolutionTiles.Add(StartPoint.Y * 1000 + StartPoint.X);
-        _uniqueSolutionTiles.Add(EndPoint.Y * 1000 + EndPoint.X);
 
-        var tiles = new HashSet<int>();
-        var (turns, steps) = Math.DivRem(LowestScore, 1000);
-        FindPath2(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0, turns, steps);
-    }
-*/
     private void FindPath(int x, int y, Direction direction, HashSet<int> tiles, int weight, int turns, int steps)
     {
         if (turns < 0 || steps < 0)
@@ -285,7 +281,18 @@ public class ReindeerMaze
 
         tiles.Remove(y * 1000 + x);
     }
-/*
+
+    public void Run3()
+    {
+        Run();
+        _uniqueSolutionTiles.Add(StartPoint.Y * 1000 + StartPoint.X);
+        _uniqueSolutionTiles.Add(EndPoint.Y * 1000 + EndPoint.X);
+
+        var tiles = new HashSet<int>();
+        var (turns, steps) = Math.DivRem(LowestScore, 1000);
+        FindPath2(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0, turns, steps);
+    }
+
     private void FindPath2(int x, int y, Direction direction, HashSet<int> tiles, int weight, int turns, int steps)
     {
         if (turns < 0 || steps < 0)
@@ -318,6 +325,13 @@ public class ReindeerMaze
             return;
         }
 
+        if (_weight[y, x, (int)direction] < weight)
+        {
+            return;
+        }
+
+        _weight[y, x, (int)direction] = weight;
+
         tiles.Add(y * 1000 + x);
 
         var incrementedX = x + 1;
@@ -325,64 +339,62 @@ public class ReindeerMaze
         var decrementedX = x - 1;
         var decrementedY = y - 1;
 
-        if (direction != Direction.West && _map[y, incrementedX].Sprite != '#')
+        if (direction != Direction.West && _map[y, incrementedX] != '#')
         {
             switch (direction)
             {
                 case Direction.East:
-                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1, turns, steps - 1);
+                    FindPath2(incrementedX, y, Direction.East, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.North:
                 case Direction.South:
-                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1001, turns - 1, steps - 1);
+                    FindPath2(incrementedX, y, Direction.East, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
 
-        if (direction != Direction.South && _map[decrementedY, x].Sprite != '#')
+        if (direction != Direction.South && _map[decrementedY, x] != '#')
         {
             switch (direction)
             {
                 case Direction.North:
-                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1, turns, steps - 1);
+                    FindPath2(x, decrementedY, Direction.North, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.East:
                 case Direction.West:
-                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1001, turns - 1, steps - 1);
+                    FindPath2(x, decrementedY, Direction.North, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
 
-        if (direction != Direction.East && _map[y, decrementedX].Sprite != '#')
+        if (direction != Direction.East && _map[y, decrementedX] != '#')
         {
             switch (direction)
             {
                 case Direction.West:
-                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1, turns, steps - 1);
+                    FindPath2(decrementedX, y, Direction.West, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.North:
                 case Direction.South:
-                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1001, turns - 1, steps - 1);
+                    FindPath2(decrementedX, y, Direction.West, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
 
-        if (direction != Direction.North && _map[incrementedY, x].Sprite != '#')
+        if (direction != Direction.North && _map[incrementedY, x] != '#')
         {
             switch (direction)
             {
                 case Direction.South:
-                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1, turns, steps - 1);
+                    FindPath2(x, incrementedY, Direction.South, tiles, weight + 1, turns, steps - 1);
                     break;
                 case Direction.East:
                 case Direction.West:
-                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1001, turns - 1, steps - 1);
+                    FindPath2(x, incrementedY, Direction.South, tiles, weight + 1001, turns - 1, steps - 1);
                     break;
             }
         }
 
         tiles.Remove(y * 1000 + x);
     }
-    */
-
 }
