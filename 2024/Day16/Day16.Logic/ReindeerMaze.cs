@@ -1,4 +1,3 @@
-
 namespace Day16.Logic;
 
 public enum Direction
@@ -12,8 +11,6 @@ public enum Direction
 public struct Tile
 {
     public char Sprite;
-    //public Direction Direction;
-    //public int Weight;
 }
 
 public class ReindeerMaze
@@ -21,6 +18,7 @@ public class ReindeerMaze
     private string _input;
     private string[] _lines;
     private readonly Tile[,] _map;
+    private readonly HashSet<(int X, int Y)> _uniqueSolutionTiles;
 
     public int Size => _lines.Length;
 
@@ -28,11 +26,14 @@ public class ReindeerMaze
     public (int X, int Y) EndPoint { get; private set; }
     public int LowestScore { get; private set; }
 
+    public int ShortestPathTiles => _uniqueSolutionTiles.Count;
+
     public ReindeerMaze(string input)
     {
         _input = input;
         _lines = _input.Split('\n');
         _map = new Tile[Size, Size];
+        _uniqueSolutionTiles = new();
 
         for (var y = 0; y < Size; y++)
         {
@@ -58,11 +59,12 @@ public class ReindeerMaze
 
     public void Run()
     {
-        var priorityQueue = new PriorityQueue<(int X, int Y, Direction Direction, int Weight), int>();
-        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.East, 0), 0);
-        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.North, 1000), 1000);
-        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.West, 2000), 2000);
-        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.South, 1000), 1000);
+        var visited = new HashSet<(int X, int Y, Direction)>();
+        var priorityQueue = new PriorityQueue<(int X, int Y, Direction Direction, int Weight, int Turns, int Steps), int>();
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.East, 0, 0, 0), 0);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.North, 1000, 1, 0), 1000);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.West, 2000, 2, 0), 2000);
+        priorityQueue.Enqueue((StartPoint.X, StartPoint.Y, Direction.South, 1000, 1, 0), 1000);
 
         while (priorityQueue.Count > 0)
         {
@@ -73,25 +75,32 @@ public class ReindeerMaze
                 return;
             }
 
+            if (visited.Contains((move.X, move.Y, move.Direction)))
+            {
+                continue;
+            }
+
+            visited.Add((move.X, move.Y, move.Direction));
+
             switch (move.Direction)
             {
                 case Direction.East:
                     var newX = move.X + 1;
                     if (newX < Size && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), move.Weight + 1);
+                        priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1, move.Turns, move.Steps + 1), move.Weight + 1);
                     }
 
                     var newY = move.Y - 1;
                     if (newY >= 0 && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
 
                     newY = move.Y + 1;
                     if (newY < Size && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, Direction.South, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((move.X, newY, Direction.South, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
                     break;
 
@@ -99,19 +108,19 @@ public class ReindeerMaze
                     newY = move.Y - 1;
                     if (newY >= 0 && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
+                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1, move.Turns, move.Steps + 1), move.Weight + 1);
                     }
 
                     newX = move.X + 1;
                     if (newX < Size && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
 
                     newX = move.X - 1;
                     if (newX >= 0 && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
                     break;
 
@@ -119,19 +128,19 @@ public class ReindeerMaze
                     newX = move.X - 1;
                     if (newX >= 0 && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1), move.Weight + 1);
+                        priorityQueue.Enqueue((newX, move.Y, move.Direction, move.Weight + 1, move.Turns, move.Steps + 1), move.Weight + 1);
                     }
 
                     newY = move.Y - 1;
                     if (newY >= 0 && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((move.X, newY, Direction.North, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
 
                     newY = move.Y + 1;
                     if (newY < Size && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, Direction.South, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((move.X, newY, Direction.South, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
                     break;
 
@@ -139,19 +148,19 @@ public class ReindeerMaze
                     newY = move.Y + 1;
                     if (newY < Size && _map[newY, move.X].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1), move.Weight + 1);
+                        priorityQueue.Enqueue((move.X, newY, move.Direction, move.Weight + 1, move.Turns, move.Steps + 1), move.Weight + 1);
                     }
 
                     newX = move.X + 1;
                     if (newX < Size && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((newX, move.Y, Direction.East, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
 
                     newX = move.X - 1;
                     if (newX >= 0 && _map[move.Y, newX].Sprite != '#')
                     {
-                        priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001), move.Weight + 1001);
+                        priorityQueue.Enqueue((newX, move.Y, Direction.West, move.Weight + 1001, move.Turns + 1, move.Steps + 1), move.Weight + 1001);
                     }
                     break;
             }
@@ -161,4 +170,108 @@ public class ReindeerMaze
     private bool IsEndPoint(int x, int y) => _map[y, x].Sprite == 'E';
 
     private int CalculatePriority(int x, int y) => (Size - y) * (Size - x);
+
+
+    public void Run2()
+    {
+        Run();
+
+        _uniqueSolutionTiles.Add((StartPoint.X, StartPoint.Y));
+        _uniqueSolutionTiles.Add((EndPoint.X, EndPoint.Y));
+        var tiles = new LinkedList<(int X, int Y)>();
+        FindPath(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0);
+    }
+
+    private void FindPath(int x, int y, Direction direction, LinkedList<(int X, int Y)> tiles, int weight)
+    {
+        if (tiles.Contains((x, y)))
+        {
+            return;
+        }
+
+        if (weight > LowestScore)
+        {
+            return;
+        }
+
+        if (weight == LowestScore)
+        {
+            if (IsEndPoint(x, y))
+            {
+                var current = tiles.First;
+                while (current != null)
+                {
+                    _uniqueSolutionTiles.Add(current.Value);
+                    current = current.Next;
+                }
+            }
+
+            return;
+        }
+
+        tiles.AddLast((x, y));
+
+        var incrementedX = x + 1;
+        var incrementedY = y + 1;
+        var decrementedX = x - 1;
+        var decrementedY = y - 1;
+
+        if (direction != Direction.West && _map[y, incrementedX].Sprite != '#')
+        {
+            switch (direction)
+            {
+                case Direction.East:
+                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1);
+                    break;
+                case Direction.North:
+                case Direction.South:
+                    FindPath(incrementedX, y, Direction.East, tiles, weight + 1001);
+                    break;
+            }
+        }
+
+        if (direction != Direction.East && _map[y, decrementedX].Sprite != '#')
+        {
+            switch (direction)
+            {
+                case Direction.West:
+                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1);
+                    break;
+                case Direction.North:
+                case Direction.South:
+                    FindPath(decrementedX, y, Direction.West, tiles, weight + 1001);
+                    break;
+            }
+        }
+
+        if (direction != Direction.South && _map[decrementedY, x].Sprite != '#')
+        {
+            switch (direction)
+            {
+                case Direction.North:
+                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1);
+                    break;
+                case Direction.East:
+                case Direction.West:
+                    FindPath(x, decrementedY, Direction.North, tiles, weight + 1001);
+                    break;
+            }
+        }
+
+        if (direction != Direction.North && _map[incrementedY, x].Sprite != '#')
+        {
+            switch (direction)
+            {
+                case Direction.South:
+                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1);
+                    break;
+                case Direction.East:
+                case Direction.West:
+                    FindPath(x, incrementedY, Direction.South, tiles, weight + 1001);
+                    break;
+            }
+        }
+
+        tiles.RemoveLast();
+    }
 }

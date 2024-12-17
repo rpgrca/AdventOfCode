@@ -56,9 +56,9 @@ public class ReindeerMazeMust
     [Fact]
     public void MoveWestCorrectly()
     {
-        var sut = new ReindeerMaze("#####\n#E.S#\n#...#\n#...#\n#####");
+        var sut = new ReindeerMaze("#####\n#E..#\n#..S#\n#...#\n#####");
         sut.Run();
-        Assert.Equal(2002, sut.LowestScore);
+        Assert.Equal(2003, sut.LowestScore);
     }
 
     [Fact]
@@ -99,4 +99,28 @@ public class ReindeerMazeMust
         Assert.Equal(expectedScore, sut.LowestScore);
     }
 
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new ReindeerMaze(PUZZLE_INPUT);
+        sut.Run();
+        Assert.Equal(115500, sut.LowestScore);
+    }
+
+    [Theory]
+    [InlineData("######\n#...E#\n#.#.##\n#.#.##\n#S..##\n######", 11)]
+    public void CountTilesForEverySolutionCorrectly(string input, int expectedCount)
+    {
+        var sut = new ReindeerMaze(input);
+        sut.Run2();
+        Assert.Equal(expectedCount, sut.ShortestPathTiles);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new ReindeerMaze(SAMPLE_INPUT);
+        sut.Run2();
+        Assert.Equal(45, sut.ShortestPathTiles);
+    }
 }
