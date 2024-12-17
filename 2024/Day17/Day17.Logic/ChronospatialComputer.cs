@@ -1,10 +1,15 @@
-
 namespace Day17.Logic;
 
 public class ChronospatialComputer
 {
     private readonly string _input;
     private readonly List<int> _program;
+
+    public long A { get; private set; }
+    public long B { get; private set; }
+    public long C { get; private set; }
+    public int IP { get; private set;}
+    public int Length => _program.Count;
 
     public ChronospatialComputer(string input)
     {
@@ -25,8 +30,40 @@ public class ChronospatialComputer
         _program = programs[1].Split(',').Select(int.Parse).ToList();
     }
 
-    public long A { get; private set; }
-    public long B { get; private set; }
-    public long C { get; private set; }
-    public int Length => _program.Count;
+    public void Run()
+    {
+        IP = 0;
+        while (IP < Length)
+        {
+            var opcode = _program[IP++];
+            var operand = _program[IP];
+
+            switch (opcode)
+            {
+                case 0: // adv
+                    switch (operand)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            A /= operand;
+                            break;
+                        case 4:
+                            A /= A;
+                            break;
+                        case 5:
+                            A /= B;
+                            break;
+                        case 6:
+                            A /= C;
+                            break;
+                        case 7:
+                            break;
+                    }
+                    IP++;
+                    break;
+            }
+        }
+    }
 }
