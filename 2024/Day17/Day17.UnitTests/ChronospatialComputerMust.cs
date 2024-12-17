@@ -98,4 +98,16 @@ public class ChronospatialComputerMust
         Assert.Equal(expectedB, sut.B);
         Assert.Equal(expectedC, sut.C);
     }
+
+    [Theory]
+    [InlineData("Register A: 64\nRegister B: 15\nRegister C: 15\n\nProgram: 4,1", 64, 0, 15)]
+    [InlineData("Register A: 64\nRegister B: 15\nRegister C: 1\n\nProgram: 4,2", 64, 14, 1)]
+    public void SetRegisterBWithRegisterBXorRegisterA_WhenExecutingBxcOpcodeCorrectly(string input, int expectedA, int expectedB, int expectedC)
+    {
+        var sut = new ChronospatialComputer(input);
+        sut.Run();
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedB, sut.B);
+        Assert.Equal(expectedC, sut.C);
+    }
 }
