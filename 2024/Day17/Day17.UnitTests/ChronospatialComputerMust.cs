@@ -69,4 +69,21 @@ public class ChronospatialComputerMust
         Assert.Equal(expectedB, sut.B);
         Assert.Equal(expectedC, sut.C);
     }
+
+    [Theory]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,0", 2, 0, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,1", 2, 1, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,2", 2, 2, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,3", 2, 3, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,4", 2, 4, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,5", 2, 0, 3)]
+    [InlineData("Register A: 2\nRegister B: 15\nRegister C: 3\n\nProgram: 2,6", 2, 0, 3)]
+    public void ExecuteBstOpcodeCorrectly(string input, int expectedA, int expectedB, int expectedC)
+    {
+        var sut = new ChronospatialComputer(input);
+        sut.Run();
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedB, sut.B);
+        Assert.Equal(expectedC, sut.C);
+    }
 }

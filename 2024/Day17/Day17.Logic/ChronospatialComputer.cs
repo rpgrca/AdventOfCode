@@ -47,6 +47,10 @@ public class ChronospatialComputer
                 case 1: // bxl
                     B ^= operand;
                     break;
+
+                case 2: // bst
+                    B = GetOperand(operand) % 8;
+                    break;
             }
         }
     }
