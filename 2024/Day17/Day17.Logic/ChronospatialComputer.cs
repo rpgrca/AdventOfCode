@@ -76,6 +76,10 @@ public class ChronospatialComputer
                         OUT += $",{result}";
                     }
                     break;
+
+                case 6: // bdv
+                    B = A / (int)Math.Pow(2, GetComboOperand(operand));
+                    break;
             }
         }
     }
