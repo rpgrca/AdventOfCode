@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Day17.Logic;
 using static Day17.UnitTests.Constants;
 
@@ -197,7 +199,259 @@ public class ChronospatialComputerMust
     public void SolveSecondSampleCorrectly()
     {
         var sut = new ChronospatialComputer(SECOND_SAMPLE_INPUT);
-        sut.Solve();
+        sut.Solve(0);
         Assert.Equal(117440, sut.Answer);
+    }
+/*
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new ChronospatialComputer(PUZZLE_INPUT);
+        sut.Solve(267411);
+        Assert.Equal(0L, sut.Answer);
+    }
+    */
+/*
+    [Fact]
+    public void Test()
+    {
+        //var value = 202341093744911;
+        //var value = 241264265751990; todo 3
+        //var value = 40210710958665; todo 6
+        //var value = 412799239201;
+        //var value = 26419149414664;
+        //var value = 277145634763263;
+        var value = 267411; // 2,4,1,5,6,3,2
+        var sut = new ChronospatialComputer(@$"Register A: {value}
+Register B: 0
+Register C: 0
+
+Program: 2,4,1,5,7,5,4,5,0,3,1,6,5,5,3,0");
+        sut.Run();
+        Assert.Equal("2,4,1,5,7,5,4,5,0,3,1,6,5,5,3,0", sut.OUT);
+    }
+*/
+/*
+    [Theory]
+    [InlineData(0, 0, 0, "0,1", 0, 0, 0)]
+    [InlineData(32, 0, 0, "0,1", 64, 0, 0)]
+    [InlineData(16, 0, 0, "0,2", 64, 0, 0)]
+    [InlineData(8, 0, 0, "0,3", 64, 0, 0)]
+    [InlineData(0, 2, 5, "0,4", 64, 2, 5)]
+    [InlineData(16, 2, 5, "0,5", 64, 2, 5)]
+    [InlineData(2, 2, 5, "0,6", 64, 2, 5)]
+    public void ReverseAdvOperationCorrectly(int a, int b, int c, string program, int expectedA, int expectedB, int expectedC)
+    {
+        var sut = new ChronospatialComputer($"Register A: {a}\nRegister B: {b}\nRegister C: {c}\n\nProgram: {program}");
+        sut.Reverse();
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedB, sut.B);
+        Assert.Equal(expectedC, sut.C);
+    }*/
+
+/*
+    [Theory]
+    [InlineData(2, 15, 3, "1,0", 2, 15, 3)]
+    [InlineData(2, 14, 3, "1,1", 2, 15, 3)]
+    [InlineData(2, 13, 3, "1,2", 2, 15, 3)]
+    [InlineData(2, 12, 3, "1,3", 2, 15, 3)]
+    [InlineData(2, 11, 3, "1,4", 2, 15, 3)]
+    [InlineData(2, 10, 3, "1,5", 2, 15, 3)]
+    [InlineData(2, 9, 3, "1,6", 2, 15, 3)]
+    [InlineData(2, 8, 3, "1,7", 2, 15, 3)]
+    [InlineData(2, 7, 3, "1,8", 2, 15, 3)]
+    [InlineData(2, 6, 3, "1,9", 2, 15, 3)]
+    [InlineData(2, 5, 3, "1,10", 2, 15, 3)]
+    [InlineData(2, 4, 3, "1,11", 2, 15, 3)]
+    [InlineData(2, 3, 3, "1,12", 2, 15, 3)]
+    [InlineData(2, 2, 3, "1,13", 2, 15, 3)]
+    [InlineData(2, 1, 3, "1,14", 2, 15, 3)]
+    [InlineData(2, 0, 3, "1,15", 2, 15, 3)]
+    public void ReverseBxlCorrectly(int a, int b, int c, string program, int expectedA, int expectedB, int expectedC)
+    {
+        var sut = new ChronospatialComputer($"Register A: {a}\nRegister B: {b}\nRegister C: {c}\n\nProgram: {program}");
+        sut.Reverse();
+        Assert.Equal(expectedA, sut.A);
+        Assert.Equal(expectedB, sut.B);
+        Assert.Equal(expectedC, sut.C);
+    }
+*/
+    [Fact]
+    public void ReverseEngineerCode()
+    {
+        var sut = new ChronospatialDebugger(PUZZLE_INPUT);
+        sut.Debug();
+        Console.WriteLine(sut.Result);
+    }
+}
+
+public class ChronospatialDebugger
+{
+    private readonly List<long> _program;
+    private long A;
+    private long B;
+    private long C;
+
+    public ChronospatialDebugger(string input)
+    {
+        _program = input.Split("\n\n")[1].Split(':', StringSplitOptions.TrimEntries)[1].Split(',').Select(long.Parse).ToList();
+    }
+
+    public ulong Result { get; private set; }
+
+    public void Debug()
+    {
+        long a, b, c;
+
+        var possibleValidValues = new Dictionary<int, List<string>>();
+        var index = 0;
+        foreach (var value in _program)
+        {
+            possibleValidValues.Add(index, new());
+            B = value;
+            B ^= 6;
+            var possibleBandCvalues = Find_BxorC_Combinations();
+            foreach (var possibleBandCvalue in possibleBandCvalues)
+            {
+                var last3Abits = possibleBandCvalue.B ^ 5;
+                var possibleAending = possibleBandCvalue.C << (int)possibleBandCvalue.B;
+                var testAending = (possibleAending | last3Abits) >> (int)possibleBandCvalue.B;
+                if (testAending == possibleBandCvalue.C)
+                {
+                    if (possibleBandCvalue.B - 3 >= 0)
+                    {
+                        var temp = ConvertTo3BitString(possibleBandCvalue.C) + new string('x', (int)possibleBandCvalue.B - 3) + ConvertTo3BitString(last3Abits);
+                        //var temp = ConvertTo3BitString(last3Abits);
+                        possibleValidValues[index].Add(temp);
+                    }
+                    else
+                    {
+                        /*
+                        switch (3 - possibleBandCvalue.B)
+                        {
+                            case 0:
+                                possibleValidValues[index].Add(ConvertTo3BitString(possibleBandCvalue.C));
+                                break;
+                            case 1:
+                                var temp2 = ConvertTo3BitString(possibleBandCvalue.C) + (possibleBandCvalue.B % 2);
+                                possibleValidValues[index].Add(temp2);
+                                break;
+                            case 2:
+                                var temp3 = ConvertTo3BitString(possibleBandCvalue.C) + (possibleBandCvalue.B % 4);
+                                possibleValidValues[index].Add(temp3);
+                                break;
+                        }*/
+                        possibleValidValues[index].Add(ConvertTo3BitString(possibleBandCvalue.B) + "->" + ConvertTo3BitString(possibleBandCvalue.C));
+                    }
+                }
+            }
+
+            index++;
+        }
+
+        var bits = string.Empty;
+
+
+        foreach (var possibleValues in possibleValidValues)
+        {
+            Console.WriteLine(possibleValues.Key);
+            foreach (var possibleValue in possibleValues.Value)
+            {
+                Console.WriteLine(possibleValue);
+            }
+        }
+/*
+        foreach (var possibleValues0 in possibleValidValues[0].OrderBy(p => p.Length))
+        {
+            foreach (var possibleValues1 in possibleValidValues[1].OrderBy(p => p.Length))
+            {
+                foreach (var possibleValues2 in possibleValidValues[2].OrderBy(p => p.Length))
+                {
+                    foreach (var possibleValues3 in possibleValidValues[3].OrderBy(p => p.Length))
+                    {
+                        foreach (var possibleValues4 in possibleValidValues[4].OrderBy(p => p.Length))
+                        {
+                            foreach (var possibleValues5 in possibleValidValues[5].OrderBy(p => p.Length))
+                            {
+                                foreach (var possibleValues6 in possibleValidValues[6].OrderBy(p => p.Length))
+                                {
+                                    foreach (var possibleValues7 in possibleValidValues[7].OrderBy(p => p.Length))
+                                    {
+                                        foreach (var possibleValues8 in possibleValidValues[8].OrderBy(p => p.Length))
+                                        {
+                                            foreach (var possibleValues9 in possibleValidValues[9].OrderBy(p => p.Length))
+                                            {
+                                                foreach (var possibleValues10 in possibleValidValues[10].OrderBy(p => p.Length))
+                                                {
+                                                    foreach (var possibleValues11 in possibleValidValues[11].OrderBy(p => p.Length))
+                                                    {
+                                                        foreach (var possibleValues12 in possibleValidValues[12].OrderBy(p => p.Length))
+                                                        {
+                                                            foreach (var possibleValues13 in possibleValidValues[13].OrderBy(p => p.Length))
+                                                            {
+                                                                foreach (var possibleValues14 in possibleValidValues[14].OrderBy(p => p.Length))
+                                                                {
+                                                                    foreach (var possibleValues15 in possibleValidValues[15].OrderBy(p => p.Length))
+                                                                    {
+                                                                        bits =  possibleValues15 + possibleValues14 +
+                                                                                possibleValues13 + possibleValues12 +
+                                                                                possibleValues11 + possibleValues10 +
+                                                                                possibleValues9 + possibleValues8 +
+                                                                                possibleValues7 + possibleValues6 +
+                                                                                possibleValues5 + possibleValues4 +
+                                                                                possibleValues3 + possibleValues2 +
+                                                                                possibleValues1 + possibleValues0;
+                                                                        Result = Convert.ToUInt64(bits, 2);
+
+                                                                        var sut = new ChronospatialComputer(@$"Register A: {Result}
+Register B: 0
+Register C: 0
+
+Program: 2,4,1,5,7,5,4,5,0,3,1,6,5,5,3,0");
+                                                                        sut.RunForTest();
+                                                                        if (sut.OUT.StartsWith("2,4,1,5"))
+                                                                        {
+                                                                            Console.WriteLine(sut.OUT);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+    }
+
+    private string ConvertTo3BitString(long value) =>
+        value switch
+            {
+                0 => "000",
+                1 => "001",
+                2 => "010",
+                3 => "011",
+                4 => "100",
+                5 => "101",
+                6 => "110",
+                _ => "111"
+            };
+
+    private List<(long B, long C)> Find_BxorC_Combinations()
+    {
+        var result = new List<(long B, long C)>();
+        for (var index = 0; index < 8; index++)
+        {
+            result.Add((index, B^index));
+        }
+
+        return result;
     }
 }
