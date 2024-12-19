@@ -14,4 +14,14 @@ public class LinenLayoutMust
         Assert.Equal(expectedTowels, sut.TowelsCount);
         Assert.Equal(expectedDesigns, sut.DesignsCount);
     }
+
+    [Theory]
+    [InlineData("r\n\nr", 1)]
+    [InlineData("r\n\nr\nrr", 2)]
+    public void ValidateDesignCorrectly(string input, int expectedCount)
+    {
+        var sut = new LinenLayout(input);
+        sut.Validate();
+        Assert.Equal(expectedCount, sut.ValidDesignsCount);
+    }
 }
