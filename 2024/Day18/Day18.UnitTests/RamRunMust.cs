@@ -28,4 +28,13 @@ public class RamRunMust
 .#..#..
 #.#....", sut.Plot());
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new RamRun(SAMPLE_INPUT, 7);
+        sut.Load(12);
+        sut.Solve();
+        Assert.Equal(22, sut.Steps);
+    }
 }

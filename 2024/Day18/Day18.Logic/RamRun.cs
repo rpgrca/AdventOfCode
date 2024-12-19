@@ -10,6 +10,8 @@ public class RamRun
     public int Count => _corruptedMemory.Count;
 
     public int Size { get; private set; }
+    public int Steps { get; private set; }
+
     private readonly char[,] _memoryMap;
 
     public RamRun(string input, int size)
@@ -48,5 +50,56 @@ public class RamRun
         }
 
         return sb.ToString().Trim();
+    }
+
+    public void Solve()
+    {
+        Steps = int.MaxValue;
+        var currentX = 0;
+        var currentY = 0;
+        var priorityQueue = new PriorityQueue<(int X, int Y, int Weight), int>();
+        var visited = new HashSet<(int X, int Y)>();
+        priorityQueue.Enqueue((0, 1, 1), 1);
+        priorityQueue.Enqueue((1, 0, 1), 1);
+
+        while (priorityQueue.Count > 0)
+        {
+            var nextStep = priorityQueue.Dequeue();
+            if (nextStep.X == Size - 1 && nextStep.Y == Size - 1)
+            {
+                if (Steps > nextStep.Weight)
+                {
+                    Steps = nextStep.Weight;
+                    continue;
+                }
+            }
+
+            if (visited.Contains((nextStep.X, nextStep.Y)))
+            {
+                continue;
+            }
+
+            visited.Add((nextStep.X, nextStep.Y));
+            var newWeight = nextStep.Weight + 1;
+            if (nextStep.X > 0 && _memoryMap[nextStep.Y, nextStep.X - 1] != '#')
+            {
+                priorityQueue.Enqueue((nextStep.X - 1, nextStep.Y, newWeight), newWeight);
+            }
+
+            if (nextStep.X < Size - 1 && _memoryMap[nextStep.Y, nextStep.X + 1] != '#')
+            {
+                priorityQueue.Enqueue((nextStep.X + 1, nextStep.Y, newWeight), newWeight);
+            }
+
+            if (nextStep.Y > 0 && _memoryMap[nextStep.Y - 1, nextStep.X] != '#')
+            {
+                priorityQueue.Enqueue((nextStep.X, nextStep.Y - 1, newWeight), newWeight);
+            }
+
+            if (nextStep.Y < Size - 1 && _memoryMap[nextStep.Y + 1, nextStep.X] != '#')
+            {
+                priorityQueue.Enqueue((nextStep.X, nextStep.Y + 1, newWeight), newWeight);
+            }
+        }
     }
 }
