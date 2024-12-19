@@ -44,9 +44,17 @@ public class RamRunMust
         var sut = new RamRun(PUZZLE_INPUT, 71);
         sut.Load(1024);
         sut.Solve();
-        //Assert.True(254 < sut.Steps);
-        //Assert.True(260 < sut.Steps);
-        // 264? 261?
+        Assert.True(254 < sut.Steps);
+        Assert.True(260 < sut.Steps);
         Assert.Equal(262, sut.Steps);
+    }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new RamRun(SAMPLE_INPUT, 7);
+        sut.Load(12);
+        sut.SolveDrop(12);
+        Assert.Equal("6,1", sut.BlockedPath);
     }
 }

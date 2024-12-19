@@ -12,6 +12,7 @@ public class RamRun
 
     public int Size { get; private set; }
     public int Steps { get; private set; }
+    public string BlockedPath { get; private set; }
 
     private readonly char[,] _memoryMap;
     private readonly int[,] _map;
@@ -20,6 +21,7 @@ public class RamRun
     {
         _input = input;
         Size = size;
+        BlockedPath = string.Empty;
         _memoryMap = new char[Size,Size];
         _map = new int[Size, Size];
         for (var y = 0; y < Size; y++)
@@ -117,19 +119,21 @@ public class RamRun
                 }
             }
 
+
             if (visited.Contains(value))
             {
                 continue;
             }
             visited.Add(value);
 
+/*
             if (_map[y, x] < steps)
             {
                 continue;
             }
 
             _map[y, x] = steps;
-
+*/
             var incrementedX = x + 1;
             var decrementedX = x - 1;
             var incrementedY = y + 1;
@@ -228,5 +232,19 @@ public class RamRun
             SolveDeeply(map, x, decrementedY, weight + 1);
         }
 
+    }
+
+    public void SolveDrop(int bytes)
+    {
+        foreach (var corruptedMemory in _corruptedMemory.Skip(bytes))
+        {
+            _memoryMap[corruptedMemory.Y, corruptedMemory.X] = '#';
+            Solve();
+            if (Steps == int.MaxValue)
+            {
+                BlockedPath = $"{corruptedMemory.X},{corruptedMemory.Y}";
+                break;
+            }
+        }
     }
 }
