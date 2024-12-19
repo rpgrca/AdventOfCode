@@ -24,4 +24,12 @@ public class LinenLayoutMust
         sut.Validate();
         Assert.Equal(expectedCount, sut.ValidDesignsCount);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new LinenLayout(SAMPLE_INPUT);
+        sut.Validate();
+        Assert.Equal(6, sut.ValidDesignsCount);
+    }
 }
