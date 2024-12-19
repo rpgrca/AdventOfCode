@@ -84,11 +84,19 @@ public class RamRun
         return sb.ToString().Trim();
     }
 
-    private int MakeWeight(int x, int y, int steps) => (steps << 16) | ((Size - y) << 8) | (Size - x);
+    private int MakeWeight(int x, int y, int steps) => steps;
 
     public void Solve()
     {
         Steps = int.MaxValue;
+        for (var y = 0; y < Size; y++)
+        {
+            for (var x = 0; x < Size; x++)
+            {
+                _map[y, x] = int.MaxValue;
+            }
+        }
+
         _map[0, 0] = 0;
 
         var visited = new HashSet<int>();
@@ -126,14 +134,14 @@ public class RamRun
             }
             visited.Add(value);
 
-/*
+
             if (_map[y, x] < steps)
             {
                 continue;
             }
 
             _map[y, x] = steps;
-*/
+
             var incrementedX = x + 1;
             var decrementedX = x - 1;
             var incrementedY = y + 1;

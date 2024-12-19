@@ -57,4 +57,13 @@ public class RamRunMust
         sut.SolveDrop(12);
         Assert.Equal("6,1", sut.BlockedPath);
     }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new RamRun(PUZZLE_INPUT, 71);
+        sut.Load(1024);
+        sut.SolveDrop(1024);
+        Assert.Equal("22,20", sut.BlockedPath);
+    }
 }
