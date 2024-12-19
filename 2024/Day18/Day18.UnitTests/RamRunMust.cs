@@ -37,4 +37,16 @@ public class RamRunMust
         sut.Solve();
         Assert.Equal(22, sut.Steps);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new RamRun(PUZZLE_INPUT, 71);
+        sut.Load(1024);
+        sut.Solve();
+        //Assert.True(254 < sut.Steps);
+        //Assert.True(260 < sut.Steps);
+        // 264? 261?
+        Assert.Equal(262, sut.Steps);
+    }
 }
