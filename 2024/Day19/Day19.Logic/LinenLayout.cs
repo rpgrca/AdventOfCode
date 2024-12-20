@@ -109,24 +109,41 @@ public class LinenLayout
         foreach (var design in _designs)
         {
             var index = 0;
-            var stack = new Stack<string>();
-            stack.Push(design);
+            var stack = new PriorityQueue<string, int>();
+            var invalid = new HashSet<string>();
+            stack.Enqueue(design, design.Length);
 
             do
             {
-                var leftOver = stack.Pop();
+                var found = false;
+                var leftOver = stack.Dequeue();
                 if (leftOver.Length == 0)
                 {
                     ValidDesignsCount++;
                     break;
                 }
 
+                if (invalid.Contains(leftOver))
+                {
+                    continue;
+                }
+
                 foreach (var towel in _towels.Where(p => leftOver[0] == p[0]))
                 {
                     if (leftOver.StartsWith(towel))
                     {
-                        stack.Push(leftOver[(index + towel.Length)..]);
+                        var still = leftOver[(index + towel.Length)..];
+                        if (! invalid.Contains(still))
+                        {
+                            stack.Enqueue(still, still.Length);
+                            found = true;
+                        }
                     }
+                }
+
+                if (! found)
+                {
+                    invalid.Add(leftOver);
                 }
             }
             while (stack.Count > 0);
