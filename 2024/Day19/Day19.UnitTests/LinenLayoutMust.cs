@@ -58,4 +58,12 @@ public class LinenLayoutMust
         sut.ValidateWithStack();
         Assert.Equal(313, sut.ValidDesignsCount);
     }
+
+    [Fact]
+    public void FindAllWaysOfArranging()
+    {
+        var sut = new LinenLayout("r, wr, b, g, bwu, rb, gb, br\n\nrrbgbr");
+        sut.FindAllValidCombinationsWithStack();
+        Assert.Equal(6, sut.AllValidCombinations);
+    }
 }

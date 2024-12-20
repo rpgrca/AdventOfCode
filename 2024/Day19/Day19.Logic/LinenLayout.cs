@@ -16,6 +16,7 @@ public class LinenLayout
     public int DesignsCount => _designs.Count;
     public int TowelsCount => _towels.Count;
     public int ValidDesignsCount { get; private set; }
+    public int AllValidCombinations { get; private set; }
 
     public LinenLayout(string input)
     {
@@ -200,6 +201,52 @@ public class LinenLayout
             {
                 yield return towel;
             }
+        }
+    }
+
+    public void FindAllValidCombinationsWithStack()
+    {
+        foreach (var design in _designs)
+        {
+            var index = 0;
+            var stack = new PriorityQueue<string, int>();
+            var invalid = new HashSet<string>();
+            stack.Enqueue(design, design.Length);
+
+            do
+            {
+                var found = false;
+                var leftOver = stack.Dequeue();
+                if (leftOver.Length == 0)
+                {
+                    AllValidCombinations++;
+                    continue;
+                }
+
+                if (invalid.Contains(leftOver))
+                {
+                    continue;
+                }
+
+                foreach (var towel in _towels.Where(p => leftOver[0] == p[0]))
+                {
+                    if (leftOver.StartsWith(towel))
+                    {
+                        var still = leftOver[(index + towel.Length)..];
+                        if (! invalid.Contains(still))
+                        {
+                            stack.Enqueue(still, still.Length);
+                            found = true;
+                        }
+                    }
+                }
+
+                if (! found)
+                {
+                    invalid.Add(leftOver);
+                }
+            }
+            while (stack.Count > 0);
         }
     }
 }
