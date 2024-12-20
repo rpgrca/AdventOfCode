@@ -66,4 +66,12 @@ public class LinenLayoutMust
         sut.FindAllValidCombinationsWithStack();
         Assert.Equal(6, sut.AllValidCombinations);
     }
+
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new LinenLayout(SAMPLE_INPUT);
+        sut.FindAllValidCombinationsWithStack();
+        Assert.Equal(16, sut.AllValidCombinations);
+    }
 }
