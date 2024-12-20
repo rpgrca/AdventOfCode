@@ -16,15 +16,19 @@ public class LinenLayout
     public int DesignsCount => _designs.Count;
     public int TowelsCount => _towels.Count;
     public int ValidDesignsCount { get; private set; }
-    public int AllValidCombinations { get; private set; }
+    public ulong AllValidCombinations { get; private set; }
 
     public LinenLayout(string input)
     {
         _input = input;
 
         var sections = _input.Split("\n\n");
-        _towels = sections[0].Split(',', StringSplitOptions.TrimEntries).Order().ToList();
         _designs = sections[1].Split('\n').ToList();
+        _towels = sections[0].Split(',', StringSplitOptions.TrimEntries)
+            .Order()
+            .Where(p => _designs.Any(q => q.Contains(p)))
+            .ToList();
+
         _longestTowel = _towels.OrderByDescending(p => p.Length).First().Length;
 
         _bag = new();
@@ -109,6 +113,7 @@ public class LinenLayout
     {
         foreach (var design in _designs)
         {
+            var towels = _towels;
             var index = 0;
             var stack = new PriorityQueue<string, int>();
             var invalid = new HashSet<string>();
@@ -129,7 +134,7 @@ public class LinenLayout
                     continue;
                 }
 
-                foreach (var towel in _towels.Where(p => leftOver[0] == p[0]))
+                foreach (var towel in towels.Where(p => leftOver[0] == p[0]))
                 {
                     if (leftOver.StartsWith(towel))
                     {
@@ -204,40 +209,48 @@ public class LinenLayout
         }
     }
 
-    public void FindAllValidCombinationsWithStack()
+    public void FindAllValidCombinationsWithStack3()
     {
         foreach (var design in _designs)
         {
+            var towels = _towels.Where(p => design.Contains(p)).ToList();
+
             var index = 0;
             var stack = new PriorityQueue<string, int>();
             var invalid = new HashSet<string>();
+            var solution = new HashSet<string>();
+
             stack.Enqueue(design, design.Length);
 
             do
             {
                 var found = false;
                 var leftOver = stack.Dequeue();
+                /*
                 if (leftOver.Length == 0)
                 {
+                    solution.Add(leftOver);
                     AllValidCombinations++;
                     continue;
-                }
+                }*/
 
                 if (invalid.Contains(leftOver))
                 {
                     continue;
                 }
 
-                foreach (var towel in _towels.Where(p => leftOver[0] == p[0]))
+                foreach (var towel in towels.Where(p => leftOver[0] == p[0] && leftOver.StartsWith(p)))
                 {
-                    if (leftOver.StartsWith(towel))
+                    var still = leftOver[(index + towel.Length)..];
+                    if (still == "" || solution.Contains(still))
                     {
-                        var still = leftOver[(index + towel.Length)..];
-                        if (! invalid.Contains(still))
-                        {
+                        AllValidCombinations++;
+                        found = true;
+                    }
+                    else if (! invalid.Contains(still))
+                    {
                             stack.Enqueue(still, still.Length);
                             found = true;
-                        }
                     }
                 }
 
@@ -249,4 +262,116 @@ public class LinenLayout
             while (stack.Count > 0);
         }
     }
+
+    public void FindAllValidCombinationsWithStack2()
+    {
+        foreach (var design in _designs)
+        {
+            var towels = _towels.Where(p => design.Contains(p)).ToList();
+
+            var index = 0;
+            var stack = new PriorityQueue<(string Already, string Left), int>();
+            var invalid = new HashSet<string>();
+            var solution = new HashSet<string>();
+
+            stack.Enqueue((string.Empty, design), design.Length);
+
+            do
+            {
+                var found = false;
+                var leftOver = stack.Dequeue();
+                if (leftOver.Left.Length == 0)
+                {
+                    if (! solution.Contains(leftOver.Already))
+                    {
+                        solution.Add(leftOver.Already);
+                        AllValidCombinations++;
+                    }
+                    else
+                    {
+                        found = false;
+                    }
+                    continue;
+                }
+
+                if (invalid.Contains(leftOver.Left))
+                {
+                    continue;
+                }
+
+                foreach (var towel in towels.Where(p => leftOver.Left[0] == p[0] && leftOver.Left.StartsWith(p)))
+                {
+                    var still = leftOver.Left[(index + towel.Length)..];
+                    if (! invalid.Contains(still))
+                    {
+                        stack.Enqueue((leftOver.Already + "-" + towel, still), still.Length);
+                        found = true;
+                    }
+                }
+
+                if (! found)
+                {
+                    invalid.Add(leftOver.Left);
+                }
+            }
+            while (stack.Count > 0);
+        }
+    }
+
+    public void FindAllValidCombinationsWithDynamicProgramming()
+    {
+        foreach (var design in _designs)
+        {
+            var towels = _towels.Where(p => design.Contains(p)).ToHashSet();
+            var longestTowel = towels.Max(p => p.Length);
+            var cache = new List<List<string>>[design.Length + 1];
+            cache[0] = new List<List<string>>{ new() };
+
+            for (var index = 1; index <= design.Length; index++)
+            {
+                cache[index] = new();
+                for (var subIndex = Math.Max(0, index - longestTowel); subIndex < index; subIndex++)
+                {
+                    var syllable = design.Substring(subIndex, index - subIndex);
+                    if (towels.Contains(syllable))
+                    {
+                        foreach (var combination in cache[subIndex])
+                        {
+                            var newCombination = new List<string>(combination) { syllable };
+                            cache[index].Add(newCombination);
+                        }
+                    }
+                }
+            }
+
+            AllValidCombinations = AllValidCombinations + (ulong)cache[design.Length].Count;
+        }
+    }
+
+    public void FindAllValidCombinations()
+    {
+        foreach (var design in _designs)
+        {
+            var towels = _towels.Where(p => design.Contains(p)).ToHashSet();
+            var longestTowel = towels.Max(p => p.Length);
+            var cache = new ulong[design.Length + 1];
+            cache[0] = 1;
+
+            for (var index = 1; index <= design.Length; index++)
+            {
+                cache[index] = new();
+                for (var subIndex = Math.Max(0, index - longestTowel); subIndex < index; subIndex++)
+                {
+                    var syllable = design.Substring(subIndex, index - subIndex);
+                    if (towels.Contains(syllable))
+                    {
+                        cache[index] += cache[subIndex];
+                    }
+                }
+            }
+
+            AllValidCombinations += cache[design.Length];
+        }
+    }
+
 }
