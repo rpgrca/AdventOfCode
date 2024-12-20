@@ -3,11 +3,14 @@ using static Day20.UnitTests.Constants;
 
 namespace Day20.UnitTests;
 
-public class UnitTest1
+public class RaceConditionMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 15)]
+    [InlineData(PUZZLE_INPUT, 141)]
+    public void LoadInputCorrectly(string input, int expectedSize)
     {
-
+        var sut = new RaceCondition(input);
+        Assert.Equal(expectedSize, sut.Size);
     }
 }
