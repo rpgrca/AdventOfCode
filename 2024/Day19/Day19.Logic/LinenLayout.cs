@@ -27,6 +27,7 @@ public class LinenLayout
         _longestTowel = _towels.OrderByDescending(p => p.Length).First().Length;
 
         _bag = new();
+
         foreach (var towel in _towels)
         {
             var current = _bag;
@@ -53,6 +54,7 @@ public class LinenLayout
             var bag = _bag;
             var found = true;
             var index = 0;
+            var buildingTowel = string.Empty;
             Automata? previous = null;
 
             while (index < design.Length)
@@ -60,11 +62,20 @@ public class LinenLayout
                 var towel = design[index];
                 if (bag.TryGetValue(towel, out var next))
                 {
-                    previous = bag;
-                    bag = next;
+                    if (next.Count == 0)
+                    {
+                        bag = _bag;
+                        previous = null;
+                    }
+                    else
+                    {
+                        bag = next;
+                        previous = bag;
+                    }
                 }
                 else
                 {
+
                     if (bag.Count > 0)
                     {
                         found = false;
@@ -86,10 +97,39 @@ public class LinenLayout
                 index++;
             }
 
-            if (found)
+            if (bag.FinalState && found)
             {
                 ValidDesignsCount++;
             }
+        }
+    }
+
+    public void ValidateWithStack()
+    {
+        foreach (var design in _designs)
+        {
+            var index = 0;
+            var stack = new Stack<string>();
+            stack.Push(design);
+
+            do
+            {
+                var leftOver = stack.Pop();
+                if (leftOver.Length == 0)
+                {
+                    ValidDesignsCount++;
+                    break;
+                }
+
+                foreach (var towel in _towels.Where(p => leftOver[0] == p[0]))
+                {
+                    if (leftOver.StartsWith(towel))
+                    {
+                        stack.Push(leftOver[(index + towel.Length)..]);
+                    }
+                }
+            }
+            while (stack.Count > 0);
         }
     }
 

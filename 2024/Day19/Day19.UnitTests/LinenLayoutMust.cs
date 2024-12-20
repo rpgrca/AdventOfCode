@@ -21,7 +21,7 @@ public class LinenLayoutMust
     public void ValidateDesignCorrectly(string input, int expectedCount)
     {
         var sut = new LinenLayout(input);
-        sut.ValidateWithAutomata();
+        sut.ValidateWithStack();
         Assert.Equal(expectedCount, sut.ValidDesignsCount);
     }
 
@@ -31,17 +31,17 @@ public class LinenLayoutMust
     public void DoNotRecognizeUnknownWord(string input)
     {
         var sut = new LinenLayout(input);
-        sut.ValidateWithAutomata();
+        sut.ValidateWithStack();
         Assert.Equal(0, sut.ValidDesignsCount);
     }
-/*
+
     [Fact]
     public void SolveFirstSampleCorrectly()
     {
         var sut = new LinenLayout(SAMPLE_INPUT);
-        sut.ValidateWithAutomata();
+        sut.ValidateWithStack();
         Assert.Equal(6, sut.ValidDesignsCount);
-    }*/
+    }
     /*
     [Fact]
     public void DetectLongChainCorrectly()
