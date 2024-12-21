@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using Day21.Logic;
 using static Day21.UnitTests.Constants;
 
@@ -10,12 +11,22 @@ public class KeypadConundrumMust
     [InlineData(PUZZLE_INPUT, 789, 540, 285, 140, 189)]
     public void LoadInputCorrectly(string input, int expectedA, int expectedB, int expectedC, int expectedD, int expectedE)
     {
-        var sut = new KeypadConundrum(input);
+        var sut = new KeypadConundrum('A', input);
         Assert.Collection(sut.Codes,
             p1 => Assert.Equal(expectedA, p1),
             p2 => Assert.Equal(expectedB, p2),
             p3 => Assert.Equal(expectedC, p3),
             p4 => Assert.Equal(expectedD, p4),
             p5 => Assert.Equal(expectedE, p5));
+    }
+
+    [Theory]
+    [InlineData('A', '0', "<A>A")]
+    [InlineData('A', '1', "^<<A>>vA")]
+    public void CalculateShortestPathInNumericKeypad(char start, char end, string expectedSequence)
+    {
+        var sut = new KeypadConundrum(start, $"{end}A");
+        sut.CalculateShortestNumericKeypad();
+        Assert.Equal(expectedSequence, sut.ShortestSequence);
     }
 }
