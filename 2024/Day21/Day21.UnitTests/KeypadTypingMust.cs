@@ -43,4 +43,18 @@ public class KeypadTypingMust
         var result = sut.CalculateShortestSequence('A', "029A");
         Assert.Equal("v<<A>>^A<A>AvA<^AA>A<vAAA>^A", result);
     }
+
+    [Fact]
+    public void CalculateShortestPathInDirectionalx2AndNumericKeypads()
+    {
+        var sut = new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        });
+
+        var result = sut.CalculateShortestSequence('A', "029A");
+        Assert.Equal("<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A".Length, result.Length);
+    }
 }
