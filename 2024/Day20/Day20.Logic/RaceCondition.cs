@@ -84,7 +84,7 @@ public class RaceCondition
             }
         }
 
-        FastCheatsCount = cheats.Count(p => p.Savings <= picoseconds);
+        FastCheatsCount = cheats.Count(p => p.Savings >= picoseconds);
     }
 
     private void ScanMap(int[,] weights, List<(int X, int Y, int Weight)> list, int x, int y, int weight)

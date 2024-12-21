@@ -18,12 +18,12 @@ public class RaceConditionMust
     }
 
     [Theory]
-    [InlineData(1, 0)]
-    [InlineData(2, 1)]
+    [InlineData(1, 2)]
+    [InlineData(2, 2)]
     [InlineData(3, 1)]
-    [InlineData(4, 2)]
-    [InlineData(5, 2)]
-    [InlineData(6, 2)]
+    [InlineData(4, 1)]
+    [InlineData(5, 0)]
+    [InlineData(6, 0)]
     public void FindCheatsCorrectly(int picoseconds, int expectedCount)
     {
         var sut = new RaceCondition("#####\n#S..#\n###.#\n#E..#\n#####");
@@ -32,17 +32,17 @@ public class RaceConditionMust
     }
 
     [Theory]
-    [InlineData(64, 44)]
-    [InlineData(40, 43)]
-    [InlineData(38, 42)]
-    [InlineData(36, 41)]
-    [InlineData(20, 40)]
-    [InlineData(12, 39)]
-    [InlineData(10, 36)]
-    [InlineData(8, 34)]
-    [InlineData(6, 30)]
-    [InlineData(4, 28)]
-    [InlineData(2, 14)]
+    [InlineData(64, 1)]
+    [InlineData(40, 2)]
+    [InlineData(38, 3)]
+    [InlineData(36, 4)]
+    [InlineData(20, 5)]
+    [InlineData(12, 8)]
+    [InlineData(10, 10)]
+    [InlineData(8, 14)]
+    [InlineData(6, 16)]
+    [InlineData(4, 30)]
+    [InlineData(2, 44)]
     public void ExecuteSamplesCorrectly(int picoseconds, int expectedCount)
     {
         var sut = new RaceCondition(SAMPLE_INPUT);
@@ -54,7 +54,16 @@ public class RaceConditionMust
     public void SolveFirstSampleCorrectly()
     {
         var sut = new RaceCondition(SAMPLE_INPUT);
-        sut.FindCheatsSavingAtLeast(1000);
-        Assert.Equal(44, sut.FastCheatsCount);
+        sut.FindCheatsSavingAtLeast(100);
+        Assert.Equal(0, sut.FastCheatsCount);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new RaceCondition(PUZZLE_INPUT);
+        sut.FindCheatsSavingAtLeast(100);
+        Assert.True(6763 > sut.FastCheatsCount);
+        Assert.True(5644 > sut.FastCheatsCount);
     }
 }
