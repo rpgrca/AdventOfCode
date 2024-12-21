@@ -19,20 +19,41 @@ public class KeypadConundrumMust
             p5 => Assert.Equal(expectedE, p5));
     }
 
-    [Fact]
-    public void CalculateShortestSequenceFor029ACorrectly()
+    [Theory]
+    [InlineData("029A", 12 * 29)]
+    public void CalculateShortestSequenceFor029ACorrectly(string input, int expectedSum)
     {
-        var sut = new KeypadConundrum("029A", KeypadTyping.CreateNumericKeypad());
-        Assert.Equal(12 * 29, sut.SumOfComplexities);
+        var sut = new KeypadConundrum(input, KeypadTyping.CreateNumericKeypad());
+        Assert.Equal(expectedSum, sut.SumOfComplexities);
     }
 
-    [Fact]
-    public void CalculateShortestSequenceForTwoKeypads()
+    [Theory]
+    [InlineData("029A", 28 * 29)]
+    public void CalculateShortestSequenceForTwoKeypads(string input, int expectedSum)
     {
-        var sut = new KeypadConundrum("029A", new CombinedKeypadTyping(new() {
+        var sut = new KeypadConundrum(input, new CombinedKeypadTyping(new() {
              KeypadTyping.CreateNumericKeypad(),
              KeypadTyping.CreateDirectionalKeypad()
         }));
-        //Assert.Equal()
+
+        Assert.Equal(expectedSum, sut.SumOfComplexities);
+    }
+
+    [Theory]
+    [InlineData("029A", 68 * 29)]
+    [InlineData("980A", 60 * 980)]
+    [InlineData("179A", 68 * 179)]
+    [InlineData("456A", 64 * 456)]
+    [InlineData("379A", 64 * 379)]
+    public void CalculateShortestSequenceForThreeKeypads(string input, int expectedSum)
+    {
+        var sut = new KeypadConundrum(input, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(expectedSum, sut.SumOfComplexities);
     }
 }

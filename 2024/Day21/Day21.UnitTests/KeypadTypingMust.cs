@@ -14,12 +14,14 @@ public class KeypadTypingMust
         Assert.Equal(expectedSequence, result);
     }
 
-    [Fact]
-    public void CalculateShortestSequenceFor029ACorrectly()
+    [Theory]
+    [InlineData("029A", "<A^A>^^AvvvA")]
+    [InlineData("379A", "^A<<^^A>>AvvvA")]
+    public void CalculateShortestSequenceFor029ACorrectly(string input, string expectedResult)
     {
         var sut = KeypadTyping.CreateNumericKeypad();
-        var result = sut.CalculateShortestSequence('A', "029A");
-        Assert.Equal("<A^A>^^AvvvA", result);
+        var result = sut.CalculateShortestSequence('A', input);
+        Assert.Equal(expectedResult, result);
     }
 
     [Theory]
@@ -31,8 +33,10 @@ public class KeypadTypingMust
         Assert.Equal(expectedSequence, result);
     }
 
-    [Fact]
-    public void CalculateShortestPathInDirectionalAndNumericKeypads()
+    [Theory]
+    [InlineData("029A", "v<<A>>^A<A>AvA<^AA>A<vAAA>^A")]
+    [InlineData("379A", "<A>Av<<AA>^AA>AvAA^A<vAAA>^A")]
+    public void CalculateShortestPathInDirectionalAndNumericKeypads(string input, string expectedResult)
     {
         var sut = new CombinedKeypadTyping(new()
         {
@@ -40,12 +44,14 @@ public class KeypadTypingMust
             KeypadTyping.CreateDirectionalKeypad()
         });
 
-        var result = sut.CalculateShortestSequence('A', "029A");
-        Assert.Equal("v<<A>>^A<A>AvA<^AA>A<vAAA>^A", result);
+        var result = sut.CalculateShortestSequence('A', input);
+        Assert.Equal(expectedResult, result);
     }
 
-    [Fact]
-    public void CalculateShortestPathInDirectionalx2AndNumericKeypads()
+    [Theory]
+    [InlineData("029A", "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A")]
+    [InlineData("379A", "v<<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>Av<<A>A>^AAAvA<^A>A")]
+    public void CalculateShortestPathInDirectionalx2AndNumericKeypads(string input, string expectedResult)
     {
         var sut = new CombinedKeypadTyping(new()
         {
@@ -54,7 +60,7 @@ public class KeypadTypingMust
             KeypadTyping.CreateDirectionalKeypad()
         });
 
-        var result = sut.CalculateShortestSequence('A', "029A");
-        Assert.Equal("<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A".Length, result.Length);
+        var result = sut.CalculateShortestSequence('A', input);
+        Assert.Equal(expectedResult.Length, result.Length);
     }
 }
