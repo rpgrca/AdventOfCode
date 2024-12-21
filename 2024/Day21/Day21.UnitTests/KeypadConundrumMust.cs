@@ -10,7 +10,7 @@ public class KeypadConundrumMust
     [InlineData(PUZZLE_INPUT, 789, 540, 285, 140, 189)]
     public void LoadInputCorrectly(string input, int expectedA, int expectedB, int expectedC, int expectedD, int expectedE)
     {
-        var sut = new KeypadConundrum(input, new() { KeypadTyping.CreateNumericKeypad() });
+        var sut = new KeypadConundrum(input, KeypadTyping.CreateNumericKeypad());
         Assert.Collection(sut.Codes,
             p1 => Assert.Equal(expectedA, p1),
             p2 => Assert.Equal(expectedB, p2),
@@ -22,8 +22,17 @@ public class KeypadConundrumMust
     [Fact]
     public void CalculateShortestSequenceFor029ACorrectly()
     {
-        var sut = new KeypadConundrum("029A", new() { KeypadTyping.CreateNumericKeypad() });
+        var sut = new KeypadConundrum("029A", KeypadTyping.CreateNumericKeypad());
         Assert.Equal(12 * 29, sut.SumOfComplexities);
     }
 
+    [Fact]
+    public void CalculateShortestSequenceForTwoKeypads()
+    {
+        var sut = new KeypadConundrum("029A", new CombinedKeypadTyping(new() {
+             KeypadTyping.CreateNumericKeypad(),
+             KeypadTyping.CreateDirectionalKeypad()
+        }));
+        //Assert.Equal()
+    }
 }

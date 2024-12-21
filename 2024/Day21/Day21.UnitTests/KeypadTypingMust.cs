@@ -19,7 +19,7 @@ public class KeypadTypingMust
     {
         var sut = KeypadTyping.CreateNumericKeypad();
         var result = sut.CalculateShortestSequence('A', "029A");
-        Assert.Equal("<A^A^^>AvvvA", result);
+        Assert.Equal("<A^A>^^AvvvA", result);
     }
 
     [Theory]
@@ -29,5 +29,18 @@ public class KeypadTypingMust
         var sut = KeypadTyping.CreateDirectionalKeypad();
         var result = sut.CalculateShortestSequence(start, $"{end}A");
         Assert.Equal(expectedSequence, result);
+    }
+
+    [Fact]
+    public void CalculateShortestPathInDirectionalAndNumericKeypads()
+    {
+        var sut = new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        });
+
+        var result = sut.CalculateShortestSequence('A', "029A");
+        Assert.Equal("v<<A>>^A<A>AvA<^AA>A<vAAA>^A", result);
     }
 }
