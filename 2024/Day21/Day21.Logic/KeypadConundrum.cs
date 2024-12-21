@@ -3,17 +3,31 @@ namespace Day21.Logic;
 
 public class KeypadConundrum
 {
-    private readonly char _start;
     private readonly string[] _lines;
+    private readonly List<KeypadTyping> _transformers;
 
     public List<int> Codes { get; set; }
     public string ShortestSequence { get; private set; }
+    public int SumOfComplexities { get; private set;}
 
-    public KeypadConundrum(char start, string input)
+    public KeypadConundrum(string input, List<KeypadTyping> transformers)
     {
-        _start = start;
         _lines = input.Split('\n');
+        _transformers = transformers;
+
         Codes = _lines.Select(p => int.Parse(p[0..^1])).ToList();
+        ShortestSequence = string.Empty;
+
+        foreach (var line in _lines)
+        {
+            var currentSequence = line;
+            foreach (var transformer in _transformers)
+            {
+                currentSequence = transformer.CalculateShortestSequence('A', currentSequence);
+            }
+
+            SumOfComplexities += currentSequence.Length * int.Parse(line[..^1]);
+        }
     }
 
 /*
