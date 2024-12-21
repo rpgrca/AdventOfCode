@@ -56,4 +56,17 @@ public class KeypadConundrumMust
 
         Assert.Equal(expectedSum, sut.SumOfComplexities);
     }
+
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new KeypadConundrum(SAMPLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(126384, sut.SumOfComplexities);
+    }
 }
