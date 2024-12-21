@@ -65,5 +65,6 @@ public class RaceConditionMust
         sut.FindCheatsSavingAtLeast(100);
         Assert.True(6763 > sut.FastCheatsCount);
         Assert.True(5644 > sut.FastCheatsCount);
+        Assert.Equal(1286, sut.FastCheatsCount);
     }
 }
