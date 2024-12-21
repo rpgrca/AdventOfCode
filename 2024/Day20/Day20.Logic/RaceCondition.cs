@@ -51,7 +51,7 @@ public class RaceCondition
 //       -19,-1 -19,0 -19,1
 //-18,-2 -18,-1 -18,0 -18,1 -18,2
 
-    public void Find20SecondCheatsSavingAtLeast(int picoseconds)
+    public void Find20PicosecondCheatsSavingAtLeast(int picoseconds)
     {
         var weights = new int[Size,Size];
         var list = new List<(int X, int Y, int Weight)>();

@@ -86,7 +86,15 @@ public class RaceConditionMust
     public void SolveSecondSampleCorrectly(int picoseconds, int expectedCount)
     {
         var sut = new RaceCondition(SAMPLE_INPUT);
-        sut.Find20SecondCheatsSavingAtLeast(picoseconds);
+        sut.Find20PicosecondCheatsSavingAtLeast(picoseconds);
         Assert.Equal(expectedCount, sut.FastCheatsCount);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new RaceCondition(PUZZLE_INPUT);
+        sut.Find20PicosecondCheatsSavingAtLeast(100);
+        Assert.Equal(989316, sut.FastCheatsCount);
     }
 }
