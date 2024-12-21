@@ -67,4 +67,26 @@ public class RaceConditionMust
         Assert.True(5644 > sut.FastCheatsCount);
         Assert.Equal(1286, sut.FastCheatsCount);
     }
+
+    [Theory]
+    [InlineData(76, 3)]
+    [InlineData(74, 7)]
+    [InlineData(72, 29)]
+    [InlineData(70, 41)]
+    [InlineData(68, 55)]
+    [InlineData(66, 67)]
+    [InlineData(64, 86)]
+    [InlineData(62, 106)]
+    [InlineData(60, 129)]
+    [InlineData(58, 154)]
+    [InlineData(56, 193)]
+    [InlineData(54, 222)]
+    [InlineData(52, 253)]
+    [InlineData(50, 285)]
+    public void SolveSecondSampleCorrectly(int picoseconds, int expectedCount)
+    {
+        var sut = new RaceCondition(SAMPLE_INPUT);
+        sut.Find20SecondCheatsSavingAtLeast(picoseconds);
+        Assert.Equal(expectedCount, sut.FastCheatsCount);
+    }
 }

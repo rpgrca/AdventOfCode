@@ -47,6 +47,45 @@ public class RaceCondition
         }
     }
 
+//              -20,0
+//       -19,-1 -19,0 -19,1
+//-18,-2 -18,-1 -18,0 -18,1 -18,2
+
+    public void Find20SecondCheatsSavingAtLeast(int picoseconds)
+    {
+        var weights = new int[Size,Size];
+        var list = new List<(int X, int Y, int Weight)>();
+        ScanMap(weights, list, Start.X, Start.Y, 1);
+        var cache = list.OrderBy(p => p.Weight).Select(p => (p.X, p.Y)).ToArray();
+        var cheats = new List<((int X, int Y) Begin, (int X, int Y) End, int Savings)>();
+
+        for (var weight = 1; weight < weights[End.Y, End.X]; weight++)
+        {
+            var (x, y) = cache[weight - 1];
+
+            for (var offsetY = -20; offsetY <= 20; offsetY++)
+            {
+                var limit = 20 - Math.Abs(offsetY);
+                for (var offsetX = -limit; offsetX <= limit; offsetX++)
+                {
+                    var modifiedX = x + offsetX;
+                    var modifiedY = y + offsetY;
+
+                    if (modifiedX < Size - 1 && modifiedX >= 0 && modifiedY < Size - 1 && modifiedY >= 0)
+                    {
+                        int v = weights[modifiedY, modifiedX] - weights[y, x] - Math.Abs(offsetX) - Math.Abs(offsetY);
+                        if (_map[modifiedY, modifiedX] != '#' && v > 0)
+                        {
+                            cheats.Add(((x, y), (modifiedX, modifiedY), v));
+                        }
+                    }
+                }
+            }
+        }
+
+        FastCheatsCount = cheats.Count(p => p.Savings >= picoseconds);
+    }
+
     public void FindCheatsSavingAtLeast(int picoseconds)
     {
         var weights = new int[Size,Size];
