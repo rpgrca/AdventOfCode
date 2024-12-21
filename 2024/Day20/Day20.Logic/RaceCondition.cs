@@ -47,7 +47,7 @@ public class RaceCondition
         }
     }
 
-    public void FindCheatsSaving(int picoseconds)
+    public void FindCheatsSavingAtLeast(int picoseconds)
     {
         var weights = new int[Size,Size];
         var list = new List<(int X, int Y, int Weight)>();
@@ -65,26 +65,26 @@ public class RaceCondition
 
             if (incrementedX < Size - 1 && _map[y, incrementedX] == '#' && _map[y, incrementedX + 1] != '#' && weights[y, incrementedX + 1] > weights[y, x])
             {
-                cheats.Add(((x, y), (incrementedX + 1, y), weights[y, incrementedX + 1] - weights[y, x] - 1));
+                cheats.Add(((x, y), (incrementedX + 1, y), weights[y, incrementedX + 1] - weights[y, x] - 2));
             }
 
             if (decrementedX > 1 && _map[y, decrementedX] == '#' && _map[y, decrementedX - 1] != '#' && weights[y, decrementedX - 1] > weights[y, x])
             {
-                cheats.Add(((x, y), (decrementedX - 1, y), weights[y, decrementedX - 1] - weights[y, x] - 1));
+                cheats.Add(((x, y), (decrementedX - 1, y), weights[y, decrementedX - 1] - weights[y, x] - 2));
             }
 
             if (incrementedY < Size - 1 && _map[incrementedY, x] == '#' && _map[incrementedY + 1, x] != '#' && weights[incrementedY + 1, x] > weights[y, x])
             {
-                cheats.Add(((x, y), (x, incrementedY + 1), weights[incrementedY + 1, x] - weights[y, x] - 1));
+                cheats.Add(((x, y), (x, incrementedY + 1), weights[incrementedY + 1, x] - weights[y, x] - 2));
             }
 
             if (decrementedY > 1 && _map[decrementedY, x] == '#' && _map[decrementedY - 1, x] != '#' && weights[decrementedY - 1, x] > weights[y, x])
             {
-                cheats.Add(((x, y), (x, decrementedY - 1), weights[decrementedY - 1, x] - weights[y, x] - 1));
+                cheats.Add(((x, y), (x, decrementedY - 1), weights[decrementedY - 1, x] - weights[y, x] - 2));
             }
         }
 
-        FastCheatsCount = cheats.Count(p => p.Savings < picoseconds);
+        FastCheatsCount = cheats.Count(p => p.Savings <= picoseconds);
     }
 
     private void ScanMap(int[,] weights, List<(int X, int Y, int Weight)> list, int x, int y, int weight)
