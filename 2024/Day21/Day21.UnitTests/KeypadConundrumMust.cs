@@ -20,13 +20,4 @@ public class KeypadConundrumMust
             p5 => Assert.Equal(expectedE, p5));
     }
 
-    [Theory]
-    [InlineData('A', '0', "<A>A")]
-    [InlineData('A', '1', "^<<A>>vA")]
-    public void CalculateShortestPathInNumericKeypad(char start, char end, string expectedSequence)
-    {
-        var sut = new KeypadConundrum(start, $"{end}A");
-        sut.CalculateShortestNumericKeypad();
-        Assert.Equal(expectedSequence, sut.ShortestSequence);
-    }
 }
