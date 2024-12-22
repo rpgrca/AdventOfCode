@@ -1,4 +1,6 @@
+using System.Security.Cryptography;
 using Day22.Logic;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day22.UnitTests.Constants;
 
 namespace Day22.UnitTests;
@@ -82,10 +84,25 @@ public class MonkeyMarketMust
     [Theory]
     [InlineData(1, -3)]
     [InlineData(2, 6)]
+    [InlineData(3, -1)]
+    [InlineData(4, -1)]
+    [InlineData(5, 0)]
+    [InlineData(6, 2)]
+    [InlineData(7, -2)]
+    [InlineData(8, 0)]
+    [InlineData(9, -2)]
     public void CalculatePriceChangesCorrectly(int changeNumber, int expectedChange)
     {
         var sut = new MonkeyMarket("123", 10);
         var result = sut.CalculateChange(0, changeNumber);
         Assert.Equal(expectedChange, result);
     }
+/*
+    [Fact]
+    public void SolveSecondSampleCorrectly()
+    {
+        var sut = new MonkeyMarket(SECOND_SAMPLE_INPUT, 2000);
+        var bestCombination = sut.FindBestCombination();
+        Assert.Equal((-2, 1, -1, 3), bestCombination);
+    }*/
 }

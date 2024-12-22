@@ -1,11 +1,10 @@
 
-
 namespace Day22.Logic;
 
 public class MonkeyMarket
 {
     private const int PruneNumber = 16777216;
-    private string _input;
+    private readonly string _input;
     private readonly List<long> _buyers;
     private readonly List<long>[] _secrets;
     private readonly List<long>[] _changes;
@@ -51,4 +50,57 @@ public class MonkeyMarket
 
     public long CalculateChange(int index, int count) =>
         count == 0? throw new ArgumentException($"Count cannot be zero") : _changes[index][count];
+
+    public (long, long, long, long) FindBestCombination()
+    {
+        var combinations = new List<(long, long, long, long)>();
+        for (var index = 0; index < Count; index++)
+        {
+            for (var subIndex = 3; subIndex < _changes[index].Count; subIndex++)
+            {
+                if (_prices[index][subIndex] == 9)
+                {
+                    combinations.Add((
+                        _changes[index][subIndex - 3],
+                        _changes[index][subIndex - 2],
+                        _changes[index][subIndex - 1],
+                        _changes[index][subIndex]));
+                }
+            }
+        }
+
+        (long, long, long, long) bestCombination = default;
+        var maximumSum = 0L;
+
+        foreach (var combination in combinations.Distinct())
+        {
+            if (combination == (-2, 1, -1, 3))
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+            var sum = 0L;
+            foreach (var buyer in _changes)
+            {
+                var maximum = 0L;
+                for (var index = 3; index < buyer.Count; index++)
+                {
+                    if (buyer[index] == combination.Item4 && buyer[index-1] == combination.Item3 && buyer[index-2] == combination.Item2 && buyer[index-3] == combination.Item1)
+                    {
+                        maximum = buyer[index];
+                        break;
+                    }
+                }
+
+                sum += maximum;
+            }
+
+            if (maximumSum < sum)
+            {
+                maximumSum = sum;
+                bestCombination = combination;
+            }
+        }
+
+        return bestCombination;
+    }
 }

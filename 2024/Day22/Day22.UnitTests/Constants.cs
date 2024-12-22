@@ -7,6 +7,11 @@ public static class Constants
 100
 2024";
 
+    public const string SECOND_SAMPLE_INPUT = @"1
+2
+3
+2024";
+
     public const string PUZZLE_INPUT = @"16005952
 4105637
 11352019
