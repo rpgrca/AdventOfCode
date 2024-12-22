@@ -70,7 +70,6 @@ public class KeypadConundrumMust
         Assert.Equal(126384, sut.SumOfComplexities);
     }
 
-/*
     [Fact]
     public void SolveFirstPuzzleCorrectly()
     {
@@ -82,6 +81,6 @@ public class KeypadConundrumMust
         }));
 
         Assert.True(137420 > sut.SumOfComplexities);
-    }*/
-
+        Assert.Equal(134120, sut.SumOfComplexities);
+    }
 }
