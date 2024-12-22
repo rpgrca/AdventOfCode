@@ -48,7 +48,7 @@ public class MonkeyMarketMust
     public void SolveFirstSampleCorrectly()
     {
         var sut = new MonkeyMarket(SAMPLE_INPUT, 2000);
-        sut.CalculateSumOfSecrets(2000);
+        sut.CalculateSumOfLastSecrets();
         Assert.Equal(37327623, sut.SumOfSecrets);
     }
 
@@ -56,7 +56,7 @@ public class MonkeyMarketMust
     public void SolveFirstPuzzleCorrectly()
     {
         var sut = new MonkeyMarket(PUZZLE_INPUT, 2000);
-        sut.CalculateSumOfSecrets(2000);
+        sut.CalculateSumOfLastSecrets();
         Assert.True(67070480906 > sut.SumOfSecrets);
         Assert.Equal(16999668565, sut.SumOfSecrets);
     }

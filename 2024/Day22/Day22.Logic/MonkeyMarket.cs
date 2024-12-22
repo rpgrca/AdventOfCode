@@ -43,30 +43,11 @@ public class MonkeyMarket
         }
     }
 
-    public void CalculateSumOfSecrets(int count)
-    {
-        SumOfSecrets = 0;
-        for (var index = 0; index < Count; index++)
-        {
-            SumOfSecrets += Generate(index, count);
-        }
-    }
+    public void CalculateSumOfLastSecrets() => SumOfSecrets = _secrets.Sum(p => p.Last());
 
-    public long Generate(int index, int count)
-    {
-        var secret = _buyers[index];
+    public long Generate(int index, int count) => _secrets[index][count];
 
-        while (count-- > 0)
-        {
-            secret = ((secret << 6) ^ secret) % PruneNumber;
-            secret = ((secret >> 5) ^ secret) % PruneNumber;
-            secret = ((secret << 11) ^ secret) % PruneNumber;
-        }
-
-        return secret;
-    }
-
-    public long GeneratePrice(int index, int count) => Generate(index, count) % 10;
+    public long GeneratePrice(int index, int count) => _prices[index][count];
 
     public long CalculateChange(int index, int count) =>
         count == 0? throw new ArgumentException($"Count cannot be zero") : _changes[index][count];
