@@ -60,4 +60,22 @@ public class MonkeyMarketMust
         Assert.True(67070480906 > sut.SumOfSecrets);
         Assert.Equal(16999668565, sut.SumOfSecrets);
     }
+
+    [Theory]
+    [InlineData(0, 3)]
+    [InlineData(1, 0)]
+    [InlineData(2, 6)]
+    [InlineData(3, 5)]
+    [InlineData(4, 4)]
+    [InlineData(5, 4)]
+    [InlineData(6, 6)]
+    [InlineData(7, 4)]
+    [InlineData(8, 4)]
+    [InlineData(9, 2)]
+    public void CalculatePricesCorrectly(int count, int expectedPrice)
+    {
+        var sut = new MonkeyMarket("123");
+        var result = sut.GeneratePrice(0, count);
+        Assert.Equal(expectedPrice, result);
+    }
 }
