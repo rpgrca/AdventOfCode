@@ -1,6 +1,4 @@
-using System.Security.Cryptography;
 using Day22.Logic;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Host;
 using static Day22.UnitTests.Constants;
 
 namespace Day22.UnitTests;
@@ -105,5 +103,15 @@ public class MonkeyMarketMust
         var result = sut.FindBestCombination();
         Assert.Equal((-2, 1, -1, 3), result.Combination);
         Assert.Equal(23, result.Bananas);
+    }
+
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new MonkeyMarket(PUZZLE_INPUT, 2000);
+        var result = sut.FindBestCombination();
+        Assert.True(1908 > result.Bananas);
+        //Assert.Equal(1898, result.Bananas); // salteando el primer cambio de 0
+        Assert.Equal(0, result.Bananas);
     }
 }

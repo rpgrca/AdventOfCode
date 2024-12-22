@@ -1,6 +1,22 @@
 
 namespace Day22.Logic;
 
+public class PriceVariation
+{
+    public long Item1;
+    public long Item2;
+    public long Item3;
+    public long Item4;
+
+    public PriceVariation(long item1, long item2, long item3, long item4)
+    {
+        Item1 = item1;
+        Item2 = item2;
+        Item3 = item3;
+        Item4 = item4;
+    }
+}
+
 public class MonkeyMarket
 {
     private const int PruneNumber = 16777216;
@@ -53,14 +69,14 @@ public class MonkeyMarket
 
     public ((long, long, long, long) Combination, long Bananas) FindBestCombination()
     {
-        var combinations = new List<(long, long, long, long)>();
+        var combinations = new List<PriceVariation>();
         for (var index = 0; index < Count; index++)
         {
-            for (var subIndex = 3; subIndex < _changes[index].Count; subIndex++)
+            for (var subIndex = 4; subIndex < _changes[index].Count; subIndex++)
             {
-                if (_prices[index][subIndex] == 9)
+                if (_prices[index][subIndex] == 6 || _prices[index][subIndex] == 7)
                 {
-                    combinations.Add((
+                    combinations.Add(new(
                         _changes[index][subIndex - 3],
                         _changes[index][subIndex - 2],
                         _changes[index][subIndex - 1],
@@ -69,7 +85,7 @@ public class MonkeyMarket
             }
         }
 
-        (long, long, long, long) bestCombination = default;
+        PriceVariation? bestCombination = default;
         var maximumSum = 0L;
 
         foreach (var combination in combinations.Distinct())
@@ -79,7 +95,7 @@ public class MonkeyMarket
             {
                 var buyer = _changes[index];
                 var maximum = 0L;
-                for (var subIndex = 3; subIndex < buyer.Count; subIndex++)
+                for (var subIndex = 4; subIndex < buyer.Count; subIndex++)
                 {
                     if (buyer[subIndex] == combination.Item4 && buyer[subIndex-1] == combination.Item3 && buyer[subIndex-2] == combination.Item2 && buyer[subIndex-3] == combination.Item1)
                     {
@@ -98,6 +114,6 @@ public class MonkeyMarket
             }
         }
 
-        return (bestCombination, maximumSum);
+        return ((bestCombination!.Item1, bestCombination.Item2, bestCombination.Item3, bestCombination.Item4), maximumSum);
     }
 }
