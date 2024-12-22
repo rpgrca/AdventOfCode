@@ -23,7 +23,7 @@ public class MonkeyMarket
         _sums = new long[Count];
     }
 
-    public void Generate(int count)
+    public void CalculateSumOfSecrets(int count)
     {
         while (count-- > 0)
         {
@@ -40,5 +40,19 @@ public class MonkeyMarket
         }
 
         SumOfSecrets = _sums.Sum();
+    }
+
+    public long Generate(int index, int count)
+    {
+        var secret = _list[index];
+
+        while (count-- > 0)
+        {
+            secret = ((secret * 64) ^ secret) % PruneNumber;
+            secret = ((secret / 32) ^ secret) % PruneNumber;
+            secret = ((secret * 2048) ^ secret) % PruneNumber;
+        }
+
+        return secret;
     }
 }

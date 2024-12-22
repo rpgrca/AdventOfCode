@@ -28,7 +28,29 @@ public class MonkeyMarketMust
     public void CalculateSumOfSecrets(int generations, int expectedResult)
     {
         var sut = new MonkeyMarket("123");
-        sut.Generate(generations);
+        sut.CalculateSumOfSecrets(generations);
         Assert.Equal(expectedResult, sut.SumOfSecrets);
     }
+
+    [Theory]
+    [InlineData(1, 8685429)]
+    [InlineData(10, 4700978)]
+    [InlineData(100, 15273692)]
+    [InlineData(2024, 8667524)]
+    public void Calculate2000thSecretNumber(int initial, int expectedValue)
+    {
+        var sut = new MonkeyMarket(initial.ToString());
+        var value = sut.Generate(0, 2000);
+        Assert.Equal(expectedValue, value);
+    }
+
+/*
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new MonkeyMarket(SAMPLE_INPUT);
+        sut.Generate(2000);
+        Assert.Equal(37327623, sut.SumOfSecrets);
+        //Assert.True(67070480906 > sut.SumOfSecrets);
+    }*/
 }
