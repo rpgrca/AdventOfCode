@@ -2,5 +2,6 @@ namespace Day21.Logic;
 
 public interface IKeypadTyping
 {
-    string CalculateShortestSequence(char initialKey, string sequenceToType);
+    List<List<string>> CalculateShortestSequence(List<List<string>> sequenceToType);
+    string CalculateShortestSequence(string sequenceToType);
 }

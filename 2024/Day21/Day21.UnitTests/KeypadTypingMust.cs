@@ -5,12 +5,12 @@ namespace Day21.UnitTests;
 public class KeypadTypingMust
 {
     [Theory]
-    [InlineData('A', '0', "<A>A")]
-    [InlineData('A', '1', "^<<A>>vA")]
-    public void CalculateShortestPathInNumericKeypad(char start, char end, string expectedSequence)
+    [InlineData('0', "<A>A")]
+    [InlineData('1', "^<<A>>vA")]
+    public void CalculateShortestPathInNumericKeypad(char end, string expectedSequence)
     {
         var sut = KeypadTyping.CreateNumericKeypad();
-        var result = sut.CalculateShortestSequence(start, $"{end}A");
+        var result = sut.CalculateShortestSequence($"{end}A");
         Assert.Equal(expectedSequence, result);
     }
 
@@ -20,16 +20,16 @@ public class KeypadTypingMust
     public void CalculateShortestSequenceFor029ACorrectly(string input, string expectedResult)
     {
         var sut = KeypadTyping.CreateNumericKeypad();
-        var result = sut.CalculateShortestSequence('A', input);
+        var result = sut.CalculateShortestSequence(input);
         Assert.Equal(expectedResult, result);
     }
 
     [Theory]
-    [InlineData('A', '<', "v<<A>>^A")]
-    public void CalculateShortestPathInDirectionalPath(char start, char end, string expectedSequence)
+    [InlineData('<', "v<<A>>^A")]
+    public void CalculateShortestPathInDirectionalPath(char end, string expectedSequence)
     {
         var sut = KeypadTyping.CreateDirectionalKeypad();
-        var result = sut.CalculateShortestSequence(start, $"{end}A");
+        var result = sut.CalculateShortestSequence($"{end}A");
         Assert.Equal(expectedSequence, result);
     }
 
@@ -44,7 +44,7 @@ public class KeypadTypingMust
             KeypadTyping.CreateDirectionalKeypad()
         });
 
-        var result = sut.CalculateShortestSequence('A', input);
+        var result = sut.CalculateShortestSequence(input);
         Assert.Equal(expectedResult, result);
     }
 
@@ -60,7 +60,7 @@ public class KeypadTypingMust
             KeypadTyping.CreateDirectionalKeypad()
         });
 
-        var result = sut.CalculateShortestSequence('A', input);
+        var result = sut.CalculateShortestSequence(input);
         Assert.Equal(expectedResult.Length, result.Length);
     }
 }

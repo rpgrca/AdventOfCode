@@ -69,4 +69,19 @@ public class KeypadConundrumMust
 
         Assert.Equal(126384, sut.SumOfComplexities);
     }
+
+/*
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.True(137420 > sut.SumOfComplexities);
+    }*/
+
 }

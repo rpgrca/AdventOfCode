@@ -9,14 +9,21 @@ public class CombinedKeypadTyping : IKeypadTyping
         _keypads = keypads;
     }
 
-    public string CalculateShortestSequence(char initialKey, string sequenceToType)
+    public List<List<string>> CalculateShortestSequence(List<List<string>> sequenceToType)
     {
-        var currentSequence = sequenceToType;
-        foreach (var keypad in _keypads)
+        var currentSequence = _keypads.First().CalculateShortestSequence(sequenceToType);
+        foreach (var keypad in _keypads.Skip(1))
         {
-            currentSequence = keypad.CalculateShortestSequence(initialKey, currentSequence);
+            currentSequence = keypad.CalculateShortestSequence(currentSequence);
         }
 
         return currentSequence;
+    }
+
+    public string CalculateShortestSequence(string sequenceToType)
+    {
+        var sequences = CalculateShortestSequence(new List<List<string>> { new() { sequenceToType } });
+        var result = string.Concat(sequences.Select(p => p.MinBy(p => p.Length)));
+        return result;
     }
 }
