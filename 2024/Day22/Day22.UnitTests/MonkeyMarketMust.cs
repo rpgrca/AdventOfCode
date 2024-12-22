@@ -5,9 +5,12 @@ namespace Day22.UnitTests;
 
 public class MonkeyMarketMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 4)]
+    [InlineData(PUZZLE_INPUT, 2032)]
+    public void LoadInputCorrectly(string input, int expectedCount)
     {
-
+        var sut = new MonkeyMarket(input);
+        Assert.Equal(expectedCount, sut.Count);
     }
 }
