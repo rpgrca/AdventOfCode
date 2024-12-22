@@ -97,12 +97,13 @@ public class MonkeyMarketMust
         var result = sut.CalculateChange(0, changeNumber);
         Assert.Equal(expectedChange, result);
     }
-/*
+
     [Fact]
     public void SolveSecondSampleCorrectly()
     {
         var sut = new MonkeyMarket(SECOND_SAMPLE_INPUT, 2000);
-        var bestCombination = sut.FindBestCombination();
-        Assert.Equal((-2, 1, -1, 3), bestCombination);
-    }*/
+        var result = sut.FindBestCombination();
+        Assert.Equal((-2, 1, -1, 3), result.Combination);
+        Assert.Equal(23, result.Bananas);
+    }
 }

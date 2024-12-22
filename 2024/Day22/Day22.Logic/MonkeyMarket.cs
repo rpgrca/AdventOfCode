@@ -51,7 +51,7 @@ public class MonkeyMarket
     public long CalculateChange(int index, int count) =>
         count == 0? throw new ArgumentException($"Count cannot be zero") : _changes[index][count];
 
-    public (long, long, long, long) FindBestCombination()
+    public ((long, long, long, long) Combination, long Bananas) FindBestCombination()
     {
         var combinations = new List<(long, long, long, long)>();
         for (var index = 0; index < Count; index++)
@@ -74,19 +74,16 @@ public class MonkeyMarket
 
         foreach (var combination in combinations.Distinct())
         {
-            if (combination == (-2, 1, -1, 3))
-            {
-                System.Diagnostics.Debugger.Break();
-            }
             var sum = 0L;
-            foreach (var buyer in _changes)
+            for (var index = 0; index < _changes.Length; index++)
             {
+                var buyer = _changes[index];
                 var maximum = 0L;
-                for (var index = 3; index < buyer.Count; index++)
+                for (var subIndex = 3; subIndex < buyer.Count; subIndex++)
                 {
-                    if (buyer[index] == combination.Item4 && buyer[index-1] == combination.Item3 && buyer[index-2] == combination.Item2 && buyer[index-3] == combination.Item1)
+                    if (buyer[subIndex] == combination.Item4 && buyer[subIndex-1] == combination.Item3 && buyer[subIndex-2] == combination.Item2 && buyer[subIndex-3] == combination.Item1)
                     {
-                        maximum = buyer[index];
+                        maximum = _prices[index][subIndex];
                         break;
                     }
                 }
@@ -101,6 +98,6 @@ public class MonkeyMarket
             }
         }
 
-        return bestCombination;
+        return (bestCombination, maximumSum);
     }
 }
