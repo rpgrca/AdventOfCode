@@ -35,10 +35,18 @@ public class LanPartyMust
     }
 
     [Fact]
-    public void FindNetworksOfThreeComputers_WhenOneStartsWithT()
+    public void SolveFirstSampleCorrectly()
     {
         var sut = new LanParty(SAMPLE_INPUT);
         var result = sut.FindNetworksWithComputerStartingWith(3, 't');
         Assert.Equal(7, result);
+    }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new LanParty(PUZZLE_INPUT);
+        var result = sut.FindNetworksWithComputerStartingWith(3, 't');
+        Assert.Equal(1175, result);
     }
 }
