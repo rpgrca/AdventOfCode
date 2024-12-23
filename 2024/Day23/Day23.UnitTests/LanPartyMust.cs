@@ -7,6 +7,7 @@ public class LanPartyMust
 {
     [Theory]
     [InlineData(SAMPLE_INPUT, 32)]
+    [InlineData(PUZZLE_INPUT, 3380)]
     public void LoadInputCorrectly(string input, int expectedCount)
     {
         var sut = new LanParty(input);
