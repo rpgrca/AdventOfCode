@@ -29,15 +29,6 @@ public class LanParty
 
     public List<string> FindPartiesOf(int size)
     {
-        /*
-        var partiesOfSize = _connections
-            .Where(p => p.Value.Count == size - 1)
-            .Select(p => new List<string>(p.Value) { p.Key }.Order())
-            .GroupBy(p => p)
-            .Where(p => p.Count() == size)
-            .Select(p => $"{p.First()}-{p.Skip(1).Take(1)}-{p.Skip(2).Take(1)}")
-            .ToList();*/
-
         var result = new List<string>();
         foreach (var computer in _connections)
         {
@@ -56,5 +47,27 @@ public class LanParty
         }
 
         return result.Distinct().Order().ToList();
+    }
+
+    public int FindNetworksWithComputerStartingWith(int size, char initialLetter)
+    {
+        var result = new List<string>();
+        foreach (var computer in _connections.Where(p => p.Key[0] == initialLetter))
+        {
+            if (computer.Value.Count >= size)
+            {
+                foreach (var other in computer.Value)
+                {
+                    var othersConnectionsToOriginal = _connections[other].Where(p => _connections[p].Contains(computer.Key)).ToList();
+                    foreach (var otherConnectionToOriginal in othersConnectionsToOriginal)
+                    {
+                        var network = string.Join(',', new List<string> { computer.Key, other, otherConnectionToOriginal }.Order());
+                        result.Add(network);
+                    }
+                }
+            }
+        }
+
+        return result.Distinct().Count();
     }
 }

@@ -33,4 +33,12 @@ public class LanPartyMust
             p1 => Assert.Equal("td,wh,yn", p1),
             p1 => Assert.Equal("ub,vc,wq", p1));
     }
+
+    [Fact]
+    public void FindNetworksOfThreeComputers_WhenOneStartsWithT()
+    {
+        var sut = new LanParty(SAMPLE_INPUT);
+        var result = sut.FindNetworksWithComputerStartingWith(3, 't');
+        Assert.Equal(7, result);
+    }
 }
