@@ -17,8 +17,7 @@ public class KeypadConundrum
 
         foreach (var line in _lines)
         {
-            var sequence = keypad.CalculateShortestSequence(line.Select(p => new List<string>() { p.ToString() }).ToList());
-            var shortestSequence = sequence.Select(p => p.MinBy(q => q.Length));
+            var shortestSequence = keypad.CalculateShortestSequence(line);
             SumOfComplexities += string.Concat(shortestSequence).Length * int.Parse(line[..^1]);
         }
     }

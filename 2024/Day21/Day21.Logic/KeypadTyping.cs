@@ -2,61 +2,38 @@ namespace Day21.Logic;
 
 public class KeypadTyping : IKeypadTyping
 {
-    private readonly Dictionary<char, Dictionary<char, List<string>>> _layout;
+    private readonly Dictionary<char, Dictionary<char, string>> _layout;
     private char _currentKey;
-    private readonly Dictionary<(char currentKey, char targetKey), List<string>> _memoizedPaths = new();
+    //private readonly Dictionary<(char currentKey, char targetKey), List<string>> _memoizedPaths = new();
 
     public static IKeypadTyping CreateNumericKeypad() =>
         new KeypadTyping(new() {
-            { 'A', new() { { 'A', new() { "A" } }, { '0', new() { "<A" } }, { '1', new() { "^<<A" /*, "<^<A"*/ } }, { '2', new() { /*"^<A",*/ "<^A" } }, { '3', new() { "^A" } }, { '4', new() { "^^<<A"/*, "^<^<A", "^<<^A", "<^^<A", "<^<^A"*/ } }, { '5', new() { /*"^^<A", "^<^A",*/ "<^^A" } }, { '6', new() { "^^A" } }, { '7', new() { "^^^<<A"/*, "^^<^<A", "^^<<^A", "^<^^<A", "^<^<^A", "^<<^^A", "<^<^^A", "<^^<^A", "<^^^<A"*/ } }, { '8', new() { /*"^^^<A", "^^<^A", "^<^^A",*/ "<^^^A" } }, { '9', new() { "^^^A" } } } },
-            { '0', new() { { 'A', new() { ">A" } }, { '0', new() { "A" } }, { '1', new() { "^<A" } }, { '2', new() { "^A" } }, { '3', new() { "^>A"/*, ">^A"*/ } }, { '4', new() { "^^<A"/*, "^<^A"*/ } }, { '5', new() { "^^A" } }, { '6', new() { "^^>A"/*, "^>^A", ">^^A"*/ } }, { '7', new() { "^^^<A"/*, "^^<^A", "^<^^A"*/ } }, { '8', new() { "^^^A" } }, { '9', new() { "^^^>A"/*, "^^>^A", "^>^^A", ">^^^A"*/ } } } },
-            { '1', new() { { 'A', new() { ">>vA"/*, ">v>A"*/ } }, { '0', new() { ">vA" } }, { '1', new() { "A" } }, { '2', new() { ">A" } }, { '3', new () { ">>A" } }, { '4', new() { "^A" } }, { '5', new() { "^>A"/*, ">^A"*/ } }, { '6', new() { "^>>A"/*, ">^>A", ">>^A"*/ } }, { '7', new() { "^^A" } }, { '8', new() { "^^>A"/*, "^>^A", ">^^A"*/ } }, { '9', new() { "^^>>A"/*, "^>^>A", "^>>^A", ">^^>A", ">^>^A", ">>^^A"*/ } } } },
-            { '2', new() { { 'A', new() { /*">vA",*/ "v>A" } }, { '0', new() { "vA" } }, { '1', new() { "<A" } }, { '2', new() { "A" } }, { '3', new() { ">A" } }, { '4', new() { "<^A"/*, "^<A"*/ } }, { '5', new() { "^A" } }, { '6', new() { "^>A"/*, ">^A"*/ } }, { '7', new() { /*"^^<A", "^<^A",*/ "<^^" } }, { '8', new() { "^^A" } }, { '9', new() { /*">^^A", "^>^A",*/ "^^>A" } } } },
-            { '3', new() { { 'A', new() { "vA" } }, { '0', new() { /*"v<A",*/ "<vA" } }, { '1', new() { "<<A" } }, { '2', new() { "<A" } }, { '3', new() { "A" } }, { '4', new() { /*"^<<A", "<^<A",*/ "<<^A" } }, { '5', new() { /*"^<A",*/ "<^A" } }, { '6', new() { "^A" } }, { '7', new() { "<<^^A"/*, "<^<^A", "<^^<A", "^<<^A", "^<^<A", "^^<<A"*/ } }, { '8', new() { /*"^^<A", "^<^A",*/ "<^^A" } }, { '9', new() { "^^A" } } } },
-            { '4', new() { { 'A', new() { ">>vvA"/*, ">v>vA", ">vv>A", "v>>vA", "v>v>A"*/ } }, { '0', new() { ">vvA"/*, "v>vA"*/ } }, { '1', new() { "vA" } }, { '2', new() { "v>A"/*, ">vA"*/ } }, { '3', new() { "v>>A"/*, ">v>A", ">>vA"*/ } }, { '4', new() { "A" } }, { '5', new() { ">A" } }, { '6', new() { ">>A" } }, { '7', new() { "^A" } }, { '8', new() { "^>A"/*, ">^A"*/ } }, { '9', new() { "^>>A"/*, ">^>A", ">>^A"*/ } } } },
-            { '5', new() { { 'A', new() { "vv>A"/*, "v>vA", ">vvA"*/ } }, { '0', new() { "vvA" } }, { '1', new() { /*"v<A",*/ "<vA" } }, { '2', new() { "vA" } }, { '3', new() { "v>A"/*, ">vA"*/ } }, { '4', new() { "<A" } }, { '5', new() { "A" } }, { '6', new() { ">A" } }, { '7', new() { /*"^<A",*/ "<^A" } }, { '8', new() { "^A" } }, { '9', new() { "^>A"/*, ">^A"*/ } } } },
-            { '6', new() { { 'A', new() { "vvA" } }, { '0', new() { /*"vv<A",*/ "<vvA" } }, { '1', new() { /*"v<<A", "<v<A",*/ "<<vA" } }, { '2', new() { /*"v<A",*/ "<vA" } }, { '3', new() { "vA" } }, { '4', new() { "<<A" } }, { '5', new() { "<A" } }, { '6', new() { "A" } }, { '7', new() { /*"^<<A", "<^<A",*/ "<<^A" } }, { '8', new() { /*"^<A",*/ "<^A" } }, { '9', new() { "^A" } } } },
-            { '7', new() { { 'A', new() { ">>vvvA"/*, ">v>vvA", ">vv>vA", ">vvv>A", "v>>vvA", "v>v>vA", "v>vv>A", "vv>>vA", "vv>v>A"*/ } }, { '0', new() { ">vvvA"/*, "v>vvA", "vv>vA"*/ } }, { '1', new() { "vvA" } }, { '2', new() { "vv>A"/*, "v>vA", ">vvA"*/ } }, { '3', new() { /*"vv>>A", "v>v>A", "v>>vA", ">vv>A", ">v>vA",*/ ">>vvA" } }, { '4', new() { "vA" } }, { '5', new() { "v>A"/*, ">vA"*/ } }, { '6', new() { "v>>A"/*, ">v>A", ">>vA"*/ } }, { '7', new() { "A" } }, { '8', new() { ">A" } }, { '9', new() { ">>A" } } } },
-            { '8', new() { { 'A', new() { "vvv>A"/*, "vv>vA", "v>vvA", ">vvvA"*/ } }, { '0', new() { "vvvA" } }, { '1', new() { /*"vv<A", "v<vA",*/ "<vvA" } }, { '2', new() { "vvA" } }, { '3', new() { "vv>A"/*, "v>vA", ">vvA"*/ } }, { '4', new() { /*"v<A",*/ "<vA" } }, { '5', new() { "vA" } }, { '6', new() { "v>A"/*, ">vA"*/ } }, { '7', new() { "<A" } }, { '8', new() { "A" } }, { '9', new() { ">A" } } } },
-            { '9', new() { { 'A', new() { "vvvA" } }, { '0', new() { /*"vvv<A", "v<vvA", "vv<vA",*/ "<vvvA" } }, { '1', new() { /*"vv<<A", "v<v<A", "v<<vA", "<vv<A", "<v<vA",*/ "<<vvA" } }, { '2', new() { /*"vv<A", "v<vA",*/ "<vvA" } }, { '3', new() { "vvA" } }, { '4', new() { /*"v<<A", "<v<A",*/ "<<vA" } }, { '5', new() { /*"v<A",*/ "<vA" } }, { '6', new() { "vA" } }, { '7', new() { "<<A" } }, { '8', new() { "<A" } }, { '9', new() { "A" } } } }
+            { 'A', new() { { 'A', "A" }, { '0', "<A" }, { '1', "^<<A" }, { '2', "<^A" }, { '3', "^A" }, { '4', "^^<<A" }, { '5', "<^^A" }, { '6', "^^A" }, { '7', "^^^<<A" }, { '8', "<^^^A" }, { '9',  "^^^A" } } },
+            { '0', new() { { 'A', ">A" }, { '0', "A" }, { '1', "^<A" }, { '2', "^A" }, { '3', "^>A" }, { '4', "^^<A" }, { '5', "^^A" }, { '6', "^^>A" }, { '7', "^^^<A" }, { '8', "^^^A" }, { '9', "^^^>A" } } },
+            { '1', new() { { 'A', ">>vA" }, { '0', ">vA" }, { '1', "A" }, { '2', ">A" }, { '3', ">>A" }, { '4', "^A" }, { '5', "^>A" }, { '6', "^>>A" }, { '7', "^^A" }, { '8', "^^>A" }, { '9', "^^>>A" } } },
+            { '2', new() { { 'A', "v>A" }, { '0', "vA" }, { '1', "<A" }, { '2', "A" }, { '3', ">A" }, { '4', "<^A" }, { '5', "^A" }, { '6', "^>A" }, { '7', "<^^" }, { '8', "^^A" }, { '9', "^^>A" } } },
+            { '3', new() { { 'A', "vA" }, { '0', "<vA" }, { '1', "<<A" }, { '2', "<A" }, { '3', "A" }, { '4', "<<^A" }, { '5', "<^A" }, { '6', "^A" }, { '7', "<<^^A" }, { '8', "<^^A" }, { '9', "^^A" } } },
+            { '4', new() { { 'A', ">>vvA" }, { '0', ">vvA" }, { '1', "vA" }, { '2', "v>A" }, { '3', "v>>A" }, { '4', "A" }, { '5', ">A" }, { '6', ">>A" }, { '7', "^A" }, { '8', "^>A" }, { '9', "^>>A" } } },
+            { '5', new() { { 'A', "vv>A" }, { '0', "vvA" }, { '1', "<vA" }, { '2', "vA" }, { '3', "v>A" }, { '4', "<A" }, { '5', "A" }, { '6', ">A" }, { '7', "<^A" }, { '8', "^A" }, { '9', "^>A" } } },
+            { '6', new() { { 'A', "vvA" }, { '0', "<vvA" }, { '1', "<<vA" }, { '2', "<vA" }, { '3', "vA" }, { '4', "<<A" }, { '5', "<A" }, { '6', "A" }, { '7', "<<^A" }, { '8', "<^A" }, { '9', "^A" } } },
+            { '7', new() { { 'A', ">>vvvA" }, { '0', ">vvvA" }, { '1', "vvA" }, { '2', "vv>A" }, { '3', ">>vvA" }, { '4', "vA" }, { '5', "v>A" }, { '6', "v>>A" }, { '7', "A" }, { '8', ">A" }, { '9', ">>A" } } },
+            { '8', new() { { 'A', "vvv>A" }, { '0', "vvvA" }, { '1', "<vvA" }, { '2', "vvA" }, { '3', "vv>A" }, { '4', "<vA" }, { '5', "vA" }, { '6', "v>A" }, { '7', "<A" }, { '8', "A" }, { '9', ">A" } } },
+            { '9', new() { { 'A', "vvvA" }, { '0', "<vvvA" }, { '1', "<<vvA" }, { '2', "<vvA" }, { '3', "vvA" }, { '4', "<<vA" }, { '5', "<vA" }, { '6', "vA" }, { '7', "<<A" }, { '8', "<A" }, { '9', "A" } } }
         });
 
     public static KeypadTyping CreateDirectionalKeypad() =>
         new(new() {
-            { 'A', new() { { 'A', new() { "A" } }, { '^', new() { "<A" } }, { 'v', new() { "<vA", /*"v<A"*/ } }, { '<', new() { "v<<A"/*, "<v<A"*/ } }, { '>', new() { "vA" } } } },
-            { '^', new() { { 'A', new() { ">A" } }, { '^', new() { "A" } }, { 'v', new() { "vA" } }, { '<', new() { "v<A" } }, { '>', new() { "v>A"/*, ">vA"*/ } } } },
-            { 'v', new() { { 'A', new() { /*">^A",*/ "^>A" } }, { '^', new() { "^A" } }, { 'v', new() { "A" } }, { '<', new() { "<A" } }, { '>', new() { ">A" } } } },
-            { '<', new() { { 'A', new() { ">>^A"/*, ">^>A"*/ } }, { '^', new() { ">^A" } }, { 'v', new() { ">A" } }, { '<', new() { "A" } }, { '>', new() { ">>A" } } } },
-            { '>', new() { { 'A', new() { "^A" } }, { '^', new() { "<^A"/*, "^<A"*/ } }, { 'v', new() { "<A" } }, { '<', new() { "<<A" } }, { '>', new() { "A" } } } }
+            { 'A', new() { { 'A', "A" }, { '^', "<A" }, { 'v', "<vA" }, { '<', "v<<A" }, { '>', "vA" } } },
+            { '^', new() { { 'A', ">A" }, { '^', "A" }, { 'v', "vA" }, { '<', "v<A" }, { '>', "v>A" } } },
+            { 'v', new() { { 'A', "^>A" }, { '^', "^A" }, { 'v', "A" }, { '<', "<A" }, { '>', ">A" } } },
+            { '<', new() { { 'A', ">>^A" }, { '^', ">^A" }, { 'v', ">A" }, { '<', "A" }, { '>', ">>A" } } },
+            { '>', new() { { 'A', "^A" }, { '^', "<^A" }, { 'v', "<A" }, { '<', "<<A" }, { '>', "A" } } }
         });
 
-    private KeypadTyping(Dictionary<char, Dictionary<char, List<string>>> layout)
+    private KeypadTyping(Dictionary<char, Dictionary<char, string>> layout)
     {
         _layout = layout;
         _currentKey = 'A';
-/*
-        var shortestNumericKeypadSequences = new Dictionary<char, Dictionary<char, string>>();
-        var numericKeypad = new[,]
-        {
-            { '7', '8', '9'},
-            { '4', '5', '6'},
-            { '1', '2', '3'},
-            { '\0', '0', 'A'}
-        };
-
-        for (var y = 0; y < 4; y++)
-        {
-            for (var x = 0; x < 3; x++)
-            {
-                for (var y2 = 0; y2 < 4; y2++)
-                {
-                    for (var x2 = 0; x2 < 3; x2++)
-                    {
-                        var results = FindShortestPaths(x, y, x2, y2, numericKeypad);
-                    }
-                }
-            }
-        }*/
     }
 
     public string CalculateShortestSequence(string sequenceToType)
@@ -66,45 +43,25 @@ public class KeypadTyping : IKeypadTyping
 
         foreach (var character in sequenceToType)
         {
-            if (_memoizedPaths.TryGetValue((currentAimed, character), out var cachedResult))
-            {
-                currentSequence += cachedResult.First();
-                currentAimed = character;
-            }
-            else
-            {
-                var collection = _layout[currentAimed][character];
-                currentSequence += collection.First();
-                currentAimed = character;
-                _memoizedPaths[(currentAimed, character)] = collection;
-            }
+            var sequence = _layout[currentAimed][character];
+            currentSequence += sequence;
+            currentAimed = character;
         }
 
         _currentKey = currentAimed;
         return currentSequence;
     }
-
-
-    public List<List<string>> CalculateShortestSequence(List<List<string>> sequencesToType)
+/*
+    public string CalculateShortestSequence(List<string> sequencesToType)
     {
-        var result = new List<List<string>>();
+        var result = string.Empty;
         foreach (var sequenceToType in sequencesToType)
         {
-            var subSequence = new List<string>();
-            var shortestSequence = int.MaxValue;
-            foreach (var option in sequenceToType)
+            foreach (var character in sequenceToType)
             {
-                var optionsPerCharacter = new List<List<string>>();
-                foreach (var character in option)
-                {
-                    optionsPerCharacter.Add(_layout[_currentKey][character]);
-                    _currentKey = character;
-                }
-
-                shortestSequence = BuildCombinations(optionsPerCharacter, subSequence, new(), shortestSequence);
+                result += _layout[_currentKey][character];
+                _currentKey = character;
             }
-
-            result.Add(subSequence);
         }
 
         return result;
@@ -138,5 +95,5 @@ public class KeypadTyping : IKeypadTyping
         }
 
         return shortestSize;
-    }
+    }*/
 }
