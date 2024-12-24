@@ -1,6 +1,4 @@
 
-using System.Net.Sockets;
-
 namespace Day23.Logic;
 
 public class LanParty
@@ -32,7 +30,6 @@ public class LanParty
         var result = new List<string>();
         foreach (var computer in _connections)
         {
-            if (computer.Value.Count >= size)
             {
                 foreach (var other in computer.Value)
                 {
@@ -69,5 +66,37 @@ public class LanParty
         }
 
         return result.Distinct().Count();
+    }
+
+    public string CalculateLargestNetworkParty() =>
+        string.Join(',', FindLargestClique().OrderByDescending(c => c.Count).First().Order());
+
+    public List<List<string>> FindLargestClique()
+    {
+        var computers = _connections.Keys.ToList();
+        var allCliques = new List<List<string>>();
+        ApplyBronKerboschAlgorithm(new List<string>(), computers, new List<string>(), _connections, allCliques);
+        return allCliques;
+    }
+
+    private void ApplyBronKerboschAlgorithm(List<string> R, List<string> P, List<string> X, Dictionary<string, List<string>> graph, List<List<string>> allCliques)
+    {
+        if (! (P.Any() || X.Any()))
+        {
+            allCliques.Add(new List<string>(R));
+            return;
+        }
+
+        var pivot = P.Concat(X).First();
+        var nonNeighbors = P.Except(graph[pivot]).ToList();
+
+        foreach (var node in nonNeighbors)
+        {
+            R.Add(node);
+            ApplyBronKerboschAlgorithm(R, P.Intersect(graph[node]).ToList(), X.Intersect(graph[node]).ToList(), graph, allCliques);
+            R.Remove(node);
+            P.Remove(node);
+            X.Add(node);
+        }
     }
 }

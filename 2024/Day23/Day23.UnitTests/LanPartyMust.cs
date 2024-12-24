@@ -46,7 +46,7 @@ public class LanPartyMust
     public void SolveFirstPuzzleCorrectly()
     {
         var sut = new LanParty(PUZZLE_INPUT);
-        var result = sut.FindNetworksWithComputerStartingWith(3, 't');
-        Assert.Equal(1175, result);
+        var result = sut.CalculateLargestNetworkParty();
+        Assert.Equal("bw,dr,du,ha,mm,ov,pj,qh,tz,uv,vq,wq,xw", result);
     }
 }
