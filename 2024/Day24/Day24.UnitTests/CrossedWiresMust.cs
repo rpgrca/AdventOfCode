@@ -61,4 +61,12 @@ public class CrossedWiredMust
         sut.Execute();
         Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new CrossedWires(PUZZLE_INPUT);
+        sut.Execute();
+        Assert.Equal(65635066541798UL, sut.OutputAsDecimalNumber);
+    }
 }
