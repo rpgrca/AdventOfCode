@@ -3,8 +3,6 @@ namespace Day21.Logic;
 public class KeypadTyping : IKeypadTyping
 {
     private readonly Dictionary<char, Dictionary<char, string>> _layout;
-    private char _currentKey;
-    //private readonly Dictionary<(char currentKey, char targetKey), List<string>> _memoizedPaths = new();
 
     public static IKeypadTyping CreateNumericKeypad() =>
         new KeypadTyping(new() {
@@ -33,12 +31,11 @@ public class KeypadTyping : IKeypadTyping
     private KeypadTyping(Dictionary<char, Dictionary<char, string>> layout)
     {
         _layout = layout;
-        _currentKey = 'A';
     }
 
     public string CalculateShortestSequence(string sequenceToType)
     {
-        var currentAimed = _currentKey;
+        var currentAimed = 'A';
         var currentSequence = string.Empty;
 
         foreach (var character in sequenceToType)
@@ -48,52 +45,69 @@ public class KeypadTyping : IKeypadTyping
             currentAimed = character;
         }
 
-        _currentKey = currentAimed;
         return currentSequence;
     }
-/*
-    public string CalculateShortestSequence(List<string> sequencesToType)
+
+    public void CountShortestSequence(string sequenceToType, Dictionary<string, int> memoization)
     {
-        var result = string.Empty;
-        foreach (var sequenceToType in sequencesToType)
+        var currentAimed = 'A';
+        var keys = memoization.Keys.ToList();
+        foreach (var key in keys)
         {
             foreach (var character in sequenceToType)
             {
-                result += _layout[_currentKey][character];
-                _currentKey = character;
+                var sequence = _layout[currentAimed][character];
+                memoization.TryAdd(sequence, 0);
+                memoization[sequence]++;
+                currentAimed = character;
             }
         }
-
-        return result;
     }
 
-    private int BuildCombinations(List<List<string>> optionsPerCharacter, List<string> subSequence, List<string> accumulatedString, int shortestSize, int index = 0)
-    {
-        if (index == optionsPerCharacter.Count)
-        {
-            var result = string.Concat(accumulatedString);
-            if (result.Length < shortestSize)
-            {
-                subSequence.Clear();
-                subSequence.Add(result);
-                return result.Length;
-            }
-            else if (result.Length == shortestSize)
-            {
-                subSequence.Add(result);
-            }
 
-            return shortestSize;
-        }
+    /*
+public string CalculateShortestSequence(List<string> sequencesToType)
+{
+  var result = string.Empty;
+  foreach (var sequenceToType in sequencesToType)
+  {
+      foreach (var character in sequenceToType)
+      {
+          result += _layout[_currentKey][character];
+          _currentKey = character;
+      }
+  }
 
-        foreach (var option in optionsPerCharacter[index])
-        {
-            accumulatedString.Add(option);
-            var newShortestSize = BuildCombinations(optionsPerCharacter, subSequence, accumulatedString, shortestSize, index + 1);
-            accumulatedString.RemoveAt(accumulatedString.Count - 1);
-            shortestSize = Math.Min(shortestSize, newShortestSize);
-        }
+  return result;
+}
 
-        return shortestSize;
-    }*/
+private int BuildCombinations(List<List<string>> optionsPerCharacter, List<string> subSequence, List<string> accumulatedString, int shortestSize, int index = 0)
+{
+  if (index == optionsPerCharacter.Count)
+  {
+      var result = string.Concat(accumulatedString);
+      if (result.Length < shortestSize)
+      {
+          subSequence.Clear();
+          subSequence.Add(result);
+          return result.Length;
+      }
+      else if (result.Length == shortestSize)
+      {
+          subSequence.Add(result);
+      }
+
+      return shortestSize;
+  }
+
+  foreach (var option in optionsPerCharacter[index])
+  {
+      accumulatedString.Add(option);
+      var newShortestSize = BuildCombinations(optionsPerCharacter, subSequence, accumulatedString, shortestSize, index + 1);
+      accumulatedString.RemoveAt(accumulatedString.Count - 1);
+      shortestSize = Math.Min(shortestSize, newShortestSize);
+  }
+
+  return shortestSize;
+}*/
 }

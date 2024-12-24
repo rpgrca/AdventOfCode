@@ -52,7 +52,7 @@ public class KeypadConundrumMust
             KeypadTyping.CreateNumericKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), false);
 
         Assert.Equal(expectedSum, sut.SumOfComplexities);
     }
@@ -83,8 +83,148 @@ public class KeypadConundrumMust
         Assert.True(137420 > sut.SumOfComplexities);
         Assert.Equal(134120, sut.SumOfComplexities);
     }
-/*
+
     [Fact]
+    public void SolveSumOfComplexities_WhenThereAre3DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(335394, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre4DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(818240, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre5DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(2042304, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre6DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(5051610, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre7DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(12589980, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre8DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(31283240, sut.SumOfComplexities);
+    }
+
+    [Fact]
+    public void SolveSumOfComplexities_WhenThereAre9DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(77841448, sut.SumOfComplexities);
+    }
+
+    [Fact(Skip = "9 seconds")]
+    public void SolveSumOfComplexities_WhenThereAre10DirectionalKeypads()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(193631162, sut.SumOfComplexities);
+    }
+
+    /*[Fact]
     public void RepeatTypingCorrectly()
     {
         var sut = new KeypadConundrum("0A", new CombinedKeypadTyping(new()
@@ -116,8 +256,10 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
         }));
-    }
-*/
+
+        Assert.Equal(0, sut.SumOfComplexities);
+    }*/
+
 /*
     [Fact]
     public void SolveSecondPuzzleCorrectly()

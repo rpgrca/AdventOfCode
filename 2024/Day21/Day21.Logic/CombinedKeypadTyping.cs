@@ -19,4 +19,13 @@ public class CombinedKeypadTyping : IKeypadTyping
 
         return currentSequence;
     }
+
+    public void CountShortestSequence(string sequenceToType, Dictionary<string, int> memoization)
+    {
+        _keypads.First().CountShortestSequence(sequenceToType, memoization);
+        foreach (var keypad in _keypads.Skip(1))
+        {
+            keypad.CountShortestSequence("", memoization);
+        }
+    }
 }
