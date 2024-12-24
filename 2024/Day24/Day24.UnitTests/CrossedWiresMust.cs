@@ -15,4 +15,16 @@ public class CrossedWiredMust
         Assert.Equal(expectedWires, sut.WiresCount);
         Assert.Equal(expectedGates, sut.GatesCount);
     }
+
+    [Theory]
+    [InlineData("x00: 1\nx01: 1\n\nx00 AND x01 -> z00", 1)]
+    [InlineData("x00: 1\nx01: 0\n\nx00 AND x01 -> z00", 0)]
+    [InlineData("x00: 0\nx01: 1\n\nx00 AND x01 -> z00", 0)]
+    [InlineData("x00: 0\nx01: 0\n\nx00 AND x01 -> z00", 0)]
+    public void ExecuteAndGateCorrectly(string input, ulong expectedResult)
+    {
+        var sut = new CrossedWires(input);
+        sut.Execute();
+        Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
+    }
 }
