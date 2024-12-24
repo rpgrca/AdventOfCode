@@ -83,4 +83,75 @@ public class KeypadConundrumMust
         Assert.True(137420 > sut.SumOfComplexities);
         Assert.Equal(134120, sut.SumOfComplexities);
     }
+/*
+    [Fact]
+    public void RepeatTypingCorrectly()
+    {
+        var sut = new KeypadConundrum("0A", new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+    }
+*/
+/*
+    [Fact]
+    public void SolveSecondPuzzleCorrectly()
+    {
+        var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        }));
+
+        Assert.Equal(0, sut.SumOfComplexities);
+    }*/
 }
