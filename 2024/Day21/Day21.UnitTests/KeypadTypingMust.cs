@@ -26,6 +26,48 @@ public class KeypadTypingMust
     }
 
     [Theory]
+    [InlineData("029A", 28 * 29)]
+    public void CountShortestPathInDirectionalAndNumericKeypads(string input, int expectedResult)
+    {
+        var memoization = new Dictionary<string, int>();
+        var sut = new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateNumericKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        });
+
+        sut.CountShortestSequence(input, memoization);
+
+        var shortestSequenceLength = memoization.Select(p => p.Key.Length * p.Value).Sum();
+        var result = shortestSequenceLength * int.Parse(input[..^1]);
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Theory]
+    [InlineData(68 * 29)]
+    public void CountShortestPathInTwoDirectionalKeypads(int expectedResult)
+    {
+        var memoization = new Dictionary<string, int>
+        {
+            { "<A", 1 },
+            { "^A", 1 },
+            { "^^>A", 1},
+            { "vvvA", 1}
+        };
+        var sut = new CombinedKeypadTyping(new()
+        {
+            KeypadTyping.CreateDirectionalKeypad(),
+            KeypadTyping.CreateDirectionalKeypad()
+        });
+
+        sut.CountShortestSequence("", memoization);
+
+        var shortestSequenceLength = memoization.Select(p => p.Key.Length * p.Value).Sum();
+        var result = shortestSequenceLength * 29;
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Theory]
     [InlineData('<', "v<<A>>^A")]
     public void CalculateShortestPathInDirectionalPath(char end, string expectedSequence)
     {

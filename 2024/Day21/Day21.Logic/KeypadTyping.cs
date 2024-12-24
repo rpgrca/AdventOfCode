@@ -51,8 +51,24 @@ public class KeypadTyping : IKeypadTyping
     public void CountShortestSequence(string sequenceToType, Dictionary<string, int> memoization)
     {
         var currentAimed = 'A';
-        var keys = memoization.Keys.ToList();
-        foreach (var key in keys)
+
+        if (string.IsNullOrEmpty(sequenceToType))
+        {
+            var currentMemoization = memoization.Where(p => p.Value > 0).ToDictionary(p => p.Key, p => p.Value);
+            foreach (var currentGroup in currentMemoization)
+            {
+                foreach (var character in currentGroup.Key)
+                {
+                    var sequence = _layout[currentAimed][character];
+                    memoization.TryAdd(sequence, 0);
+                    memoization[sequence] += currentGroup.Value;
+                    currentAimed = character;
+                }
+
+                memoization[currentGroup.Key] -= currentGroup.Value;
+            }
+        }
+        else
         {
             foreach (var character in sequenceToType)
             {

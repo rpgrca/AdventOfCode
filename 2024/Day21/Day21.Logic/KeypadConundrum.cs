@@ -23,15 +23,13 @@ public class KeypadConundrum
         }
         else
         {
-            var memoization = new Dictionary<string, int>();
             foreach (var line in _lines)
             {
+                var memoization = new Dictionary<string, int>();
                 keypad.CountShortestSequence(line, memoization);
-            }
 
-            foreach (var value in memoization)
-            {
-                SumOfComplexities += value.Key.Length * value.Value;
+                var shortestSequenceLength = memoization.Select(p => p.Key.Length * p.Value).Sum();
+                SumOfComplexities = shortestSequenceLength * int.Parse(line[..^1]);
             }
         }
     }
