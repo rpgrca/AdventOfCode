@@ -22,7 +22,7 @@ public class KeypadConundrumMust
     [Theory]
     [InlineData("029A", false, 12 * 29)]
     [InlineData("029A", true, 12 * 29)]
-    public void CalculateShortestSequenceFor029ACorrectly(string input, bool onlySum, int expectedSum)
+    public void CalculateShortestSequenceFor029ACorrectly(string input, bool onlySum, ulong expectedSum)
     {
         var sut = new KeypadConundrum(input, KeypadTyping.CreateNumericKeypad(), onlySum);
         Assert.Equal(expectedSum, sut.SumOfComplexities);
@@ -31,7 +31,7 @@ public class KeypadConundrumMust
     [Theory]
     [InlineData("029A", false, 28 * 29)]
     [InlineData("029A", true, 28 * 29)]
-    public void CalculateShortestSequenceForTwoKeypads(string input, bool onlySum, int expectedSum)
+    public void CalculateShortestSequenceForTwoKeypads(string input, bool onlySum, ulong expectedSum)
     {
         var sut = new KeypadConundrum(input, new CombinedKeypadTyping(new() {
              KeypadTyping.CreateNumericKeypad(),
@@ -47,7 +47,7 @@ public class KeypadConundrumMust
     [InlineData("179A", 68 * 179)]
     [InlineData("456A", 64 * 456)]
     [InlineData("379A", 64 * 379)]
-    public void CalculateShortestSequenceForThreeKeypads(string input, int expectedSum)
+    public void CalculateShortestSequenceForThreeKeypads(string input, ulong expectedSum)
     {
         var sut = new KeypadConundrum(input, new CombinedKeypadTyping(new()
         {
@@ -67,9 +67,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateNumericKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(126384, sut.SumOfComplexities);
+        Assert.Equal(126384UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -80,10 +80,10 @@ public class KeypadConundrumMust
             KeypadTyping.CreateNumericKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
         Assert.True(137420 > sut.SumOfComplexities);
-        Assert.Equal(134120, sut.SumOfComplexities);
+        Assert.Equal(134120UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -95,9 +95,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(335394, sut.SumOfComplexities);
+        Assert.Equal(335394UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -110,9 +110,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(818240, sut.SumOfComplexities);
+        Assert.Equal(818240UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -128,7 +128,7 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad()
         }));
 
-        Assert.Equal(2042304, sut.SumOfComplexities);
+        Assert.Equal(2042304UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -143,9 +143,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(5051610, sut.SumOfComplexities);
+        Assert.Equal(5051610UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -161,9 +161,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(12589980, sut.SumOfComplexities);
+        Assert.Equal(12589980UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -180,9 +180,9 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(31283240, sut.SumOfComplexities);
+        Assert.Equal(31283240UL, sut.SumOfComplexities);
     }
 
     [Fact]
@@ -200,12 +200,12 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(77841448, sut.SumOfComplexities);
+        Assert.Equal(77841448UL, sut.SumOfComplexities);
     }
 
-    [Fact(Skip = "9 seconds")]
+    [Fact]
     public void SolveSumOfComplexities_WhenThereAre10DirectionalKeypads()
     {
         var sut = new KeypadConundrum(PUZZLE_INPUT, new CombinedKeypadTyping(new()
@@ -221,48 +221,11 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(193631162, sut.SumOfComplexities);
+        Assert.Equal(193631162UL, sut.SumOfComplexities);
     }
 
-    /*[Fact]
-    public void RepeatTypingCorrectly()
-    {
-        var sut = new KeypadConundrum("0A", new CombinedKeypadTyping(new()
-        {
-            KeypadTyping.CreateNumericKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad(),
-            KeypadTyping.CreateDirectionalKeypad()
-        }));
-
-        Assert.Equal(0, sut.SumOfComplexities);
-    }*/
-
-/*
     [Fact]
     public void SolveSecondPuzzleCorrectly()
     {
@@ -294,8 +257,8 @@ public class KeypadConundrumMust
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad(),
             KeypadTyping.CreateDirectionalKeypad()
-        }));
+        }), true);
 
-        Assert.Equal(0, sut.SumOfComplexities);
-    }*/
+        Assert.Equal(167389793580400UL, sut.SumOfComplexities);
+    }
 }

@@ -48,7 +48,7 @@ public class KeypadTyping : IKeypadTyping
         return currentSequence;
     }
 
-    public void CountShortestSequence(string sequenceToType, Dictionary<string, int> memoization)
+    public void CountShortestSequence(string sequenceToType, Dictionary<string, long> memoization)
     {
         var currentAimed = 'A';
 
@@ -79,51 +79,4 @@ public class KeypadTyping : IKeypadTyping
             }
         }
     }
-
-
-    /*
-public string CalculateShortestSequence(List<string> sequencesToType)
-{
-  var result = string.Empty;
-  foreach (var sequenceToType in sequencesToType)
-  {
-      foreach (var character in sequenceToType)
-      {
-          result += _layout[_currentKey][character];
-          _currentKey = character;
-      }
-  }
-
-  return result;
-}
-
-private int BuildCombinations(List<List<string>> optionsPerCharacter, List<string> subSequence, List<string> accumulatedString, int shortestSize, int index = 0)
-{
-  if (index == optionsPerCharacter.Count)
-  {
-      var result = string.Concat(accumulatedString);
-      if (result.Length < shortestSize)
-      {
-          subSequence.Clear();
-          subSequence.Add(result);
-          return result.Length;
-      }
-      else if (result.Length == shortestSize)
-      {
-          subSequence.Add(result);
-      }
-
-      return shortestSize;
-  }
-
-  foreach (var option in optionsPerCharacter[index])
-  {
-      accumulatedString.Add(option);
-      var newShortestSize = BuildCombinations(optionsPerCharacter, subSequence, accumulatedString, shortestSize, index + 1);
-      accumulatedString.RemoveAt(accumulatedString.Count - 1);
-      shortestSize = Math.Min(shortestSize, newShortestSize);
-  }
-
-  return shortestSize;
-}*/
 }

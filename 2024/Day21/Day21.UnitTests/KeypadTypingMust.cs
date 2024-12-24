@@ -29,7 +29,7 @@ public class KeypadTypingMust
     [InlineData("029A", 28 * 29)]
     public void CountShortestPathInDirectionalAndNumericKeypads(string input, int expectedResult)
     {
-        var memoization = new Dictionary<string, int>();
+        var memoization = new Dictionary<string, long>();
         var sut = new CombinedKeypadTyping(new()
         {
             KeypadTyping.CreateNumericKeypad(),
@@ -47,7 +47,7 @@ public class KeypadTypingMust
     [InlineData(68 * 29)]
     public void CountShortestPathInTwoDirectionalKeypads(int expectedResult)
     {
-        var memoization = new Dictionary<string, int>
+        var memoization = new Dictionary<string, long>
         {
             { "<A", 1 },
             { "^A", 1 },

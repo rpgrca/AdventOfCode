@@ -5,7 +5,7 @@ public class KeypadConundrum
     private readonly string[] _lines;
 
     public List<int> Codes { get; set; }
-    public int SumOfComplexities { get; private set;}
+    public ulong SumOfComplexities { get; private set;}
 
     public KeypadConundrum(string input, IKeypadTyping keypad, bool onlyCount = false)
     {
@@ -18,18 +18,18 @@ public class KeypadConundrum
             foreach (var line in _lines)
             {
                 var shortestSequence = keypad.CalculateShortestSequence(line);
-                SumOfComplexities += shortestSequence.Length * int.Parse(line[..^1]);
+                SumOfComplexities += (ulong)shortestSequence.Length * ulong.Parse(line[..^1]);
             }
         }
         else
         {
             foreach (var line in _lines)
             {
-                var memoization = new Dictionary<string, int>();
+                var memoization = new Dictionary<string, long>();
                 keypad.CountShortestSequence(line, memoization);
 
-                var shortestSequenceLength = memoization.Select(p => p.Key.Length * p.Value).Sum();
-                SumOfComplexities = shortestSequenceLength * int.Parse(line[..^1]);
+                var shortestSequenceLength = (ulong)memoization.Select(p => p.Key.Length * p.Value).Sum();
+                SumOfComplexities += (ulong)shortestSequenceLength * ulong.Parse(line[..^1]);
             }
         }
     }
