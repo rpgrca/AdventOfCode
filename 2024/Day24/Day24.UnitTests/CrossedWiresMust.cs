@@ -27,4 +27,17 @@ public class CrossedWiredMust
         sut.Execute();
         Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
     }
+
+    [Theory]
+    [InlineData("x00: 1\nx01: 1\n\nx00 OR x01 -> z00", 1)]
+    [InlineData("x00: 1\nx01: 0\n\nx00 OR x01 -> z00", 1)]
+    [InlineData("x00: 0\nx01: 1\n\nx00 OR x01 -> z00", 1)]
+    [InlineData("x00: 0\nx01: 0\n\nx00 OR x01 -> z00", 0)]
+    public void ExecuteOrGateCorrectly(string input, ulong expectedResult)
+    {
+        var sut = new CrossedWires(input);
+        sut.Execute();
+        Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
+    }
+
 }
