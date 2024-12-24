@@ -41,7 +41,7 @@ public class CrossedWires
         for (var index = 0; index < _maxResult + 1; index++)
         {
             var value = (ulong)CalculateValueFor($"z{index:00}");
-            result = result << index | value;
+            result = value << index | result;
         }
 
         OutputAsDecimalNumber = result;

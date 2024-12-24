@@ -52,5 +52,13 @@ public class CrossedWiredMust
         Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
     }
 
-
+    [Theory]
+    [InlineData(SECOND_SAMPLE_INPUT, 4)]
+    [InlineData(SAMPLE_INPUT, 2024)]
+    public void SolveFirstSamplesCorrectly(string input, ulong expectedResult)
+    {
+        var sut = new CrossedWires(input);
+        sut.Execute();
+        Assert.Equal(expectedResult, sut.OutputAsDecimalNumber);
+    }
 }
