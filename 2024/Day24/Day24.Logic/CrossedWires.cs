@@ -69,4 +69,31 @@ public class CrossedWires
         _wires.Add(key, result);
         return result;
     }
+
+    public long CalculateExpectedResultWith(Func<long, long, long> callback)
+    {
+        var x = GenerateX();
+        var y = GenerateY();
+        return callback(x, y);
+    }
+
+    private long GenerateX()
+    {
+        var xs = _wires
+            .Where(p => p.Key.StartsWith('x'))
+            .OrderByDescending(p => p.Key)
+            .Select(p => p.Value)
+            .Aggregate(0L, (t, i) => (t << 1) | (long)i);
+        return xs;
+    }
+
+    private long GenerateY()
+    {
+        var xs = _wires
+            .Where(p => p.Key.StartsWith('y'))
+            .OrderByDescending(p => p.Key)
+            .Select(p => p.Value)
+            .Aggregate(0L, (t, i) => (t << 1) | (long)i);
+        return xs;
+    }
 }

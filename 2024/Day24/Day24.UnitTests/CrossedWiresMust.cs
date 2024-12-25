@@ -1,4 +1,5 @@
 using Day24.Logic;
+using Xunit.Sdk;
 using static Day24.UnitTests.Constants;
 
 namespace Day24.UnitTests;
@@ -69,4 +70,13 @@ public class CrossedWiredMust
         sut.Execute();
         Assert.Equal(65635066541798UL, sut.OutputAsDecimalNumber);
     }
+
+    [Fact]
+    public void CalculateExpectedResultForZ()
+    {
+        var sut = new CrossedWires(THIRD_SAMPLE_INPUT);
+        var value = sut.CalculateExpectedResultWith((x, y) => x & y);
+        Assert.Equal(0b101000, value);
+    }
+
 }
