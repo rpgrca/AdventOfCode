@@ -1,3 +1,4 @@
+using System.Reflection;
 using Day25.Logic;
 using static Day25.UnitTests.Constants;
 
@@ -5,9 +6,20 @@ namespace Day25.UnitTests;
 
 public class CodeChronicleMust
 {
-    [Fact]
-    public void Test1()
+    [Theory]
+    [InlineData(SAMPLE_INPUT, 2, 3)]
+    [InlineData(PUZZLE_INPUT, 250, 250)]
+    public void LoadInputCorrectly(string input, int expectedLocks, int expectedKeys)
     {
+        var sut = new CodeChronicle(input);
+        Assert.Equal(expectedLocks, sut.Locks);
+        Assert.Equal(expectedKeys, sut.Keys);
+    }
 
+    [Fact]
+    public void SolveFirstSampleCorrectly()
+    {
+        var sut = new CodeChronicle(SAMPLE_INPUT);
+        Assert.Equal(3, sut.UniqueWorkingPairs);
     }
 }
