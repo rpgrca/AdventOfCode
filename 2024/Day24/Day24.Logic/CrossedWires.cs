@@ -14,6 +14,15 @@ public class CrossedWires
 
     public ulong OutputAsDecimalNumber { get; private set; }
 
+    public CrossedWires(string input, Dictionary<string, int> overwrittenWires)
+        : this(input)
+    {
+        foreach (var pair in overwrittenWires)
+        {
+            _wires[pair.Key] = pair.Value;
+        }
+    }
+
     public CrossedWires(string input)
     {
         _input = input;
@@ -70,30 +79,38 @@ public class CrossedWires
         return result;
     }
 
-    public long CalculateExpectedResultWith(Func<long, long, long> callback)
+    public ulong CalculateExpectedResultWith(Func<ulong, ulong, ulong> callback)
     {
         var x = GenerateX();
         var y = GenerateY();
         return callback(x, y);
     }
 
-    private long GenerateX()
+    private ulong GenerateX()
     {
         var xs = _wires
             .Where(p => p.Key.StartsWith('x'))
             .OrderByDescending(p => p.Key)
             .Select(p => p.Value)
-            .Aggregate(0L, (t, i) => (t << 1) | (long)i);
+            .Aggregate(0UL, (t, i) => (t << 1) | (uint)i);
         return xs;
     }
 
-    private long GenerateY()
+    private ulong GenerateY()
     {
         var xs = _wires
             .Where(p => p.Key.StartsWith('y'))
             .OrderByDescending(p => p.Key)
             .Select(p => p.Value)
-            .Aggregate(0L, (t, i) => (t << 1) | (long)i);
+            .Aggregate(0UL, (t, i) => (t << 1) | (uint)i);
         return xs;
+    }
+
+    public ulong CalculateDifferenceWithExpected(Func<ulong, ulong, ulong> callback)
+    {
+        var expectedResult = CalculateExpectedResultWith(callback);
+        var actualResult = OutputAsDecimalNumber;
+
+        return expectedResult ^ actualResult;
     }
 }
