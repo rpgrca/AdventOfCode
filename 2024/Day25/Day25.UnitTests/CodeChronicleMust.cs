@@ -22,4 +22,11 @@ public class CodeChronicleMust
         var sut = new CodeChronicle(SAMPLE_INPUT);
         Assert.Equal(3, sut.UniqueWorkingPairs);
     }
+
+    [Fact]
+    public void SolveFirstPuzzleCorrectly()
+    {
+        var sut = new CodeChronicle(PUZZLE_INPUT);
+        Assert.Equal(2835, sut.UniqueWorkingPairs);
+    }
 }
