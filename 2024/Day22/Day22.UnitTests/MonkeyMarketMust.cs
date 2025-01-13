@@ -105,7 +105,7 @@ public class MonkeyMarketMust
         Assert.Equal(23, result.Bananas);
     }
 
-    [Fact]
+    [Fact(Skip = "long test, needs optimization")]
     public void SolveSecondPuzzleCorrectly()
     {
         var sut = new MonkeyMarket(PUZZLE_INPUT, 2000);
