@@ -172,18 +172,6 @@ public class ReindeerMaze
 
     private bool IsEndPoint(int x, int y) => _map[y, x] == 'E';
 
-    public void Run2()
-    {
-        Run();
-
-        _uniqueSolutionTiles.Add(StartPoint.Y * 1000 + StartPoint.X);
-        _uniqueSolutionTiles.Add(EndPoint.Y * 1000 + EndPoint.X);
-
-        var tiles = new HashSet<int>();
-        var (turns, steps) = Math.DivRem(LowestScore, 1000);
-        FindPath(StartPoint.X, StartPoint.Y, Direction.East, tiles, 0, turns, steps);
-    }
-
     private void FindPath(int x, int y, Direction direction, HashSet<int> tiles, int weight, int turns, int steps)
     {
         if (turns < 0 || steps < 0)
@@ -210,7 +198,7 @@ public class ReindeerMaze
                     _uniqueSolutionTiles.Add(tile);
                 }
 
-                Console.WriteLine(_uniqueSolutionTiles.Count);
+                //Console.WriteLine(_uniqueSolutionTiles.Count);
             }
 
             return;
@@ -319,7 +307,7 @@ public class ReindeerMaze
                     _uniqueSolutionTiles.Add(tile);
                 }
 
-                Console.WriteLine(_uniqueSolutionTiles.Count);
+                //Console.WriteLine(_uniqueSolutionTiles.Count);
             }
 
             return;
